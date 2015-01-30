@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/list_item_bg"
+    android:orientation="vertical" >
+	
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvOnlinePaymentHeadingText"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/top_bar_height"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/tool_bar"
+        android:textColor="@color/black" />
+
+    <RelativeLayout
+        android:id="@+id/rlEditUserBottomBar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/bottom_bar_height"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/tool_bar" >
+
+        <com.sinepulse.app.custom.controls.CustomButton
+            android:id="@+id/bNextFromUser"
+            android:layout_width="@dimen/bottom_bar_icon_width"
+            android:layout_height="@dimen/bottom_bar_icon_height"
+            android:layout_alignParentRight="true"
+            android:layout_margin="6dp"
+            android:layout_marginRight="36dp"
+            android:background="@drawable/save"
+            android:contentDescription="@string/save"
+            android:textColor="#3f6618"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/rlEditUserBottomBar"
+        android:layout_below="@+id/tvOnlinePaymentHeadingText"
+        android:layout_marginTop="10dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvUserInfoName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/e_mail"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvUserInfoMendatory"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                   android:paddingRight="0dp" 
+                    android:text="@string/mandatory"
+                    android:textColor="@color/mendatory_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etUserId"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:windowSoftInputMode="stateHidden" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvUserPass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/password"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvUserPassMendatory"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/mandatory"
+                    android:textColor="@color/mendatory_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etUserPass"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:inputType="textPassword"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:windowSoftInputMode="stateHidden" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvUserPassConfirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/confirm_password"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvUserPassConfirmMendatory"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/mandatory"
+                    android:textColor="@color/mendatory_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etUserPassConfirm"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:inputType="textPassword"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:windowSoftInputMode="stateHidden" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvFirstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/first_name"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp" />
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvFirstNameMendatory"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/mandatory"
+                    android:textColor="@color/mendatory_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etFirstName"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:inputType="text"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvLastName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/last_name"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp" />
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvLastNameMendatory"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/mandatory"
+                    android:textColor="@color/mendatory_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etLastName"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:inputType="text"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvAddress1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="address1"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp" />
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvAddress1Mendatory"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/mandatory"
+                    android:textColor="@color/mendatory_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etAddress1"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:inputType="text"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvAddress2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="address2"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etAddress2"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:inputType="text"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvZipCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/post_number1"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp" />
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvZipCodeMendatory"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/mandatory"
+                    android:textColor="@color/mendatory_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etZipCode"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:inputType="textPostalAddress"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="City"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp" />
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvCityMendatory"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/mandatory"
+                    android:textColor="@color/mendatory_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etCity"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:inputType="text"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvTelephone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="Phone"
+                    android:textColor="@color/subTextColor"
+                    android:textSize="12sp" />
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvTelephoneMendatory"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="@string/mandatory"
+                    android:textColor="@color/mendatory_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.sinepulse.app.custom.controls.CustomEditText
+                android:id="@+id/etTelephone"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edit_text_custom"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

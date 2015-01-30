@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/sh_background"
+    android:cacheColorHint="#00000000"
+    android:orientation="vertical" 
+    >
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvBasketHeadingText"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/top_bar_height"
+        android:background="@drawable/tool_bar"
+        android:gravity="center_vertical"
+        android:text="@string/empty_basket"
+        android:textColor="@color/black"
+        android:visibility="gone" />
+    
+
+    <ListView
+        android:id="@+id/lvBasket"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@color/list_row_divider"
+        android:dividerHeight="1.5dp"
+        android:fadingEdge="none"
+        android:scrollbars="vertical"
+        android:scrollingCache="false"
+        android:overScrollMode="always"
+        />
+
+    <RelativeLayout android:id="@+id/emptyHolder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:visibility="gone"
+        >
+    	<com.sinepulse.app.custom.controls.CustomTextView
+	        android:id="@+id/empty1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal|center_vertical"
+	        android:text="@string/emptybasketmessage"
+	        android:textColor="@color/white"
+	        android:lines="2"
+	        android:textSize="14sp"
+	        android:textStyle="bold" 
+	        android:visibility="visible"
+	        android:layout_centerInParent="true"/> 
+	     <com.sinepulse.app.custom.controls.CustomButton
+            android:id="@+id/bContinueShopping"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/bottom_bar_icon_height"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/empty1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="5dp"
+            android:text="@string/continue_shopping"
+            android:textStyle="bold"
+            android:contentDescription="@string/checkout"
+            android:enabled="true"
+            android:paddingLeft="10dp" 
+            android:paddingRight="0dp"
+            android:visibility="visible"
+            android:textColor="@color/white"/>
+	        
+    </RelativeLayout>
+    
+
+    
+    <RelativeLayout
+        android:id="@+id/rlBasketListBottomBar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/bottom_bar_height"
+        android:background="@drawable/tool_bar"
+        android:visibility="gone" >
+
+        <com.sinepulse.app.custom.controls.CustomButton
+            android:id="@+id/addEnterEanBasket"
+            android:layout_width="@dimen/bottom_bar_icon_width"
+            android:layout_height="@dimen/bottom_bar_icon_height"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="3dp"
+            android:layout_toLeftOf="@+id/bCheckoutBasket"
+            android:contentDescription="@string/ean"
+            android:paddingRight="5dp"
+            android:paddingLeft="0dp"
+            android:visibility="gone" />
+
+        <com.sinepulse.app.custom.controls.CustomButton
+            android:id="@+id/bCheckoutBasket"
+            android:layout_width="@dimen/bottom_bar_icon_width"
+            android:layout_height="@dimen/bottom_bar_icon_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/nextbutton"
+            android:contentDescription="@string/checkout"
+            android:enabled="false"
+            android:paddingLeft="10dp" 
+            android:paddingRight="0dp"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+
+</LinearLayout>

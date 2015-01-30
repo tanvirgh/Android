@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlDeviceByTypeDetails"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="15dp"
+    android:background="@drawable/sh_background" >
+
+    <Button
+        android:id="@+id/btAddDevice"
+        style="@style/HomeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:background="@drawable/bg_bottom"
+        android:drawablePadding="18dp"
+        android:gravity="left|center_vertical"
+        android:paddingRight="0dp"
+        android:paddingLeft="30dp"
+        android:lines="2"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <ProgressBar
+        android:id="@+id/devicelistProgressBar"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
+    <ListView
+        android:id="@+id/lvDeviceList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btAddDevice"
+        android:layout_marginTop="7dp"
+        tools:listitem="@layout/device_item_view" >
+    </ListView>
+
+</RelativeLayout>

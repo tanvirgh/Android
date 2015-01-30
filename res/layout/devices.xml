@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/basketview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/list_divider_bg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FF333333" />
+
+    <ViewFlipper
+        android:id="@+id/vfDevice"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#dcdcdc" >
+
+        <include
+            android:id="@+id/basketitemlist"
+            layout="@layout/device_item_list" />
+    </ViewFlipper>
+
+</LinearLayout>

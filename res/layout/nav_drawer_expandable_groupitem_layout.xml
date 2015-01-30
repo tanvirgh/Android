@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rlnavDrawerExpandGrouplayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft" >
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/groupName"
+        android:layout_width="180dip"
+        android:layout_height="35dip"
+        android:paddingLeft="55dip"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:singleLine="true"
+        android:textSize="16sp" 
+        />
+
+
+      <ImageView
+        android:id="@+id/groupExpandIndicator"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="14dp"
+        android:layout_toRightOf="@+id/groupName"
+        android:contentDescription="@string/todo"
+        android:visibility="visible" />  
+    
+    <ProgressBar
+        android:id="@+id/nav_drawer_group_progress_bar"
+        style="@android:style/Widget.ProgressBar.Small.Inverse"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/groupExpandIndicator"
+        android:visibility="invisible" />
+
+</RelativeLayout>

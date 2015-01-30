@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.6" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true">  
+  <class id="1" language="java" name="com.sinepulse.app.activities.SplashScreen" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/activities/SplashScreen.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="75" width="222" x="-57" y="-1274"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.devspark.appmsg.MsgManager.OutAnimationListener" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/devspark/appmsg/MsgManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="197" x="-45" y="-13"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.devspark.appmsg.MsgManager" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/devspark/appmsg/MsgManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="73" width="195" x="-49" y="-128"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="com.sinepulse.app.base.HomeAutomationApplication" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/base/HomeAutomationApplication.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="58" width="248" x="637" y="-782"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="com.sinepulse.app.fragments.HomeFragment" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/fragments/HomeFragment.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="212" x="454" y="-677"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="com.sinepulse.app.fragments.UserProfileFragment" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/fragments/UserProfileFragment.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="59" width="216" x="455" y="-590"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="7" language="java" name="com.sinepulse.app.fragments.UserProfileFragment.UserProfileSate" 
+    project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/fragments/UserProfileFragment.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="186" x="670" y="-499"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="8" language="java" name="com.sinepulse.app.activities.Home" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/activities/Home.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="96" width="253" x="289" y="-1265"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.sinepulse.app.activities.About" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/activities/About.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="72" width="164" x="1038" y="-1030"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="com.sinepulse.app.activities.RoomManager" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/activities/RoomManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="73" width="164" x="1040" y="-935"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="com.sinepulse.app.activities.Settings.SettingPreferenceFragment" 
+    project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/activities/Settings.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="63" width="215" x="1017" y="-684"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="com.sinepulse.app.activities.Settings" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/activities/Settings.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="75" width="158" x="1045" y="-818"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="com.sinepulse.app.adapters.DeviceListAdapter" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/adapters/DeviceListAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="193" x="-67" y="-535"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="com.sinepulse.app.adapters.NavDrawerListAdapter.CustExpListview" 
+    project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/adapters/NavDrawerListAdapter.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="171" x="-55" y="-886"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="com.sinepulse.app.adapters.NavDrawerListAdapter" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/adapters/NavDrawerListAdapter.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="65" width="222" x="179" y="-1081"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="com.sinepulse.app.adapters.RoomListAdapter" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/adapters/RoomListAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="103" width="139" x="-61" y="-690"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="com.sinepulse.app.asynctasks.AsyncCheckServerStateAndSaveServerInfo" 
+    project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/asynctasks/AsyncCheckServerStateAndSaveServerInfo.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="81" width="272" x="953" y="-1261"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="com.sinepulse.app.asynctasks.AsyncNavDrawerExpandFirstStepItemsLoading" 
+    project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/asynctasks/AsyncNavDrawerExpandFirstStepItemsLoading.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="68" width="292" x="141" y="-828"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="com.sinepulse.app.base.MainActionbarBase" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/base/MainActionbarBase.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="58" width="173" x="755" y="-1021"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="com.sinepulse.app.custom.controls.CustomButton" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/custom/controls/CustomButton.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="224" x="263" y="-8"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="com.sinepulse.app.custom.controls.CustomEditText" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/custom/controls/CustomEditText.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="54" width="232" x="270" y="-84"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="com.sinepulse.app.custom.controls.CustomTextView" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/custom/controls/CustomTextView.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="227" x="514" y="-5"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="com.sinepulse.app.custom.controls.CustomUnsafeButton" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/custom/controls/CustomUnsafeButton.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="228" x="524" y="-77"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="com.sinepulse.app.entities.DeviceManager" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/entities/DeviceManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="125" width="222" x="207" y="-401"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="com.sinepulse.app.entities.RoomManager" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/entities/RoomManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="61" width="242" x="201" y="-499"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="26" language="java" name="com.sinepulse.app.fragments.CameraStreamFragment.CameraFragmentState" 
+    project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/fragments/CameraStreamFragment.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="204" x="681" y="-179"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="27" language="java" name="com.sinepulse.app.fragments.CameraStreamFragment" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/fragments/CameraStreamFragment.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="69" width="213" x="449" y="-269"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="28" language="java" name="com.sinepulse.app.fragments.DeviceControlFragment.StateSearch" 
+    project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/fragments/DeviceControlFragment.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="190" x="669" y="-338"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="29" language="java" name="com.sinepulse.app.fragments.DeviceControlFragment" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/fragments/DeviceControlFragment.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="59" width="215" x="450" y="-427"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="com.sinepulse.app.utils.CommonTask" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/utils/CommonTask.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="64" width="186" x="415" y="-1006"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="com.sinepulse.app.utils.CommonURL" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/utils/CommonURL.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="76" width="146" x="641" y="-899"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="32" language="java" name="com.sinepulse.app.utils.JSONfunctions" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/utils/JSONfunctions.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="65" width="240" x="980" y="-1131"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="com.sinepulse.app.utils.NavDrawerItem" project="HomeAutomationV1" 
+    file="/HomeAutomationV1/src/com/sinepulse/app/utils/NavDrawerItem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="167" x="-54" y="-1172"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="34">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="35" name="commonURLInstance">        
+        <position height="18" width="111" x="658" y="-849"/>      
+      </attribute>      
+      <multiplicity id="36" minimum="0" maximum="1">        
+        <position height="16" width="23" x="792" y="-823"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="31" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="37">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <nesting id="38">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </nesting>  
+  <association id="39">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="40" name="navDrawerAdapter"/>      
+      <multiplicity id="41" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="42">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="30"/>  
+  </dependency>  
+  <nesting id="43">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="11"/>  
+  </nesting>  
+  <association id="44">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="45" name="navDrawerListAdapter"/>      
+      <multiplicity id="46" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="47">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <dependency id="48">    
+    <end type="SOURCE" refId="30"/>    
+    <end type="TARGET" refId="31"/>  
+  </dependency>  
+  <association id="49">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="50" name="backState"/>      
+      <multiplicity id="51" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="52">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="14"/>  
+  </nesting>  
+  <dependency id="53">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="30"/>  
+  </dependency>  
+  <association id="54">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="55" name="backState"/>      
+      <multiplicity id="56" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="57">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <dependency id="58">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="30"/>  
+  </dependency>  
+  <dependency id="59">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="31"/>  
+  </dependency>  
+  <association id="60">    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="61" name="backState"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="63">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="64" name="basketDrawerItem"/>      
+      <multiplicity id="65" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="66">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="28"/>  
+  </nesting>  
+  <dependency id="67">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <association id="68">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="69" name="mInstance"/>      
+      <multiplicity id="70" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="71">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="26"/>  
+  </nesting>  
+  <association id="72">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="73" name="navDrawerItems"/>      
+      <multiplicity id="74" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="75">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="30"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

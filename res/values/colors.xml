@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<resources>
+
+    <color name="contents_text">#ff000000</color>
+    <color name="btn_press_color">#282828</color>
+    <color name="btn_release_color">#464646</color>
+    <color name="list_item_bg">#253F62</color>
+    <color name="list_divider_bg">#dcdcdc</color>
+    <color name="searchitemdiscountimage_text">#ffffff</color>
+    <color name="tvSearchitemtext2_text">#cfcfcf</color>
+    <color name="price_fraction">#355E88</color>
+    <color name="tvSearchitemtext3_text">#C0BCBC</color>
+    <color name="encode_view">#ffffffff</color>
+    <color name="help_button_view">#ffcccccc</color>
+    <color name="help_view">#ff404040</color>
+    <color name="possible_result_points">#c0ffff00</color>
+    <color name="result_image_border">#ffffffff</color>
+    <color name="result_minor_text">#ffc0c0c0</color>
+    <color name="result_points">#c000ff00</color>
+    <color name="result_text">#ffffffff</color>
+    <color name="result_view">#b0000000</color>
+    <color name="sbc_header_text">#ff808080</color>
+    <color name="sbc_header_view">#ffffffff</color>
+    <color name="sbc_list_item">#fffff0e0</color>
+    <color name="sbc_layout_view">#ffffffff</color>
+    <color name="sbc_page_number_text">#ff000000</color>
+    <color name="sbc_snippet_text">#ff4b4b4b</color>
+    <color name="share_text">#ff000000</color>
+    <color name="status_view">#50000000</color>
+    <color name="status_text">#AFABAA</color>
+    <color name="transparent">#00000000</color>
+    <color name="viewfinder_frame">#ff000000</color>
+    <color name="viewfinder_laser">#ffff0000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="tabMedium">#2B2B2B</color>
+    <color name="tabDark">#000000</color>
+    <color name="tabTransparent">#10ffffff</color>
+    <color name="blue">#0303ff</color>
+    <color name="gray">#f7f7f7</color>
+    <color name="gray_ash">#8b8f8f</color>
+    <color name="background">#55000000</color>
+    <color name="list_row_divider">#55dcdcdc</color>
+    <color name="basket_item_selected_background">#cecece</color>
+    <color name="basket_item_normal_background">#ffffff</color>
+    <color name="skyblue">#39abdf</color>
+    <color name="white">#ffffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="royal_blue">#4169e1</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="subTextColor">#99ffffff</color>
+    <color name="yellow_base">#EEEE00</color>
+    <color name="yellow_stroke">#EEEE00</color>
+    <color name="yellow_gradientS">#EEEE00</color>
+    <color name="yellow_gradientE">#EEEE00</color>
+    <color name="menu_text_color">#FFFFFF</color>
+    <color name="menu_shadow_color">#FFFFFF</color>
+    <color name="input_text_color">#FFFFFF</color>
+    <color name="mendatory_text_color">#ff0000</color>
+    <color name="pressed_apptheme">#CC33B5E5</color>
+    <color name="image_border_start">#40990000</color>
+    <color name="image_border_end">#FF660000</color>
+    <color name="image_border_center">#FFFF3333</color>
+    <color name="orange">#FFA500</color>
+    <color name="separator_color">#BBBBBB</color>
+    <color name="popup_text_color">#FFFFFF</color>
+    <color name="btn_normal">#00000000</color>
+    <color name="btn_pressed">#ff33b5e5</color>
+    <color name="btn_focused">#ff0099cc</color>
+    <color name="popup_bg_color">#EE666666</color>
+
+    <!-- AppMsg related colors -->
+    <color name="alert">#2a2a2a</color>
+    <color name="confirm">#ee8800</color>
+    <color name="info">#669900</color>
+    <color name="list_item_title">#FFFFFF</color>
+    <color name="list_background">#eeeeee</color>
+    <color name="list_background_pressed">#992416</color>
+    <color name="list_divider">#272727</color>
+    <color name="counter_text_bg">#626262</color>
+    <color name="counter_text_color">#c5c4c4</color>
+    <color name="title_background">#ff355689</color>
+    <color name="title_text">#ffffffff</color>
+    <color name="title_text_alt">#ff000000</color>
+    <color name="foreground1">#ff355689</color>
+    <color name="foreground2">#ff7081a3</color>
+    <color name="background1">#ffffffff</color>
+    <color name="background2">#ffd5ddeb</color>
+    <color name="background3">#ffe3e8f1</color>
+    <color name="title_separator">#40ffffff</color>
+    <color name="black_overlay">#66000000</color>
+
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/popup_bg"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingRight="8dp" >
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:textColor="@color/popup_text_color"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_weight="0"
+        android:background="@color/separator_color" />
+
+    <com.sinepulse.app.custom.controls.CustomButton
+        android:id="@+id/undo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:background="@drawable/undo_btn_bg"
+        android:drawableLeft="@drawable/ic_action_undo"
+        android:paddingRight="8dp"
+        android:textColor="@color/popup_text_color" />
+
+</LinearLayout>

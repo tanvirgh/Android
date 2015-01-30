@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_refresh"
+        android:icon="@drawable/refresh1"
+        android:showAsAction="always"
+        android:title="@string/search"/>
+   <!--  <item
+        android:id="@+id/menu_basket_scan"
+        android:actionLayout="@layout/tab_indicator"
+        android:showAsAction="always"
+        android:title="@string/scan"/> -->
+
+    <!-- The Overflow Menu -->
+
+    <item
+        android:id="@+id/menu_overflow"
+        android:icon="@drawable/tab_more"
+        android:showAsAction="always"
+        android:title="@string/more">
+       <!--  <menu>
+            <item
+                android:id="@+id/menu_More"
+                android:showAsAction="always|withText"
+                android:title="@string/settings">
+            </item>
+            <item
+                android:id="@+id/menu_About"
+                android:showAsAction="always|withText"
+                android:title="@string/about">
+            </item>
+            <item
+                android:id="@+id/menu_CreateRoom"
+                android:showAsAction="always|withText"
+                android:title="Create Room">
+            </item>
+        </menu> -->
+    </item>
+
+</menu>

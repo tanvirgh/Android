@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_bg"
+    android:orientation="horizontal" >
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvDropdownItemText"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="left"
+        android:gravity="left"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
+        android:textColor="@color/textColor"
+        android:textSize="12sp" />
+
+</LinearLayout>

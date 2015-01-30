@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/thirdRow"
+    android:baselineAligned="false"
+    android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+    android:layout_below="@+id/secondRow"
+    android:layout_marginTop="10dp"
+     android:background="@drawable/bgmedium"
+    android:onClick="middleViewClicked"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1" >
+
+        <TextView
+            android:id="@+id/thirdRowLeft"
+            style="@style/HomeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="58 w"
+            android:paddingLeft="20dp"
+            android:paddingRight="0dp"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+         android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical" >
+
+        <ImageView
+            android:id="@+id/thirdRowImage"
+            style="@style/HomeButton"
+            android:layout_centerInParent="true"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:src="@drawable/ac_medium"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="vertical" 
+         android:paddingRight="15dp"
+        android:paddingLeft="0dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:background="@drawable/bgled"
+          android:layout_marginTop="8dp" >
+
+            <TextView
+                android:id="@+id/thirdRowRightUp"
+                style="@style/HomeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3 "
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/thirdRowRightUp"
+                android:src="@drawable/greenled" 
+                android:layout_alignParentTop="true">
+            </ImageView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+             android:background="@drawable/bgled"
+            android:layout_marginTop="3dp" 
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/thirdRowRightDown"
+                style="@style/HomeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:text="4 "
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/thirdRowRightDown"
+                android:src="@drawable/redled"
+                android:layout_alignParentTop="true" >
+            </ImageView>
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

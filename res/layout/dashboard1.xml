@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/db1_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/sh_background"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <include
+        android:id="@+id/include1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/dashboard_top" />
+    
+    <ProgressBar
+        android:id="@+id/dashBoardProgressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rlDashboardBottomBar"
+        android:layout_below="@+id/include1" 
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/include2"
+                android:layout_width="fill_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="10dp"
+                layout="@layout/dashboard_firstrow" />
+
+            <include
+                android:id="@+id/include3"
+                android:layout_width="fill_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="10dp"
+                layout="@layout/dashboard_secondrow" />
+
+            <include
+                android:id="@+id/include4"
+                android:layout_width="fill_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="10dp"
+                layout="@layout/dashboard_thirdrow" />
+            <include
+                android:id="@+id/include5"
+                android:layout_width="fill_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="10dp"
+                layout="@layout/dashboard_fourthrow" />
+        </LinearLayout>
+    </ScrollView>
+
+    
+
+</RelativeLayout>

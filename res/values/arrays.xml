@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<array name="names">
+	    <item>Camera 1</item>
+	    <item>Camera 2</item>
+	    <item>Camera 3</item>
+	    <item>Camera 4</item>
+	    <item>Camera 5</item>
+	    <item>Camera 6</item>
+	    <item>Camera 7</item>
+	     <!--<item>Cam 8</item>
+	    <item>Cam 9</item>
+	    <item>Cam 10</item>
+	    <item>Cam 11</item>
+	    <item>Cam 12</item>
+	    <item>Cam 13</item>
+	    <item>Cam 14</item>
+	    <item>Cam 15</item>
+	    <item>Cam 16</item> -->
+	    
+	</array>
+   
+
+</resources>

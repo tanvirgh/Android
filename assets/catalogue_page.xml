@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pagelist>
+	<page name="page1" imagesrc="page1">
+		<button name="catButton1" imagesrc="addwagon" x="105" y="275" h="30" w="30" ean="4000417019004" desc="Kyllingefilet"/>				
+		<button name="catButton2" imagesrc="addwagon" x="280" y="310" h="30" w="30" ean="202222" desc="Oksecuvette"/>				
+		<button name="catButton3" imagesrc="addwagon" x="140" y="360" h="30" w="30" ean="201818" desc="Hakket kalve- og svinekød"/>			
+	</page>		
+	<page name="page2" imagesrc="page2">
+		<button name="catButton4" imagesrc="addwagon" x="100" y="65" h="30" w="30" ean="204303" desc="Oksefilet"/>				
+		<button name="catButton5" imagesrc="addwagon" x="225" y="120" h="30" w="30" ean="201818" desc="2stk New York strips"/>				
+		<button name="catButton6" imagesrc="addwagon" x="80" y="165" h="30" w="30" ean="4000417214003" desc="Lammeculotte"/>			
+		<button name="catButton7" imagesrc="addwagon" x="95" y="275" h="30" w="30" ean="201818" desc="Kalvekoteletter"/>			
+		<button name="catButton8" imagesrc="addwagon" x="210" y="365" h="30" w="30" ean="201818" desc="Icebergsalat"/>			
+		<button name="catButton9" imagesrc="addwagon" x="85" y="395" h="30" w="30" ean="201818" desc="Blommetomater"/>			
+						
+	</page>		
+	<page name="page3" imagesrc="page3">
+		<button name="catButton10" imagesrc="addwagon" x="25" y="15" h="30" w="30" ean="7810000000015" desc="Soleus Hvidvin"/>			
+		<button name="catButton11" imagesrc="addwagon" x="210" y="15" h="30" w="30" ean="7810000000039" desc="Banrock Station, Bag-in-a-box"/>				
+		<button name="catButton12" imagesrc="addwagon" x="125" y="65" h="30" w="30" ean="7810000000008" desc="Soleus Rødvin"/>				
+		<button name="catButton13" imagesrc="addwagon" x="285" y="87" h="30" w="30" ean="7810000000022" desc="Banrock Station, Bag-in-a-box"/>				
+		<button name="catButton14" imagesrc="addwagon" x="265" y="390" h="30" w="30" ean="7810000000046" desc="Diego de Almagro extra value box"/>					
+	
+	</page>	
+</pagelist>

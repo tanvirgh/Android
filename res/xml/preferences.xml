@@ -1,0 +1,30 @@
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     >
+
+    <PreferenceCategory
+        android:title="Application Settings"
+        android:layout="@layout/pref_category_layout"
+        >
+	    <Preference
+	        android:key="serverurl_preference"
+	        android:summary="Click to view User Information"
+	        android:title="User Profile"
+	        android:layout="@layout/pref_item_layout"
+	        >
+	         <intent
+	            android:action="android.intent.action.VIEW"
+	            android:data="http://www.android.com"
+	            android:targetClass="com.sinepulse.app.activities.UserInformation"
+	            android:targetPackage="com.sinepulse.app" /> 
+	    </Preference>
+	
+	    <CheckBoxPreference
+	        android:defaultValue="false"
+	        android:key="checkout_preference"
+	        android:summary="Check to Run app in Offline Mode"
+	        android:title="Application Mode" 
+	        android:layout="@layout/pref_item_checkbox_layout"
+	        />
+    </PreferenceCategory>
+</PreferenceScreen>
