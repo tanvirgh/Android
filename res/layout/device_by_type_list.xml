@@ -6,19 +6,39 @@
     android:layout_margin="15dp"
     android:background="@drawable/sh_background" >
 
-    <Button
-        android:id="@+id/btAddDevice"
-        style="@style/HomeButton"
+     <RelativeLayout
+        android:id="@+id/top"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:background="@drawable/bg_bottom"
-        android:drawablePadding="18dp"
-        android:gravity="start|center_vertical"
-        android:paddingRight="0dp"
-        android:paddingLeft="30dp"
-        android:lines="2"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bg_bottom" >
+     <ImageView
+         android:id="@+id/btAddDevice"
+         android:layout_width="80dp"
+         android:layout_height="80dp"
+         android:padding="15dp"
+         android:layout_alignParentLeft="true"
+         android:layout_centerVertical="true"
+         android:layout_marginLeft="10dp"
+         android:gravity="center_vertical|center_horizontal" />
+
+      <TextView
+          android:id="@+id/tvdeviceValue"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_toRightOf="@+id/btAddDevice"
+          android:paddingLeft="10dp"
+          android:paddingRight="0dp"
+          android:paddingTop="38dp"
+          android:textColor="#FFFFFF"
+          android:textSize="18sp"
+          android:textStyle="bold"
+          android:visibility="visible" />
+
+     </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/devicelistProgressBar"
@@ -32,7 +52,7 @@
         android:id="@+id/lvDeviceList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btAddDevice"
+        android:layout_below="@+id/top"
         android:layout_marginTop="7dp"
         tools:listitem="@layout/device_typewise_listitem_view" >
     </ListView>

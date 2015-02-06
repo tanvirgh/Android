@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+       android:background="#b0886a"
+       >
+
+        <Button
+            android:id="@+id/Button01"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:background="@drawable/highlighted_button"
+            android:text="Ok"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvOnlinePaymentHeadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8dp"
+            android:layout_centerVertical="true"
+            android:text="Select Date"
+            android:textColor="#3f6618"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/Button02"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/Button01"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:background="@drawable/highlighted_button"
+            android:text="Cancel"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/svDeliveryPayment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical|horizontal" >
+
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_ash"
+            android:orientation="vertical" > 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="3dp"
+                android:background="@drawable/online_payment_first_row"
+                android:orientation="vertical" >
+
+                <CalendarView
+                    android:id="@+id/calendarView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </LinearLayout>
+      </LinearLayout> 
+    </ScrollView>
+
+</LinearLayout>

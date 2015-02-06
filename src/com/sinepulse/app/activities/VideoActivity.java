@@ -6,6 +6,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -18,7 +20,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -31,24 +32,23 @@ import com.hikvision.netsdk.NET_DVR_IPCHANINFO;
 import com.hikvision.netsdk.NET_DVR_IPPARACFG_V40;
 import com.hikvision.netsdk.RealPlayCallBack;
 import com.sinepulse.app.R;
-import com.sinepulse.app.asynctasks.AsyncCheckServerStateAndSaveServerInfo;
 import com.sinepulse.app.asynctasks.AsyncGetCameraInfo;
 import com.sinepulse.app.base.MainActionbarBase;
-import com.sinepulse.app.entities.HomeLink;
 import com.sinepulse.app.fragments.DebugTools;
 import com.sinepulse.app.fragments.LiveSurface;
 import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
+import com.sinepulse.app.utils.NetworkUtil;
 
 @EActivity(R.layout.mediaplayer)
 public class VideoActivity extends MainActionbarBase implements
 		android.widget.AdapterView.OnItemSelectedListener,
 		SurfaceHolder.Callback, OnClickListener {
-	
+
 	ArrayAdapter<String> dataAdapter;
-	int spinnerValue ;
+	int spinnerValue;
 	String streamingUrl = "";
 	boolean fragmentPaused = false;
 	public static final int INITIAL_STATE = -1;
@@ -82,7 +82,7 @@ public class VideoActivity extends MainActionbarBase implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		createMenuBar();
 		if (asyncGetCameraInfo != null) {
 			asyncGetCameraInfo.cancel(true);
@@ -90,31 +90,33 @@ public class VideoActivity extends MainActionbarBase implements
 		asyncGetCameraInfo = new AsyncGetCameraInfo(this,
 				CommonValues.getInstance().userId);
 		asyncGetCameraInfo.execute();
-		
-//		loadStream( CommonValues.getInstance().currentCameraIndex);
-		
+
+		// loadStream( CommonValues.getInstance().currentCameraIndex);
+
 	}
+
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		MenuItem refresh=menu.findItem(R.id.menu_refresh);
+		MenuItem refresh = menu.findItem(R.id.menu_refresh);
 		refresh.setVisible(false);
 		invalidateOptionsMenu();
 		return prepared;
 	};
-	
+
 	private void createMenuBar() {
 		mSupportActionBar = getSupportActionBar();
 		mSupportActionBar.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.tool_bar));
 		mSupportActionBar.setIcon(R.drawable.sp_logo);
 		mSupportActionBar.setDisplayHomeAsUpEnabled(true);
-		
+
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
-			 onBackPressed();
+			onBackPressed();
 		}
 		return true;
 	}
@@ -124,57 +126,47 @@ public class VideoActivity extends MainActionbarBase implements
 		spCamera.setOnItemSelectedListener(this);
 	}
 
-	@Click({ R.id.MyStreamButton, R.id.bCamera, R.id.bRoom,
-			R.id.bDashboard })
+	@Click({ R.id.MyStreamButton, R.id.bCamera, R.id.bRoom, R.id.bDashboard })
 	public void onClick(View v) {
 		switch (v.getId()) {
 
 		case R.id.MyStreamButton://
 			releaseVideoProperties();
-			
-			switch (spinnerValue) {
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-			case 9:
-			case 10:
-			case 11:
-			case 12:
-			case 13:
-			case 14:
-			case 15:
-			
-				Toast.makeText(this, "*** Loading Video.Please wait ***",
+			final String status = NetworkUtil.getConnectivityStatusString(this);
+			if (status.equals("Wifi enabled")) {
+				Toast.makeText(VideoActivity.this,
+						"*** Loading Video.Please wait ***",
 						Toast.LENGTH_SHORT).show();
 				loadStream(spinnerValue);
 
+			} else if (status.equals("Mobiledata enabled")) {
+				CommonTask
+						.ShowConfirmation(
+								this,
+								"Video Stream will consume high Data Volume.Do you want to continue?",
+								ShowCameraEvent());
 			}
+
 			break;
 		case R.id.bCamera:
 			break;
 		case R.id.bRoom:
-			 releaseVideoProperties();
-			playPort=-1;
+			releaseVideoProperties();
+			playPort = -1;
 			MainActionbarBase.stackIndex.removeAllElements();
-			currentFragment=ROOM_FRAGMENT;
+			currentFragment = ROOM_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(5)))
 				stackIndex.push(String.valueOf(5));
-			  Intent roomIntent = new Intent(this,
-			  RoomManager_.class);
-			  roomIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			  startActivity(roomIntent);
-			 
+			Intent roomIntent = new Intent(this, RoomManager_.class);
+			roomIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(roomIntent);
+
 			break;
 		case R.id.bDashboard:
-//			loadingDevicesTask.cancel(true);
+			// loadingDevicesTask.cancel(true);
 			MainActionbarBase.stackIndex.removeAllElements();
 			releaseVideoProperties();
-			playPort=-1;
+			playPort = -1;
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
 			Home.navDrawerAdapter.setSelectedPosition(ALLDEVICE_FRAGMENT);
 			currentFragment = ALLDEVICE_FRAGMENT;
@@ -191,12 +183,55 @@ public class VideoActivity extends MainActionbarBase implements
 
 	}
 
+	public DialogInterface.OnClickListener ShowCameraEvent() {
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					/*switch (spinnerValue) {
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					case 6:
+					case 7:
+					case 8:
+					case 9:
+					case 10:
+					case 11:
+					case 12:
+					case 13:
+					case 14:
+					case 15:
+						Toast.makeText(VideoActivity.this,
+								"*** Loading Video.Please wait ***",
+								Toast.LENGTH_SHORT).show();
+
+					}*/
+					Toast.makeText(VideoActivity.this,
+							"*** Loading Video.Please wait ***",
+							Toast.LENGTH_SHORT).show();
+					loadStream(spinnerValue);
+					break;
+
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialog.cancel();
+					break;
+				}
+			}
+		};
+		return dialogClickListener;
+
+	}
+
 	private void loadStream(int spinnerValue) {
 
 		if (loadingDevicesTask != null) {
 			loadingDevicesTask.cancel(true);
 		}
-		loadingDevicesTask = new LoadingDevicesTask(spinnerValue,cameraIp,port,userName,password);
+		loadingDevicesTask = new LoadingDevicesTask(spinnerValue, cameraIp,
+				port, userName, password);
 		loadingDevicesTask.execute();
 		streamingButton.setText("Refresh");
 	}
@@ -261,7 +296,7 @@ public class VideoActivity extends MainActionbarBase implements
 			break;
 		default:
 			break;
-			
+
 		}
 
 	}
@@ -290,12 +325,12 @@ public class VideoActivity extends MainActionbarBase implements
 
 	@Override
 	public void onPause() {
-		releaseVideoProperties() ;
+		releaseVideoProperties();
 		streamingButton.setText("Strat Streaming");
 		super.onPause();
 		fragmentPaused = true;
 		spinnerValue = spCamera.getSelectedItemPosition() + 1;
-        CommonValues.getInstance().currentCameraIndex=spinnerValue;
+		CommonValues.getInstance().currentCameraIndex = spinnerValue;
 	}
 
 	@Override
@@ -304,7 +339,7 @@ public class VideoActivity extends MainActionbarBase implements
 				R.drawable.camera_selected1));
 		getSupportActionBar().setTitle("Video Stream");
 		streamingButton.setText("Strat Streaming");
-//		playPort=-1;
+		// playPort=-1;
 		fragmentPaused = false;
 		super.onResume();
 
@@ -314,23 +349,24 @@ public class VideoActivity extends MainActionbarBase implements
 	 * 
 	 */
 	private void releaseVideoProperties() {
-		if(surface!=null && player!=null){
-		if (surface.getHolder().getSurface().isValid() && -1 != playPort) {
-			Player.getInstance().closeStream(playPort);
-			Player.getInstance().freePort(playPort);
-			Player.getInstance().setVideoWindow(playPort, 0, null);
+		if (surface != null && player != null) {
+			if (surface.getHolder().getSurface().isValid() && -1 != playPort) {
+				Player.getInstance().closeStream(playPort);
+				Player.getInstance().freePort(playPort);
+				Player.getInstance().setVideoWindow(playPort, 0, null);
+				playPort = -1;
+				Player.getInstance().stop(userId);
+			}
+			// hcNetSdk.NET_DVR_Logout_V30(userId);
+			hcNetSdk.NET_DVR_Cleanup();
 			playPort = -1;
-			Player.getInstance().stop(userId);
 		}
-//		hcNetSdk.NET_DVR_Logout_V30(userId);
-		hcNetSdk.NET_DVR_Cleanup();
-		playPort = -1;
 	}
-	}
-   @Override
+
+	@Override
 	public void onBackPressed() {
-		releaseVideoProperties() ;
-		 MainActionbarBase.stackIndex.removeAllElements();
+		releaseVideoProperties();
+		MainActionbarBase.stackIndex.removeAllElements();
 		currentFragment = ALLDEVICE_FRAGMENT;
 		Intent homeIntent = new Intent(this, Home_.class);
 		homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -344,7 +380,7 @@ public class VideoActivity extends MainActionbarBase implements
 
 	@Override
 	public void onStop() {
-//		releaseVideoProperties() ;
+		// releaseVideoProperties() ;
 		super.onStop();
 	}
 
@@ -365,8 +401,6 @@ public class VideoActivity extends MainActionbarBase implements
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
 	}
-
-	
 
 	private static final int PLAYING_BUFFER_SIZE = 1024 * 1024 * 4;
 
@@ -405,9 +439,12 @@ public class VideoActivity extends MainActionbarBase implements
 
 				if (0 < bufferSize) {
 					if (openPlayer(buffer, bufferSize)) {
-						 System.out.println("Open player successfully.");
+						System.out.println("Open player successfully.");
 					} else {
-						 System.out.println("Open player failed.");
+						// System.out.println("Open player failed.");
+						CommonTask
+								.ShowMessage((Context) realplayCallback,
+										"Some error occured in HIK Vision SDK.Please try watching Stream later");
 					}
 				}
 
@@ -462,9 +499,10 @@ public class VideoActivity extends MainActionbarBase implements
 		}
 
 		Player.getInstance().setStreamOpenMode(playPort, Player.STREAM_FILE);
-//		 System.out.println("We are using " + surface.getHolder() +" as a Displayer.");
-		
-		 if (!Player.getInstance().play(playPort,
+		// System.out.println("We are using " + surface.getHolder()
+		// +" as a Displayer.");
+
+		if (!Player.getInstance().play(playPort,
 				surface.getHolder().getSurface())) {
 			Player.getInstance().closeStream(playPort);
 			Player.getInstance().freePort(playPort);
@@ -483,44 +521,45 @@ public class VideoActivity extends MainActionbarBase implements
 			System.out.println("Error: " + code);
 		}
 	}
+
 	public boolean sendGetCameraInfoRequest(int logedInUserId) {
-		
+
 		String getCameraInfoUrl = CommonURL.getInstance().GetCommonURL + "/"
-				+ logedInUserId+ "/home"+"/camera";
+				+ logedInUserId + "/home" + "/camera";
 
 		if (JsonParser.getcameraInfoRequest(getCameraInfoUrl) != null) {
 			return true;
 		}
 		return false;
-		
-		
+
 	}
+
 	public void setCameraInfo() {
-		if(CommonValues.getInstance().cameraInfo!=null){
-		 cameraIp=CommonValues.getInstance().cameraInfo.IpAddress;
-		 port=CommonValues.getInstance().cameraInfo.port;
-		userName=CommonValues.getInstance().cameraInfo.userName;
-		password=CommonValues.getInstance().cameraInfo.password;
-		Integer channelCount=CommonValues.getInstance().cameraInfo.ChannelCount;
-//		String[] state=new String[channelCount];
-		String[] cameraStates=new String[channelCount];
-	    for (int i = 0; i < channelCount; i++)
-	    {
-	        
-	    	cameraStates[i]="Camera"+(i+1);
-	    }
-	    // Initialize and set Adapter
-//		cameraStates = getResources().getStringArray(R.array.camera_arrays);
-				dataAdapter = new ArrayAdapter<String>(this,
-						R.layout.spinneritem_camera, cameraStates);
-				spCamera.setAdapter(dataAdapter);
-				spCamera.setSelection(CommonValues.getInstance().currentCameraIndex-1);
-		
-	}else{
-		CommonTask.ShowMessage(this, "Error Fetching Data from Server");
+		if (CommonValues.getInstance().cameraInfo != null) {
+			cameraIp = CommonValues.getInstance().cameraInfo.IpAddress;
+			port = CommonValues.getInstance().cameraInfo.port;
+			userName = CommonValues.getInstance().cameraInfo.userName;
+			password = CommonValues.getInstance().cameraInfo.password;
+			Integer channelCount = CommonValues.getInstance().cameraInfo.ChannelCount;
+			// String[] state=new String[channelCount];
+			String[] cameraStates = new String[channelCount];
+			for (int i = 0; i < channelCount; i++) {
+
+				cameraStates[i] = "Camera " + (i + 1);
+			}
+			// Initialize and set Adapter
+			// cameraStates =
+			// getResources().getStringArray(R.array.camera_arrays);
+			dataAdapter = new ArrayAdapter<String>(this,
+					R.layout.spinneritem_camera, cameraStates);
+			spCamera.setAdapter(dataAdapter);
+			spCamera.setSelection(CommonValues.getInstance().currentCameraIndex - 1);
+
+		} else {
+			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
+		}
 	}
-	}
-	
+
 	private class LoadingDevicesTask extends AsyncTask<Void, Void, Boolean> {
 
 		private int spinnerValue;
@@ -529,12 +568,13 @@ public class VideoActivity extends MainActionbarBase implements
 		private String userName;
 		private String passWord;
 
-		public LoadingDevicesTask(int spinnerValue,String iP,int port,String userName,String passWord) {
+		public LoadingDevicesTask(int spinnerValue, String iP, int port,
+				String userName, String passWord) {
 			this.spinnerValue = spinnerValue;
-			this.iP=iP;
-			this.port=port;
-			this.userName=userName;
-			this.passWord=passWord;
+			this.iP = iP;
+			this.port = port;
+			this.userName = userName;
+			this.passWord = passWord;
 
 		}
 
@@ -555,14 +595,14 @@ public class VideoActivity extends MainActionbarBase implements
 			NET_DVR_DEVICEINFO_V30 dvr_deviceinfo;
 			try {
 				dvr_deviceinfo = new NET_DVR_DEVICEINFO_V30();
-				userId = hcNetSdk.NET_DVR_Login_V30(iP, port,
-						userName, passWord, dvr_deviceinfo);
+				userId = hcNetSdk.NET_DVR_Login_V30(iP, port, userName,
+						passWord, dvr_deviceinfo);
 				DebugTools.dump(dvr_deviceinfo);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			catchErrorIfNecessary();
 			NET_DVR_IPPARACFG_V40 ipParaCfg = new NET_DVR_IPPARACFG_V40();
 			// UserId, Command, ChannelNo., Out
@@ -586,8 +626,10 @@ public class VideoActivity extends MainActionbarBase implements
 			clientInfo.sMultiCastIP = null;
 
 			// UserId, ClientInfo, RealplayCallback, Blocked
-			/*final int returned = hcNetSdk.NET_DVR_RealPlay_V30(userId,
-					clientInfo, realplayCallback, true);*/
+			/*
+			 * final int returned = hcNetSdk.NET_DVR_RealPlay_V30(userId,
+			 * clientInfo, realplayCallback, true);
+			 */
 			try {
 				final int returned = hcNetSdk.NET_DVR_RealPlay_V30(userId,
 						clientInfo, realplayCallback, true);
@@ -600,23 +642,21 @@ public class VideoActivity extends MainActionbarBase implements
 			return null;
 
 		}
-		
+
 		@Override
 		protected void onPostExecute(Boolean result) {
 			// TODO Auto-generated method stub
-//			super.onPostExecute(result);
-			if(Player.getInstance().getPort()== -1){
+			// super.onPostExecute(result);
+			if (Player.getInstance().getPort() == -1) {
 				showVideoLoadingError();
 			}
 		}
 
-		
 	}
-	
+
 	private void showVideoLoadingError() {
 		CommonTask.ShowMessage(this, "Error Loading Video Stream");
-		
+
 	}
-	
 
 }

@@ -71,7 +71,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/login_button"
+            android:background="@drawable/login_button_mb"
             android:gravity="center_horizontal|center" >
  </com.sinepulse.app.custom.controls.CustomButton>
    

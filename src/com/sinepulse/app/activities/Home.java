@@ -213,7 +213,9 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	@ViewById(R.id.lvDeviceList)
 	public ListView deviceListView;
 	@ViewById(R.id.btAddDevice)
-	public Button btAddDevice;
+	public ImageView btAddDevice;
+	@ViewById(R.id.tvdeviceValue)
+	public TextView tvdeviceValue;
 	@ViewById(R.id.btdevice_value)
 	public ToggleButton btdevice_value;
 	@ViewById(R.id.onOffImage)
@@ -509,7 +511,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			// Total Bulbs
 			home_btn_bulb.setText("   "
 					+ (CommonValues.getInstance().summary.deviceSummaryArray
-							.get(1)).DeviceCount + " Bulbs");
+							.get(1)).DeviceCount + " Lights");
 			// Total AC
 			home_btn_ac.setText("   "
 					+ (CommonValues.getInstance().summary.deviceSummaryArray
@@ -588,24 +590,28 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	public void setupDeviceByTypeListViewAdapter(int deviceType) {
 		switch (deviceType) {
 		case 1:
-			btAddDevice.setText("  Fan");
-			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-					R.drawable.fan_on, 0, 0, 0);
+			tvdeviceValue.setText("  Fan");
+//			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
+//					0, R.drawable.fan_on, 0, 0);
+			btAddDevice.setBackgroundResource(R.drawable.fan_on);
 			break;
 		case 2:
-			btAddDevice.setText("  Light");
-			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-					R.drawable.bulbon, 0, 0, 0);
+			tvdeviceValue.setText("  Light");
+//			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
+//					0, R.drawable.bulbon, 0, 0);
+			btAddDevice.setBackgroundResource(R.drawable.bulbon);
 			break;
 		case 3:
-			btAddDevice.setText("  AC");
-			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-					R.drawable.ac_large, 0, 0, 0);
+			tvdeviceValue.setText("  AC");
+//			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
+//					0, R.drawable.ac_large, 0, 0);
+			btAddDevice.setBackgroundResource(R.drawable.ac_large_top);
 			break;
 		case 4:
-			btAddDevice.setText("  Curtain");
-			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-					R.drawable.curtain_large, 0, 0, 0);
+			tvdeviceValue.setText("  Curtain");
+//			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
+//					0, R.drawable.curtain_large, 0, 0);
+			btAddDevice.setBackgroundResource(R.drawable.curtain_large);
 			break;
 
 		default:
@@ -779,6 +785,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				seekBarProgressValue = seekBar.getProgress();
+				seekBar1.setEnabled(false);
 				if (deviceManagerEntity.DeviceTypeId == 1) {
 					sendSetProperty(CommonValues.getInstance().userId,
 							seekBarProgressValue, property.DeviceId, 3);
@@ -788,6 +795,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				}
 				tvProgressValue.setText(String.valueOf(seekBarProgressValue)
 						+ " %");
+				
 			}
 
 			@Override
@@ -1172,8 +1180,9 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	public void clearDeviceByTypeData() {
 		CommonValues.getInstance().deviceList.clear();
 		deviceListView.setAdapter(null);
-		btAddDevice.setText("");
-		btAddDevice.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		tvdeviceValue.setText("");
+//		btAddDevice.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		btAddDevice.setBackgroundResource(0);
 	}
 
 	private void backToHomeScreen() {
@@ -1194,7 +1203,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		currentFragment = ALLDEVICE_FRAGMENT;
 
 		if (vfDeviceType.getDisplayedChild() == 0) {
-			this.setTitle("DashBoard");
+			this.setTitle("Dashboard");
 			CommonValues.getInstance().currentAction = CommonIdentifier.Action_Summary;
 			if (asyncRefreshDashBoard != null) {
 				asyncRefreshDashBoard.cancel(true);
@@ -1608,8 +1617,9 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				new AsyncRefreshDashBoard(Home.this).execute();
 				CommonValues.getInstance().deviceList.clear();
 				deviceListView.setAdapter(null);
-				btAddDevice.setText("");
-				btAddDevice.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+				tvdeviceValue.setText("");
+//				btAddDevice.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+				btAddDevice.setBackgroundResource(0);
 				vfDeviceType.setDisplayedChild(0);
 			}
 			break;
@@ -1635,7 +1645,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 						R.drawable.ac_medium, 0, 0, 0);
 			} else if (deviceManagerEntity.DeviceTypeId == 4) {
 				tvDeviceLogHeadingText.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.curtainsmall, 0, 0, 0);
+						R.drawable.curtainmedium, 0, 0, 0);
 			}
 			tvToday.setTextColor(Color.parseColor("#2C5197"));
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));

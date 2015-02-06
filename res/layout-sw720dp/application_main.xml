@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/moreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ViewFlipper
+            android:id="@+id/vfMore"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+           >
+
+            <include
+                android:id="@+id/moreUserAccount"
+                layout="@layout/user_login" />
+
+            <!-- <include
+                android:id="@+id/lMoreUserInfo"
+                layout="@layout/user_profile" /> -->
+
+            <ProgressBar
+                android:id="@+id/pblogInProgressBar"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp" />
+        </ViewFlipper>
+    </RelativeLayout>
+
+</LinearLayout>

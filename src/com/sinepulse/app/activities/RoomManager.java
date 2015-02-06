@@ -327,8 +327,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			roomListView.setSelectionFromTop(position, view.getTop());
 			roomManagerEntity = rAdapter.getItemAtPosition(position);
 			btAddDevice.setText("  " + roomManagerEntity.Name);
-			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-					R.drawable.icon_room_medium, 0, 0, 0);
+//			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
+//					R.drawable.icon_room_medium, 0, 0, 0);
 			// new DisplayRoomDetails(RoomManagerFragment.this,
 			// roomManagerEntity.Id);
 			roomid = roomManagerEntity.getId();
@@ -540,6 +540,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				seekBarProgressValue = seekBar.getProgress();
+				seekBar1.setEnabled(false);
 				if (deviceManagerEntity.DeviceTypeId == 1) {
 					sendSetProperty(CommonValues.getInstance().userId,
 							seekBarProgressValue, property.DeviceId, 3);
@@ -982,10 +983,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			tvDeviceLogHeadingText.setText("  " + deviceManagerEntity.Name);
 			if (deviceManagerEntity.DeviceTypeId == 1) {
 				tvDeviceLogHeadingText.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.fanmedium, 0, 0, 0);
+						R.drawable.fan_on, 0, 0, 0);
 			} else if (deviceManagerEntity.DeviceTypeId == 2) {
 				tvDeviceLogHeadingText.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.bulbmedium, 0, 0, 0);
+						R.drawable.bulbon, 0, 0, 0);
 			} else if (deviceManagerEntity.DeviceTypeId == 3) {
 				tvDeviceLogHeadingText.setCompoundDrawablesWithIntrinsicBounds(
 						R.drawable.ac_medium, 0, 0, 0);

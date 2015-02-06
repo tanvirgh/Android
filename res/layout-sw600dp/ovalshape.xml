@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/curtainControl"
+    android:layout_width="match_parent"
+    android:layout_marginTop="30dp"
+    android:layout_height="350dp" >
+
+    
+
+    <ImageView
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="0dp"
+        android:layout_alignTop="@+id/down"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/reset" />
+    
+     <TextView
+                android:id="@+id/tvResetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/reset"
+                 android:layout_marginLeft="30dp"
+                android:layout_alignParentLeft="true"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:text="Reset"
+                android:textStyle="bold"
+                android:visibility="visible" />
+    
+    <ImageView
+        android:id="@+id/calibration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/down"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="0dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/calibration" />
+    
+     <TextView
+                android:id="@+id/tvCalibrateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:layout_below="@+id/calibration"
+                 android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:textColor="#FFFFFF"
+                android:text="Calibrate"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+     <ImageView
+         android:id="@+id/up"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/pause"
+         android:layout_alignParentTop="true"
+         android:contentDescription="@string/app_name"
+         android:src="@drawable/curup" />
+
+     <ImageView
+         android:id="@+id/pause"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/up"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="60dp"
+         android:contentDescription="@string/app_name"
+         android:src="@drawable/pause" />
+
+     <ImageView
+         android:id="@+id/down"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/pause"
+         android:layout_below="@+id/pause"
+         android:layout_marginTop="67dp"
+         android:contentDescription="@string/app_name"
+         android:src="@drawable/curdown" />
+
+     <ImageView
+         android:id="@+id/left"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/down"
+         android:layout_marginLeft="44dp"
+         android:layout_toRightOf="@+id/tvResetText"
+         android:contentDescription="@string/app_name"
+         android:src="@drawable/left" />
+
+     <ImageView
+         android:id="@+id/right"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignTop="@+id/pause"
+         android:layout_marginRight="28dp"
+         android:layout_toLeftOf="@+id/tvCalibrateText"
+         android:contentDescription="@string/app_name"
+         android:src="@drawable/right" />
+
+</RelativeLayout>

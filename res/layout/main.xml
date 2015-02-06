@@ -27,7 +27,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="20dp"
-                layout="@layout/device_list" />
+                layout="@layout/device_by_type_list" />
 
             <include
                 android:id="@+id/devicePropertyView"

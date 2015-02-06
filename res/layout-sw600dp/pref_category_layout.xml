@@ -1,0 +1,9 @@
+<!-- Layout used for PreferenceCategory in a PreferenceActivity. -->
+<com.sinepulse.app.custom.controls.CustomTextView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+android:id/title"
+    style="?android:attr/listSeparatorTextViewStyle"
+    android:layout_margin="0dp"
+    android:background="@color/list_divider_bg"
+    android:textColor="@color/black"
+    android:textIsSelectable="false" />

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/topRow"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginTop="15dp"
+    android:orientation="horizontal" >
+
+    <Button
+        android:id="@+id/btn_total_power"
+        style="@style/HomeButton"
+        android:layout_width="fill_parent"
+        android:layout_height="420dp"
+        android:layout_weight="1"
+        android:background="@drawable/bgheaderleft"
+        android:drawableTop="@drawable/voltage_tab"
+        android:padding="0dp"
+        android:text="54 watts in use"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/topRowRight"
+        android:layout_width="fill_parent"
+        android:layout_height="420dp"
+        android:layout_weight="1"
+        android:background="@drawable/bgheaderleft"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/home_btn_room"
+            style="@style/HomeButton"
+            android:drawableLeft="@drawable/roomsmall"
+            android:drawablePadding="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingLeft="25dp"
+            android:paddingRight="5dp"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/home_btn_fan"
+            style="@style/HomeButton"
+            android:drawableLeft="@drawable/fansmall"
+            android:drawablePadding="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingLeft="25dp"
+            android:paddingRight="5dp"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/home_btn_bulb"
+            style="@style/HomeButton"
+            android:drawableLeft="@drawable/bulbsmall"
+            android:drawablePadding="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingLeft="25dp"
+            android:paddingRight="5dp"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/home_btn_ac"
+            style="@style/HomeButton"
+            android:drawableLeft="@drawable/ac2_web"
+            android:drawablePadding="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingLeft="25dp"
+            android:paddingRight="5dp"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/home_btn_curtain"
+            style="@style/HomeButton"
+            android:drawableLeft="@drawable/curtainsmall"
+            android:drawablePadding="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingLeft="25dp"
+            android:paddingRight="5dp"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+</LinearLayout>

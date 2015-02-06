@@ -12,6 +12,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,6 +50,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.sinepulse.app.R;
 import com.sinepulse.app.asynctasks.AsyncCheckServerStateAndSaveServerInfo;
+import com.sinepulse.app.asynctasks.AsyncGetCurtainPresetValues;
+import com.sinepulse.app.asynctasks.CheckMC;
 import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.utils.CommonConstraints;
 import com.sinepulse.app.utils.CommonGcmValues;
@@ -78,9 +83,9 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	public ProgressBar pbFirstPage;
 	GoogleCloudMessaging gcm;
 	String regid;
+//	CheckMC checkMC = null;
 	CheckMC checkMC = null;
-	protected static String connnectionState="NONE";
-	
+	protected static String connnectionState = "NONE";
 
 	public static Context context;
 
@@ -97,6 +102,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	 * Tag used on log messages.
 	 */
 	static final String TAG = "Tanvir";
+	String urlForMc="";
 
 	/**
 	 * Called when the activity is started.
@@ -109,38 +115,39 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		UserLogin.context = this;
 		mSupportActionBar = getSupportActionBar();
 		mSupportActionBar.hide();
-		
-//		specifyAppMode();
+
+		// specifyAppMode();
 	}
 
 	@AfterViews
 	void afterViewsLoaded() {
-//		bUserLogin.setEnabled(false);
+		// bUserLogin.setEnabled(false);
 		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		etUserName.requestFocus();
 		CommonTask.showSoftKeybord(etUserName);
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-		// Check device for Play Services APK. If check succeeds, proceed with GCM registration.
+		// Check device for Play Services APK. If check succeeds, proceed with
+		// GCM registration.
 		if (checkPlayServices()) {
 			// Log.d(TAG, "Play Service Found!");
 			gcm = GoogleCloudMessaging.getInstance(this);
 			regid = getRegistrationId(this);
 			if (regid.isEmpty()) {
 				registerInBackground();
-//				Log.d(TAG, regid);
+				// Log.d(TAG, regid);
 			} else {
 				// mDisplay.setText("Stored" + regid);
-//				Log.d(TAG, regid);
+				// Log.d(TAG, regid);
 			}
 		} else {
-//			Log.i(TAG, "No valid Google Play Services APK found.");
+			// Log.i(TAG, "No valid Google Play Services APK found.");
 		}
-//		if (isMyServiceRunning()) {
-//			Log.d(TAG, "Service running");
-//		} else {
-//			Log.d(TAG, "Service Not running");
-//		}
+		// if (isMyServiceRunning()) {
+		// Log.d(TAG, "Service running");
+		// } else {
+		// Log.d(TAG, "Service Not running");
+		// }
 	}
 
 	@Override
@@ -178,9 +185,9 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 
 		switch (v.getId()) {
 		case R.id.bUserLogin:
-//			if(specifyAppMode()){
+			// if(specifyAppMode()){
 			proceedLoginProcess();
-//			}
+			// }
 			break;
 		default:
 			break;
@@ -191,28 +198,9 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	/**
 	 * 
 	 */
-	public void resolveNetworkState() {
-		final String status = NetworkUtil.getConnectivityStatusString(this);
-			if (status.equals("Wifi enabled")) {
-				connectByRasPeri();
-			} else if(status.equals("Mobiledata enabled")) {
-				CommonURL.getInstance().assignValues(CommonURL.getInstance().remoteBaseUrl);
-				Toast.makeText(context, "Internet Mode", Toast.LENGTH_SHORT).show();
-//				Log.d("NInfo", "GSM");
-			}else{
-				CommonValues.getInstance().IsServerConnectionError=true;
-				CommonTask.ShowMessage(this,
-						"Eroor Connecting to Server,Pleasee retry.");
-				
-			}
-	}
-
-	/**
-	 * 
-	 */
 	public void proceedLoginProcess() {
 		if (validateLoginInfo()) {
-			
+
 			etUserName.clearFocus();
 			etUserPassword.clearFocus();
 			backState = INITIAL_STATE;
@@ -222,7 +210,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 			} else {
 				String GcmRegId = getRegistrationId(getApplicationContext());
 				saveUserInfo(GcmRegId);
-//				System.out.println(GcmRegId);
+				// System.out.println(GcmRegId);
 			}
 		}
 	}
@@ -259,13 +247,19 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 
 	@Override
 	protected void onResume() {
-		
-		if(specifyAppMode()){
-//			bUserLogin.setEnabled(true);
-		}else{
-		CommonTask.ShowMessage(this, "Failed to resolve connection mode.");
-//		bUserLogin.setEnabled(false);
+
+		if (selectAppMode() == true) {
+
+		} else {
+			CommonTask.ShowMessage(this, "Failed to resolve connection mode.");
 		}
+
+		// selectAppMode();
+/*		if (CommonURL.getInstance().LoginCustomerURL
+				.equals("http://dev.sinepulse.com/smarthome/service/prod/DataAPI.svc/data/login")) {
+			Toast.makeText(context, "Internet Mode", Toast.LENGTH_SHORT).show();
+		}
+*/
 		etUserPassword.clearFocus();
 		super.onResume();
 	}
@@ -273,87 +267,140 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	/**
 	 * 
 	 */
-	public boolean specifyAppMode() {
-		if( CommonTask.isNetworkAvailable(this)	){
-			if(CommonTask.isEmpty(CommonTask.getBaseUrl(this)) ){
-				connectByIp();
-			}
-			else{
+	public boolean selectAppMode() {
+		if (CommonTask.isNetworkAvailable(this)) {
 			resolveNetworkState();
-			}
 			return true;
-			}else{
-//           Toast.makeText(this, "Failed to resolve Connection Mode.Please turn on WiFi or Data Connection", Toast.LENGTH_SHORT).show();
-            CommonTask.ShowMessage(this, "Please turn on WiFi or Data Connection");
-           return false;
-			}
-		
+		} else {
+			// Toast.makeText(this,
+			// "Failed to resolve Connection Mode.Please turn on WiFi or Data Connection",
+			// Toast.LENGTH_SHORT).show();
+			CommonTask.ShowMessage(this,
+					"Please turn on WiFi or Data Connection");
+			return false;
+		}
+
 	}
-	
+
+	/**
+	 * 
+	 */
+	public void resolveNetworkState() {
+		final String status = NetworkUtil.getConnectivityStatusString(this);
+		if (status.equals("Wifi enabled")) {
+			/*if (CommonTask.isEmpty(CommonTask.getBaseUrl(this))) {
+				// If SharedPreference is empty try resolving with host
+				// name...Step1
+				connectByHostName();
+
+			} else {
+				// Already have an IP in Preference...Lets try to connect with
+				// that...Step2
+				urlForMc = "http://"
+						+ CommonTask.getBaseUrl(this) + "/api/is-online";
+				if (checkMC != null) {
+					checkMC.cancel(true);
+				}
+				connnectionState = "PREF";
+				checkMC = new CheckMC(urlForMc, (UserLogin_) this,false);
+//				checkMC.execute();
+				checkMC.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+			}*/
+			connectByHostName();
+		} else if (status.equals("Mobiledata enabled")) {
+			CommonURL.getInstance().assignValues(
+					CommonURL.getInstance().remoteBaseUrl);
+//			Toast.makeText(context, "Internet Mode", Toast.LENGTH_SHORT).show();
+			// Log.d("NInfo", "GSM");
+		} else {
+			CommonValues.getInstance().IsServerConnectionError = true;
+			CommonTask.ShowMessage(this,
+					"Device offline ! Pleasee check your network connection.");
+
+		}
+	}
+
+	/**
+	 * Failed to resolve with host name..Lets try with replacing WIFI IP last
+	 * sub net mask and attempt to connect.
+	 */
+
 	public void connectByIp() {
 		WifiManager wifiMgr = (WifiManager) getSystemService(WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
-		
+
 		int ip = wifiInfo.getIpAddress();
 		String ipAddress = Formatter.formatIpAddress(ip);
-		String[] tokens = ipAddress.split("\\."); 
-	    tokens[3]="151";
-	    ipAddress=tokens[0]+"."+tokens[1]+"."+tokens[2]+"."+tokens[3];
-//		Log.d("WIFI Ip", ipAddress);
-	    String  urlForMcState="http://"+ipAddress+"/api/is-online";
+		String[] tokens = ipAddress.split("\\.");
+		tokens[3] = "151";
+		ipAddress = tokens[0] + "." + tokens[1] + "." + tokens[2] + "."
+				+ tokens[3];
+		// Log.d("WIFI Ip", ipAddress);
+		urlForMc = "http://" + ipAddress + "/api/is-online";
 		if (checkMC != null) {
 			checkMC.cancel(true);
 		}
-		connnectionState="IP";
-		checkMC = new CheckMC(urlForMcState,this);
+		connnectionState = "IP";
+		checkMC = new CheckMC(urlForMc, (UserLogin_) this,isSolvedLocal);
+//		checkMC.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		checkMC.execute();
 	}
-	
-	private class CheckMC extends AsyncTask<Void, Void, Boolean> {
+
+	/*private class CheckMC extends AsyncTask<Void, Void, Boolean> {
 		private String mcUrl;
 		private Context context;
 
-		public CheckMC(String mcUrl,Context context) {
-			this.mcUrl=mcUrl;
-			this.context=context;
-			
+		public CheckMC(String mcUrl, Context context) {
+//			this.mcUrl = mcUrl;
+//			this.context = context;
+
 		}
+
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			sendMCStatusRequest(mcUrl);
 			return null;
 		}
+
 		@Override
 		protected void onPostExecute(Boolean result) {
-//			bUserLogin.setEnabled(true);
-			if(isSolvedLocal==true){
-//				proceedLoginProcess();
+			// bUserLogin.setEnabled(true);
+			if (isSolvedLocal == true) {
+				// proceedLoginProcess();
 				saveLocalIpInPreference();
-				Toast.makeText(context, "Local Mode", Toast.LENGTH_SHORT).show();
-			}else{
-				Toast.makeText(context, "Internet Mode", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Local Mode", Toast.LENGTH_SHORT)
+						.show();
+			} else {
+				Toast.makeText(context, "Internet Mode", Toast.LENGTH_SHORT)
+						.show();
 			}
 		};
-		
-	}
-	
+
+	}*/
+
 	public boolean sendMCStatusRequest(String mcUrl) {
 
-
-		if (getMcStatus(mcUrl) != null && getMcStatus(mcUrl) !="" ) {
+		if (getMcStatus(mcUrl) != null && getMcStatus(mcUrl) != "") {
 			return true;
 		}
 		return false;
 	}
-	
-	boolean isSolvedLocal=false;
-public  String  getMcStatus(String url) {
-		
+
+	boolean isSolvedLocal = false;
+
+	public String getMcStatus(String url) {
+
 		InputStream is = null;
 		String result = "";
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 
 		try {
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
+					CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpParameters,
+					CommonConstraints.TIMEOUT_MILLISEC);
 			HttpGet httpGet = new HttpGet(url);
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity httpEntity = httpResponse.getEntity();
@@ -372,59 +419,71 @@ public  String  getMcStatus(String url) {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (result != null && !result.equals("")) {
-			
+ 		if (result != null && !result.equals("")) {
+
 			try {
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
-//				String host=(jObject.getJSONObject("Data")).getString("hostname");
-				String Ip=(jObject.getJSONObject("Data")).getString("ip");
-				CommonValues.getInstance().localIp="http://"+Ip+"/api/";
-				
-				String baseUrlForMC="http://"+Ip+"/api/";
+				// String
+				// host=(jObject.getJSONObject("Data")).getString("hostname");
+				String Ip = (jObject.getJSONObject("Data")).getString("ip");
+				CommonValues.getInstance().localIp = Ip;
+
+				String baseUrlForMC = "http://" + Ip + "/api/";
 				CommonURL.getInstance().assignValues(baseUrlForMC);
-				isSolvedLocal=true;
-				
-				}
+				isSolvedLocal = true;
+
+			}
 
 			catch (JSONException e) {
 				Log.e("log_tag", "Error parsing data " + e.toString());
 			}
-		}else{
-			if(connnectionState.equals("RasPeri")){
-				isSolvedLocal=false;
+		} else {
+
+			if (connnectionState.equals("RasPeri")) {
+				// Failed to resolve with host name..Lets try with replacing
+				// WIFI IP last sub net...Step3
+				isSolvedLocal = false;
+				urlForMc="";
 				connectByIp();
-			}else if(connnectionState.equals("IP")){
-				isSolvedLocal=false;
-				CommonURL.getInstance().assignValues(CommonURL.getInstance().remoteBaseUrl);
-				/*this.runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						proceedLoginProcess();
-						
-					}
-				});*/
-				
-				
 			}
-//			CommonURL.getInstance().baseUrl=CommonURL.getInstance().remoteBaseUrl;
+			/*else if (connnectionState.equals("PREF")) {
+				// Failed to resolve with shared preference IP..Lets try with
+				// host name
+				isSolvedLocal = false;
+				urlForMc="";
+				connectByHostName();
+			} */
+			else if (connnectionState.equals("IP")) {
+				// Both Host and IP resolve process failed...Lets assign the
+				// Internet URL as base URL
+				isSolvedLocal = false;
+				CommonURL.getInstance().assignValues(
+						CommonURL.getInstance().remoteBaseUrl);
+
+			}
 		}
 
 		// 11. return result
 		return result;
 	}
 
-public void connectByRasPeri() {
-	  connnectionState="RasPeri";
-		String urlForRajpBeripi="http://sinepulsemcprod/api/is-online";
+	/**
+	 * try to resolve the connectivity by Appropriate host name
+	 */
+
+	public void connectByHostName() {
+		connnectionState = "RasPeri";
+		urlForMc = "http://sinepulsemcprod/api/is-online";
 		if (checkMC != null) {
 			checkMC.cancel(true);
 		}
-		
-		checkMC = new CheckMC(urlForRajpBeripi,this);
+
+		checkMC = new CheckMC(urlForMc, (UserLogin_) this,isSolvedLocal);
 		checkMC.execute();
-		
-}
+//		checkMC.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+	}
 
 	@Override
 	public void onBackPressed() {
@@ -436,19 +495,19 @@ public void connectByRasPeri() {
 	 */
 
 	public void saveUsernameAndPassword() {
-		CommonTask
-				.SavePreferences(this, CommonConstraints.PREF_SETTINGS_NAME,
-						CommonConstraints.PREF_LOGINUSER_NAME, etUserName.getText()
-								.toString());
+		CommonTask.SavePreferences(this, CommonConstraints.PREF_SETTINGS_NAME,
+				CommonConstraints.PREF_LOGINUSER_NAME, etUserName.getText()
+						.toString());
 
 		CommonTask.SavePreferences(this, CommonConstraints.PREF_SETTINGS_NAME,
 				CommonConstraints.PREF_PASSWORD_KEY, etUserPassword.getText()
 						.toString());
 	}
-	
-	public void saveLocalIpInPreference(){
+
+	public void saveLocalIpInPreference() {
 		CommonTask.SavePreferences(this, CommonConstraints.PREF_URL_KEY,
-				CommonConstraints.PREF_LOCALIP_KEY, CommonValues.getInstance().localIp);
+				CommonConstraints.PREF_LOCALIP_KEY,
+				CommonValues.getInstance().localIp);
 	}
 
 	/**
@@ -461,24 +520,23 @@ public void connectByRasPeri() {
 	}
 
 	private boolean validateLoginInfo() {
-		if (etUserName.getText().toString().trim().equals("")){
-			
+		if (etUserName.getText().toString().trim().equals("")) {
+
 			etUserName.setError("Please Provide UserName");
 			return false;
-			
-		}
-		else if (etUserPassword.getText().toString().trim().equals("")) {
-			
+
+		} else if (etUserPassword.getText().toString().trim().equals("")) {
+
 			etUserPassword.setError("Please Provide Password");
-//			Toast.makeText(this, "Please provide UserName & Password",
-//					Toast.LENGTH_SHORT).show();
+			// Toast.makeText(this, "Please provide UserName & Password",
+			// Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
 		else
 			etUserName.setError(null);
-		   etUserPassword.setError(null);
-			return true;
+		etUserPassword.setError(null);
+		return true;
 	}
 
 	/**
@@ -509,7 +567,7 @@ public void connectByRasPeri() {
 		final SharedPreferences prefs = getGCMPreferences(context);
 		String registrationId = prefs.getString(
 				CommonGcmValues.PROPERTY_REG_ID, "");
-		CommonValues.getInstance().appToken=registrationId;
+		CommonValues.getInstance().appToken = registrationId;
 		if (registrationId.isEmpty()) {
 			Log.i(TAG, "Registration not found.");
 			return "";
@@ -567,7 +625,7 @@ public void connectByRasPeri() {
 					storeRegistrationId(context, regid);
 				} catch (IOException ex) {
 					msg = "Error :" + ex.getMessage();
-					
+
 					// If there is an error, don't just keep trying to register.
 				}
 				return msg;
@@ -601,7 +659,7 @@ public void connectByRasPeri() {
 						CommonGcmValues.PLAY_SERVICES_RESOLUTION_REQUEST)
 						.show();
 			} else {
-//				Log.i(TAG, "This device is not supported.");
+				// Log.i(TAG, "This device is not supported.");
 				finish();
 			}
 			return false;

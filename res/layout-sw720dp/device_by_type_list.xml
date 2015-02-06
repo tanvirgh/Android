@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlDeviceByTypeDetails"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_margin="25dp"
+    android:background="@drawable/sh_background" >
+     <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bg_bottom" >
+     <ImageView
+         android:id="@+id/btAddDevice"
+         android:layout_width="130dp"
+         android:layout_height="130dp"
+         android:layout_alignParentLeft="true"
+         android:layout_centerVertical="true"
+         android:layout_marginLeft="25dp"
+         android:gravity="center_vertical|center_horizontal" />
+      <TextView
+         android:id="@+id/tvdeviceValue"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_toRightOf="@+id/btAddDevice"
+         android:textColor="#FFFFFF"
+         android:paddingTop="80dp"
+         android:paddingLeft="25dp"
+         android:textSize="24sp"
+         android:textStyle="bold"
+         android:visibility="visible" />
+
+     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/devicelistProgressBar"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
+    <ListView
+        android:id="@+id/lvDeviceList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:layout_marginTop="25dp"
+        tools:listitem="@layout/device_typewise_listitem_view" >
+    </ListView>
+
+</RelativeLayout>

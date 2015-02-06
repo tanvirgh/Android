@@ -17,7 +17,7 @@
         android:normalScreens="true"
         android:smallScreens="true"
         android:xlargeScreens="true" 
-        />
+       android:compatibleWidthLimitDp="320"  />
     <!--
   For Donut and above we must specify that we use the camera, but intentionally omit the
   autofocus feature in order for the app to appear in Market for non-AF devices. While it's true

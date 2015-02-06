@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/list_item_bg"
+    android:orientation="horizontal" >
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvgroupItemText"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="left"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft" />
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvgrouparrow"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/arrow_search"
+        android:visibility="gone" />
+
+</LinearLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/sh_background">
+
+    <ImageView
+        android:id="@+id/aboutImageView01"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal"
+        android:scaleType="fitCenter"
+        android:src="@drawable/sp_logo"
+        android:contentDescription="@string/todo" />
+
+    <ImageView
+        android:id="@+id/aboutImageView02"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tvAboutHeadingText2"
+        android:layout_marginTop="15dp"
+        android:background="@color/gray_ash"
+        android:contentDescription="@string/todo"
+        android:layout_margin="20dp" />
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvAboutHeadingText"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/aboutImageView01"
+        android:layout_marginTop="55dp"
+        android:ellipsize="marquee"
+        android:gravity="center_horizontal"
+        android:maxLines="4"
+       android:textSize="22sp"
+        android:singleLine="false"
+        android:text="@string/aboutText"
+        android:textColor="@color/white" />
+    <!-- <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvAboutHeadingText1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvAboutHeadingText"
+        android:layout_marginTop="45dp"
+        android:gravity="center_horizontal"
+        android:linksClickable="true"
+        android:maxLines="3"
+        android:text="@string/desc"
+        android:textSize="19sp"
+        android:textColor="@color/white" /> -->
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvAboutHeadingText2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvAboutHeadingText"
+        android:layout_marginTop="55dp"
+        android:gravity="center_horizontal"
+        android:linksClickable="true"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/hyperlink"
+        android:textSize="20sp"
+        android:textColor="@color/white" />
+    <include
+            android:id="@+id/bottom"
+            layout="@layout/dashboard_bottom_bar" 
+            android:visibility="visible" />
+    
+
+</RelativeLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal" 
+    android:background="@color/list_item_bg">
+
+    <ImageView
+        android:id="@+id/ivSearchFamilyImage"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="7dp"
+        android:background="@drawable/badge_circle"
+        android:contentDescription="@string/todo"
+        android:scaleType="fitXY" />
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvfamilyItemText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:gravity="left"
+        android:layout_toRightOf="@+id/ivSearchFamilyImage"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:layout_marginLeft="5dp"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+</RelativeLayout>

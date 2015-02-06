@@ -38,8 +38,6 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_alignBottom="@+id/tvDeviceLogHeadingText"
-            android:layout_alignLeft="@+id/tvOnlinePaymentHeadingText"
-            android:layout_below="@+id/tvOnlinePaymentHeadingText"
             android:layout_marginLeft="50dp"
             android:visibility="visible" />
     </RelativeLayout>

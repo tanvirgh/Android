@@ -5,7 +5,7 @@
         android:id="@+id/menu_refresh"
         android:icon="@drawable/refresh1"
         android:showAsAction="always"
-        android:title="@string/search"/>
+        android:title="@string/refresh"/>
    <!--  <item
         android:id="@+id/menu_basket_scan"
         android:actionLayout="@layout/tab_indicator"
@@ -14,12 +14,12 @@
 
     <!-- The Overflow Menu -->
 
-    <item
+   <!--  <item
         android:id="@+id/menu_overflow"
         android:icon="@drawable/tab_more"
         android:showAsAction="always"
-        android:title="@string/more">
-       <!--  <menu>
+        android:title="@string/more"> 
+      <menu>
             <item
                 android:id="@+id/menu_More"
                 android:showAsAction="always|withText"
@@ -35,7 +35,7 @@
                 android:showAsAction="always|withText"
                 android:title="Create Room">
             </item>
-        </menu> -->
-    </item>
+        </menu> 
+    </item>-->
 
 </menu>

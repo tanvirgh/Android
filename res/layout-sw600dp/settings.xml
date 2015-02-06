@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/list_item_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical" >
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvSettingHeadingText"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/top_bar_height"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/tool_bar"
+        android:text="@string/login_settings"
+        android:textColor="@color/black" />
+
+    
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvSettingAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSettingHeadingText"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="15dp"
+        android:gravity="right"
+        android:text="@string/usercredential"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <AutoCompleteTextView
+        android:id="@+id/etSettingAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSettingAddress"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edit_text_custom"
+        android:gravity="left|bottom"
+        android:hint="@string/setting_hint"
+        android:imeOptions="actionNext"
+        android:paddingLeft="7dp"
+        android:popupBackground="#0FFF"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textCursorDrawable="@null"
+        android:textSize="12sp"
+        android:windowSoftInputMode="stateHidden" />
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/tvSettingShopNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etSettingAddress"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="15dp"
+        android:gravity="right"
+        android:text="@string/passkey"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <com.sinepulse.app.custom.controls.CustomEditText
+        android:id="@+id/etSettingShopNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSettingShopNumber"
+        android:layout_marginBottom="25dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edit_text_custom"
+        android:gravity="left|bottom"
+        android:hint="@string/shopnumber_hint"
+        android:imeOptions="actionDone"
+        android:paddingLeft="7dp"
+        android:textColor="@color/white"
+        android:textCursorDrawable="@null"
+        android:textSize="12sp"
+        android:inputType="textPassword" 
+        android:windowSoftInputMode="stateHidden" />
+
+    <com.sinepulse.app.custom.controls.CustomButton
+        android:id="@+id/bSettingSave"
+        android:layout_width="315dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/etSettingShopNumber"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/normal_rounded_button_bg"
+        android:drawableLeft="@drawable/save"
+        android:gravity="center_horizontal|center"
+        android:text="@string/save"
+        android:textColor="@color/black" 
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/settingsProgressBar"
+        android:layout_below="@+id/bSettingSave"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="05dp"
+        android:visibility="invisible" />
+
+</RelativeLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rlnavDrawerExpandChildlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical"
+        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft" >
+
+    <com.sinepulse.app.custom.controls.CustomTextView
+        android:id="@+id/childitemName"
+        android:layout_width="250dip"
+        android:layout_height="35dip"
+        android:paddingLeft="73dip"
+        android:singleLine="true"
+        android:textSize="15sp" 
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:textStyle="normal"/>
+   
+
+</RelativeLayout>
+
+
+
+<!-- android:layout_alignParentLeft="true" -->

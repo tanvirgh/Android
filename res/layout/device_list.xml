@@ -3,7 +3,7 @@
     android:id="@+id/rlDeviceByTypeDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="15dp"
+    android:layout_margin="20dp"
     android:background="@drawable/sh_background" >
 
     <Button
@@ -12,11 +12,12 @@
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:background="@drawable/bg_bottom"
+        android:drawableLeft="@drawable/icon_room_medium"
         android:drawablePadding="18dp"
         android:gravity="left|center_vertical"
-        android:paddingRight="0dp"
-        android:paddingLeft="30dp"
         android:lines="2"
+        android:paddingLeft="15dp"
+        android:paddingRight="0dp"
         android:textColor="@color/white"
         android:textSize="18sp" />
 
@@ -33,7 +34,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btAddDevice"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="12dp"
         tools:listitem="@layout/device_item_view" >
     </ListView>
 

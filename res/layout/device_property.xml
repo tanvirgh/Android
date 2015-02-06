@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/ivDevice"
             android:layout_width="80dp"
-            android:layout_height="100dp"
+            android:layout_height="95dp"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/app_name"
             />
@@ -81,14 +81,15 @@
 
            
         </RelativeLayout>
+
          <ProgressBar
-                android:id="@+id/devicePropertyProgressBar"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-               android:layout_marginTop="2dp"
-               android:layout_centerHorizontal="true"
-                android:layout_below="@+id/thumbnail"
-                android:visibility="visible" />
+             android:id="@+id/devicePropertyProgressBar"
+             android:layout_width="25dp"
+             android:layout_height="25dp"
+             android:layout_alignRight="@+id/tvDeviceName"
+             android:layout_below="@+id/thumbnail"
+             android:layout_marginTop="2dp"
+             android:visibility="visible" />
 
         <RelativeLayout
             android:id="@+id/middleView"
@@ -96,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/thumbnail"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="2dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="0dp"
@@ -105,13 +106,16 @@
             <SeekBar
                 android:id="@+id/seekBar1"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="55dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginBottom="110dp"
+                  android:layout_centerInParent="true"
+                android:layout_marginBottom="140dp"
+                 android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:background="@drawable/slider_bg"
                 android:max="100"
-                android:visibility="invisible" />
+                android:visibility="visible" />
              <TextView
                 android:id="@+id/tvProgressValue"
                 android:layout_width="wrap_content"

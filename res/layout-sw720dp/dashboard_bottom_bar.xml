@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout
+         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rlDashboardBottomBar"
+        android:layout_width="fill_parent"
+        android:layout_height="85dp"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_bottom" >
+
+        <Button
+            android:id="@+id/bRoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+			android:layout_centerInParent="true"
+			android:layout_marginLeft="15dp"
+            android:background="@drawable/room_button_selector"
+            android:contentDescription="@string/save"
+           />
+
+        <Button
+            android:id="@+id/bDashboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+           android:layout_centerInParent="true"
+            android:background="@drawable/dashboard_button_selector"
+            android:contentDescription="@string/save"
+            />
+
+        <Button
+            android:id="@+id/bCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+			android:layout_marginRight="15dp"
+            android:background="@drawable/camera_button_selector"
+            android:contentDescription="@string/save"
+           />
+    </RelativeLayout>

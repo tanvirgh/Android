@@ -35,16 +35,14 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <ProgressBar
+       
+    </RelativeLayout>
+     <ProgressBar
             android:id="@+id/deviceLogProgressBar"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_alignBottom="@+id/tvDeviceLogHeadingText"
-            android:layout_alignLeft="@+id/tvOnlinePaymentHeadingText"
-            android:layout_below="@+id/tvOnlinePaymentHeadingText"
-            android:layout_marginLeft="50dp"
-            android:visibility="visible" />
-    </RelativeLayout>
+           android:layout_centerInParent="true"
+           android:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"

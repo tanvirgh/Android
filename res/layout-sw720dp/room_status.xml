@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sh_background"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/moreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ViewFlipper
+            android:id="@+id/vfRoom"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/bottom">
+
+            <include
+                android:id="@+id/roomListView"
+                layout="@layout/room_list_view"/>
+
+            <include
+                android:id="@+id/deviceItemView"
+                layout="@layout/device_list" />
+             <include
+                android:id="@+id/devicePropertyView"
+                layout="@layout/device_property" />
+              <include
+                android:id="@+id/deviceLogView"
+                layout="@layout/device_log" />
+        </ViewFlipper>
+         <include 
+             android:id="@+id/bottom"
+            layout="@layout/dashboard_bottom_bar"/>
+    </RelativeLayout>
+
+</LinearLayout>

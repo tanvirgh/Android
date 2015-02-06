@@ -2,56 +2,59 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/logbgnew"
-    >
+    android:background="@drawable/logbgnew" >
 
     <RelativeLayout
         android:id="@+id/rlOnlinePaymentHeading"
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="85dp"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="18dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="14dp"
         android:gravity="center" >
 
         <TextView
-            android:id="@+id/tvOnlinePaymentHeadingText"
+            android:id="@+id/tvUserProfileHeadingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/userProfileProgressBar"
+            android:layout_centerHorizontal="true"
             android:drawableLeft="@drawable/userimage"
             android:gravity="center"
-            android:paddingTop="14dp"
-            android:paddingRight="30dp"
+            android:paddingBottom="8dp"
             android:paddingLeft="0dp"
-            android:text=" UserProfile"
+            android:paddingRight="30dp"
+            android:paddingTop="5dp"
+            android:text=" User Profile"
             android:textColor="#FFFFFF"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <ProgressBar
             android:id="@+id/userProfileProgressBar"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_alignLeft="@+id/tvOnlinePaymentHeadingText"
-            android:layout_below="@+id/tvOnlinePaymentHeadingText"
-            android:layout_marginLeft="50dp" />
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dp" />
     </RelativeLayout>
-    
+
     <ScrollView
         android:id="@+id/body"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/bottom"
         android:layout_below="@+id/rlOnlinePaymentHeading"
-        android:layout_above="@+id/bottom">
+        android:layout_marginBottom="10dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
-            android:layout_marginRight="5dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
             android:orientation="vertical" >
 
             <RelativeLayout
@@ -60,7 +63,7 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="30dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
 
@@ -410,33 +413,31 @@
     </ScrollView>
 
     <RelativeLayout
-         android:id="@+id/bottom"
-         android:layout_width="fill_parent"
+        android:id="@+id/bottom"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/bg_bottom" >
+        android:background="@drawable/bg_bottom"
+        android:padding="5dp" >
 
         <Button
             android:id="@+id/bRoom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-			android:layout_centerInParent="true"
-			android:layout_marginLeft="15dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
             android:background="@drawable/room_button_selector"
-            android:contentDescription="@string/save"
-           />
+            android:contentDescription="@string/save" />
 
         <Button
             android:id="@+id/bDashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-           android:layout_centerInParent="true"
+            android:layout_centerInParent="true"
             android:background="@drawable/dashboard_button_selector"
-            android:contentDescription="@string/save"
-            />
+            android:contentDescription="@string/save" />
 
         <Button
             android:id="@+id/bCamera"
@@ -444,10 +445,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-			android:layout_marginRight="15dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/camera_button_selector"
-            android:contentDescription="@string/save"
-           />
+            android:contentDescription="@string/save" />
     </RelativeLayout>
 
 </RelativeLayout>

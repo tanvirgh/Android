@@ -53,6 +53,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.hikvision.netsdk.RealPlayCallBack;
 import com.sinepulse.app.R;
 import com.sinepulse.app.animations.AlphaAnimationListener;
 import com.sinepulse.app.animations.DisplayNextView;
@@ -183,12 +184,12 @@ public class CommonTask {
 
 	public static void ShowConfirmation(Context context, String message,
 			DialogInterface.OnClickListener event) {
-//		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//		builder.setTitle(R.string.app_name).setMessage(message)
-//				.setPositiveButton(R.string.button_yes, event)
-//				.setNegativeButton(R.string.button_no, event);
-//		AlertDialog alert = builder.create();
-//		alert.show();
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.app_name).setMessage(message)
+				.setPositiveButton(R.string.button_yes, event)
+				.setNegativeButton(R.string.button_no, event);
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 	
 	
@@ -506,27 +507,6 @@ public class CommonTask {
 		return Patterns.EMAIL_ADDRESS.matcher(email).matches();
 	}
 
-	// Method for displaying log in Confirmationmessage..Tanivr
-	public static void showLogInConfirmation(Context context, String message,
-			DialogInterface.OnClickListener event) {
-//		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//		builder.setMessage(message)
-//				.setPositiveButton(R.string.button_yes, event)
-//				.setNegativeButton(R.string.button_no, event);
-//		AlertDialog alert = builder.create();
-//		alert.show();
-	}
-	// Method for displaying cancel basket Confirmationmessage..Tanivr
-	
-	public static void showCancelBasketConfirmation(Context context, String message,
-			DialogInterface.OnClickListener event) {
-//		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//		builder.setMessage(message)
-//				.setPositiveButton(R.string.button_yes, event)
-//				.setNegativeButton(R.string.button_no, event);
-//		AlertDialog alert = builder.create();
-//		alert.show();
-	}
 
 	// Method for displaying Checkout Confirmationmessage..Tanivr
 	public static void showCheckoutConfirmation(Context context,
@@ -537,17 +517,7 @@ public class CommonTask {
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-	// Method for displaying serversettings Confirmationmessage..Tanivr
-	public static void showServerSettingConfirmation(Context context, String message,
-			DialogInterface.OnClickListener event) {
-		
-//		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//		builder.setTitle(R.string.app_name).setMessage(message)
-//				.setPositiveButton(R.string.button_server_setting_yes, event)
-//				.setNegativeButton(R.string.button_server_setting_no, event);
-//		AlertDialog alert = builder.create();
-//		alert.show();
-	}
+	
 
 	/**
 	 * Indicates whether network connectivity exists or is in the process of
@@ -618,77 +588,8 @@ public class CommonTask {
 		}
 	}
 	
-	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
-		Bitmap output = null;
-		if(bitmap!=null){
-		    output = Bitmap.createBitmap(bitmap.getWidth(),
-		        bitmap.getHeight(), Config.ARGB_8888);
-		    Canvas canvas = new Canvas(output);
-		 
-		    final int color = 0xff424242;
-		    final Paint paint = new Paint();
-		    final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-		    final RectF rectF = new RectF(rect);
-		    final float roundPx = 30;
-		 
-		    paint.setAntiAlias(true);
-		    canvas.drawARGB(0, 0, 0, 0);
-		    paint.setColor(color);
-		    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-		 
-		    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-		    canvas.drawBitmap(bitmap, rect, rect, paint);
-		}
-	    return output;
-	}
-	//Format the price value of articles as per Standard DK currency format
-	
-	public static String formatPrice(double amount){
-		
-		double roundedAmount = round(amount, 2,BigDecimal.ROUND_HALF_UP);
-		NumberFormat numberFormat =NumberFormat.getCurrencyInstance(new Locale("da", "DK"));
-		numberFormat.setCurrency(Currency.getInstance("DKK"));
-		
-		String basketTitle = numberFormat.format( roundedAmount);
-		
-		return basketTitle;
-		
-	}
-	
 
 	
-	/**
-	 * Creates a 'ghost' bitmap version of the given source drawable (ideally a BitmapDrawable).
-	 * In the ghost bitmap, the RGB values take on the values from the 'color' argument, while
-	 * the alpha values are derived from the source's grayscaled RGB values. The effect is that
-	 * you can see through darker parts of the source bitmap, while lighter parts show up as
-	 * the given color. The 'invert' argument inverts the computation of alpha values, and looks
-	 * best when the given color is a dark.
-	 */
-	public static Bitmap createGhostIcon(Drawable src, int color, boolean invert) {
-	    int width = src.getIntrinsicWidth();
-	    int height = src.getIntrinsicHeight();
-	    if (width <= 0 || height <= 0) {
-	        throw new UnsupportedOperationException("Source drawable needs an intrinsic size.");
-	    }
-	 
-	    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-	    Canvas canvas = new Canvas(bitmap);
-	    Paint colorToAlphaPaint = new Paint();
-	    int invMul = invert ? -1 : 1;
-	    colorToAlphaPaint.setColorFilter(new ColorMatrixColorFilter(new ColorMatrix(new float[]{
-	            0, 0, 0, 0, Color.red(color),
-	            0, 0, 0, 0, Color.green(color),
-	            0, 0, 0, 0, Color.blue(color),
-	            invMul * 0.213f, invMul * 0.715f, invMul * 0.072f, 0, invert ? 255 : 0,
-	    })));
-	    canvas.saveLayer(0, 0, width, height, colorToAlphaPaint, Canvas.ALL_SAVE_FLAG);
-	    canvas.drawColor(invert ? Color.WHITE : Color.BLACK);
-	    src.setBounds(0, 0, width, height);
-	    src.draw(canvas);
-	    canvas.restore();
-	    return bitmap;
-	}
 	
 	public static void showSoftKeybord(final EditText editText) {
 		(new Handler()).postDelayed(new Runnable() {
@@ -703,11 +604,13 @@ public class CommonTask {
 		    }, 200);
 	}
 	 public static boolean isEmpty(CharSequence str) {
-	        if (str == null || str.length() == 0)
+	        if (str == null || str.length() == 0 || str=="")
 	            return true;
 	        else
 	            return false;
 	    }
+
+	
 	 
 	 
 	
