@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.RoomManager;
-import com.sinepulse.app.fragments.RoomManagerFragment;
 import com.sinepulse.app.utils.CommonValues;
 
 /**

@@ -26,8 +26,6 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.sinepulse.app.R;
-import com.sinepulse.app.activities.Home;
-import com.sinepulse.app.activities.Home_;
 import com.sinepulse.app.activities.RoomManager_;
 import com.sinepulse.app.activities.VideoActivity_;
 import com.sinepulse.app.adapters.UserLogAdapter;

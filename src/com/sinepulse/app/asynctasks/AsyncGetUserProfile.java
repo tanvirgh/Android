@@ -4,7 +4,6 @@
 package com.sinepulse.app.asynctasks;
 
 import com.sinepulse.app.activities.UserProfileActivity;
-import com.sinepulse.app.fragments.UserProfileFragment;
 import com.sinepulse.app.utils.CommonValues;
 
 import android.os.AsyncTask;

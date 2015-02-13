@@ -13,13 +13,7 @@
         android:layout_height="wrap_content"
         layout="@layout/dashboard_top" />
     
-    <ProgressBar
-        android:id="@+id/dashBoardProgressBar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
-        android:visibility="invisible" />
+   
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -29,6 +23,7 @@
         android:paddingBottom="10dp">
 
         <LinearLayout
+            android:id="@+id/middlePortion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
@@ -61,6 +56,14 @@
                 layout="@layout/dashboard_fourthrow" />
         </LinearLayout>
     </ScrollView>
+     <ProgressBar
+        android:id="@+id/dashBoardProgressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+       android:layout_above="@+id/middlePortion"
+        android:layout_below="@+id/include1"
+        android:visibility="visible" />
 
     
 

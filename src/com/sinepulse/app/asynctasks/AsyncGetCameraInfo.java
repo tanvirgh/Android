@@ -5,7 +5,6 @@ package com.sinepulse.app.asynctasks;
 
 import android.os.AsyncTask;
 
-import com.sinepulse.app.activities.RoomManager;
 import com.sinepulse.app.activities.VideoActivity;
 import com.sinepulse.app.utils.CommonValues;
 
@@ -30,7 +29,7 @@ public class AsyncGetCameraInfo extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPreExecute() {
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
-//		parentActivity.startProgress();
+		parentActivity.startProgress();
 		
 	}
 	
@@ -44,7 +43,7 @@ public class AsyncGetCameraInfo extends AsyncTask<Void, Void, Boolean> {
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
-//		parentActivity.stopProgress();
+		parentActivity.stopProgress();
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {

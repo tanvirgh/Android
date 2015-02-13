@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -841,7 +842,7 @@ public class JsonParser  extends MainActionbarBase{
 			try {
 				jObject = new JSONObject(result);
 				if(jObject.getString("Data").equals("true")){
-					SharedPreferences password = UserLogin.context.getSharedPreferences(CommonConstraints.PREF_PASSWORD_KEY, UserLogin.context.MODE_PRIVATE);
+					SharedPreferences password = UserLogin.context.getSharedPreferences(CommonConstraints.PREF_PASSWORD_KEY, Context.MODE_PRIVATE);
 					password.edit().remove(CommonConstraints.PREF_PASSWORD_KEY).commit();
 					CommonTask.SavePreferences(UserLogin.context, CommonConstraints.PREF_LOGINUSER_NAME,
 							CommonConstraints.PREF_PASSWORD_KEY, newPass);

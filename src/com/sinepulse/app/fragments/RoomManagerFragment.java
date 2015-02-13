@@ -42,8 +42,8 @@ import android.widget.ViewFlipper;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.sinepulse.app.R;
+import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.activities.Home_;
-import com.sinepulse.app.activities.RoomManager_;
 import com.sinepulse.app.activities.VideoActivity_;
 import com.sinepulse.app.adapters.DeviceListAdapter;
 import com.sinepulse.app.adapters.DeviceLogAdapter;
@@ -775,8 +775,8 @@ public class RoomManagerFragment extends SherlockFragment implements
 			break;
 		case R.id.bDashboard:
 			asyncGetRoomInfo.cancel(true);
-			Home_.mDrawerList.setItemChecked(0, true);
-			Home_.navDrawerAdapter.setSelectedPosition(0);
+			Home.mDrawerList.setItemChecked(0, true);
+			Home.navDrawerAdapter.setSelectedPosition(0);
 			goBackToDashboard();
 //			((MainActionbarBase) getActivity()).displayFragment(0);
 			break;

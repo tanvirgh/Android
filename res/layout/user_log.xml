@@ -24,8 +24,8 @@
             android:drawableLeft="@drawable/userimage"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="12dp"
             android:paddingRight="30dp"
             android:paddingLeft="0dp"
             android:text="   User Log"
@@ -49,7 +49,7 @@
         android:layout_marginRight="18dp"
         android:layout_marginLeft="20dp"
         android:layout_below="@+id/rlOnlinePaymentHeading"
-       android:layout_above="@+id/bottom" 
+      android:layout_above="@+id/bottom" 
         android:orientation="vertical" >
 <!-- android:background="@drawable/userinfo_body" -->
        

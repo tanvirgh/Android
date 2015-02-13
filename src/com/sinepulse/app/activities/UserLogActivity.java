@@ -76,8 +76,8 @@ public class UserLogActivity extends MainActionbarBase implements OnClickListene
 	public TextView tvToday;
 	@ViewById(R.id.tvYesterday)
 	public TextView tvYesterday;
-	String fromDate=null;
-	String toDate=null;
+	String fromDate="";
+	String toDate="";
 	@ViewById(R.id.bCamera)
 	protected Button bCamera;
 	@ViewById(R.id.bRoom)
@@ -106,6 +106,9 @@ public class UserLogActivity extends MainActionbarBase implements OnClickListene
 	    String[] tokens = formatter.format(d).toString().split(delims);
 	    etDateFrom.setText(tokens[0]);
 	    etDateTo.setText(tokens[0]);
+//	    fromDate=formatter.format(d).toString();
+	    fromDate=formatter.format(d).toString();
+	    toDate=formatter.format(d).toString();
 		
 //		bSearch.setVisibility(View.INVISIBLE);
 		etDateFrom.setOnClickListener(this);
@@ -161,9 +164,11 @@ public class UserLogActivity extends MainActionbarBase implements OnClickListene
 			showCalendar(v);
 			break;
 		case R.id.tvToday:
-			etDateFrom.setText("");
-			etDateTo.setText("");
-			bSearch.setVisibility(View.INVISIBLE);
+			String tDelims ="T" ;
+		    String[] tTokens = formatter.format(d).toString().split(tDelims);
+			etDateFrom.setText(tTokens[0]);
+			etDateTo.setText(tTokens[0]);
+//			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#2C5197"));
 			if(CommonValues.getInstance().deviceLogDetailList.size() > 0){
@@ -176,8 +181,10 @@ public class UserLogActivity extends MainActionbarBase implements OnClickListene
 			if(tvEmptyLog.isShown()){
 				tvEmptyLog.setVisibility(View.GONE);
 			}
-			etDateFrom.setText("");
-			etDateTo.setText("");
+			String yDelims ="T" ;
+		    String[] yTokens = formatter.format(d.getTime() - 24 * 60 * 60 * 1000).toString().split(yDelims);
+			etDateFrom.setText(yTokens[0]);
+			etDateTo.setText(yTokens[0]);
 //			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#2C5197"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
@@ -239,7 +246,6 @@ public class UserLogActivity extends MainActionbarBase implements OnClickListene
 			@Override
 			public void onClick(View v) {
 				calendarView1.getDate();
-				
 
 			}
 		});
@@ -331,11 +337,12 @@ public class UserLogActivity extends MainActionbarBase implements OnClickListene
 			Date firstDate = formatter.parse(fromDate);
 			Date lastDate = formatter.parse(toDate);
 			if (lastDate.after(CurrentDate)) {
-				CommonTask.ShowMessage(this, "To date cant be greater than current date");
+				CommonTask.ShowMessage(this, "To date can't be greater than current date");
 				etDateTo.setText("");
 				return false;
-			}else if( lastDate.before(firstDate)){
-				CommonTask.ShowMessage(this, "To date cant be less than From date");
+			}
+			else if( lastDate.before(firstDate)){
+				CommonTask.ShowMessage(this, "To date can't be less than From date");
 				etDateTo.setText("");
 				return false;
 			}
@@ -352,6 +359,9 @@ public class UserLogActivity extends MainActionbarBase implements OnClickListene
 	}
 	public void showFirstDateError() {
 		CommonTask.ShowMessage(this, "From Date should  be less than current date");
+	}
+	public void showLastDateError() {
+		CommonTask.ShowMessage(this, "To Date should not  be less than From date");
 	}
 
 	private void loadUserLogInfo(int userId,int FilterType, String fromDate,String toDate) {
@@ -400,6 +410,7 @@ public class UserLogActivity extends MainActionbarBase implements OnClickListene
 
 	}
 
+	@Override
 	public void onBackPressed() {
 //		if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 //			CommonValues.getInstance().deviceLogDetailList.clear();

@@ -10,18 +10,18 @@
         android:id="@+id/btn_total_power"
         style="@style/HomeButton"
         android:layout_width="fill_parent"
-        android:layout_height="420dp"
+        android:layout_height="415dp"
         android:layout_weight="1"
         android:background="@drawable/bgheaderleft"
         android:drawableTop="@drawable/voltage_tab"
         android:padding="0dp"
         android:text="54 watts in use"
-        android:textSize="18sp" />
+        android:textSize="24sp" />
 
     <LinearLayout
         android:id="@+id/topRowRight"
         android:layout_width="fill_parent"
-        android:layout_height="420dp"
+        android:layout_height="415dp"
         android:layout_weight="1"
         android:background="@drawable/bgheaderleft"
         android:orientation="vertical" >

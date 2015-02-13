@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.Locale;
 
 import org.json.JSONArray;
@@ -22,25 +21,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -53,7 +40,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.hikvision.netsdk.RealPlayCallBack;
 import com.sinepulse.app.R;
 import com.sinepulse.app.animations.AlphaAnimationListener;
 import com.sinepulse.app.animations.DisplayNextView;
@@ -185,7 +171,7 @@ public class CommonTask {
 	public static void ShowConfirmation(Context context, String message,
 			DialogInterface.OnClickListener event) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(R.string.app_name).setMessage(message)
+		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning).setMessage(message)
 				.setPositiveButton(R.string.button_yes, event)
 				.setNegativeButton(R.string.button_no, event);
 		AlertDialog alert = builder.create();
@@ -609,6 +595,18 @@ public class CommonTask {
 	        else
 	            return false;
 	    }
+
+	public static void ShowLogOutConfirmation(
+			Context context, String message,
+			android.content.DialogInterface.OnClickListener showExitEvent) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning).setMessage(message)
+				.setPositiveButton(R.string.button_yes, showExitEvent)
+				.setNegativeButton(R.string.button_no, showExitEvent);
+		AlertDialog alert = builder.create();
+		alert.show();
+		
+	}
 
 	
 	 

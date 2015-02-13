@@ -15,9 +15,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
@@ -36,7 +38,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +47,6 @@ import android.widget.ViewFlipper;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
-import com.sinepulse.app.activities.Home.GestureListener;
 import com.sinepulse.app.adapters.DeviceListAdapter;
 import com.sinepulse.app.adapters.DeviceLogAdapter;
 import com.sinepulse.app.adapters.RoomListAdapter;
@@ -68,6 +69,8 @@ import com.sinepulse.app.utils.JsonParser;
 @EActivity(R.layout.room_status)
 public class RoomManager extends MainActionbarBase implements OnClickListener,
 		OnTouchListener, OnItemClickListener {
+	
+	Singleton m_Inst = Singleton.getInstance();
 	@ViewById(R.id.lvRoomList)
 	public ListView roomListView;
 	@ViewById(R.id.lvDeviceList)
@@ -140,8 +143,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	public Button bRoom;
 	@ViewById(R.id.tvProgressValue)
 	public TextView tvProgressValue;
-	String fromDate = null;
-	String toDate = null;
+	String fromDate = "";
+	String toDate = "";
 	int seekBarProgressValue = 0;
 	int deviceId = 0;
 	int curtainPropertyId = 0;
@@ -180,13 +183,15 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	SimpleDateFormat formatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	Date d = new Date();
+	RoundKnobButton rv ;
+	TextView tv2;
+	RelativeLayout panel ;
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// setTheme(R.style.settinglistbackground);
-
 		super.onCreate(savedInstanceState);
+		m_Inst.InitGUIFrame(this);
 		RoomManager.context = this;
 		backState = RoomsState.INITIAL_STATE;
 		createMenuBar();
@@ -199,6 +204,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		backState = RoomsState.INITIAL_STATE;
 		vfRoom.setDisplayedChild(0);
 		btAddRoom.setText("Room List");
+		fromDate=formatter.format(d).toString();
+		toDate=formatter.format(d).toString();
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_All_Room;
 		if (asyncGetRoomInfo != null) {
 			asyncGetRoomInfo.cancel(true);
@@ -391,21 +398,59 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		case 1:// Fan
 			getSupportActionBar().setTitle("Fan Control");
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
-			seekBar1.setVisibility(View.VISIBLE);
-			tvProgressValue.setVisibility(View.VISIBLE);
+			 generateRotatingKnobView();
+			rv.SetListener(new com.sinepulse.app.activities.RoundKnobButton.RoundKnobButtonListener() {
+
+				@Override
+				public void onRotate(final int percentage) {
+					tv2.post(new Runnable() {
+						@Override
+						public void run() {
+							 tv2.setText(percentage + " %");
+//							if(knobState){
+							int value=percentage;
+							sendSetProperty(CommonValues.getInstance().userId,
+									value, deviceId, 3);
+						}
+					});
+				}
+			});
+			seekBar1.setVisibility(View.INVISIBLE);
+			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 2:// Light
 			getSupportActionBar().setTitle("Light Control");
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
-			seekBar1.setVisibility(View.VISIBLE);
-			tvProgressValue.setVisibility(View.VISIBLE);
+			 generateRotatingKnobView();
+			 rv.SetListener(new com.sinepulse.app.activities.RoundKnobButton.RoundKnobButtonListener() {
+					
+					@Override
+					public void onRotate(final int percentage) {
+						tv2.post(new Runnable() {
+							@Override
+							public void run() {
+								 tv2.setText(percentage + " %");
+//								if(knobState){
+								int value=percentage;
+								if(value==99){
+									value=100;
+								}
+								sendSetProperty(CommonValues.getInstance().userId,
+										value, deviceId,2);
+							}
+						});
+					}
+				});
+			seekBar1.setVisibility(View.INVISIBLE);
+			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 3:// AC
 			getSupportActionBar().setTitle("AC Control");
+			hideRotatingKnob();
 			ivDevice.setImageDrawable(getResources().getDrawable(
 					R.drawable.ac_large));
 			seekBar1.setVisibility(View.INVISIBLE);
@@ -415,6 +460,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 4:// Curtain
+			hideRotatingKnob();
 			spinner1.setVisibility(View.VISIBLE);
 			loadCurtainPresetValues(CommonValues.getInstance().userId,
 					deviceManagerEntity.Id);
@@ -436,8 +482,55 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 						.get(i));
 			}
 		} else {
-			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
+			CommonTask.ShowMessage(this, "Network Problem.Please Retry.");
 		}
+	}
+	
+	ViewGroup parent;
+	public void generateRotatingKnobView() {
+		 View C = findViewById(R.id.propertyMiddleView);
+		 parent = (ViewGroup) C.getParent();
+//		panel = (RelativeLayout) findViewById(R.id.propertyMiddleView).getParent();
+		 rv = new RoundKnobButton(this, R.drawable.stator,
+					R.drawable.rotoron, R.drawable.rotoroff, m_Inst.Scale(360),
+					m_Inst.Scale(360));
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		lp = new RelativeLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+//			lp.setMargins(0, 0, 0, 200);
+		parent.addView(rv,lp);
+		
+		tv2 = new TextView(this);
+		tv2.setText("");
+		tv2.setTextColor(getResources().getColor(R.color.lime));
+		tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, 
+		           getResources().getDimension(R.dimen.font_size));
+		lp = new RelativeLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+		parent.addView(tv2, lp);
+	}
+	
+	public void hideRotatingKnob() {
+		if(parent!=null){
+			if(rv.getVisibility()==View.VISIBLE){
+				parent.removeView(rv);
+				rv.setVisibility(View.GONE);
+			}
+			if(tv2.getVisibility()==View.VISIBLE){
+				parent.removeView(tv2);
+				tv2.setVisibility(View.GONE);
+			}
+		}
+		/*if(rv!=null){
+		panel.removeView(rv);
+		}
+		if(tv2!=null){
+		panel.removeView(tv2);
+		}*/
 	}
 
 	private void loadCurtainPresetValues(int userId, int deviceId) {
@@ -450,7 +543,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	}
 
-	public void setDevicePropertyValue(final DeviceProperty property) {
+	public void setDevicePropertyValue(DeviceProperty property) {
 
 		switch (property.PropertyId) {
 		case 1:// OnOff
@@ -477,30 +570,52 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				list_image.setImageResource(R.drawable.redled_large);
 			}
 			break;
-		case 2:// Dimming
+		case 2:// Dimming Light
+			/*seekBar1.setOnSeekBarChangeListener(null);
 			if (property.IsActionPending) {
 				seekBar1.setProgress(Integer.parseInt(property
 						.getPendingValue()));
-				tvProgressValue.setText(property.getPendingValue() + " %");
+				tvProgressValue.setText("Dimming : "+property.getPendingValue() + " %");
 				seekBar1.setEnabled(false);
 			} else {
 				seekBar1.setProgress(Integer.parseInt(property.getValue()));
 				seekBar1.setEnabled(true);
-				tvProgressValue.setText(property.getValue() + " %");
-			}
+				tvProgressValue.setText("Dimming : "+property.getValue() + " %");
+			}*/
+			if (property.IsActionPending) {
+				 rv.setRotorPercentage(Integer.parseInt(property
+							.getPendingValue()));
+				 tv2.setText(property.getPendingValue() + " %");
+				 rv.setEnabled(false);
+				} else {
+					rv.setRotorPercentage(Integer.parseInt(property.getValue()));
+					rv.setEnabled(true);
+					tv2.setText(property.getValue() + " %");
+				}
 
 			break;
-		case 3:// Dimming
+		case 3:// Dimming Fan(Knob)
+			/*seekBar1.setOnSeekBarChangeListener(null);
 			if (property.IsActionPending) {
 				seekBar1.setProgress(Integer.parseInt(property
 						.getPendingValue()));
 				seekBar1.setEnabled(false);
-				tvProgressValue.setText(property.getPendingValue() + " %");
+				tvProgressValue.setText("Dimming : "+property.getPendingValue() + " %");
 			} else {
 				seekBar1.setProgress(Integer.parseInt(property.getValue()));
 				seekBar1.setEnabled(true);
-				tvProgressValue.setText(property.getValue() + " %");
-			}
+				tvProgressValue.setText("Dimming : "+property.getValue() + " %");
+			}*/
+			if (property.IsActionPending) {
+				 rv.setRotorPercentage(Integer.parseInt(property
+							.getPendingValue()));
+				 tv2.setText(property.getPendingValue() + " %");
+				 rv.setEnabled(false);
+				} else {
+					rv.setRotorPercentage(Integer.parseInt(property.getValue()));
+					rv.setEnabled(true);
+					tv2.setText(property.getValue() + " %");
+				}
 			break;
 		case 6:// Preset
 			if (property.IsActionPending) {
@@ -532,23 +647,23 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				sendSetProperty(CommonValues.getInstance().userId,
-						(isChecked ? 1 : 0), property.DeviceId, 1);
+						(isChecked ? 1 : 0), deviceId, 1);
 				// toggleButton2.setEnabled(false);
 			}
 		});
-		seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		/*seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				seekBarProgressValue = seekBar.getProgress();
 				seekBar1.setEnabled(false);
 				if (deviceManagerEntity.DeviceTypeId == 1) {
 					sendSetProperty(CommonValues.getInstance().userId,
-							seekBarProgressValue, property.DeviceId, 3);
+							seekBarProgressValue, deviceId, 3);
 				} else if (deviceManagerEntity.DeviceTypeId == 2) {
 					sendSetProperty(CommonValues.getInstance().userId,
-							seekBarProgressValue, property.DeviceId, 2);
+							seekBarProgressValue, deviceId, 2);
 				}
-				tvProgressValue.setText(String.valueOf(seekBarProgressValue)
+				tvProgressValue.setText("Dimming : "+String.valueOf(seekBarProgressValue)
 						+ " %");
 			}
 
@@ -562,7 +677,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				// seekBarProgress=progress;
 				// sendSetPropertyForSeekBar(CommonValues.getInstance().userId,progress,2,property.DeviceId);
 			}
-		});
+		});*/
 		up.setOnTouchListener(this);
 		down.setOnTouchListener(this);
 		right.setOnTouchListener(this);
@@ -624,7 +739,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 						.get(i));
 			}
 		} else {
-			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
+			CommonTask.ShowMessage(this, "Network Error.Please try Later");
 		}
 
 	}
@@ -797,11 +912,11 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			Date firstDate = formatter.parse(fromDate);
 			Date lastDate = formatter.parse(toDate);
 			if (lastDate.after(CurrentDate)) {
-				CommonTask.ShowMessage(this, "To date cant be greater than current date");
+				CommonTask.ShowMessage(this, "To date can't be greater than current date");
 				etDateTo.setText("");
 				return false;
 			}else if( lastDate.before(firstDate)){
-				CommonTask.ShowMessage(this, "To date cant be less than From date");
+				CommonTask.ShowMessage(this, "To date can't be less than From date");
 				etDateTo.setText("");
 				return false;
 			}
@@ -947,6 +1062,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		}
 
 	}
+	@Override
 	@Click({ R.id.bCamera, R.id.bRoom, R.id.bDashboard, R.id.btShowLog,
 			R.id.etDateFrom, R.id.etDateTo, R.id.tvToday, R.id.tvYesterday })
 	public void onClick(View v) {
@@ -1009,8 +1125,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			showCalendar(v);
 			break;
 		case R.id.tvToday:
-//			etDateFrom.setText("");
-//			etDateTo.setText("");
+			String tDelims ="T" ;
+		    String[] tTokens = formatter.format(d).toString().split(tDelims);
+			etDateFrom.setText(tTokens[0]);
+			etDateTo.setText(tTokens[0]);
 //			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#2C5197"));
@@ -1025,8 +1143,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			if (tvEmptyLog.isShown()) {
 				tvEmptyLog.setVisibility(View.GONE);
 			}
-			etDateFrom.setText("");
-			etDateTo.setText("");
+			String yDelims ="T" ;
+		    String[] yTokens = formatter.format(d.getTime() - 24 * 60 * 60 * 1000).toString().split(yDelims);
+			etDateFrom.setText(yTokens[0]);
+			etDateTo.setText(yTokens[0]);
 //			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#2C5197"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
@@ -1113,7 +1233,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	public void setCurtainPresetResponseData() {
 		String[] presetValues = getCurtainPresetValues();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, presetValues);
+				R.layout.spinner_item, presetValues);
 		 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner1.setAdapter(adapter);
 		spinner1.setSelection(presetItemPosition + 1);
@@ -1145,7 +1265,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 					.size()];
 			for (int i = 0; i < CommonValues.getInstance().presetList.size(); i++) {
 				presetArray[i] = CommonValues.getInstance().presetList.get(i)
-						.getName();
+						.getDisplayName();
 			}
 			shouldSetPreset = false;
 			return presetArray;

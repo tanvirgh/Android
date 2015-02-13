@@ -62,7 +62,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
                 android:prompt="@string/camera_prompt"
-                android:visibility="visible"/>
+                android:visibility="invisible"/>
             <!-- Rightend OnOFF Button -->
 
             <ToggleButton
@@ -93,7 +93,7 @@
              android:visibility="visible" />
 
         <RelativeLayout
-            android:id="@+id/middleView"
+            android:id="@+id/propertyMiddleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -133,7 +133,7 @@
                 android:id="@+id/porda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible" >
+                android:visibility="invisible" >
 
                 <include
                     android:id="@+id/curtainadcontrol"
@@ -164,7 +164,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="5dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="10dp"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/tvDeviceName"
             android:background="@drawable/left_curved_button_bg_selected"

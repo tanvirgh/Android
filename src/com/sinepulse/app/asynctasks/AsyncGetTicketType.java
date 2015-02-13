@@ -5,7 +5,7 @@ package com.sinepulse.app.asynctasks;
 
 import android.os.AsyncTask;
 
-import com.sinepulse.app.activities.HelpActivity;
+import com.sinepulse.app.activities.SupportActivity;
 
 /**
  * @author tanvir.ahmed
@@ -14,10 +14,10 @@ import com.sinepulse.app.activities.HelpActivity;
 public class AsyncGetTicketType extends AsyncTask<Void, Void, Boolean> {
 	
 //	DisplayDeviceDetails  deviceDetails ;
-	HelpActivity parentActivity;
+	SupportActivity parentActivity;
 	public int userId;
 	
-	public AsyncGetTicketType(HelpActivity parent, int userId) {
+	public AsyncGetTicketType(SupportActivity parent, int userId) {
 		this.parentActivity=parent;
 		this.userId=userId;
 		

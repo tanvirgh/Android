@@ -6,7 +6,6 @@
     android:layout_height="35dp"
     android:textSize="16sp"
     android:gravity="start"
-    android:background="#8B7355"
     android:textColor="#FFFFFF"         
     android:padding="5dip"
-    />
+   android:paddingLeft="6dp" />

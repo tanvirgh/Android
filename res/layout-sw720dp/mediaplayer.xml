@@ -36,6 +36,14 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/spinner_camera" />
 
+        <ProgressBar
+            android:id="@+id/pbCamera"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"
+             />
         <Spinner
             android:id="@+id/spinner_camera"
             android:layout_width="fill_parent"

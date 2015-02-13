@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@drawable/sh_background">
+    android:background="@drawable/sh_background"
+    android:orientation="vertical" >
+    <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="10dp"
+         android:layout_above="@+id/bottom" >
 
-    <ImageView
-        android:id="@+id/aboutImageView01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:contentDescription="@string/todo"
-        android:gravity="center_horizontal"
-        android:scaleType="fitCenter"
-        android:src="@drawable/uc" />
+    <ViewFlipper
+        android:id="@+id/vfTicket"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+
+        <include
+            android:id="@+id/viewAllTicket"
+            layout="@layout/view_all_ticket" />
+
+        <include
+            android:id="@+id/createTicket"
+            layout="@layout/create_ticket" />
+
+        <include
+            android:id="@+id/viewSingleTicket"
+            layout="@layout/view_single_ticket" />
+    </ViewFlipper>
+    
+    </RelativeLayout>
+
     <include
-            android:id="@+id/bottom"
-            layout="@layout/dashboard_bottom_bar" 
-            android:visibility="visible" />
+        android:id="@+id/bottom"
+        layout="@layout/dashboard_bottom_bar"
+        android:visibility="visible" />
 
 </RelativeLayout>

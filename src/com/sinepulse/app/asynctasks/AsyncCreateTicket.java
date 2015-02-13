@@ -6,7 +6,7 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.sinepulse.app.activities.HelpActivity;
+import com.sinepulse.app.activities.SupportActivity;
 
 /**
  * @author tanvir.ahmed
@@ -15,13 +15,13 @@ import com.sinepulse.app.activities.HelpActivity;
 public class AsyncCreateTicket extends AsyncTask<Void, Void, Boolean> {
 	
 //	DisplayDeviceDetails  deviceDetails ;
-	HelpActivity parentActivity;
+	SupportActivity parentActivity;
 	public int userId;
 	public String Subject;
 	public String Details;
 	public int TicketTypeId;
 	
-	public AsyncCreateTicket(HelpActivity parent, int userId,String Subject,String Details,Integer TicketTypeId) {
+	public AsyncCreateTicket(SupportActivity parent, int userId,String Subject,String Details,Integer TicketTypeId) {
 		this.parentActivity=parent;
 		this.userId=userId;
 		this.Subject=Subject;

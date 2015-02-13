@@ -3,7 +3,6 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.RoomManager;
-import com.sinepulse.app.fragments.RoomManagerFragment;
 import com.sinepulse.app.utils.CommonValues;
 
 public class AsyncGetRoom extends AsyncTask<Void, Void, Boolean> {

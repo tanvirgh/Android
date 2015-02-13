@@ -2,7 +2,6 @@ package com.sinepulse.app.activities;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import android.content.Intent;
@@ -10,13 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
-import com.sinepulse.app.asynctasks.AsyncPostChangePassRequest;
 import com.sinepulse.app.base.MainActionbarBase;
 
 /**
@@ -71,6 +66,7 @@ public class About extends MainActionbarBase implements OnClickListener {
 		return prepared;
 	}
 	
+	@Override
 	@Click({R.id.bCamera,R.id.bDashboard,R.id.bRoom})
 	public void onClick(View v) {
 		MainActionbarBase.stackIndex.removeAllElements();

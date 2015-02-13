@@ -3,7 +3,9 @@ package com.sinepulse.app.activities;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -11,9 +13,12 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import android.annotation.TargetApi;
-import android.app.Dialog;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -22,7 +27,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.text.InputType;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ActionProvider;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
@@ -31,7 +38,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -39,10 +46,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.CalendarView.OnDateChangeListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -50,8 +56,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +79,7 @@ import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.entities.Device;
 import com.sinepulse.app.entities.DeviceProperty;
 import com.sinepulse.app.entities.DevicePropertyLog;
+import com.sinepulse.app.utils.CommonConstraints;
 import com.sinepulse.app.utils.CommonIdentifier;
 import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonURL;
@@ -90,6 +97,8 @@ import com.sinepulse.app.utils.NavDrawerItem;
 @EActivity(R.layout.main)
 public class Home extends MainActionbarBase implements OnClickListener,
 		OnTouchListener {
+
+	Singleton m_Inst = Singleton.getInstance();
 
 	// private static final int INITIAL_STATE = -1;
 	public static final int INITIAL_STATE = -1, DEVICE_STATE = 0,
@@ -243,14 +252,14 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	static AsyncGetDevicesByType asyncGetDeviceByType = null;
 	private DeviceLogAdapter dLogAdapter;
 	@ViewById(R.id.etDateFrom)
-	public EditText etDateFrom;
+	public static EditText etDateFrom;
 	@ViewById(R.id.etDateTo)
 	public EditText etDateTo;
 	@ViewById(R.id.tvEmptyLog)
 	public TextView tvEmptyLog;
 	AsyncGetSetPropertyFromDashBoard asyncGetSetPropertyFromDashBoard = null;
 	int modifiedIndex = 0;
-	String fromDate = "";
+	static String fromDate = "";
 	String toDate = "";
 	int seekBarProgressValue = 0;
 	int curtainPropertyId = 0;
@@ -259,10 +268,22 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	int presetItemPosition;
 	int deviceTypeId;
 	boolean shouldSetPreset = false;
+	boolean knobState;
+	RoundKnobButton rv;
+	TextView tv2;
+	RelativeLayout panel;
+
+	int year;
+	int month;
+	int day;
+	private DatePickerDialog fromDatePickerDialog = null;
+	private DatePickerDialog toDatePickerDialog = null;
+	private SimpleDateFormat dateFormatter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		m_Inst.InitGUIFrame(this);
 		Home.context = this;
 		mSupportActionBar.setDisplayHomeAsUpEnabled(false);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -270,6 +291,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
 						| WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		backState = DeviceTypeState.INITIAL_STATE;
+		dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
 	}
 
@@ -293,6 +315,10 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		CommonTask.loadSettings(this);
 		CommonTask.loadLoginUser(this);
+
+		fromDate = dateFormatter.format(d).toString();
+		toDate = dateFormatter.format(d).toString();
+
 		mTitle = mDrawerTitle = getTitle();
 
 		// load slide menu items
@@ -515,7 +541,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			// Total AC
 			home_btn_ac.setText("   "
 					+ (CommonValues.getInstance().summary.deviceSummaryArray
-							.get(2)).DeviceCount + " AC s");
+							.get(2)).DeviceCount + " ACs");
 			// Total Curtains
 			home_btn_curtain.setText("   "
 					+ (CommonValues.getInstance().summary.deviceSummaryArray
@@ -591,26 +617,26 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		switch (deviceType) {
 		case 1:
 			tvdeviceValue.setText("  Fan");
-//			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-//					0, R.drawable.fan_on, 0, 0);
+			// btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
+			// 0, R.drawable.fan_on, 0, 0);
 			btAddDevice.setBackgroundResource(R.drawable.fan_on);
 			break;
 		case 2:
 			tvdeviceValue.setText("  Light");
-//			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-//					0, R.drawable.bulbon, 0, 0);
+			// btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
+			// 0, R.drawable.bulbon, 0, 0);
 			btAddDevice.setBackgroundResource(R.drawable.bulbon);
 			break;
 		case 3:
 			tvdeviceValue.setText("  AC");
-//			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-//					0, R.drawable.ac_large, 0, 0);
+			// btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
+			// 0, R.drawable.ac_large, 0, 0);
 			btAddDevice.setBackgroundResource(R.drawable.ac_large_top);
 			break;
 		case 4:
 			tvdeviceValue.setText("  Curtain");
-//			btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-//					0, R.drawable.curtain_large, 0, 0);
+			// btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
+			// 0, R.drawable.curtain_large, 0, 0);
 			btAddDevice.setBackgroundResource(R.drawable.curtain_large);
 			break;
 
@@ -624,6 +650,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+
 				vfDeviceType.setInAnimation(CommonTask.inFromRightAnimation());
 				vfDeviceType.setOutAnimation(CommonTask.outToLeftAnimation());
 
@@ -646,19 +673,11 @@ public class Home extends MainActionbarBase implements OnClickListener,
 
 	}
 
-	/**
-	 * 
-	 */
 	private void setDeviceByTypeAdapter() {
 		if (CommonValues.getInstance().deviceList != null) {
 			dtAdapter = new DeviceListByTypeAdapter(this,
 					R.layout.device_typewise_listitem_view,
 					CommonValues.getInstance().deviceList);
-			// for (int i = 0; i < CommonValues.getInstance().deviceList.size();
-			// i++) {
-			// System.out.println("First Is On "
-			// + CommonValues.getInstance().deviceList.get(i).IsOn);
-			// }
 			deviceListView.setAdapter(dtAdapter);
 			dtAdapter.setTouchEnabled(false);
 			deviceListView.setEnabled(true);
@@ -668,9 +687,6 @@ public class Home extends MainActionbarBase implements OnClickListener,
 
 	}
 
-	/**
-	 * 
-	 */
 	public void loadDeviceProperty(int DeviceTypeId, int deviceId) {
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_Properties_Dashboard;
 		if (asyncGetDeviceProperty != null) {
@@ -693,7 +709,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 
 	}
 
-	public void setDevicePropertyValue(final DeviceProperty property) {
+	public void setDevicePropertyValue(DeviceProperty property) {
 
 		switch (property.PropertyId) {
 		case 1:// On_Off
@@ -721,31 +737,54 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				list_image.setImageResource(R.drawable.redled_large);
 			}
 			break;
-		case 2:// Dimming
-			seekBar1.setOnSeekBarChangeListener(null);
+		case 2:// Dimming Light
+			/*
+			 * seekBar1.setOnSeekBarChangeListener(null); if
+			 * (property.IsActionPending) {
+			 * seekBar1.setProgress(Integer.parseInt(property
+			 * .getPendingValue()));
+			 * tvProgressValue.setText("Dimming : "+property.getPendingValue() +
+			 * " %"); seekBar1.setEnabled(false); } else {
+			 * seekBar1.setProgress(Integer.parseInt(property.getValue()));
+			 * seekBar1.setEnabled(true);
+			 * tvProgressValue.setText("Dimming : "+property.getValue() + " %");
+			 * }
+			 */
+			// rv.SetListener(null);
 			if (property.IsActionPending) {
-				seekBar1.setProgress(Integer.parseInt(property
+				rv.setRotorPercentage(Integer.parseInt(property
 						.getPendingValue()));
-				tvProgressValue.setText(property.getPendingValue() + " %");
-				seekBar1.setEnabled(false);
+				tv2.setText(property.getPendingValue() + " %");
+				rv.setEnabled(false);
 			} else {
-				seekBar1.setProgress(Integer.parseInt(property.getValue()));
-				seekBar1.setEnabled(true);
-				tvProgressValue.setText(property.getValue() + " %");
+				rv.setRotorPercentage(Integer.parseInt(property.getValue()));
+				rv.setEnabled(true);
+				tv2.setText(property.getValue() + " %");
 			}
 			break;
-		case 3:// Dimming
-			seekBar1.setOnSeekBarChangeListener(null);
+		case 3:// Dimming Fan(Knob)
+			/*
+			 * seekBar1.setOnSeekBarChangeListener(null); if
+			 * (property.IsActionPending) {
+			 * 
+			 * seekBar1.setProgress(Integer.parseInt(property
+			 * .getPendingValue())); seekBar1.setEnabled(false);
+			 * tvProgressValue.setText(property.getPendingValue() + " %"); }
+			 * else {
+			 * seekBar1.setProgress(Integer.parseInt(property.getValue()));
+			 * seekBar1.setEnabled(true);
+			 * tvProgressValue.setText(property.getValue() + " %"); }
+			 */
+			// rv.SetListener(null);
 			if (property.IsActionPending) {
-
-				seekBar1.setProgress(Integer.parseInt(property
+				rv.setRotorPercentage(Integer.parseInt(property
 						.getPendingValue()));
-				seekBar1.setEnabled(false);
-				tvProgressValue.setText(property.getPendingValue() + " %");
+				tv2.setText(property.getPendingValue() + " %");
+				rv.setEnabled(false);
 			} else {
-				seekBar1.setProgress(Integer.parseInt(property.getValue()));
-				seekBar1.setEnabled(true);
-				tvProgressValue.setText(property.getValue() + " %");
+				rv.setRotorPercentage(Integer.parseInt(property.getValue()));
+				rv.setEnabled(true);
+				tv2.setText(property.getValue() + " %");
 			}
 			break;
 		case 6:// Preset
@@ -778,35 +817,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				sendSetProperty(CommonValues.getInstance().userId,
-						(isChecked ? 1 : 0), property.DeviceId, 1);
-			}
-		});
-		seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				seekBarProgressValue = seekBar.getProgress();
-				seekBar1.setEnabled(false);
-				if (deviceManagerEntity.DeviceTypeId == 1) {
-					sendSetProperty(CommonValues.getInstance().userId,
-							seekBarProgressValue, property.DeviceId, 3);
-				} else if (deviceManagerEntity.DeviceTypeId == 2) {
-					sendSetProperty(CommonValues.getInstance().userId,
-							seekBarProgressValue, property.DeviceId, 2);
-				}
-				tvProgressValue.setText(String.valueOf(seekBarProgressValue)
-						+ " %");
-				
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// seekBarProgress=progress;
-				// sendSetPropertyForSeekBar(CommonValues.getInstance().userId,progress,2,property.DeviceId);
+						(isChecked ? 1 : 0), deviceId, 1);
 			}
 		});
 		up.setOnTouchListener(this);
@@ -895,20 +906,61 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		case 1:// Fan
 			getSupportActionBar().setTitle("Fan Control");
 			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
-			seekBar1.setVisibility(View.VISIBLE);
-			tvProgressValue.setVisibility(View.VISIBLE);
+			generateRotatingKnobView();
+
+			rv.SetListener(new com.sinepulse.app.activities.RoundKnobButton.RoundKnobButtonListener() {
+				public void onRotate(final int percentage) {
+					tv2.post(new Runnable() {
+						public void run() {
+							tv2.setText(percentage + " %");
+							int value = percentage;
+							if (value == 99) {
+								value = 100;
+							}
+							sendSetProperty(CommonValues.getInstance().userId,
+									value, deviceId, 3);
+							loadDeviceProperty(
+									deviceManagerEntity.DeviceTypeId,
+									deviceManagerEntity.Id);
+						}
+					});
+				}
+			});
+			seekBar1.setVisibility(View.INVISIBLE);
+			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 2:// Light
 			getSupportActionBar().setTitle("Light Control");
 			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
-			seekBar1.setVisibility(View.VISIBLE);
-			tvProgressValue.setVisibility(View.VISIBLE);
+			generateRotatingKnobView();
+			rv.SetListener(new com.sinepulse.app.activities.RoundKnobButton.RoundKnobButtonListener() {
+
+				public void onRotate(final int percentage) {
+					tv2.post(new Runnable() {
+						public void run() {
+							tv2.setText(percentage + " %");
+							int value = percentage;
+							if (value == 99) {
+								value = 100;
+							}
+							sendSetProperty(CommonValues.getInstance().userId,
+									value, deviceId, 2);
+							loadDeviceProperty(
+									deviceManagerEntity.DeviceTypeId,
+									deviceManagerEntity.Id);
+						}
+					});
+				}
+			});
+			seekBar1.setVisibility(View.INVISIBLE);
+			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 3:// Ac
+			hideRotatingKnob();
 			getSupportActionBar().setTitle("AC Control");
 			ivDevice.setImageDrawable(getResources().getDrawable(
 					R.drawable.ac_large));
@@ -919,11 +971,13 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
 			break;
 		case 4:// Curtain
+			hideRotatingKnob();
 			getSupportActionBar().setTitle("Curtain Control");
 			spinner1.setVisibility(View.VISIBLE);
 			loadCurtainPresetValues(CommonValues.getInstance().userId,
 					deviceManagerEntity.Id);
 			seekBar1.setVisibility(View.INVISIBLE);
+
 			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.VISIBLE);
 			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
@@ -941,8 +995,62 @@ public class Home extends MainActionbarBase implements OnClickListener,
 						.get(i));
 			}
 		} else {
-			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
+			CommonTask.ShowMessage(this, "Network Problem.Please Retry.");
 		}
+	}
+
+	/**
+	 * 
+	 */
+	ViewGroup parent;
+
+	public void generateRotatingKnobView() {
+		View C = findViewById(R.id.propertyMiddleView);
+		parent = (ViewGroup) C.getParent();
+		// panel = (RelativeLayout)
+		// findViewById(R.id.propertyMiddleView).getParent();
+		rv = new RoundKnobButton(this, R.drawable.stator, R.drawable.rotoron,
+				R.drawable.rotoroff, m_Inst.Scale(360), m_Inst.Scale(360));
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
+		lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+		// lp.setMargins(0, 0, 0, 200);
+		parent.addView(rv, lp);
+
+		tv2 = new TextView(this);
+		tv2.setText("");
+		tv2.setTextColor(getResources().getColor(R.color.lime));
+		tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources()
+				.getDimension(R.dimen.font_size));
+		lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
+		lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+		parent.addView(tv2, lp);
+	}
+
+	/**
+	 * 
+	 */
+	public void hideRotatingKnob() {
+		if (parent != null) {
+			if (rv.getVisibility() == View.VISIBLE) {
+				parent.removeView(rv);
+				rv.setVisibility(View.GONE);
+			}
+			if (tv2.getVisibility() == View.VISIBLE) {
+				parent.removeView(tv2);
+				tv2.setVisibility(View.GONE);
+			}
+		}
+		/*
+		 * if(rv!=null){ panel.removeView(rv); rv.setVisibility(View.GONE);
+		 * 
+		 * } if(tv2!=null){ panel.removeView(tv2); tv2.setVisibility(View.GONE);
+		 * }
+		 */
 	}
 
 	private void loadCurtainPresetValues(int userId, int deviceId) {
@@ -1005,16 +1113,12 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		public boolean onGroupClick(ExpandableListView eListView, View view,
 				int groupPosition, long id) {
 			// cancelAsyncOnVisibleFlipper();
-			if (groupPosition != 6) {
+			if (groupPosition != 7) {
 				displayFragment(groupPosition);
 			} else {
-				CommonValues.getInstance().currentAction = CommonIdentifier.Action_LogOut;
-				if (asyncLogOutTask != null) {
-					asyncLogOutTask.cancel(true);
-				}
-				asyncLogOutTask = new AsyncLogOutTask(Home.this,
-						CommonValues.getInstance().userId);
-				asyncLogOutTask.execute();
+				CommonTask.ShowLogOutConfirmation(Home.context,
+						"Do you really want to Log Out from the app?",
+						ShowExitEvent());
 			}
 
 			return false;
@@ -1026,12 +1130,28 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	 */
 	public void redirectToLogInPage() {
 		if (CommonValues.getInstance().logoutResponse == true) {
+			removePreferenceLoginData();
 			Intent intent = new Intent("com.sinepulse.app.activities.UserLogin");
-			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
+
 		} else {
 			CommonTask.ShowMessage(this, "Server Error ! LogOut Failed.");
 		}
+	}
+
+	/**
+	 * 
+	 */
+	public void removePreferenceLoginData() {
+		SharedPreferences password = UserLogin.context.getSharedPreferences(
+				CommonConstraints.PREF_PASSWORD_KEY,
+				UserLogin.context.MODE_PRIVATE);
+		password.edit().remove(CommonConstraints.PREF_PASSWORD_KEY).commit();
+		SharedPreferences userName = UserLogin.context.getSharedPreferences(
+				CommonConstraints.PREF_LOGINUSER_NAME,
+				UserLogin.context.MODE_PRIVATE);
+		userName.edit().remove(CommonConstraints.PREF_LOGINUSER_NAME).commit();
 	}
 
 	public void addDrawerMenuItems() {
@@ -1048,16 +1168,20 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		// Change Pass
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons
 				.getResourceId(3, -1)));
-		// About
+
+		// Support
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons
 				.getResourceId(4, -1)));
 		// Help
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons
 				.getResourceId(5, -1)));
-
-		// LogOut
+		// About
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons
 				.getResourceId(6, -1)));
+
+		// LogOut
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons
+				.getResourceId(7, -1)));
 
 	}
 
@@ -1087,15 +1211,6 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		return prepared;
 	}
 
-	/**
-	 * @param menu
-	 */
-	// private void hideRefreshMenu(com.actionbarsherlock.view.Menu menu) {
-	// MenuItem refresh = menu.findItem(R.id.menu_refresh);
-	// refresh.setVisible(false);
-	// invalidateOptionsMenu();
-	// }
-
 	void cancelFromSettingsScreen() {
 		backToHomeScreen();
 	}
@@ -1117,15 +1232,10 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		if (currentFragment == ALLDEVICE_FRAGMENT) {
 			if (backState == DeviceTypeState.INITIAL_STATE) {
 				MainActionbarBase.stackIndex.removeAllElements();
-				// systems back to finish
-				CommonValues.getInstance().summary.deviceSummaryArray.clear();
-				CommonValues.getInstance().userId = 0;
-				Intent loginintent = new Intent(
-						"com.sinepulse.app.activities.UserLogin");
-				loginintent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-				startActivity(loginintent);
-				super.onBackPressed();
-
+				Intent intent = new Intent(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_HOME);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
 			}
 			vfDeviceType.setInAnimation(CommonTask.inFromLeftAnimation());
 			vfDeviceType.setOutAnimation(CommonTask.outToRightAnimation());
@@ -1142,18 +1252,8 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				vfDeviceType.setDisplayedChild(1);
 				backState = DeviceTypeState.DEVICE_STATE;
 				LoadDeviceDetailsContent(deviceTypeId);
-				// LoadDeviceDetailsContent(CommonValues.getInstance().summary.deviceSummaryArray
-				// .get(0).DeviceTypeId);
 			}
 			if (backState == DeviceTypeState.VIEWLOG_STATE) {
-				// clearDeviceByTypeData();
-				if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-					// deviceLogListView.setAdapter(null);
-					// dLogAdapter.clear();
-				}
-//				etDateFrom.setText("");
-//				etDateTo.setText("");
-//				bSearch.setVisibility(View.INVISIBLE);
 				getSupportActionBar().setTitle("Device Control");
 				vfDeviceType.setDisplayedChild(2);
 				backState = DeviceTypeState.PROPERTY_STATE;
@@ -1175,6 +1275,40 @@ public class Home extends MainActionbarBase implements OnClickListener,
 
 	}
 
+	public DialogInterface.OnClickListener ShowExitEvent() {
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					CommonValues.getInstance().summary.deviceSummaryArray
+							.clear();
+					CommonValues.getInstance().userId = 0;
+					CommonValues.getInstance().currentAction = CommonIdentifier.Action_LogOut;
+					if (asyncLogOutTask != null) {
+						asyncLogOutTask.cancel(true);
+					}
+					asyncLogOutTask = new AsyncLogOutTask(Home.this,
+							CommonValues.getInstance().userId);
+					asyncLogOutTask.execute();
+					break;
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialog.cancel();
+
+					break;
+
+				default:
+					break;
+				}
+
+			}
+
+		};
+		return dialogClickListener;
+
+	}
+
 	/**
 	 * Clear Device By Type page Data
 	 */
@@ -1182,7 +1316,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		CommonValues.getInstance().deviceList.clear();
 		deviceListView.setAdapter(null);
 		tvdeviceValue.setText("");
-//		btAddDevice.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		// btAddDevice.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 		btAddDevice.setBackgroundResource(0);
 	}
 
@@ -1227,20 +1361,6 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		bDashboard.setBackground(getResources().getDrawable(
 				R.drawable.dashboard_selected1));
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		// goBackToHomeFragment();
-
-		if (showSettingsScreen) {
-			showSettingsScreen = false;
-		}
-
-		// on resume we have to set proper selection in navigation drawer, if on
-		// resumed we check our back stack for which was was the last entry
-		// and set it, if no item in back stack then we set it to home
-		/*
-		 * if (fragmentBackStack.size() > 0 && currentFragment !=
-		 * ALLDEVICE_FRAGMENT) currentFragment = fragmentBackStack.peek(); else
-		 * { currentFragment = ALLDEVICE_FRAGMENT; }
-		 */
 		if (mDrawerList != null) {
 			mDrawerList.setItemChecked(currentFragment, true);
 			// mDrawerList.setSelection(currentFragment);
@@ -1269,11 +1389,6 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			// update the main content by replacing fragments
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
-		// if (position == 1) {
-		// spinner1.setEnabled(false);
-		// } else if (position == 0) {
-		// spinner1.setEnabled(true);
-		// }
 
 		super.displayFragment(position);
 		mDrawerList.setItemChecked(position, true);
@@ -1578,10 +1693,12 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	SimpleDateFormat formatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	Date d = new Date();
+	static final int DATE_DIALOG_ID = 999;
 
 	@Override
 	@Click({ R.id.bCamera, R.id.bRoom, R.id.bDashboard, R.id.btShowLog,
-			R.id.etDateFrom, R.id.etDateTo, R.id.tvToday, R.id.tvYesterday })
+			R.id.etDateFrom, R.id.etDateTo, R.id.tvToday, R.id.tvYesterday,
+			R.id.bSearch })
 	public void onClick(View v) {
 		// vfDeviceType.setDisplayedChild(0);
 
@@ -1615,21 +1732,25 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			if (vfDeviceType.getDisplayedChild() == 0) {
 				return;
 			} else {
+				getSupportActionBar().setTitle("Dashboard");
 				new AsyncRefreshDashBoard(Home.this).execute();
 				CommonValues.getInstance().deviceList.clear();
 				deviceListView.setAdapter(null);
 				tvdeviceValue.setText("");
-//				btAddDevice.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+				// btAddDevice.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0,
+				// 0);
 				btAddDevice.setBackgroundResource(0);
 				vfDeviceType.setDisplayedChild(0);
 			}
 			break;
 		case R.id.btShowLog:
 			getSupportActionBar().setTitle("Device Activity");
-			String delims ="T" ;
-		    String[] tokens = formatter.format(d).toString().split(delims);
-		    etDateFrom.setText(tokens[0]);
-		    etDateTo.setText(tokens[0]);
+			etDateFrom.setInputType(InputType.TYPE_NULL);
+			etDateTo.setInputType(InputType.TYPE_NULL);
+			 etDateFrom.setText(fromDate);
+			 etDateTo.setText(toDate);
+			etDateFrom.requestFocus();
+			setDateTimeField();
 			vfDeviceType.setInAnimation(CommonTask.inFromRightAnimation());
 			vfDeviceType.setOutAnimation(CommonTask.outToLeftAnimation());
 			backState = DeviceTypeState.VIEWLOG_STATE;
@@ -1654,14 +1775,26 @@ public class Home extends MainActionbarBase implements OnClickListener,
 					.toString(), formatter.format(d).toString());
 			break;
 		case R.id.etDateFrom:
+			if(fromDatePickerDialog!=null)
+				fromDatePickerDialog.show();
+//			setDateTimeField(R.id.etDateFrom);
+			// setDateTimeField();
+			break;
+			
 		case R.id.etDateTo:
-			showCalendar(v);
-
+			if(toDatePickerDialog!=null)
+				toDatePickerDialog.show();
+			// setDateTimeField();
+//			setDateTimeField(R.id.etDateTo);
 			break;
 		case R.id.tvToday:
-//			etDateFrom.setText("");
-//			etDateTo.setText("");
-//			bSearch.setVisibility(View.INVISIBLE);
+			
+			  String tDelims = "T"; 
+			  String[] tTokens =dateFormatter.format(d).toString().split(tDelims);
+			  etDateFrom.setText(tTokens[0]); 
+			  etDateTo.setText(tTokens[0]);
+			 
+			// bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#2C5197"));
 			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
@@ -1675,9 +1808,14 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			if (tvEmptyLog.isShown()) {
 				tvEmptyLog.setVisibility(View.GONE);
 			}
-			etDateFrom.setText("");
-			etDateTo.setText("");
-//			bSearch.setVisibility(View.INVISIBLE);
+			
+			  String yDelims = "T"; 
+			  String[] yTokens = dateFormatter .format(d.getTime() - 24 * 60 * 60 * 1000).toString()
+			  .split(yDelims); 
+			  etDateFrom.setText(yTokens[0]);
+			  etDateTo.setText(yTokens[0]);
+			 
+			// bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#2C5197"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
 			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
@@ -1685,13 +1823,35 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				dLogAdapter.clear();
 			}
 			LoadDeviceLogContent(deviceManagerEntity.DeviceTypeId, 2, formatter
-					.format(d.getTime()-24*60*60*1000).toString(), formatter.format(d.getTime()-24*60*60*1000).toString());
+					.format(d.getTime() - 24 * 60 * 60 * 1000).toString(),
+					formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
+							.toString());
+			break;
+		case R.id.bSearch:
+			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
+				deviceLogListView.setAdapter(null);
+				dLogAdapter.clear();
+			}
+			
+			
+			LoadDeviceLogContent(deviceManagerEntity.Id, 3, stserverDate, lstserverDate);
+
 			break;
 
 		default:
 			break;
 		}
 
+	}
+
+	/**
+	 * @return
+	 */
+	public StringBuilder getTodaysFormattedDate() {
+		return new StringBuilder()
+				// Month is 0 based, just add 1
+				.append(month + 1).append("-").append(day).append("-")
+				.append(year).append(" ");
 	}
 
 	/**
@@ -1712,123 +1872,20 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		}
 	}
 
-	Dialog dialog;
-
-	private void showCalendar(final View v) {
-		dialog = new Dialog(this);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setContentView(R.layout.delivery_date);
-		dialog.setCancelable(true);
-
-		final CalendarView calendarView1 = (CalendarView) dialog
-				.findViewById(R.id.calendarView1);
-
-		calendarView1.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				calendarView1.getDate();
-
-			}
-		});
-
-		calendarView1.setOnDateChangeListener(new OnDateChangeListener() {
-
-			@Override
-			public void onSelectedDayChange(CalendarView view, int year,
-					int month, int dayOfMonth) {
-				tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-				tvToday.setTextColor(Color.parseColor("#bdbdbd"));
-				SimpleDateFormat formatter = new SimpleDateFormat(
-						"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-				if (etDateFrom != null && v.getId() == R.id.etDateFrom) {
-					fromDate = formatter.format(
-							new Date(year - 1900, month, dayOfMonth))
-							.toString();
-					String delims = "T";
-					String[] tokens = fromDate.split(delims);
-					try {
-						Date firstDate = formatter.parse(fromDate);
-						Date CurrentDate = d;
-						if(firstDate.after(CurrentDate)){
-							showFirstDateError();
-						}else{
-							etDateFrom.setText(tokens[0]);
-						}
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				if (etDateTo != null && v.getId() == R.id.etDateTo) {
-					if (etDateFrom.getText().toString().length() > 0) {
-						toDate = formatter.format(
-								new Date(year - 1900, month, dayOfMonth))
-								.toString();
-						String delims = "T";
-						String[] tokens = toDate.split(delims);
-						 if (validateLastDateInput()) {
-								etDateTo.setText(tokens[0]);
-								bSearch.setVisibility(View.VISIBLE);
-								}
-					} else {
-						showError();
-					}
-				}
-				// dialog.cancel();
-			}
-		});
-
-		// Date ok button
-		Button button = (Button) dialog.findViewById(R.id.Button01);
-		button.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.cancel();
-
-			}
-		});
-		// Date cancel button
-		Button button2 = (Button) dialog.findViewById(R.id.Button02);
-		button2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.cancel();
-
-			}
-		});
-
-		// now that the dialog is set up, it's time to show it
-		dialog.show();
-
-		bSearch.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-					deviceLogListView.setAdapter(null);
-					dLogAdapter.clear();
-				}
-				LoadDeviceLogContent(deviceManagerEntity.Id, 3, fromDate,
-						toDate);
-
-			}
-
-		});
-
-	}
-
 	private boolean validateLastDateInput() {
-		Date CurrentDate = d;
+		
 		try {
-			Date firstDate = formatter.parse(fromDate);
-			Date lastDate = formatter.parse(toDate);
+			Date firstDate = dateFormatter.parse(stDate);
+			Date lastDate = dateFormatter.parse(lstDate);
+			Date CurrentDate = d;
 			if (lastDate.after(CurrentDate)) {
-				CommonTask.ShowMessage(this, "To date cant be greater than current date");
+				CommonTask.ShowMessage(this,
+						"To date can't be greater than current date");
 				etDateTo.setText("");
 				return false;
-			}else if( lastDate.before(firstDate)){
-				CommonTask.ShowMessage(this, "To date cant be less than From date");
+			} else if (lastDate.before(firstDate)) {
+				CommonTask.ShowMessage(this,
+						"To date can't be less than From date");
 				etDateTo.setText("");
 				return false;
 			}
@@ -1843,8 +1900,10 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	public void showError() {
 		CommonTask.ShowMessage(this, "Please select FromDate First");
 	}
-	public void showFirstDateError() {
-		CommonTask.ShowMessage(this, "From Date should  be less than current date");
+
+	public static void showFirstDateError() {
+		CommonTask.ShowMessage(Home.context,
+				"From Date should not be Greater than current date.");
 	}
 
 	public void startDeviceProgress() {
@@ -1891,16 +1950,6 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			dashBoardProgressBar.setVisibility(View.GONE);
 		}
 	}
-
-	/*
-	 * public void startNavDrawerProgress() {
-	 * nav_drawer_progress_bar.setVisibility(View.VISIBLE); }
-	 * 
-	 * public void stopNavDrawerProgress() { if (null != nav_drawer_progress_bar
-	 * && nav_drawer_progress_bar.isShown()) {
-	 * 
-	 * nav_drawer_progress_bar.setVisibility(View.GONE); } }
-	 */
 
 	public boolean setPropertyRequestFromDashboard(int userId, int deviceId,
 			int propertyId, int value) {
@@ -1949,9 +1998,10 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	public void setCurtainPresetResponseData() {
 		String[] presetValues = getCurtainPresetValues();
 		ArrayAdapter<String> presetAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, presetValues);
+				R.layout.spinner_item, presetValues);
 		spinner1.setAdapter(presetAdapter);
-		presetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		presetAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		spinner1.setSelection(presetItemPosition + 1);
 
@@ -1984,7 +2034,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 					.size()];
 			for (int i = 0; i < CommonValues.getInstance().presetList.size(); i++) {
 				presetArray[i] = CommonValues.getInstance().presetList.get(i)
-						.getName();
+						.getDisplayName();
 			}
 
 			shouldSetPreset = false;
@@ -2081,6 +2131,79 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		}
 		return false;
 
+	}
+	String stDate="";
+	String lstDate="";
+	String stserverDate=formatter.format(d).toString();
+	String lstserverDate=formatter.format(d).toString();	
+	Calendar newDate = Calendar.getInstance();
+	
+	
+	
+	private void setDateTimeField() {
+		// etDateFrom.setOnClickListener(this);
+		// etDateTo.setOnClickListener(this);
+//		switch (v) {
+//		case R.id.etDateFrom:
+			Calendar newCalendar = Calendar.getInstance();
+			fromDatePickerDialog = new DatePickerDialog(this,
+					new OnDateSetListener() {
+
+						public void onDateSet(DatePicker view, int year,
+								int monthOfYear, int dayOfMonth) {
+							newDate.set(year, monthOfYear, dayOfMonth);
+							
+							try {
+						   Date fromDate= dateFormatter.parse(dateFormatter.format(newDate.getTime()));
+						   stDate=dateFormatter.format(newDate.getTime());
+						   stserverDate=formatter.format(newDate.getTime());
+							Date CurrentDate = new Date();
+							if(fromDate.after(CurrentDate)){
+								showFirstDateError();
+							}else{
+								etDateFrom.setText(dateFormatter.format(newDate.getTime()));
+							}
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						}
+
+					}, newCalendar.get(Calendar.YEAR),
+					newCalendar.get(Calendar.MONTH),
+					newCalendar.get(Calendar.DAY_OF_MONTH));
+//			fromDatePickerDialog.dismiss();
+//			break;
+
+//		case R.id.etDateTo:
+//			Toast.makeText(this, "ToDate", Toast.LENGTH_SHORT).show();
+//			Calendar newCalendar1 = Calendar.getInstance();
+			toDatePickerDialog = new DatePickerDialog(this,
+					new OnDateSetListener() {
+
+						public void onDateSet(DatePicker view, int year,
+								int monthOfYear, int dayOfMonth) {
+							Calendar newDate = Calendar.getInstance();
+							newDate.set(year, monthOfYear, dayOfMonth);
+							 lstDate=dateFormatter.format(newDate.getTime());
+							 lstserverDate=formatter.format(newDate.getTime());
+							 if (validateLastDateInput()) {
+							etDateTo.setText(dateFormatter.format(newDate
+									.getTime()));
+							
+							 }
+						}
+
+					}, newCalendar.get(Calendar.YEAR),
+					newCalendar.get(Calendar.MONTH),
+					newCalendar.get(Calendar.DAY_OF_MONTH));
+//			break;
+
+//		default:
+//			break;
+//		}
+		
 	}
 
 }

@@ -11,17 +11,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -31,18 +29,13 @@ import com.devspark.appmsg.AppMsg;
 import com.sinepulse.app.R;
 import com.sinepulse.app.activities.About_;
 import com.sinepulse.app.activities.ChangePasswordActivity_;
-import com.sinepulse.app.activities.HelpActivity_;
 import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.activities.Home_;
+import com.sinepulse.app.activities.SupportActivity_;
 import com.sinepulse.app.activities.UserLogActivity_;
 import com.sinepulse.app.activities.UserProfileActivity_;
-import com.sinepulse.app.fragments.AboutFragment_;
-import com.sinepulse.app.fragments.ChangePasswordFragment_;
-import com.sinepulse.app.fragments.UserLogFragment_;
-import com.sinepulse.app.fragments.UserProfileFragment_;
 import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
-import com.sinepulse.app.utils.NetworkUtil;
 
 /**
  * @author Tanvir Ahmed Chowdhury used for loading sherlock action bar,set
@@ -306,10 +299,12 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			USERLOG_FRAGMENT = 1,
 			SETTINGS_FRAGMENT = 2,
 			CHANGEPASSWORD_FRAGMENT = 3,
-			HELP_FRAGMENT = 4,
-			ABOUT_FRAGMENT = 5,
-			ROOM_FRAGMENT=6,
-			CAMERA_FRAGMENT=7;
+			SUPPORT_FRAGMENT = 4,
+			HELP_FRAGMENT=5,
+			ABOUT_FRAGMENT = 6,
+			ROOM_FRAGMENT=7,
+			CAMERA_FRAGMENT=8
+					;
 	
 
 	/**
@@ -410,22 +405,32 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			Intent aboutIntent = new Intent(this, About_.class);
 			startActivity(aboutIntent);
 			break;
-		case HELP_FRAGMENT:
-			currentFragment = HELP_FRAGMENT;
+		case SUPPORT_FRAGMENT:
+			currentFragment = SUPPORT_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(4)))
 				stackIndex.push(String.valueOf(4));
 			if(CommonValues.getInstance().connectionMode.equals("Internet")){
-			Intent helpIntent = new Intent(this, HelpActivity_.class);
-			startActivity(helpIntent);
+			Intent supportIntent = new Intent(this, SupportActivity_.class);
+			startActivity(supportIntent);
 			}
 			else{
-				CommonTask.ShowMessage(MainActionbarBase.this, "You are in Local Mode.Help menu is not accesible in this mode.Please switch to Internet mode to access Help Menu.");
+				CommonTask.ShowMessage(MainActionbarBase.this, "You are in Local Mode.Support menu is not accesible in this mode.Please switch to Internet mode to access this Menu.");
 				stackIndex.removeAllElements();
 				if (!stackIndex.contains(String.valueOf(0)))
 					stackIndex.push(String.valueOf(0));
 				Intent dashboardIntent = new Intent(this, Home_.class);
 				startActivity(dashboardIntent);
 			}
+			break;
+			
+		case HELP_FRAGMENT:
+			currentFragment = HELP_FRAGMENT;
+			if (!stackIndex.contains(String.valueOf(7)))
+				stackIndex.push(String.valueOf(7));
+			Intent viewIntent =
+			          new Intent("android.intent.action.VIEW",
+			            Uri.parse("http://dev.sinepulse.com/SmartHome/Web/Dev/en/Analysis"));
+			          startActivity(viewIntent);
 			break;
 
 		default:

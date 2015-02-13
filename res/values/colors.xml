@@ -51,6 +51,8 @@
     <color name="tabDark">#000000</color>
     <color name="tabTransparent">#10ffffff</color>
     <color name="blue">#0303ff</color>
+    <color name="paste">#35b6f0</color>
+    <color name="lime">#FF4500</color>
     <color name="gray">#f7f7f7</color>
     <color name="gray_ash">#8b8f8f</color>
     <color name="background">#55000000</color>
@@ -58,7 +60,7 @@
     <color name="basket_item_selected_background">#cecece</color>
     <color name="basket_item_normal_background">#ffffff</color>
     <color name="skyblue">#39abdf</color>
-    <color name="white">#ffffffff</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
     <color name="royal_blue">#4169e1</color>

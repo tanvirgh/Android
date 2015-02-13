@@ -31,13 +31,9 @@ import android.widget.ViewFlipper;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
-import com.sinepulse.app.activities.Home.DeviceTypeState;
-import com.sinepulse.app.activities.RoomManager.RoomsState;
 import com.sinepulse.app.adapters.AllTicketListAdapter;
-import com.sinepulse.app.adapters.RoomListAdapter;
 import com.sinepulse.app.asynctasks.AsyncCreateTicket;
 import com.sinepulse.app.asynctasks.AsyncGetAllTickets;
-import com.sinepulse.app.asynctasks.AsyncGetRoom;
 import com.sinepulse.app.asynctasks.AsyncGetTicketType;
 import com.sinepulse.app.asynctasks.AsyncLoadTicketDetails;
 import com.sinepulse.app.base.MainActionbarBase;
@@ -52,7 +48,7 @@ import com.sinepulse.app.utils.JsonParser;
  * 
  */
 @EActivity(R.layout.help_page)
-public class HelpActivity extends MainActionbarBase implements OnClickListener, OnItemClickListener {
+public class SupportActivity extends MainActionbarBase implements OnClickListener, OnItemClickListener {
 
 	public static ActionBar mSupportActionBar;
 	@ViewById(R.id.bCamera)
@@ -127,7 +123,6 @@ public class HelpActivity extends MainActionbarBase implements OnClickListener, 
 		backState = TicketsState.INITIAL_STATE;
 //		btSubmitTicket.setEnabled(false);
 		vfTicket.setDisplayedChild(0);
-		CommonValues.getInstance().currentAction = CommonIdentifier.Action_AllTicket;
 		loadAllTicketList();
 		
 	}
@@ -136,6 +131,7 @@ public class HelpActivity extends MainActionbarBase implements OnClickListener, 
 	 * 
 	 */
 	public void loadAllTicketList() {
+		CommonValues.getInstance().currentAction = CommonIdentifier.Action_All_Tickets;
 		if (asyncGetAllTickets != null) {
 			asyncGetAllTickets.cancel(true);
 		}
@@ -170,6 +166,7 @@ public class HelpActivity extends MainActionbarBase implements OnClickListener, 
 		return prepared;
 	}
 
+	@Override
 	@Click({ R.id.bCamera, R.id.bDashboard, R.id.bRoom, R.id.bCreateTIcket,R.id.btSubmitTicket })
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -185,6 +182,8 @@ public class HelpActivity extends MainActionbarBase implements OnClickListener, 
 			startActivity(homeIntent);
 			break;
 		case R.id.bCamera:
+//			spType.setEnabled(false);
+			spType.setAdapter(null);
 			MainActionbarBase.stackIndex.removeAllElements();
 			currentFragment = CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))
@@ -241,6 +240,7 @@ public class HelpActivity extends MainActionbarBase implements OnClickListener, 
 
 	@Override
 	public void onResume() {
+		spType.setEnabled(true);
 		mSupportActionBar.setTitle("Help");
 		super.onResume();
 
@@ -295,17 +295,17 @@ public class HelpActivity extends MainActionbarBase implements OnClickListener, 
 
 	public void setTIcketTypeResponseData() {
 		String[] ticketTypeValues = getTicketTypeValues();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, ticketTypeValues);
-		 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spType.setAdapter(adapter);
+		ArrayAdapter<String> ticketTypeAdapter = new ArrayAdapter<String>(this,
+				R.layout.spinner_item, ticketTypeValues);
+		ticketTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spType.setAdapter(ticketTypeAdapter);
 //		spType.setSelection(presetItemPosition + 1);
 		
 	}
 
 	private String[] getTicketTypeValues() {
 		// TODO Auto-generated method stub
-		if (CommonValues.getInstance().ticketTypeList != null) {
+		if (CommonValues.getInstance().ticketTypeList != null && CommonValues.getInstance().ticketTypeList.size()>0) {
 			String[] ticketTypeArray = new String[CommonValues.getInstance().ticketTypeList
 					.size()];
 			for (int i = 0; i < CommonValues.getInstance().ticketTypeList.size(); i++) {
@@ -316,7 +316,7 @@ public class HelpActivity extends MainActionbarBase implements OnClickListener, 
 			return ticketTypeArray;
 		} else {
 			// shouldSetPreset = true;
-			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
+			CommonTask.ShowMessage(this, "Network Problem.Please Retry.");
 			return null;
 		}
 	}

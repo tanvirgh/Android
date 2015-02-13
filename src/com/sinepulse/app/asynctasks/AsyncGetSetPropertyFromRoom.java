@@ -6,7 +6,6 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.RoomManager;
-import com.sinepulse.app.fragments.RoomManagerFragment;
 
 /**
  * @author tanvir.ahmed
@@ -49,11 +48,12 @@ public class AsyncGetSetPropertyFromRoom extends AsyncTask<Void, Void, Boolean> 
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
+				parentActivity.stopDevicePropertyProgress();
 		parentActivity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				parentActivity.stopDevicePropertyProgress();
+				
 				parentActivity.setPropertyResponseData();
 			}
 		});

@@ -83,18 +83,18 @@ public final class UserProfileActivity_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        etCity = ((EditText) hasViews.findViewById(id.etCity));
-        userProfileProgressBar = ((ProgressBar) hasViews.findViewById(id.userProfileProgressBar));
         etSocialSecurity = ((EditText) hasViews.findViewById(id.etSocialSecurity));
-        etAddress = ((EditText) hasViews.findViewById(id.etAddress));
         bRoom = ((Button) hasViews.findViewById(id.bRoom));
-        etEmail = ((EditText) hasViews.findViewById(id.etEmail));
-        bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
+        etAddress = ((EditText) hasViews.findViewById(id.etAddress));
+        etSex = ((EditText) hasViews.findViewById(id.etSex));
         etTelephone = ((EditText) hasViews.findViewById(id.etTelephone));
+        bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
+        userProfileProgressBar = ((ProgressBar) hasViews.findViewById(id.userProfileProgressBar));
+        etCity = ((EditText) hasViews.findViewById(id.etCity));
+        bCamera = ((Button) hasViews.findViewById(id.bCamera));
         etFirstName = ((EditText) hasViews.findViewById(id.etFirstName));
         etAddress2 = ((EditText) hasViews.findViewById(id.etAddress2));
-        etSex = ((EditText) hasViews.findViewById(id.etSex));
-        bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        etEmail = ((EditText) hasViews.findViewById(id.etEmail));
         if (hasViews.findViewById(id.bDeliverydate)!= null) {
             hasViews.findViewById(id.bDeliverydate).setOnClickListener(new OnClickListener() {
 

@@ -28,6 +28,9 @@ public class SplashScreen extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
+		/*if (getIntent().getBooleanExtra("EXIT", false)) {
+		    finish();
+		}*/
 		final String status = NetworkUtil.getConnectivityStatusString(this);
 		// thread for displaying the SplashScreen
 		Thread splashTread = new Thread() {

@@ -32,6 +32,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.sinepulse.app.R;
@@ -91,7 +92,7 @@ public class GCMIntentService extends IntentService {
 					if (action.equals("DeviceStatus")) {
 
 						if (getCurrentVisibleView("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.RoomManager_}")) {
-							if (RoomManager_.vfRoom.getDisplayedChild() == 1) {
+							if (RoomManager.vfRoom.getDisplayedChild() == 1) {
 								Device device = parseGCMDevice(extras);
 								int index = -1;
 								for (int i = 0; i < CommonValues.getInstance().deviceList
@@ -110,15 +111,17 @@ public class GCMIntentService extends IntentService {
 											.runOnUiThread(new Runnable() {
 												@Override
 												public void run() {
+													if(CommonValues.getInstance().connectionMode.equals("Internet")){
 													CommonValues.getInstance().roomManager.dAdapter
 															.refreshAdapter();
+													}
 												}
 											});
 								}
 							}
 						}
 						if (getCurrentVisibleView("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.Home_}")) {
-							if (Home_.vfDeviceType.getDisplayedChild() == 1) {
+							if (Home.vfDeviceType.getDisplayedChild() == 1) {
 								Device device = parseGCMDevice(extras);
 								int index = -1;
 								for (int i = 0; i < CommonValues.getInstance().deviceList
@@ -139,8 +142,10 @@ public class GCMIntentService extends IntentService {
 
 												@Override
 												public void run() {
+													if(CommonValues.getInstance().connectionMode.equals("Internet")){
 													CommonValues.getInstance().home.dtAdapter
 															.refreshAdapter();
+													}
 
 												}
 											});
@@ -151,7 +156,7 @@ public class GCMIntentService extends IntentService {
 					}
 					if (action.equals("DeviceProperties")) {
 						if (getCurrentVisibleView("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.RoomManager_}")) {
-							if (RoomManager_.vfRoom.getDisplayedChild() == 2) {
+							if (RoomManager.vfRoom.getDisplayedChild() == 2) {
 								Integer pushDeviceId = jsonObj.getInt("Id");
 								ArrayList<DeviceProperty> devicePropertyValues = parseGCMDeviceProperty(extras);
 								if (pushDeviceId == CommonValues.getInstance().roomManager.deviceId) {
@@ -160,15 +165,17 @@ public class GCMIntentService extends IntentService {
 											.runOnUiThread(new Runnable() {
 												@Override
 												public void run() {
+													if(CommonValues.getInstance().connectionMode.equals("Internet")){
 													CommonValues.getInstance().roomManager
 															.setPropertyResponseData();
+													}
 												}
 											});
 								}
 							}
 						}
 						if (getCurrentVisibleView("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.Home_}")) {
-							if (Home_.vfDeviceType.getDisplayedChild() == 2) {
+							if (Home.vfDeviceType.getDisplayedChild() == 2) {
 								Integer pushDeviceId = jsonObj.getInt("Id");
 								ArrayList<DeviceProperty> devicePropertyValues = parseGCMDeviceProperty(extras);
 								if (pushDeviceId == CommonValues.getInstance().home.deviceId) {
@@ -177,8 +184,10 @@ public class GCMIntentService extends IntentService {
 											.runOnUiThread(new Runnable() {
 												@Override
 												public void run() {
+													if(CommonValues.getInstance().connectionMode.equals("Internet")){
 													CommonValues.getInstance().home
 															.setPropertyResponseData();
+													}
 												}
 											});
 								}
@@ -194,7 +203,7 @@ public class GCMIntentService extends IntentService {
 			}
 		}
 		// Release the wake lock provided by the WakefulBroadcastReceiver.
-		GcmBroadcastReceiver.completeWakefulIntent(intent);
+		WakefulBroadcastReceiver.completeWakefulIntent(intent);
 	}
 
 	/**

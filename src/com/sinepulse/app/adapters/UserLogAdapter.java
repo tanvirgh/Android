@@ -156,6 +156,11 @@ public class UserLogAdapter extends ArrayAdapter<DevicePropertyLog> {
 	public int getCount() {
 		return  deviceLogDetailList.size();
 	}
+	
+	@Override
+	  public boolean isEnabled (int position) {
+	    return false;
+	  }
 
 	public void setSelection(int pos) {
 		_position = pos;

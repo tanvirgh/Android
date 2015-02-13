@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -35,8 +34,6 @@ import com.sinepulse.app.fragments.DebugTools;
 import com.sinepulse.app.R;
 import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.activities.Home_;
-import com.sinepulse.app.activities.RoomManager_;
-import com.sinepulse.app.asynctasks.AsyncRefreshDashBoard;
 import com.sinepulse.app.base.MainActionbarBase;
 /**
  * 

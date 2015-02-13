@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.sinepulse.app.activities.DisplayDeviceDetails;
 import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.utils.CommonValues;
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import com.sinepulse.app.R.id;
 import com.sinepulse.app.R.layout;
@@ -84,9 +85,10 @@ public final class VideoActivity_
     @Override
     public void onViewChanged(HasViews hasViews) {
         spCamera = ((Spinner) hasViews.findViewById(id.spinner_camera));
-        surface = ((LiveSurface) hasViews.findViewById(id.surface));
         bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        surface = ((LiveSurface) hasViews.findViewById(id.surface));
         streamingButton = ((Button) hasViews.findViewById(id.MyStreamButton));
+        pbCamera = ((ProgressBar) hasViews.findViewById(id.pbCamera));
         if (hasViews.findViewById(id.MyStreamButton)!= null) {
             hasViews.findViewById(id.MyStreamButton).setOnClickListener(new OnClickListener() {
 

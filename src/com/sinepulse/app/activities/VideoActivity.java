@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.sinepulse.app.asynctasks.AsyncGetCameraInfo;
 import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.fragments.DebugTools;
 import com.sinepulse.app.fragments.LiveSurface;
+import com.sinepulse.app.utils.CommonIdentifier;
 import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
@@ -78,18 +80,14 @@ public class VideoActivity extends MainActionbarBase implements
 	Integer port;
 	String userName;
 	String password;
+	@ViewById(R.id.pbCamera)
+	public ProgressBar pbCamera;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		createMenuBar();
-		if (asyncGetCameraInfo != null) {
-			asyncGetCameraInfo.cancel(true);
-		}
-		asyncGetCameraInfo = new AsyncGetCameraInfo(this,
-				CommonValues.getInstance().userId);
-		asyncGetCameraInfo.execute();
 
 		// loadStream( CommonValues.getInstance().currentCameraIndex);
 
@@ -124,8 +122,16 @@ public class VideoActivity extends MainActionbarBase implements
 	@AfterViews
 	void afterViewLoaded() {
 		spCamera.setOnItemSelectedListener(this);
+		CommonValues.getInstance().currentAction = CommonIdentifier.Action_CameraInfo;
+		if (asyncGetCameraInfo != null) {
+			asyncGetCameraInfo.cancel(true);
+		}
+		asyncGetCameraInfo = new AsyncGetCameraInfo(this,
+				CommonValues.getInstance().userId);
+		asyncGetCameraInfo.execute();
 	}
 
+	@Override
 	@Click({ R.id.MyStreamButton, R.id.bCamera, R.id.bRoom, R.id.bDashboard })
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -185,6 +191,7 @@ public class VideoActivity extends MainActionbarBase implements
 
 	public DialogInterface.OnClickListener ShowCameraEvent() {
 		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
@@ -326,7 +333,7 @@ public class VideoActivity extends MainActionbarBase implements
 	@Override
 	public void onPause() {
 		releaseVideoProperties();
-		streamingButton.setText("Strat Streaming");
+		streamingButton.setText("Start Streaming");
 		super.onPause();
 		fragmentPaused = true;
 		spinnerValue = spCamera.getSelectedItemPosition() + 1;
@@ -338,7 +345,7 @@ public class VideoActivity extends MainActionbarBase implements
 		bCamera.setBackground(getResources().getDrawable(
 				R.drawable.camera_selected1));
 		getSupportActionBar().setTitle("Video Stream");
-		streamingButton.setText("Strat Streaming");
+		streamingButton.setText("Start Streaming");
 		// playPort=-1;
 		fragmentPaused = false;
 		super.onResume();
@@ -657,6 +664,16 @@ public class VideoActivity extends MainActionbarBase implements
 	private void showVideoLoadingError() {
 		CommonTask.ShowMessage(this, "Error Loading Video Stream");
 
+	}
+
+	public void startProgress() {
+		pbCamera.setVisibility(View.VISIBLE);
+		
+	}
+
+	public void stopProgress() {
+		pbCamera.setVisibility(View.INVISIBLE);
+		
 	}
 
 }

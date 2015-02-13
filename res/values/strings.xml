@@ -25,7 +25,7 @@
     <string name="next">Next</string>
     <string name="mandatory">*</string>
     <string name="login">Log In</string>
-    <string name="wronguserpass">Wrong Information.Please verify your username , password</string>
+    <string name="wronguserpass">Invalid login credentials .Please check your username , password</string>
     <string name="button_yes">Yes</string>
     <string name="button_no">NO</string>
     <string name="button_server_setting_yes">Configure Now</string>
@@ -89,6 +89,7 @@
     <string name="roomlist"> My Rooms</string>
     <string name="settings"> My Profile</string>
     <string name="about"> About Us</string>
+     <string name="support"> Support</string>
      <string name="help"> Help</string>
     <string name="cp"> Change Password</string>
     <string name="userlog"> My Activities</string>
@@ -126,10 +127,9 @@
        <!--  <item>@string/roomlist</item> -->
         <item>@string/settings</item>
         <item>@string/cp</item>
+        <item>@string/support</item>
         <item>@string/help</item>
         <item>@string/about</item>
-        
-       
          <item>@string/logout</item>
 
         <!--
@@ -147,6 +147,7 @@
        <!--  <item>@drawable/ic_action_view_as_list</item> -->
         <item>@drawable/settings1</item>
         <item>@drawable/locknew</item>
+        <item>@drawable/support</item>
         <item>@drawable/ic_help2</item>
         <item>@drawable/ic_menu_info_details_new1</item>
         <!-- <item>@drawable/ic_menu_info_details_new1</item> -->

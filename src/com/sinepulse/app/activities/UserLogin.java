@@ -29,7 +29,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
@@ -39,18 +38,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
-
 import com.actionbarsherlock.app.ActionBar;
-import com.google.android.gcm.GCMRegistrar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.sinepulse.app.R;
 import com.sinepulse.app.asynctasks.AsyncCheckServerStateAndSaveServerInfo;
-import com.sinepulse.app.asynctasks.AsyncGetCurtainPresetValues;
 import com.sinepulse.app.asynctasks.CheckMC;
 import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.utils.CommonConstraints;
@@ -185,8 +178,13 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 
 		switch (v.getId()) {
 		case R.id.bUserLogin:
+			 if(CommonTask.checkEmail(etUserName.getText().toString())==true){
+				 proceedLoginProcess();
+				}else{
+					etUserName.setError("Invalid Email address.");
+				}
 			// if(specifyAppMode()){
-			proceedLoginProcess();
+			
 			// }
 			break;
 		default:
@@ -194,6 +192,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		}
 
 	}
+	
 
 	/**
 	 * 
@@ -251,7 +250,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		if (selectAppMode() == true) {
 
 		} else {
-			CommonTask.ShowMessage(this, "Failed to resolve connection mode.");
+			CommonTask.ShowMessage(this, "Failed to resolve service mode.");
 		}
 
 		// selectAppMode();
@@ -272,9 +271,6 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 			resolveNetworkState();
 			return true;
 		} else {
-			// Toast.makeText(this,
-			// "Failed to resolve Connection Mode.Please turn on WiFi or Data Connection",
-			// Toast.LENGTH_SHORT).show();
 			CommonTask.ShowMessage(this,
 					"Please turn on WiFi or Data Connection");
 			return false;
@@ -334,7 +330,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		int ip = wifiInfo.getIpAddress();
 		String ipAddress = Formatter.formatIpAddress(ip);
 		String[] tokens = ipAddress.split("\\.");
-		tokens[3] = "111";
+		tokens[3] = "151";
 		ipAddress = tokens[0] + "." + tokens[1] + "." + tokens[2] + "."
 				+ tokens[3];
 		// Log.d("WIFI Ip", ipAddress);
@@ -477,7 +473,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 
 	public void connectByHostName() {
 		connnectionState = "RasPeri";
-		urlForMc = "http://sinepulsemcdev/api/is-online";
+		urlForMc = "http://sinepulsemcprod/api/is-online";
 		if (checkMC != null) {
 			checkMC.cancel(true);
 		}
@@ -524,22 +520,17 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 
 	private boolean validateLoginInfo() {
 		if (etUserName.getText().toString().trim().equals("")) {
-
 			etUserName.setError("Please Provide UserName");
 			return false;
-
 		} else if (etUserPassword.getText().toString().trim().equals("")) {
-
 			etUserPassword.setError("Please Provide Password");
-			// Toast.makeText(this, "Please provide UserName & Password",
-			// Toast.LENGTH_SHORT).show();
 			return false;
 		}
-
-		else
-			etUserName.setError(null);
+		else{
+		etUserName.setError(null);
 		etUserPassword.setError(null);
 		return true;
+		}
 	}
 
 	/**
@@ -551,6 +542,8 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		// CommonValues.getInstance().loginuser = new UserInformation();
 		Intent homeIntent = new Intent(this, Home_.class);
 		startActivity(homeIntent);
+		//though this is not recommended to use this method but here it has been used for a custom requirement..Tanvir
+		finish();
 
 	}
 
@@ -669,5 +662,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		}
 		return true;
 	}
+
+
 
 }
