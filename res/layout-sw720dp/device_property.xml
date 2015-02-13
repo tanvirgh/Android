@@ -64,6 +64,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="35dp"
                 android:layout_toRightOf="@+id/list_image"
+               android:background="@drawable/cellbg_dropdown"
                 android:prompt="@string/camera_prompt"
                 android:visibility="visible" />
 

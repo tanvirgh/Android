@@ -1008,6 +1008,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			if (groupPosition != 6) {
 				displayFragment(groupPosition);
 			} else {
+				CommonValues.getInstance().currentAction = CommonIdentifier.Action_LogOut;
 				if (asyncLogOutTask != null) {
 					asyncLogOutTask.cancel(true);
 				}
@@ -1906,6 +1907,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		String setPropertyUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ userId + "/property?id=" + deviceId + "&propertyid="
 				+ propertyId + "&value=" + value;
+		System.out.println(setPropertyUrl);
 		if (JsonParser.setProptyerRequest(setPropertyUrl) != null) {
 			return true;
 		}
@@ -1947,8 +1949,9 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	public void setCurtainPresetResponseData() {
 		String[] presetValues = getCurtainPresetValues();
 		ArrayAdapter<String> presetAdapter = new ArrayAdapter<String>(this,
-				R.layout.spinner_item, presetValues);
+				android.R.layout.simple_spinner_item, presetValues);
 		spinner1.setAdapter(presetAdapter);
+		presetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		spinner1.setSelection(presetItemPosition + 1);
 
@@ -2058,7 +2061,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	}
 
 	public boolean sendLogOutRequest(int userId) {
-		String logOutUrl = CommonURL.getInstance().LogOutURL + "/logout";
+		String logOutUrl = CommonURL.getInstance().LogOutURL;
 
 		if (JsonParser.postLogOutRequest(logOutUrl, userId,
 				CommonValues.getInstance().appToken, 1) != null) {

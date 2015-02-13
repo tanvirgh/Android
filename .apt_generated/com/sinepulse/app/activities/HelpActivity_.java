@@ -14,6 +14,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.ViewFlipper;
 import com.sinepulse.app.R.id;
 import com.sinepulse.app.R.layout;
 import org.androidannotations.api.SdkVersionHelper;
@@ -81,8 +86,23 @@ public final class HelpActivity_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
+        ticketListView = ((ListView) hasViews.findViewById(id.lvTicketList));
+        btSubmitTicket = ((Button) hasViews.findViewById(id.btSubmitTicket));
+        etTicketNo = ((EditText) hasViews.findViewById(id.etTicketNo));
+        etTktSubject = ((EditText) hasViews.findViewById(id.etTktSubject));
+        pbSingleTicket = ((ProgressBar) hasViews.findViewById(id.pbSingleTicket));
+        etTktMessage = ((EditText) hasViews.findViewById(id.etTktMessage));
         bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
+        etDate = ((EditText) hasViews.findViewById(id.etDate));
+        pbCreateTicket = ((ProgressBar) hasViews.findViewById(id.pbCreateTicket));
+        etStatus = ((EditText) hasViews.findViewById(id.etStatus));
         bRoom = ((Button) hasViews.findViewById(id.bRoom));
+        etMessage = ((EditText) hasViews.findViewById(id.etMessage));
+        vfTicket = ((ViewFlipper) hasViews.findViewById(id.vfTicket));
+        pbTicket = ((ProgressBar) hasViews.findViewById(id.pbTicket));
+        spType = ((Spinner) hasViews.findViewById(id.spType));
+        etSubject = ((EditText) hasViews.findViewById(id.etSubject));
+        bCreateTIcket = ((Button) hasViews.findViewById(id.bCreateTIcket));
         bCamera = ((Button) hasViews.findViewById(id.bCamera));
         if (hasViews.findViewById(id.bCamera)!= null) {
             hasViews.findViewById(id.bCamera).setOnClickListener(new OnClickListener() {
@@ -120,6 +140,31 @@ public final class HelpActivity_
             }
             );
         }
+        if (hasViews.findViewById(id.bCreateTIcket)!= null) {
+            hasViews.findViewById(id.bCreateTIcket).setOnClickListener(new OnClickListener() {
+
+
+                @Override
+                public void onClick(View view) {
+                    HelpActivity_.this.onClick(view);
+                }
+
+            }
+            );
+        }
+        if (hasViews.findViewById(id.btSubmitTicket)!= null) {
+            hasViews.findViewById(id.btSubmitTicket).setOnClickListener(new OnClickListener() {
+
+
+                @Override
+                public void onClick(View view) {
+                    HelpActivity_.this.onClick(view);
+                }
+
+            }
+            );
+        }
+        afterViewLoaded();
     }
 
     public static class IntentBuilder_ {

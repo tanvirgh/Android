@@ -41,6 +41,7 @@ import com.sinepulse.app.fragments.ChangePasswordFragment_;
 import com.sinepulse.app.fragments.UserLogFragment_;
 import com.sinepulse.app.fragments.UserProfileFragment_;
 import com.sinepulse.app.utils.CommonTask;
+import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.NetworkUtil;
 
 /**
@@ -413,8 +414,18 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			currentFragment = HELP_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(4)))
 				stackIndex.push(String.valueOf(4));
+			if(CommonValues.getInstance().connectionMode.equals("Internet")){
 			Intent helpIntent = new Intent(this, HelpActivity_.class);
 			startActivity(helpIntent);
+			}
+			else{
+				CommonTask.ShowMessage(MainActionbarBase.this, "You are in Local Mode.Help menu is not accesible in this mode.Please switch to Internet mode to access Help Menu.");
+				stackIndex.removeAllElements();
+				if (!stackIndex.contains(String.valueOf(0)))
+					stackIndex.push(String.valueOf(0));
+				Intent dashboardIntent = new Intent(this, Home_.class);
+				startActivity(dashboardIntent);
+			}
 			break;
 
 		default:

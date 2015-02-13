@@ -14,6 +14,8 @@ import com.sinepulse.app.entities.HomeLink;
 import com.sinepulse.app.entities.Preset;
 import com.sinepulse.app.entities.Room;
 import com.sinepulse.app.entities.Summary;
+import com.sinepulse.app.entities.Ticket;
+import com.sinepulse.app.entities.TicketType;
 import com.sinepulse.app.entities.UserProfile;
 import com.sinepulse.app.enums.CameraMessageStatus;
 
@@ -39,6 +41,10 @@ public class CommonValues {
 	public ArrayList<Preset> presetList=new ArrayList<Preset>();
 	public Device modifiedDeviceStatus=new Device();
 	public HomeLink cameraInfo=new HomeLink();
+	public ArrayList<TicketType> ticketTypeList=new ArrayList<TicketType>();
+	public ArrayList<Ticket> allTicketList=new ArrayList<Ticket>();
+	public Ticket singleTicket=new Ticket();
+//	public TicketType ticketType=new TicketType();
 	public RoomManager_ roomManager=new RoomManager_();
 	public Home_ home=new Home_();
 	
@@ -58,6 +64,7 @@ public class CommonValues {
 
 	static CommonValues commonValuesInstance;
 	public boolean logoutResponse=false;
+	public String connectionMode="";
 
 	/**
 	 * Return Instance

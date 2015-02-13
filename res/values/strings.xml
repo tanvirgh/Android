@@ -114,13 +114,8 @@
     <string name="voltage">Voltage</string>
 
     <string-array name="camera_arrays">
-        <item>Camera 1</item>
-        <item>Camera 2</item>
-        <item>Camera 3</item>
-        <item>Camera 4</item>
-        <item>Camera 5</item>
-        <item>Camera 6</item>
-        <item>Camera 7</item>
+        <item>Technical</item>
+        <item>Billing </item>
     </string-array>
 
     <!-- Nav Drawer Menu Items -->

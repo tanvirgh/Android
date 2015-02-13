@@ -28,5 +28,7 @@ public class CommonIdentifier {
 	public static String Action_Activities_Dashboard ="dashactivities";
 	public static String Action_User_Activities ="useractivities";
 	public static String Action_Summary ="summary";
+	public static String Action_AllTicket="allTicket";
+	public static String Action_SingleTicket="singleTicket";
 
 }

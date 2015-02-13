@@ -5,52 +5,62 @@ package com.sinepulse.app.asynctasks;
 
 import android.os.AsyncTask;
 
-import com.sinepulse.app.activities.Home;
-import com.sinepulse.app.activities.RoomManager;
+import com.sinepulse.app.activities.HelpActivity;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
  * @author tanvir.ahmed
  *
  */
-public class AsyncLogOutTask extends AsyncTask<Void, Void, Boolean> {
+public class AsyncLoadTicketDetails extends AsyncTask<Void, Void, Boolean> {
 	
-	Home parentActivity;
-	private int userId;
+//	DisplayDeviceDetails  deviceDetails ;
+	HelpActivity parentActivity;
+	public int userId;
+	public int ticketId;
 	
-	public AsyncLogOutTask(Home _parentActivity, int userId) {
-		this.parentActivity=_parentActivity;
+	public AsyncLoadTicketDetails(HelpActivity parent, int userId,int ticketId) {
+		this.parentActivity=parent;
 		this.userId=userId;
-//		this.roomId=roomId;
+		this.ticketId=ticketId;
 		
 	}
 	
 
+
 	@Override
 	protected void onPreExecute() {
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
-//		parentActivity.startNavDrawerProgress();
+		parentActivity.startSingleTktProgress();
 		
 	}
 	
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
-//		deviceStatusFrg.sendGetDeviceRequest(userId);
-		parentActivity.sendLogOutRequest(userId);
+		parentActivity.loadTicketDetails(userId,ticketId);
 		return null;
 	}
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
+		parentActivity.stopSingleTktProgress();
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
-//		parentActivity.stopNavDrawerProgress();
-	   parentActivity.redirectToLogInPage();
-	}
+				parentActivity.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						parentActivity.setSingleTicketData();
+					}
+				});
+		
+			}
 		}
 	}
 	}
 }
+
+

@@ -39,6 +39,8 @@ import com.sinepulse.app.entities.HomeLink;
 import com.sinepulse.app.entities.LogInInfo;
 import com.sinepulse.app.entities.Preset;
 import com.sinepulse.app.entities.Room;
+import com.sinepulse.app.entities.Ticket;
+import com.sinepulse.app.entities.TicketType;
 import com.sinepulse.app.entities.UserProfile;
 
 /**
@@ -204,7 +206,7 @@ public class JsonParser  extends MainActionbarBase{
 			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
-//			httpPost.addHeader("Cookie",cookieID );
+			httpPost.addHeader("Cookie",cookieID );
 			String json = "";
 
 			// 3. build jsonObject
@@ -212,6 +214,7 @@ public class JsonParser  extends MainActionbarBase{
 			jsonObject.accumulate("Id",userId);
 			jsonObject.accumulate("AppToken", appToken);
 			jsonObject.accumulate("AppType", appType);
+			
 			// 4. convert JSONObject to JSON to String
 			json = jsonObject.toString();
 			// 5. set json to StringEntity
@@ -930,6 +933,191 @@ public class JsonParser  extends MainActionbarBase{
 		return result;
 
 	}
-	
 
+	public static String getTicketTypeRequest(String url) {
+		InputStream is = null;
+		String result = "";
+		JSONArray ticketTypeArray = null;
+//		JSONObject jCameraInfo = null;
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		result = sendHttpGetRequest(url, is, result, httpClient);
+		if (result != null && !result.equals("")) {
+			try {
+				JSONObject jObject = null;
+				jObject = new JSONObject(result);
+				ticketTypeArray = jObject.getJSONArray("Data");
+				ArrayList<TicketType> tTypeArrayValues = new ArrayList<TicketType>();
+				for (int i = 0; i < ticketTypeArray.length(); i++) {
+					TicketType tType = new TicketType();
+				
+					tType.setId(ticketTypeArray.getJSONObject(i).getInt("Id"));
+					tType.setTypeName(ticketTypeArray.getJSONObject(i).getString("TypeName"));
+					tTypeArrayValues.add(tType);
+				}
+				 if (CommonValues.getInstance().ticketTypeList.size() > 0) {
+					 CommonValues.getInstance().ticketTypeList.clear();
+					 }
+					 CommonValues.getInstance().ticketTypeList.addAll(tTypeArrayValues);
+				
+			} 
+		 catch (JSONException e) {
+				Log.e("log_tag", "Error parsing data " + e.toString());
+				CommonValues.getInstance().IsServerConnectionError = true;
+			}
+		}
+		return result;
+}
+	
+	public static String postCreateTicketRequest(String url,String Subject,String Details,Integer TicketTypeId) {
+		InputStream inputStream = null;
+		String result = "";
+		try {
+			// 1. create HttpClient
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
+					CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
+			// 2. make POST request to the given URL
+			HttpPost httpPost = new HttpPost(url);
+//			httpPost.addHeader("Cookie",cookieID );
+			String json = "";
+
+			// 3. build jsonObject
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.accumulate("Subject",Subject);
+			jsonObject.accumulate("Details", Details);
+			jsonObject.accumulate("TicketTypeId", TicketTypeId);
+
+			// 4. convert JSONObject to JSON to String
+			json = jsonObject.toString();
+			// 5. set json to StringEntity
+			StringEntity se = new StringEntity(json);
+			// 6. set httpPost Entity
+			httpPost.setEntity(se);
+
+			// 7. Set headers to inform server about the type of the content
+			httpPost.setHeader("Accept", "application/json");
+			httpPost.setHeader("Content-type", "application/json");
+			// 8. Execute POST request to the given URL
+			HttpResponse httpResponse = httpclient.execute(httpPost);
+			// 9. receive response as inputStream
+			inputStream = httpResponse.getEntity().getContent();
+
+			// 10. convert inputstream to string
+			if (inputStream != null) {
+				result = convertInputStreamToString(inputStream);
+			} else {
+				result = "Did not work!";
+			}
+			if (result.equals("")) {
+				CommonValues.getInstance().IsServerConnectionError = true;
+			} else {
+				CommonValues.getInstance().IsServerConnectionError = false;
+			}
+
+		} catch (Exception e) {
+			e.getMessage();
+			CommonValues.getInstance().IsServerConnectionError = true;
+		}
+
+		if (result != null && !result.equals("")) {
+			JSONObject jObject = null;
+			try {
+				jObject = new JSONObject(result);
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				CommonValues.getInstance().IsServerConnectionError = true;
+			}
+			
+	}
+		// 11. return result
+		return result;
+	}
+	
+	public static String getAllTicketRequest(String url) {
+		InputStream is = null;
+		String result = "";
+		JSONArray allTicketArray = null;
+//		JSONObject jCameraInfo = null;
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		result = sendHttpGetRequest(url, is, result, httpClient);
+		if (result != null && !result.equals("")) {
+			try {
+				JSONObject jObject = null;
+				jObject = new JSONObject(result);
+				allTicketArray = jObject.getJSONArray("Data");
+				ArrayList<Ticket> allTicketArrayValues = new ArrayList<Ticket>();
+				for (int i = 0; i < allTicketArray.length(); i++) {
+					Ticket allTicket = new Ticket();
+				
+					allTicket.setId(allTicketArray.getJSONObject(i).getInt("Id"));
+					allTicket.setSubject(allTicketArray.getJSONObject(i).getString("Subject"));
+					
+					String results = allTicketArray.getJSONObject(i)
+							.getString("SubmissionDate").replaceAll("^/Date\\(", "");
+					results = results.substring(0, results.indexOf('+'));
+					Long timeInMillis = Long.valueOf(results);
+					Date LoggedAt = new Date(timeInMillis);
+					allTicket.setSubmissionDate(LoggedAt);
+					allTicket.setStatus(allTicketArray.getJSONObject(i).getString("Status"));
+					allTicketArrayValues.add(allTicket);
+				}
+				 if (CommonValues.getInstance().allTicketList.size() > 0) {
+					 CommonValues.getInstance().allTicketList.clear();
+					 }
+					 CommonValues.getInstance().allTicketList.addAll(allTicketArrayValues);
+				
+			} 
+		 catch (JSONException e) {
+				Log.e("log_tag", "Error parsing data " + e.toString());
+				CommonValues.getInstance().IsServerConnectionError = true;
+			}
+		}
+		return result;
+}
+	
+	public static String getViewTicketRequest(String url) {
+		InputStream is = null;
+		String result = "";
+//		Ticket singleTicket = null;
+//		JSONObject jCameraInfo = null;
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		result = sendHttpGetRequest(url, is, result, httpClient);
+		if (result != null && !result.equals("")) {
+			try {
+				JSONObject jObject = null;
+				jObject = new JSONObject(result);
+				JSONObject singleTicketObj = jObject.getJSONObject("Data");
+//				ArrayList<Ticket> singleTicketArrayValues = new ArrayList<Ticket>();
+				
+				
+					Ticket ticket = new Ticket();
+				
+					ticket.setId(singleTicketObj.getInt("Id"));
+					ticket.setSubject(singleTicketObj.getString("Subject"));
+					
+					String results = singleTicketObj
+							.getString("SubmissionDate").replaceAll("^/Date\\(", "");
+					results = results.substring(0, results.indexOf('+'));
+					Long timeInMillis = Long.valueOf(results);
+					Date LoggedAt = new Date(timeInMillis);
+					ticket.setSubmissionDate(LoggedAt);
+					ticket.setStatus(singleTicketObj.getString("Status"));
+					ticket.setDetails(singleTicketObj.getString("Details"));
+					CommonValues.getInstance().singleTicket=ticket;
+				 
+				
+			} 
+		 catch (JSONException e) {
+				Log.e("log_tag", "Error parsing data " + e.toString());
+				CommonValues.getInstance().IsServerConnectionError = true;
+			}
+		}
+		return result;
+}
+	
+	
 }

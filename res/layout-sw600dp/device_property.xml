@@ -63,6 +63,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
+                android:background="@drawable/cellbg_dropdown"
                 android:layout_toRightOf="@+id/list_image"
                 android:prompt="@string/camera_prompt"
                 android:visibility="visible" />

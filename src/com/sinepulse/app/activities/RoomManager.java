@@ -608,6 +608,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		String setPropertyUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ userId + "/property?id=" + deviceId + "&propertyid="
 				+ propertyId + "&value=" + value;
+		System.out.println(setPropertyUrl);
 		if (JsonParser.setProptyerRequest(setPropertyUrl) != null) {
 			return true;
 		}
@@ -1112,8 +1113,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	public void setCurtainPresetResponseData() {
 		String[] presetValues = getCurtainPresetValues();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				R.layout.spinner_item, presetValues);
-		// adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				android.R.layout.simple_spinner_item, presetValues);
+		 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner1.setAdapter(adapter);
 		spinner1.setSelection(presetItemPosition + 1);
 		spinner1.setOnItemSelectedListener(new OnItemSelectedListener() {

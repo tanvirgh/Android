@@ -140,14 +140,14 @@ public class HomeFragment extends SherlockFragment {
 			ROOM_MANAGER_FRAGMENT = 2, SETTINGS_FRAGMENT = 3,
 			HELP_FRAGMENT = 4, ABOUT_FRAGMENT = 5, USERLOG_FRAGMENT=6,CAMERA_FRAGMENT = 7;
 
-	public UserProfileFragment_ userProfileFragment = null;
-	public RoomManagerFragment_ roomManagerFragment = null;
-	public DeviceStatusFragment_ deviceStatusFragment = null;
-//	public DeviceControlFragment_ deviceControlFragment = null;
-	public AboutFragment_ aboutFragment = null;
-	public UserLogFragment_ userlogFragment=null;
-	public CameraStreamFragment_ cameraStreamFragment = null;
-//	public DeviceByRoomFragment_ deviceByRoomFragment=null;
+//	public UserProfileFragment_ userProfileFragment = null;
+//	public RoomManagerFragment_ roomManagerFragment = null;
+//	public DeviceStatusFragment_ deviceStatusFragment = null;
+////	public DeviceControlFragment_ deviceControlFragment = null;
+//	public AboutFragment_ aboutFragment = null;
+//	public UserLogFragment_ userlogFragment=null;
+//	public CameraStreamFragment_ cameraStreamFragment = null;
+////	public DeviceByRoomFragment_ deviceByRoomFragment=null;
 
 	
 	
@@ -219,73 +219,73 @@ public class HomeFragment extends SherlockFragment {
 //			break;
 		case ROOM_MANAGER_FRAGMENT:
 			currentFragment = ROOM_MANAGER_FRAGMENT;
-			if (roomManagerFragment == null) {
-				roomManagerFragment = new RoomManagerFragment_();
-
-			}
-			fragtmentTransaction = getFragmentManager()
-					.beginTransaction();
-			fragtmentTransaction.remove(roomManagerFragment);
-			fragtmentTransaction.commit();
-			fragment = roomManagerFragment;
+//			if (roomManagerFragment == null) {
+//				roomManagerFragment = new RoomManagerFragment_();
+//
+//			}
+//			fragtmentTransaction = getFragmentManager()
+//					.beginTransaction();
+//			fragtmentTransaction.remove(roomManagerFragment);
+//			fragtmentTransaction.commit();
+//			fragment = roomManagerFragment;
 
 			break;
 		case SETTINGS_FRAGMENT:
 			currentFragment = SETTINGS_FRAGMENT;
 
-			if (userProfileFragment == null) {
-				userProfileFragment = new UserProfileFragment_();
-			}
-			fragtmentTransaction = getFragmentManager()
-					.beginTransaction();
-			fragtmentTransaction.remove(userProfileFragment);
-			fragtmentTransaction.commit();
-			fragment = userProfileFragment;
+//			if (userProfileFragment == null) {
+//				userProfileFragment = new UserProfileFragment_();
+//			}
+//			fragtmentTransaction = getFragmentManager()
+//					.beginTransaction();
+//			fragtmentTransaction.remove(userProfileFragment);
+//			fragtmentTransaction.commit();
+//			fragment = userProfileFragment;
 			break;
 		case HELP_FRAGMENT:
 			currentFragment = HELP_FRAGMENT;
-			if (deviceStatusFragment == null) {
-				deviceStatusFragment = new DeviceStatusFragment_();
-			}
-			fragtmentTransaction = getFragmentManager()
-					.beginTransaction();
-			fragtmentTransaction.remove(deviceStatusFragment);
-			fragtmentTransaction.commit();
-			fragment = deviceStatusFragment;
+//			if (deviceStatusFragment == null) {
+//				deviceStatusFragment = new DeviceStatusFragment_();
+//			}
+//			fragtmentTransaction = getFragmentManager()
+//					.beginTransaction();
+//			fragtmentTransaction.remove(deviceStatusFragment);
+//			fragtmentTransaction.commit();
+//			fragment = deviceStatusFragment;
 			break;
 		case ABOUT_FRAGMENT:
 			currentFragment = ABOUT_FRAGMENT;
-			if (aboutFragment == null) {
-				aboutFragment = new AboutFragment_();
-			}
-			fragtmentTransaction = getFragmentManager()
-					.beginTransaction();
-			fragtmentTransaction.remove(aboutFragment);
-			fragtmentTransaction.commit();
-			fragment = aboutFragment;
+//			if (aboutFragment == null) {
+//				aboutFragment = new AboutFragment_();
+//			}
+//			fragtmentTransaction = getFragmentManager()
+//					.beginTransaction();
+//			fragtmentTransaction.remove(aboutFragment);
+//			fragtmentTransaction.commit();
+//			fragment = aboutFragment;
 			break;
 		case USERLOG_FRAGMENT:
 			currentFragment = USERLOG_FRAGMENT;
-			if (userlogFragment == null) {
-				userlogFragment = new UserLogFragment_();
-			}
-			fragtmentTransaction = getFragmentManager()
-					.beginTransaction();
-			fragtmentTransaction.remove(userlogFragment);
-			fragtmentTransaction.commit();
-			fragment = userlogFragment;
+//			if (userlogFragment == null) {
+//				userlogFragment = new UserLogFragment_();
+//			}
+//			fragtmentTransaction = getFragmentManager()
+//					.beginTransaction();
+//			fragtmentTransaction.remove(userlogFragment);
+//			fragtmentTransaction.commit();
+//			fragment = userlogFragment;
 			break;
 		case CAMERA_FRAGMENT:
 			currentFragment = CAMERA_FRAGMENT;
-			if (cameraStreamFragment == null) {
-				cameraStreamFragment = new CameraStreamFragment_();
-
-			}
-			fragtmentTransaction = getFragmentManager()
-					.beginTransaction();
-			fragtmentTransaction.remove(cameraStreamFragment);
-			fragtmentTransaction.commit();
-			fragment = cameraStreamFragment;
+//			if (cameraStreamFragment == null) {
+//				cameraStreamFragment = new CameraStreamFragment_();
+//
+//			}
+//			fragtmentTransaction = getFragmentManager()
+//					.beginTransaction();
+//			fragtmentTransaction.remove(cameraStreamFragment);
+//			fragtmentTransaction.commit();
+//			fragment = cameraStreamFragment;
 
 			break;
 		default:

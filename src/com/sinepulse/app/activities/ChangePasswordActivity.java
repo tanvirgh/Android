@@ -8,6 +8,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -81,6 +82,13 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	@AfterViews
 	void afterViewsLoaded() {
 //		bSavePassword.setEnabled(false);
+		/*imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		etOldPass.requestFocus();
+		CommonTask.showSoftKeybord(etOldPass);
+		getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);*/
+		etOldPass.requestFocus();
+//		CommonTask.showSoftKeybord(etOldPass);
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 	}

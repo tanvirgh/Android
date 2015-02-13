@@ -138,8 +138,15 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 				+ userProfile.getMiddleName() + " "
 				+ userProfile.getLastName());
 		etEmail.setText(userProfile.getEmail());
+		if(userProfile.getAddress()!=null &&userProfile.getAddress().getAddress1()!=null && userProfile.getAddress().getAddress2()!=null ){
 		etAddress.setText(userProfile.getAddress().getAddress1());
 		etAddress2.setText(userProfile.getAddress().getAddress2());
+		}else{
+			etAddress.setText("");
+			etAddress2.setText("");
+		}
+		
+		
 		etCity.setText(userProfile.getAddress().getCity().getCountry()
 				+ "- " + userProfile.getAddress().getCity().getName());
 //		etCity.setText("");

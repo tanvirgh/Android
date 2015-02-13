@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/sh_background"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" >
+
+        <com.sinepulse.app.custom.controls.CustomTextView
+            android:id="@+id/tvSubject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="5dp"
+            android:text="Subject"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <com.sinepulse.app.custom.controls.CustomEditText
+            android:id="@+id/etSubject"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/spType"
+            android:layout_alignRight="@+id/spType"
+            android:layout_below="@+id/tvSubject"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/cellbg"
+            android:ems="10"
+            android:gravity="left|center"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingLeft="20dp"
+            android:paddingRight="0dp"
+            android:textColor="@color/white"
+            android:textCursorDrawable="@drawable/custom_cursor"
+            android:windowSoftInputMode="stateHidden" />
+
+        <com.sinepulse.app.custom.controls.CustomTextView
+            android:id="@+id/tvType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/etSubject"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:text="Type"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <Spinner
+            android:id="@+id/spType"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/tvType"
+            android:layout_below="@+id/tvType"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:background="@drawable/cellbg_dropdown"
+            android:paddingLeft="15dp"
+            android:paddingRight="0dp"
+            android:entries="@array/camera_arrays"
+            android:textColor="#FFFFFF" />
+
+        
+
+        <com.sinepulse.app.custom.controls.CustomTextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spType"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+             android:layout_marginTop="15dp"
+            android:text="Message"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <com.sinepulse.app.custom.controls.CustomEditText
+            android:id="@+id/etMessage"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:layout_alignLeft="@+id/spCategory"
+            android:layout_alignRight="@+id/spCategory"
+            android:layout_below="@+id/tvMessage"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/cellbg"
+            android:ems="10"
+            android:gravity="left"
+            android:inputType="text"
+            android:maxLines="5"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"
+            android:textCursorDrawable="@drawable/custom_cursor"
+            android:windowSoftInputMode="stateHidden" />
+
+        <com.sinepulse.app.custom.controls.CustomButton
+            android:id="@+id/btSubmitTicket"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:layout_alignRight="@+id/etMessage"
+            android:layout_below="@+id/etMessage"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/left_curved_button_bg_selected"
+            android:gravity="center"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/pbCreateTicket"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_above="@+id/etMessage"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

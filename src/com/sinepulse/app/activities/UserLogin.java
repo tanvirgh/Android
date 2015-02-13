@@ -312,6 +312,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 			CommonURL.getInstance().assignValues(
 					CommonURL.getInstance().remoteBaseUrl);
 //			Toast.makeText(context, "Internet Mode", Toast.LENGTH_SHORT).show();
+			CommonValues.getInstance().connectionMode="Internet";
 			// Log.d("NInfo", "GSM");
 		} else {
 			CommonValues.getInstance().IsServerConnectionError = true;
@@ -333,7 +334,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		int ip = wifiInfo.getIpAddress();
 		String ipAddress = Formatter.formatIpAddress(ip);
 		String[] tokens = ipAddress.split("\\.");
-		tokens[3] = "151";
+		tokens[3] = "111";
 		ipAddress = tokens[0] + "." + tokens[1] + "." + tokens[2] + "."
 				+ tokens[3];
 		// Log.d("WIFI Ip", ipAddress);
@@ -432,6 +433,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 				String baseUrlForMC = "http://" + Ip + "/api/";
 				CommonURL.getInstance().assignValues(baseUrlForMC);
 				isSolvedLocal = true;
+				CommonValues.getInstance().connectionMode="Local";
 
 			}
 
@@ -460,6 +462,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 				isSolvedLocal = false;
 				CommonURL.getInstance().assignValues(
 						CommonURL.getInstance().remoteBaseUrl);
+				CommonValues.getInstance().connectionMode="Internet";
 
 			}
 		}
@@ -474,7 +477,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 
 	public void connectByHostName() {
 		connnectionState = "RasPeri";
-		urlForMc = "http://sinepulsemcprod/api/is-online";
+		urlForMc = "http://sinepulsemcdev/api/is-online";
 		if (checkMC != null) {
 			checkMC.cancel(true);
 		}
