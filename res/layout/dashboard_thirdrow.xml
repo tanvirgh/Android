@@ -23,6 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:ellipsize="end"
+              android:singleLine="true"
             android:text="58 w"
             android:paddingLeft="20dp"
             android:paddingRight="0dp"

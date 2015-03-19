@@ -10,14 +10,14 @@
     <RelativeLayout
         android:id="@+id/rlTicketDetails"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginLeft="3dp"
+        android:layout_height="75dp"
+        android:layout_marginLeft="10dp"
          android:gravity="left|center"
-        android:padding="5dp" >
+        android:padding="10dp" >
         
          <TextView
             android:id="@+id/tvTicketNumber"
-            android:layout_width="35dp"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerHorizontal="true"
@@ -27,16 +27,16 @@
             android:singleLine="true"
             android:text="TktNo"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
           <TextView
               android:id="@+id/tvTktSubject"
-              android:layout_width="100dp"
+              android:layout_width="270dp"
               android:layout_height="wrap_content"
               android:layout_alignBaseline="@+id/tvTicketNumber"
               android:layout_alignBottom="@+id/tvTicketNumber"
-              android:layout_marginLeft="7dp"
+              android:layout_marginLeft="65dp"
               android:layout_toRightOf="@+id/tvTicketNumber"
               android:ellipsize="end"
               android:singleLine="true"
@@ -45,12 +45,12 @@
             android:gravity="left|center_vertical"
               android:text="Subject"
               android:textColor="#FFFFFF"
-              android:textSize="12sp"
+              android:textSize="16sp"
               android:textStyle="bold" />
 
           <TextView
               android:id="@+id/tvTktSubmissionDate"
-              android:layout_width="70dp"
+              android:layout_width="170dp"
               android:layout_height="wrap_content"
               android:layout_alignBaseline="@+id/tvTktSubject"
               android:layout_alignBottom="@+id/tvTktSubject"
@@ -62,24 +62,25 @@
               android:singleLine="true"
               android:text="Date"
               android:textColor="#FFFFFF"
-              android:textSize="12sp"
+              android:textSize="16sp"
               android:textStyle="bold" />
 
           <TextView
               android:id="@+id/tvTktStatus"
-              android:layout_width="60dp"
+              android:layout_width="160dp"
               android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
               android:layout_alignBaseline="@+id/tvTktSubmissionDate"
               android:layout_alignBottom="@+id/tvTktSubmissionDate"
               android:layout_alignParentRight="true"
               android:ellipsize="end"
-                android:layout_centerHorizontal="true"
+              android:layout_centerHorizontal="true"
               android:layout_centerVertical="true"
-              android:gravity="left|center_vertical"
+              android:gravity="center_vertical"
               android:singleLine="true"
               android:text="Status"
               android:textColor="#FFFFFF"
-              android:textSize="12sp"
+              android:textSize="16sp"
               android:textStyle="bold" />
 
     </RelativeLayout>

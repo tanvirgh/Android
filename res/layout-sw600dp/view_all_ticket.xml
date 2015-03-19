@@ -8,85 +8,86 @@
     <com.sinepulse.app.custom.controls.CustomButton
         android:id="@+id/bCreateTIcket"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="55dp"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/back_button"
         android:gravity="center_horizontal|center"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="Create Ticket"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textSize="30sp"
         android:textStyle="normal" />
 
     <RelativeLayout
         android:id="@+id/rlHeader"
         android:layout_width="fill_parent"
-        android:layout_height="35dp"
+        android:layout_height="65dp"
         android:layout_below="@+id/bCreateTIcket"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="55dp"
         android:background="@color/gray_ash"
         android:gravity="left|center_horizontal"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/tvTicketNo"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="0dp"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="10dp"
             android:paddingRight="0dp"
             android:text="Ticket No"
             android:gravity="center"
             android:textColor="#FFFFFF"
-            android:textSize="13sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:visibility="visible" />
 
         <TextView
             android:id="@+id/tvSubject"
-            android:layout_width="100dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_toRightOf="@+id/tvTicketNo"
             android:gravity="center"
             android:text="Subject"
             android:textColor="#FFFFFF"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
-
-        <TextView
-            android:id="@+id/tvSubmission"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/tvSubject"
-            android:text="Date"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:visibility="visible" />
 
         <TextView
             android:id="@+id/tvStatus"
-            android:layout_width="70dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/tvSubmission"
             android:layout_alignBottom="@+id/tvSubmission"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:text="Status"
             android:gravity="center"
             android:textColor="#FFFFFF"
-            android:textSize="13sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvSubmission"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tvSubject"
+            android:gravity="center"
+            android:text="Date"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
     </RelativeLayout>
 
     <ListView
@@ -95,17 +96,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rlHeader"
         android:gravity="left|center"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="2dp"
         tools:listitem="@layout/ticket_list_item" >
     </ListView>
 
     <ProgressBar
         android:id="@+id/pbTicket"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:visibility="invisible" />

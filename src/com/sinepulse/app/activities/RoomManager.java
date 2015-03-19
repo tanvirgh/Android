@@ -2,18 +2,25 @@ package com.sinepulse.app.activities;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -32,6 +39,7 @@ import android.widget.CalendarView;
 import android.widget.CalendarView.OnDateChangeListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -183,9 +191,17 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	SimpleDateFormat formatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	Date d = new Date();
+	int year;
+	int month;
+	int day;
+	private DatePickerDialog fromDatePickerDialog = null;
+	private DatePickerDialog toDatePickerDialog = null;
+	private SimpleDateFormat dateFormatter;
 	RoundKnobButton rv ;
 	TextView tv2;
 	RelativeLayout panel ;
+	Date tobesetFromDate = new Date();
+	Date tobesetToDate=new Date();
 
 
 	@Override
@@ -195,6 +211,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		RoomManager.context = this;
 		backState = RoomsState.INITIAL_STATE;
 		createMenuBar();
+		dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
 	}
 
@@ -204,8 +221,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		backState = RoomsState.INITIAL_STATE;
 		vfRoom.setDisplayedChild(0);
 		btAddRoom.setText("Room List");
-		fromDate=formatter.format(d).toString();
-		toDate=formatter.format(d).toString();
+		fromDate = dateFormatter.format(d).toString();
+		toDate = dateFormatter.format(d).toString();
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_All_Room;
 		if (asyncGetRoomInfo != null) {
 			asyncGetRoomInfo.cancel(true);
@@ -394,6 +411,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	public void setDevicePropertyControlData(int deviceTypeId) {
 		// rAdapter.clear();
+		hideRotatingKnob();
 		switch (deviceTypeId) {
 		case 1:// Fan
 			getSupportActionBar().setTitle("Fan Control");
@@ -401,19 +419,25 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			 generateRotatingKnobView();
 			rv.SetListener(new com.sinepulse.app.activities.RoundKnobButton.RoundKnobButtonListener() {
 
-				@Override
 				public void onRotate(final int percentage) {
 					tv2.post(new Runnable() {
 						@Override
 						public void run() {
 							 tv2.setText(percentage + " %");
+							 int value = percentage;
+								if (value == 99) {
+									value = 100;
+								}
 //							if(knobState){
-							int value=percentage;
-							sendSetProperty(CommonValues.getInstance().userId,
-									value, deviceId, 3);
+								sendSetProperty(CommonValues.getInstance().userId,
+										value, deviceId, 3);
+								loadDeviceProperty(
+										deviceManagerEntity.DeviceTypeId,
+										deviceManagerEntity.Id);
 						}
 					});
 				}
+
 			});
 			seekBar1.setVisibility(View.INVISIBLE);
 			tvProgressValue.setVisibility(View.INVISIBLE);
@@ -426,19 +450,21 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			 generateRotatingKnobView();
 			 rv.SetListener(new com.sinepulse.app.activities.RoundKnobButton.RoundKnobButtonListener() {
 					
-					@Override
 					public void onRotate(final int percentage) {
 						tv2.post(new Runnable() {
 							@Override
 							public void run() {
 								 tv2.setText(percentage + " %");
 //								if(knobState){
-								int value=percentage;
-								if(value==99){
-									value=100;
-								}
-								sendSetProperty(CommonValues.getInstance().userId,
-										value, deviceId,2);
+								 int value = percentage;
+									if (value == 99) {
+										value = 100;
+									}
+									sendSetProperty(CommonValues.getInstance().userId,
+											value, deviceId, 2);
+									loadDeviceProperty(
+											deviceManagerEntity.DeviceTypeId,
+											deviceManagerEntity.Id);
 							}
 						});
 					}
@@ -450,7 +476,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			break;
 		case 3:// AC
 			getSupportActionBar().setTitle("AC Control");
-			hideRotatingKnob();
+//			hideRotatingKnob();
 			ivDevice.setImageDrawable(getResources().getDrawable(
 					R.drawable.ac_large));
 			seekBar1.setVisibility(View.INVISIBLE);
@@ -460,7 +486,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 4:// Curtain
-			hideRotatingKnob();
+//			hideRotatingKnob();
 			spinner1.setVisibility(View.VISIBLE);
 			loadCurtainPresetValues(CommonValues.getInstance().userId,
 					deviceManagerEntity.Id);
@@ -799,96 +825,96 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
 		}
 
-	}
+//	}
 
-	Dialog dialog;
-
-	private void showCalendar(final View v) {
-		dialog = new Dialog(this);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setContentView(R.layout.delivery_date);
-		dialog.setCancelable(true);
-
-		final CalendarView calendarView1 = (CalendarView) dialog
-				.findViewById(R.id.calendarView1);
-
-		calendarView1.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				calendarView1.getDate();
-
-			}
-		});
-		calendarView1.setOnDateChangeListener(new OnDateChangeListener() {
-
-			@Override
-			@SuppressWarnings("deprecation")
-			public void onSelectedDayChange(CalendarView view, int year,
-					int month, int dayOfMonth) {
-				tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-				tvToday.setTextColor(Color.parseColor("#bdbdbd"));
-				SimpleDateFormat formatter = new SimpleDateFormat(
-						"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-				if (etDateFrom != null && v.getId() == R.id.etDateFrom) {
-					fromDate = formatter.format(
-							new Date(year - 1900, month, dayOfMonth))
-							.toString();
-					String delims = "T";
-					String[] tokens = fromDate.split(delims);
-					try {
-						Date firstDate = formatter.parse(fromDate);
-						Date CurrentDate = d;
-						if(firstDate.after(CurrentDate)){
-							showFirstDateError();
-						}else{
-							etDateFrom.setText(tokens[0]);
-						}
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				if (etDateTo != null && v.getId() == R.id.etDateTo) {
-					if (etDateFrom.getText().toString().length() > 0) {
-						toDate = formatter.format(
-								new Date(year - 1900, month, dayOfMonth))
-								.toString();
-						String delims = "T";
-						String[] tokens = toDate.split(delims);
-						 if (validateLastDateInput()) {
-								etDateTo.setText(tokens[0]);
-								bSearch.setVisibility(View.VISIBLE);
-								}
-					} else {
-						showError();
-					}
-				}
-				// dialog.cancel();
-			}
-		});
-
-		// Date ok button
-		Button button = (Button) dialog.findViewById(R.id.Button01);
-		button.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.cancel();
-
-			}
-		});
-		// Date cancel button
-		Button button2 = (Button) dialog.findViewById(R.id.Button02);
-		button2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.cancel();
-
-			}
-		});
-
-		// now that the dialog is set up, it's time to show it
-		dialog.show();
+//	Dialog dialog;
+//
+//	private void showCalendar(final View v) {
+//		dialog = new Dialog(this);
+//		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		dialog.setContentView(R.layout.delivery_date);
+//		dialog.setCancelable(true);
+//
+//		final CalendarView calendarView1 = (CalendarView) dialog
+//				.findViewById(R.id.calendarView1);
+//
+//		calendarView1.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				calendarView1.getDate();
+//
+//			}
+//		});
+//		calendarView1.setOnDateChangeListener(new OnDateChangeListener() {
+//
+//			@Override
+//			@SuppressWarnings("deprecation")
+//			public void onSelectedDayChange(CalendarView view, int year,
+//					int month, int dayOfMonth) {
+//				tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
+//				tvToday.setTextColor(Color.parseColor("#bdbdbd"));
+//				SimpleDateFormat formatter = new SimpleDateFormat(
+//						"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+//				if (etDateFrom != null && v.getId() == R.id.etDateFrom) {
+//					fromDate = formatter.format(
+//							new Date(year - 1900, month, dayOfMonth))
+//							.toString();
+//					String delims = "T";
+//					String[] tokens = fromDate.split(delims);
+//					try {
+//						Date firstDate = formatter.parse(fromDate);
+//						Date CurrentDate = d;
+//						if(firstDate.after(CurrentDate)){
+//							showFirstDateError();
+//						}else{
+//							etDateFrom.setText(tokens[0]);
+//						}
+//					} catch (ParseException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//				if (etDateTo != null && v.getId() == R.id.etDateTo) {
+//					if (etDateFrom.getText().toString().length() > 0) {
+//						toDate = formatter.format(
+//								new Date(year - 1900, month, dayOfMonth))
+//								.toString();
+//						String delims = "T";
+//						String[] tokens = toDate.split(delims);
+//						 if (validateLastDateInput()) {
+//								etDateTo.setText(tokens[0]);
+//								bSearch.setVisibility(View.VISIBLE);
+//								}
+//					} else {
+//						showError();
+//					}
+//				}
+//				// dialog.cancel();
+//			}
+//		});
+//
+//		// Date ok button
+//		Button button = (Button) dialog.findViewById(R.id.Button01);
+//		button.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				dialog.cancel();
+//
+//			}
+//		});
+//		// Date cancel button
+//		Button button2 = (Button) dialog.findViewById(R.id.Button02);
+//		button2.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				dialog.cancel();
+//
+//			}
+//		});
+//
+//		// now that the dialog is set up, it's time to show it
+//		dialog.show();
 
 		bSearch.setOnClickListener(new OnClickListener() {
 
@@ -898,8 +924,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 					deviceLogListView.setAdapter(null);
 					dLogAdapter.clear();
 				}
-				LoadDeviceLogContent(deviceManagerEntity.Id, 3, fromDate,
-						toDate);
+				LoadDeviceLogContent(deviceManagerEntity.Id, 3, stserverDate, lstserverDate);
 
 			}
 		});
@@ -907,16 +932,18 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	}
 
 	private boolean validateLastDateInput() {
-		Date CurrentDate = d;
 		try {
-			Date firstDate = formatter.parse(fromDate);
-			Date lastDate = formatter.parse(toDate);
+			Date firstDate = dateFormatter.parse(stDate);
+			Date lastDate = dateFormatter.parse(lstDate);
+			Date CurrentDate = d;
 			if (lastDate.after(CurrentDate)) {
-				CommonTask.ShowMessage(this, "To date can't be greater than current date");
+				CommonTask.ShowMessage(this,
+						"To date can't be greater than current date");
 				etDateTo.setText("");
 				return false;
-			}else if( lastDate.before(firstDate)){
-				CommonTask.ShowMessage(this, "To date can't be less than From date");
+			} else if (lastDate.before(firstDate)) {
+				CommonTask.ShowMessage(this,
+						"To date can't be less than From date");
 				etDateTo.setText("");
 				return false;
 			}
@@ -929,10 +956,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	}
 
 	public void showError() {
-		CommonTask.ShowMessage(this, "Please select FromDate First");
+		CommonTask.ShowMessage(this, "Please select FromDate First.");
 	}
 	public void showFirstDateError() {
-		CommonTask.ShowMessage(this, "From Date should  be less than current date");
+		CommonTask.ShowMessage(this, "From Date should not be Greater than current date.");
 	}
 
 	public boolean sendGetDeviceRequest(int userId, int roomId) {
@@ -1113,22 +1140,48 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			}
 			tvToday.setTextColor(Color.parseColor("#2C5197"));
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-			String delims ="T" ;
-		    String[] tokens = formatter.format(d).toString().split(delims);
-		    etDateFrom.setText(tokens[0]);
-		    etDateTo.setText(tokens[0]);
+			etDateFrom.setInputType(InputType.TYPE_NULL);
+			etDateTo.setInputType(InputType.TYPE_NULL);
+			 etDateFrom.setText(fromDate);
+			 etDateTo.setText(toDate);
+			etDateFrom.requestFocus();
+		    setDateTimeField();
+		    bSearch.setVisibility(View.INVISIBLE);
+			
 			LoadDeviceLogContent(deviceManagerEntity.Id, 1, formatter.format(d)
 					.toString(), formatter.format(d).toString());
 			break;
 		case R.id.etDateFrom:
+			if(fromDatePickerDialog!=null)
+				fromDatePickerDialog.show();
+            fromDatePickerDialog.setOnCancelListener(new OnCancelListener() {
+				
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					
+					fromDatePickerDialog.getDatePicker().getCalendarView().setDate(tobesetFromDate.getTime());
+				}
+			});
+			bSearch.setVisibility(View.VISIBLE);
+			break;
 		case R.id.etDateTo:
-			showCalendar(v);
+//			showCalendar(v);
+			if(toDatePickerDialog!=null)
+				toDatePickerDialog.show();
+toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
+				
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					
+					toDatePickerDialog.getDatePicker().getCalendarView().setDate(tobesetToDate.getTime());
+				}
+			});
 			break;
 		case R.id.tvToday:
-			String tDelims ="T" ;
-		    String[] tTokens = formatter.format(d).toString().split(tDelims);
-			etDateFrom.setText(tTokens[0]);
-			etDateTo.setText(tTokens[0]);
+			  String tDelims = "T"; 
+			  String[] tTokens =dateFormatter.format(d).toString().split(tDelims);
+			  etDateFrom.setText(tTokens[0]); 
+			  etDateTo.setText(tTokens[0]);
 //			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#2C5197"));
@@ -1143,10 +1196,11 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			if (tvEmptyLog.isShown()) {
 				tvEmptyLog.setVisibility(View.GONE);
 			}
-			String yDelims ="T" ;
-		    String[] yTokens = formatter.format(d.getTime() - 24 * 60 * 60 * 1000).toString().split(yDelims);
-			etDateFrom.setText(yTokens[0]);
-			etDateTo.setText(yTokens[0]);
+			 String yDelims = "T"; 
+			  String[] yTokens = dateFormatter .format(d.getTime() - 24 * 60 * 60 * 1000).toString()
+					  .split(yDelims); 
+			 etDateFrom.setText(yTokens[0]);
+			 etDateTo.setText(yTokens[0]);
 //			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#2C5197"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
@@ -1379,5 +1433,73 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		}
 
 	}
+	
+	String stDate="";
+	String lstDate="";
+	String stserverDate=formatter.format(d).toString();
+	String lstserverDate=formatter.format(d).toString();	
+	Calendar newDate = Calendar.getInstance();
+	private void setDateTimeField() {
+		Calendar newCalendar = Calendar.getInstance();
+		fromDatePickerDialog = new DatePickerDialog(this,
+				new OnDateSetListener() {
+
+					public void onDateSet(DatePicker view, int year,
+							int monthOfYear, int dayOfMonth) {
+						newDate.set(year, monthOfYear, dayOfMonth);
+						
+						try {
+					   Date fromDate= dateFormatter.parse(dateFormatter.format(newDate.getTime()));
+					   stDate=dateFormatter.format(newDate.getTime());
+					   stserverDate=formatter.format(newDate.getTime());
+						Date CurrentDate = new Date();
+						if(fromDate.after(CurrentDate)){
+							showFirstDateError();
+						}else{
+							etDateFrom.setText(dateFormatter.format(newDate.getTime()));
+						}
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+						try {
+							tobesetFromDate = dateFormatter.parse(etDateFrom.getText().toString());
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+
+				}, newCalendar.get(Calendar.YEAR),
+				newCalendar.get(Calendar.MONTH),
+				newCalendar.get(Calendar.DAY_OF_MONTH));
+		
+		toDatePickerDialog = new DatePickerDialog(this,
+				new OnDateSetListener() {
+
+					public void onDateSet(DatePicker view, int year,
+							int monthOfYear, int dayOfMonth) {
+						Calendar newDate = Calendar.getInstance();
+						newDate.set(year, monthOfYear, dayOfMonth);
+						 lstDate=dateFormatter.format(newDate.getTime());
+						 lstserverDate=formatter.format(newDate.getTime());
+						 if (validateLastDateInput()) {
+						etDateTo.setText(dateFormatter.format(newDate
+								.getTime()));
+						
+						 }
+						 try {
+							 tobesetToDate = dateFormatter.parse(etDateTo.getText().toString());
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					}
+
+				}, newCalendar.get(Calendar.YEAR),
+				newCalendar.get(Calendar.MONTH),
+				newCalendar.get(Calendar.DAY_OF_MONTH));
+	
+}
 
 }

@@ -260,27 +260,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="28" language="java" name="com.sinepulse.app.fragments.DeviceControlFragment.StateSearch" 
-    project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/fragments/DeviceControlFragment.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="190" x="669" y="-338"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </enumeration>  
-  <class id="29" language="java" name="com.sinepulse.app.fragments.DeviceControlFragment" project="HomeAutomationV1" 
-    file="/HomeAutomationV1/src/com/sinepulse/app/fragments/DeviceControlFragment.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="59" width="215" x="450" y="-427"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="30" language="java" name="com.sinepulse.app.utils.CommonTask" project="HomeAutomationV1" 
+  <class id="28" language="java" name="com.sinepulse.app.utils.CommonTask" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/utils/CommonTask.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="64" width="186" x="415" y="-1006"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -289,7 +269,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="31" language="java" name="com.sinepulse.app.utils.CommonURL" project="HomeAutomationV1" 
+  <class id="29" language="java" name="com.sinepulse.app.utils.CommonURL" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/utils/CommonURL.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="76" width="146" x="641" y="-899"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -298,7 +278,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="32" language="java" name="com.sinepulse.app.utils.JSONfunctions" project="HomeAutomationV1" 
+  <class id="30" language="java" name="com.sinepulse.app.utils.JSONfunctions" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/utils/JSONfunctions.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="65" width="240" x="980" y="-1131"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -307,7 +287,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="33" language="java" name="com.sinepulse.app.utils.NavDrawerItem" project="HomeAutomationV1" 
+  <class id="31" language="java" name="com.sinepulse.app.utils.NavDrawerItem" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/utils/NavDrawerItem.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="81" width="167" x="-54" y="-1172"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
@@ -316,141 +296,165 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="34">    
-    <end type="SOURCE" refId="31" navigable="false">      
-      <attribute id="35" name="commonURLInstance">        
-        <position height="18" width="111" x="658" y="-849"/>      
-      </attribute>      
-      <multiplicity id="36" minimum="0" maximum="1">        
-        <position height="16" width="23" x="792" y="-823"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="31" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="37">    
-    <end type="SOURCE" refId="27"/>    
-    <end type="TARGET" refId="8"/>  
+  <dependency id="32">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="28"/>  
   </dependency>  
-  <nesting id="38">    
+  <nesting id="33">    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="7"/>  
   </nesting>  
-  <association id="39">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="40" name="navDrawerAdapter"/>      
-      <multiplicity id="41" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="42">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="30"/>  
-  </dependency>  
-  <nesting id="43">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="11"/>  
+  <nesting id="34">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="26"/>  
   </nesting>  
-  <association id="44">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="45" name="navDrawerListAdapter"/>      
-      <multiplicity id="46" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="47">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="19"/>  
-  </generalization>  
-  <dependency id="48">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="31"/>  
+  <dependency id="35">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="29"/>  
   </dependency>  
-  <association id="49">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="50" name="backState"/>      
-      <multiplicity id="51" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="52">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="14"/>  
-  </nesting>  
-  <dependency id="53">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="30"/>  
-  </dependency>  
-  <association id="54">    
+  <association id="36">    
     <end type="SOURCE" refId="27" navigable="false">      
-      <attribute id="55" name="backState"/>      
-      <multiplicity id="56" minimum="0" maximum="1"/>    
+      <attribute id="37" name="backState"/>      
+      <multiplicity id="38" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="26" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="57">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
-  </nesting>  
-  <dependency id="58">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="30"/>  
+  <dependency id="39">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="8"/>  
   </dependency>  
-  <dependency id="59">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="31"/>  
-  </dependency>  
-  <association id="60">    
-    <end type="SOURCE" refId="29" navigable="false">      
-      <attribute id="61" name="backState"/>      
-      <multiplicity id="62" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="28" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="63">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="64" name="basketDrawerItem"/>      
-      <multiplicity id="65" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="33" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="66">    
-    <end type="SOURCE" refId="29"/>    
+  <dependency id="40">    
+    <end type="SOURCE" refId="17"/>    
     <end type="TARGET" refId="28"/>  
-  </nesting>  
-  <dependency id="67">    
+  </dependency>  
+  <association id="41">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="42" name="navDrawerItems"/>      
+      <multiplicity id="43" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="31" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="44">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <association id="45">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="46" name="basketDrawerItem"/>      
+      <multiplicity id="47" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="31" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="48">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="49" name="navDrawerListAdapter"/>      
+      <multiplicity id="50" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="51">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="52" name="navDrawerAdapter"/>      
+      <multiplicity id="53" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="54">    
     <end type="SOURCE" refId="19"/>    
     <end type="TARGET" refId="8"/>  
   </dependency>  
-  <association id="68">    
+  <association id="55">    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="56" name="commonURLInstance">        
+        <position height="18" width="111" x="658" y="-849"/>      
+      </attribute>      
+      <multiplicity id="57" minimum="0" maximum="1">        
+        <position height="16" width="23" x="792" y="-823"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="58">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="19"/>  
+  </dependency>  
+  <generalization id="59">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <generalization id="60">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <dependency id="61">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="28"/>  
+  </dependency>  
+  <nesting id="62">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="14"/>  
+  </nesting>  
+  <generalization id="63">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <dependency id="64">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <dependency id="65">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <association id="66">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="69" name="mInstance"/>      
-      <multiplicity id="70" minimum="0" maximum="1"/>    
+      <attribute id="67" name="mInstance"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="71">    
-    <end type="SOURCE" refId="27"/>    
-    <end type="TARGET" refId="26"/>  
+  <nesting id="69">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
   </nesting>  
-  <association id="72">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="73" name="navDrawerItems"/>      
-      <multiplicity id="74" minimum="0" maximum="2147483647"/>    
+  <nesting id="70">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="11"/>  
+  </nesting>  
+  <dependency id="71">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <dependency id="72">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="28"/>  
+  </dependency>  
+  <association id="73">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="74" name="backState"/>      
+      <multiplicity id="75" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="33" navigable="true"/>    
+    <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="75">    
+  <dependency id="76">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="28"/>  
+  </dependency>  
+  <dependency id="77">    
     <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="30"/>  
+    <end type="TARGET" refId="28"/>  
+  </dependency>  
+  <dependency id="78">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="29"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     accessors="true" visibility="true">    

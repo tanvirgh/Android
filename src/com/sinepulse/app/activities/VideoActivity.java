@@ -140,17 +140,19 @@ public class VideoActivity extends MainActionbarBase implements
 			releaseVideoProperties();
 			final String status = NetworkUtil.getConnectivityStatusString(this);
 			if (status.equals("Wifi enabled")) {
-				Toast.makeText(VideoActivity.this,
-						"*** Loading Video.Please wait ***",
-						Toast.LENGTH_SHORT).show();
-				loadStream(spinnerValue);
+				continueStreaming();
 
 			} else if (status.equals("Mobiledata enabled")) {
+				if(spinnerValue==1)
 				CommonTask
 						.ShowConfirmation(
 								this,
 								"Video Stream will consume high Data Volume.Do you want to continue?",
 								ShowCameraEvent());
+				else{
+					continueStreaming();
+				}
+				
 			}
 
 			break;
@@ -189,37 +191,23 @@ public class VideoActivity extends MainActionbarBase implements
 
 	}
 
+	/**
+	 * 
+	 */
+	public void continueStreaming() {
+//		Toast.makeText(VideoActivity.this,
+//				"*** Loading Video.Please wait ***",
+//				Toast.LENGTH_SHORT).show();
+		loadStream(spinnerValue);
+	}
+
 	public DialogInterface.OnClickListener ShowCameraEvent() {
 		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
-					/*switch (spinnerValue) {
-					case 1:
-					case 2:
-					case 3:
-					case 4:
-					case 5:
-					case 6:
-					case 7:
-					case 8:
-					case 9:
-					case 10:
-					case 11:
-					case 12:
-					case 13:
-					case 14:
-					case 15:
-						Toast.makeText(VideoActivity.this,
-								"*** Loading Video.Please wait ***",
-								Toast.LENGTH_SHORT).show();
-
-					}*/
-					Toast.makeText(VideoActivity.this,
-							"*** Loading Video.Please wait ***",
-							Toast.LENGTH_SHORT).show();
-					loadStream(spinnerValue);
+					continueStreaming();
 					break;
 
 				case DialogInterface.BUTTON_NEGATIVE:
@@ -526,6 +514,7 @@ public class VideoActivity extends MainActionbarBase implements
 		int code = hcNetSdk.NET_DVR_GetLastError();
 		if (0 != code) {
 			System.out.println("Error: " + code);
+//			Toast.makeText(this, "Error: " + code, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -613,12 +602,17 @@ public class VideoActivity extends MainActionbarBase implements
 			catchErrorIfNecessary();
 			NET_DVR_IPPARACFG_V40 ipParaCfg = new NET_DVR_IPPARACFG_V40();
 			// UserId, Command, ChannelNo., Out
-			hcNetSdk.NET_DVR_GetDVRConfig(userId,
-					HCNetSDK.NET_DVR_GET_IPPARACFG_V40, 0, ipParaCfg);
-			for (NET_DVR_IPCHANINFO entry : ipParaCfg.struIPChanInfo) {
-				if (CHANNEL_ENABLED == entry.byEnable) {
-					DebugTools.dump(entry);
+			try {
+				hcNetSdk.NET_DVR_GetDVRConfig(userId,
+						HCNetSDK.NET_DVR_GET_IPPARACFG_V40, 0, ipParaCfg);
+				for (NET_DVR_IPCHANINFO entry : ipParaCfg.struIPChanInfo) {
+					if (CHANNEL_ENABLED == entry.byEnable) {
+						DebugTools.dump(entry);
+					}
 				}
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 
 			DebugTools.dump(ipParaCfg);

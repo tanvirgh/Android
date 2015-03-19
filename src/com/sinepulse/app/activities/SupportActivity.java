@@ -241,7 +241,7 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 	@Override
 	public void onResume() {
 		spType.setEnabled(true);
-		mSupportActionBar.setTitle("Help");
+		mSupportActionBar.setTitle("Support");
 		super.onResume();
 
 	}
@@ -446,10 +446,8 @@ private boolean validateSubmitTicketWindow() {
 		
 		
 		else {
-			
 			etSubject.setError(null);
 			etMessage.setError(null);
-//			btSubmitTicket.setEnabled(true);
 			return true;
 		}
 		// TODO Auto-generated method stub

@@ -177,6 +177,14 @@ public class CommonTask {
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
+	public static void ShowNetworkChangeConfirmation(Context context, String message,
+			DialogInterface.OnClickListener event) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning).setMessage(message)
+				.setPositiveButton(R.string.button_yes, event);
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
 	
 	
 
@@ -540,6 +548,7 @@ public class CommonTask {
 					return true;
 				}
 			}
+			
 		}
 		return false;
 	}
@@ -598,11 +607,11 @@ public class CommonTask {
 
 	public static void ShowLogOutConfirmation(
 			Context context, String message,
-			android.content.DialogInterface.OnClickListener showExitEvent) {
+			android.content.DialogInterface.OnClickListener showLogOutEvent) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning).setMessage(message)
-				.setPositiveButton(R.string.button_yes, showExitEvent)
-				.setNegativeButton(R.string.button_no, showExitEvent);
+				.setPositiveButton(R.string.button_yes, showLogOutEvent)
+				.setNegativeButton(R.string.button_no, showLogOutEvent);
 		AlertDialog alert = builder.create();
 		alert.show();
 		

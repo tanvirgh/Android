@@ -90,7 +90,7 @@
              android:layout_alignRight="@+id/tvDeviceName"
              android:layout_below="@+id/thumbnail"
              android:layout_marginTop="2dp"
-             android:visibility="visible" />
+             android:visibility="invisible" />
 
         <RelativeLayout
             android:id="@+id/propertyMiddleView"

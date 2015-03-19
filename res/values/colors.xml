@@ -106,5 +106,6 @@
     <color name="background3">#ffe3e8f1</color>
     <color name="title_separator">#40ffffff</color>
     <color name="black_overlay">#66000000</color>
+    <color name="cal_bg">#b0886a</color>
 
 </resources>

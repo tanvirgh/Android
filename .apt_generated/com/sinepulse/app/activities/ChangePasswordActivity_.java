@@ -83,14 +83,14 @@ public final class ChangePasswordActivity_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        etNewPassword = ((EditText) hasViews.findViewById(id.etNewPassword));
+        bRoom = ((Button) hasViews.findViewById(id.bRoom));
         bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        pbChangePass = ((ProgressBar) hasViews.findViewById(id.pbChangePass));
         bSavePassword = ((Button) hasViews.findViewById(id.bSavePassword));
         etConfirmPassword = ((EditText) hasViews.findViewById(id.etConfirmPassword));
-        bRoom = ((Button) hasViews.findViewById(id.bRoom));
-        pbChangePass = ((ProgressBar) hasViews.findViewById(id.pbChangePass));
-        etOldPass = ((EditText) hasViews.findViewById(id.etOldPass));
         bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
+        etNewPassword = ((EditText) hasViews.findViewById(id.etNewPassword));
+        etOldPass = ((EditText) hasViews.findViewById(id.etOldPass));
         if (hasViews.findViewById(id.bSavePassword)!= null) {
             hasViews.findViewById(id.bSavePassword).setOnClickListener(new OnClickListener() {
 

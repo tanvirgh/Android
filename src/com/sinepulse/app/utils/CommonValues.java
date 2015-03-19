@@ -80,7 +80,7 @@ public class CommonValues {
 	public static void initializeInstance() {
 		if (commonValuesInstance == null) {
 			commonValuesInstance = new CommonValues();
-			checkApiVersion();
+//			checkApiVersion();
 		}
 	}
 	// Constructor hidden because of singleton

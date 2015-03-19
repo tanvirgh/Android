@@ -25,21 +25,24 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:paddingTop="10dp"
-            android:paddingBottom="12dp"
+            android:paddingBottom="10dp"
             android:paddingRight="30dp"
             android:paddingLeft="0dp"
             android:text="   User Log"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
+            android:visibility="invisible"
             android:textStyle="bold" />
 
         <ProgressBar
             android:id="@+id/deviceLogProgressBar"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_alignBottom="@+id/tvDeviceLogHeadingText"
-            android:layout_marginLeft="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/tvDeviceLogHeadingText"
+            android:layout_marginRight="44dp"
             android:visibility="visible" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -57,7 +60,7 @@
             android:id="@+id/rllogsearch"
             android:layout_width="fill_parent"
             android:layout_height="35dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="22dp"
             android:focusable="true"
             android:focusableInTouchMode="true" >
 
@@ -107,6 +110,7 @@
             android:layout_height="35dp"
             android:layout_below="@+id/rllogsearch"
             android:focusable="true"
+            android:layout_marginTop="5dp"
             android:focusableInTouchMode="true" >
 
             <Button
@@ -122,7 +126,7 @@
 
             <EditText
                 android:id="@+id/etDateFrom"
-                android:layout_width="80dp"
+                android:layout_width="85dp"
                 android:layout_height="25dp"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="5dp"
@@ -148,10 +152,10 @@
 
             <EditText
                 android:id="@+id/etDateTo"
-                android:layout_width="80dp"
+                android:layout_width="85dp"
                 android:layout_height="25dp"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
+                android:layout_marginLeft="3dp"
                 android:layout_marginTop="5dp"
                 android:layout_toRightOf="@+id/tvto"
                 android:background="@drawable/setting_username_background"
@@ -166,7 +170,7 @@
                 android:layout_height="25dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:layout_toRightOf="@+id/etDateTo"
                 android:background="@drawable/icon_arrow_color"
                 android:gravity="center"
@@ -193,7 +197,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="2dp"
-            android:dividerHeight="2dp"
+           android:dividerHeight="3dp"
             tools:listitem="@layout/log_list_item" >
         </ListView>
 

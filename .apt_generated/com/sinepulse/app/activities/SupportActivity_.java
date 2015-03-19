@@ -17,7 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Spinner;
+import android.widget.ViewFlipper;
 import com.sinepulse.app.R.id;
 import com.sinepulse.app.R.layout;
 import org.androidannotations.api.SdkVersionHelper;
@@ -25,8 +26,8 @@ import org.androidannotations.api.view.HasViews;
 import org.androidannotations.api.view.OnViewChangedListener;
 import org.androidannotations.api.view.OnViewChangedNotifier;
 
-public final class UserLogActivity_
-    extends UserLogActivity
+public final class SupportActivity_
+    extends SupportActivity
     implements HasViews, OnViewChangedListener
 {
 
@@ -42,7 +43,7 @@ public final class UserLogActivity_
         init_(savedInstanceState);
         super.onCreate(savedInstanceState);
         OnViewChangedNotifier.replaceNotifier(previousNotifier);
-        setContentView(layout.user_log);
+        setContentView(layout.help_page);
     }
 
     @Override
@@ -71,99 +72,45 @@ public final class UserLogActivity_
         return super.onKeyDown(keyCode, event);
     }
 
-    public static UserLogActivity_.IntentBuilder_ intent(Context context) {
-        return new UserLogActivity_.IntentBuilder_(context);
+    public static SupportActivity_.IntentBuilder_ intent(Context context) {
+        return new SupportActivity_.IntentBuilder_(context);
     }
 
-    public static UserLogActivity_.IntentBuilder_ intent(android.app.Fragment fragment) {
-        return new UserLogActivity_.IntentBuilder_(fragment);
+    public static SupportActivity_.IntentBuilder_ intent(android.app.Fragment fragment) {
+        return new SupportActivity_.IntentBuilder_(fragment);
     }
 
-    public static UserLogActivity_.IntentBuilder_ intent(android.support.v4.app.Fragment supportFragment) {
-        return new UserLogActivity_.IntentBuilder_(supportFragment);
+    public static SupportActivity_.IntentBuilder_ intent(android.support.v4.app.Fragment supportFragment) {
+        return new SupportActivity_.IntentBuilder_(supportFragment);
     }
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        deviceLogProgressBar = ((ProgressBar) hasViews.findViewById(id.deviceLogProgressBar));
-        bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
-        tvYesterday = ((TextView) hasViews.findViewById(id.tvYesterday));
-        etDateFrom = ((EditText) hasViews.findViewById(id.etDateFrom));
-        tvToday = ((TextView) hasViews.findViewById(id.tvToday));
-        bRoom = ((Button) hasViews.findViewById(id.bRoom));
-        bSearch = ((Button) hasViews.findViewById(id.bSearch));
-        tvEmptyLog = ((TextView) hasViews.findViewById(id.tvEmptyLog));
-        bDeliverydate = ((Button) hasViews.findViewById(id.bDeliverydate));
-        deviceLogListView = ((ListView) hasViews.findViewById(id.lvLogList));
+        etMessage = ((EditText) hasViews.findViewById(id.etMessage));
+        bCreateTIcket = ((Button) hasViews.findViewById(id.bCreateTIcket));
         bCamera = ((Button) hasViews.findViewById(id.bCamera));
-        etDateTo = ((EditText) hasViews.findViewById(id.etDateTo));
-        if (hasViews.findViewById(id.bDeliverydate)!= null) {
-            hasViews.findViewById(id.bDeliverydate).setOnClickListener(new OnClickListener() {
-
-
-                @Override
-                public void onClick(View view) {
-                    UserLogActivity_.this.onClick(view);
-                }
-
-            }
-            );
-        }
-        if (hasViews.findViewById(id.etDateFrom)!= null) {
-            hasViews.findViewById(id.etDateFrom).setOnClickListener(new OnClickListener() {
-
-
-                @Override
-                public void onClick(View view) {
-                    UserLogActivity_.this.onClick(view);
-                }
-
-            }
-            );
-        }
-        if (hasViews.findViewById(id.etDateTo)!= null) {
-            hasViews.findViewById(id.etDateTo).setOnClickListener(new OnClickListener() {
-
-
-                @Override
-                public void onClick(View view) {
-                    UserLogActivity_.this.onClick(view);
-                }
-
-            }
-            );
-        }
-        if (hasViews.findViewById(id.tvToday)!= null) {
-            hasViews.findViewById(id.tvToday).setOnClickListener(new OnClickListener() {
-
-
-                @Override
-                public void onClick(View view) {
-                    UserLogActivity_.this.onClick(view);
-                }
-
-            }
-            );
-        }
-        if (hasViews.findViewById(id.tvYesterday)!= null) {
-            hasViews.findViewById(id.tvYesterday).setOnClickListener(new OnClickListener() {
-
-
-                @Override
-                public void onClick(View view) {
-                    UserLogActivity_.this.onClick(view);
-                }
-
-            }
-            );
-        }
+        btSubmitTicket = ((Button) hasViews.findViewById(id.btSubmitTicket));
+        ticketListView = ((ListView) hasViews.findViewById(id.lvTicketList));
+        etStatus = ((EditText) hasViews.findViewById(id.etStatus));
+        etTktMessage = ((EditText) hasViews.findViewById(id.etTktMessage));
+        etTktSubject = ((EditText) hasViews.findViewById(id.etTktSubject));
+        pbTicket = ((ProgressBar) hasViews.findViewById(id.pbTicket));
+        spType = ((Spinner) hasViews.findViewById(id.spType));
+        vfTicket = ((ViewFlipper) hasViews.findViewById(id.vfTicket));
+        bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
+        etTicketNo = ((EditText) hasViews.findViewById(id.etTicketNo));
+        bRoom = ((Button) hasViews.findViewById(id.bRoom));
+        pbCreateTicket = ((ProgressBar) hasViews.findViewById(id.pbCreateTicket));
+        pbSingleTicket = ((ProgressBar) hasViews.findViewById(id.pbSingleTicket));
+        etSubject = ((EditText) hasViews.findViewById(id.etSubject));
+        etDate = ((EditText) hasViews.findViewById(id.etDate));
         if (hasViews.findViewById(id.bCamera)!= null) {
             hasViews.findViewById(id.bCamera).setOnClickListener(new OnClickListener() {
 
 
                 @Override
                 public void onClick(View view) {
-                    UserLogActivity_.this.onClick(view);
+                    SupportActivity_.this.onClick(view);
                 }
 
             }
@@ -175,7 +122,7 @@ public final class UserLogActivity_
 
                 @Override
                 public void onClick(View view) {
-                    UserLogActivity_.this.onClick(view);
+                    SupportActivity_.this.onClick(view);
                 }
 
             }
@@ -187,7 +134,31 @@ public final class UserLogActivity_
 
                 @Override
                 public void onClick(View view) {
-                    UserLogActivity_.this.onClick(view);
+                    SupportActivity_.this.onClick(view);
+                }
+
+            }
+            );
+        }
+        if (hasViews.findViewById(id.bCreateTIcket)!= null) {
+            hasViews.findViewById(id.bCreateTIcket).setOnClickListener(new OnClickListener() {
+
+
+                @Override
+                public void onClick(View view) {
+                    SupportActivity_.this.onClick(view);
+                }
+
+            }
+            );
+        }
+        if (hasViews.findViewById(id.btSubmitTicket)!= null) {
+            hasViews.findViewById(id.btSubmitTicket).setOnClickListener(new OnClickListener() {
+
+
+                @Override
+                public void onClick(View view) {
+                    SupportActivity_.this.onClick(view);
                 }
 
             }
@@ -205,26 +176,26 @@ public final class UserLogActivity_
 
         public IntentBuilder_(Context context) {
             context_ = context;
-            intent_ = new Intent(context, UserLogActivity_.class);
+            intent_ = new Intent(context, SupportActivity_.class);
         }
 
         public IntentBuilder_(android.app.Fragment fragment) {
             fragment_ = fragment;
             context_ = fragment.getActivity();
-            intent_ = new Intent(context_, UserLogActivity_.class);
+            intent_ = new Intent(context_, SupportActivity_.class);
         }
 
         public IntentBuilder_(android.support.v4.app.Fragment fragment) {
             fragmentSupport_ = fragment;
             context_ = fragment.getActivity();
-            intent_ = new Intent(context_, UserLogActivity_.class);
+            intent_ = new Intent(context_, SupportActivity_.class);
         }
 
         public Intent get() {
             return intent_;
         }
 
-        public UserLogActivity_.IntentBuilder_ flags(int flags) {
+        public SupportActivity_.IntentBuilder_ flags(int flags) {
             intent_.setFlags(flags);
             return this;
         }

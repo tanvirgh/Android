@@ -38,6 +38,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -313,7 +315,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		} else {
 			CommonValues.getInstance().IsServerConnectionError = true;
 			CommonTask.ShowMessage(this,
-					"Device offline ! Pleasee check your network connection.");
+					"Pleasee check your network connection.");
 
 		}
 	}
@@ -335,6 +337,15 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 				+ tokens[3];
 		// Log.d("WIFI Ip", ipAddress);
 		urlForMc = "http://" + ipAddress + "/api/is-online";
+		/*UserLogin.this.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(UserLogin.this, "Connecting By Ip", Toast.LENGTH_SHORT)
+				.show();
+				
+			}
+		});*/
 		if (checkMC != null) {
 			checkMC.cancel(true);
 		}
@@ -443,15 +454,16 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 				// WIFI IP last sub net...Step3
 				isSolvedLocal = false;
 				urlForMc="";
-				connectByIp();
+				connectByHostNameLocal();
+				
 			}
-			/*else if (connnectionState.equals("PREF")) {
-				// Failed to resolve with shared preference IP..Lets try with
-				// host name
+			else if (connnectionState.equals("Local")) {
+				//..Lets try with host name Local
 				isSolvedLocal = false;
 				urlForMc="";
-				connectByHostName();
-			} */
+				connectByIp();
+				
+			} 
 			else if (connnectionState.equals("IP")) {
 				// Both Host and IP resolve process failed...Lets assign the
 				// Internet URL as base URL
@@ -468,19 +480,50 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	}
 
 	/**
-	 * try to resolve the connectivity by Appropriate host name
+	 * try to resolve the connectivity by Appropriate host name.local
 	 */
 
-	public void connectByHostName() {
-		connnectionState = "RasPeri";
-		urlForMc = "http://sinepulsemcprod/api/is-online";
+	public void connectByHostNameLocal() {
+	/*	UserLogin.this.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(UserLogin.this, "Connecting to sinepulsemc.local", Toast.LENGTH_SHORT)
+				.show();
+				
+			}
+		});*/
+		connnectionState = "Local";
+		urlForMc = "http://sinepulsemc.local/api/is-online";
 		if (checkMC != null) {
 			checkMC.cancel(true);
 		}
 
 		checkMC = new CheckMC(urlForMc, (UserLogin_) this,isSolvedLocal);
 		checkMC.execute();
-//		checkMC.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+	}
+	/**
+	 * try to resolve the connectivity by Appropriate host name
+	 */
+	public void connectByHostName() {
+		/* UserLogin.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					Toast.makeText(UserLogin.this, "Connecting to sinepulsemc", Toast.LENGTH_SHORT)
+					.show();
+					
+				}
+			});*/
+		connnectionState = "RasPeri";
+		urlForMc = "http://sinepulsemc/api/is-online";
+		if (checkMC != null) {
+			checkMC.cancel(true);
+		}
+
+		checkMC = new CheckMC(urlForMc, (UserLogin_) this,isSolvedLocal);
+		checkMC.execute();
 
 	}
 
