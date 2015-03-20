@@ -84,11 +84,11 @@ public final class VideoActivity_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        bCamera = ((Button) hasViews.findViewById(id.bCamera));
-        spCamera = ((Spinner) hasViews.findViewById(id.spinner_camera));
-        surface = ((LiveSurface) hasViews.findViewById(id.surface));
-        streamingButton = ((Button) hasViews.findViewById(id.MyStreamButton));
         pbCamera = ((ProgressBar) hasViews.findViewById(id.pbCamera));
+        spCamera = ((Spinner) hasViews.findViewById(id.spinner_camera));
+        streamingButton = ((Button) hasViews.findViewById(id.MyStreamButton));
+        bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        surface = ((LiveSurface) hasViews.findViewById(id.surface));
         if (hasViews.findViewById(id.MyStreamButton)!= null) {
             hasViews.findViewById(id.MyStreamButton).setOnClickListener(new OnClickListener() {
 
