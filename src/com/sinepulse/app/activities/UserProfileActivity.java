@@ -161,7 +161,9 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 	@Override
 	public void onBackPressed() {
 			backState = UserProfileSate.INITIAL_STATE;
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			currentFragment = ALLDEVICE_FRAGMENT;
 			Intent homeIntent = new Intent(this, Home_.class);
 			homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -173,7 +175,9 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 	@Override
 	@Click({ R.id.bDeliverydate, R.id.etDateFrom, R.id.etDateTo,R.id.tvToday,R.id.tvYesterday, R.id.bCamera,R.id.bDashboard,R.id.bRoom})
 	public void onClick(View v) {
+		if(MainActionbarBase.stackIndex!=null){
 		MainActionbarBase.stackIndex.removeAllElements();
+		}
 		switch (v.getId()) {
 		case R.id.bDashboard:
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);

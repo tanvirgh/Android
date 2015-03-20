@@ -154,7 +154,7 @@ public class CommonTask {
 
 	public static void ShowMessage(Context context, String message) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(R.string.app_name)
+		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning)
 				.setMessage(message)
 				.setCancelable(false)
 				.setNegativeButton(R.string.button_ok,

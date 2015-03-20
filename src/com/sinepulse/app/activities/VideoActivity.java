@@ -161,7 +161,9 @@ public class VideoActivity extends MainActionbarBase implements
 		case R.id.bRoom:
 			releaseVideoProperties();
 			playPort = -1;
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			currentFragment = ROOM_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(5)))
 				stackIndex.push(String.valueOf(5));
@@ -172,7 +174,9 @@ public class VideoActivity extends MainActionbarBase implements
 			break;
 		case R.id.bDashboard:
 			// loadingDevicesTask.cancel(true);
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			releaseVideoProperties();
 			playPort = -1;
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
@@ -361,7 +365,9 @@ public class VideoActivity extends MainActionbarBase implements
 	@Override
 	public void onBackPressed() {
 		releaseVideoProperties();
+		if(MainActionbarBase.stackIndex!=null){
 		MainActionbarBase.stackIndex.removeAllElements();
+		}
 		currentFragment = ALLDEVICE_FRAGMENT;
 		Intent homeIntent = new Intent(this, Home_.class);
 		homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

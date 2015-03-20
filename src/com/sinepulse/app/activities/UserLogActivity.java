@@ -121,10 +121,12 @@ public class UserLogActivity extends MainActionbarBase implements OnClickListene
 		loadTodaysLog();
 	  /*  fromDate=formatter.format(d).toString();
 	    toDate=formatter.format(d).toString();*/
-	    fromDate = dateFormatter.format(d).toString();
+	    /*fromDate = dateFormatter.format(d).toString();
 		toDate = dateFormatter.format(d).toString();
 		etDateFrom.setText(fromDate);
-		 etDateTo.setText(toDate);
+		 etDateTo.setText(toDate);*/
+		etDateFrom.setHint("Start Date");
+		etDateTo.setHint("End Date");
 		
 //		bSearch.setVisibility(View.INVISIBLE);
 		etDateFrom.setOnClickListener(this);
@@ -204,10 +206,10 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 //			showCalendar(v);
 			break;
 		case R.id.tvToday:
-			  String tDelims = "T"; 
-			  String[] tTokens =dateFormatter.format(d).toString().split(tDelims);
-			  etDateFrom.setText(tTokens[0]); 
-			  etDateTo.setText(tTokens[0]);
+			 /* String tDelims = "T"; 
+			  String[] tTokens =dateFormatter.format(d).toString().split(tDelims);*/
+			  etDateFrom.setText(""); 
+			  etDateTo.setText("");
 //			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#2C5197"));
@@ -221,11 +223,11 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 			if(tvEmptyLog.isShown()){
 				tvEmptyLog.setVisibility(View.GONE);
 			}
-			 String yDelims = "T"; 
+			/* String yDelims = "T"; 
 			  String[] yTokens = dateFormatter .format(d.getTime() - 24 * 60 * 60 * 1000).toString()
-			  .split(yDelims); 
-			  etDateFrom.setText(yTokens[0]);
-			  etDateTo.setText(yTokens[0]);
+			  .split(yDelims); */
+			  etDateFrom.setText("");
+			  etDateTo.setText("");
 //			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#2C5197"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
@@ -236,7 +238,9 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 				loadUserLogInfo(CommonValues.getInstance().userId,2,formatter.format(d.getTime()-24*60*60*1000).toString(),formatter.format(d.getTime()-24*60*60*1000).toString());
 			break;
 		case R.id.bDashboard:
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
 			Home.navDrawerAdapter.setSelectedPosition(ALLDEVICE_FRAGMENT);
 			currentFragment = ALLDEVICE_FRAGMENT;
@@ -247,7 +251,9 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 			startActivity(homeIntent);
 			break;
 		case R.id.bCamera:
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			currentFragment=CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))
 				stackIndex.push(String.valueOf(6));
@@ -257,7 +263,9 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 			
 			break;
 		case R.id.bRoom:
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			currentFragment=ROOM_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(5)))
 				stackIndex.push(String.valueOf(5));
@@ -291,17 +299,23 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 	
 	private boolean validateLastDateInput() {
 		try {
-			Date firstDate = dateFormatter.parse(stDate);
+//			Date firstDate = dateFormatter.parse(stDate);
 			Date lastDate = dateFormatter.parse(lstDate);
 			Date CurrentDate = d;
-			if (lastDate.after(CurrentDate)) {
+			 if(etDateFrom.getText().toString().length()==0){
+					CommonTask.ShowMessage(this,
+							"Please select Start Date first.");
+					etDateTo.setText("");
+					return false;
+				}
+			 else if (lastDate.after(CurrentDate)) {
 				CommonTask.ShowMessage(this,
-						"To date can't be greater than current date");
+						"End date can't be greater than Current Date");
 				etDateTo.setText("");
 				return false;
-			} else if (lastDate.before(firstDate)) {
+			} else if (lastDate.before(tobesetFromDate)) {
 				CommonTask.ShowMessage(this,
-						"To date can't be less than From date");
+						"End date can't be less than Start date");
 				etDateTo.setText("");
 				return false;
 			}
@@ -315,13 +329,13 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 
 
 	public void showError() {
-		CommonTask.ShowMessage(this, "Please select FromDate First.");
+		CommonTask.ShowMessage(this, "Please select StartDate First.");
 	}
 	public void showFirstDateError() {
-		CommonTask.ShowMessage(this, "From Date should not be Greater than current date.");
+		CommonTask.ShowMessage(this, "Start Date can't be Greater than Current Date.");
 	}
 	public void showLastDateError() {
-		CommonTask.ShowMessage(this, "To Date should not  be less than From date.");
+		CommonTask.ShowMessage(this, "End Date can't  be less than Start date.");
 	}
 
 	private void loadUserLogInfo(int userId,int FilterType, String fromDate,String toDate) {
@@ -380,7 +394,9 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 //		etDateFrom.setText("");
 //		etDateTo.setText("");
 		backState = UserLogSate.INITIAL_STATE;
+		if(MainActionbarBase.stackIndex!=null){
 		MainActionbarBase.stackIndex.removeAllElements();
+		}
 		currentFragment = ALLDEVICE_FRAGMENT;
 		Intent homeIntent = new Intent(this, Home_.class);
 		homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

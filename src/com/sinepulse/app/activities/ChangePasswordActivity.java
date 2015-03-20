@@ -125,7 +125,9 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	public void onBackPressed() {
 
 		backState = AboutState.INITIAL_STATE;
+		if(MainActionbarBase.stackIndex!=null){
 		MainActionbarBase.stackIndex.removeAllElements();
+		}
 		currentFragment = ALLDEVICE_FRAGMENT;
 		Intent homeIntent = new Intent(this, Home_.class);
 		homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -178,7 +180,9 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 		}
 		break;
 		case R.id.bDashboard:
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
 			Home.navDrawerAdapter.setSelectedPosition(ALLDEVICE_FRAGMENT);
 			currentFragment = ALLDEVICE_FRAGMENT;

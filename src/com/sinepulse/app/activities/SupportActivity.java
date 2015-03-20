@@ -171,7 +171,9 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.bDashboard:
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
 			Home.navDrawerAdapter.setSelectedPosition(ALLDEVICE_FRAGMENT);
 			currentFragment = ALLDEVICE_FRAGMENT;
@@ -184,7 +186,9 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 		case R.id.bCamera:
 //			spType.setEnabled(false);
 			spType.setAdapter(null);
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			currentFragment = CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))
 				stackIndex.push(String.valueOf(6));
@@ -194,7 +198,9 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 
 			break;
 		case R.id.bRoom:
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			currentFragment = ROOM_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(5)))
 				stackIndex.push(String.valueOf(5));
@@ -258,7 +264,9 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 		vfTicket.setOutAnimation(CommonTask.outToRightAnimation());
 		switch (backState) {
 		case INITIAL_STATE:
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			Intent homeIntent = new Intent(this, Home_.class);
 			homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(homeIntent);

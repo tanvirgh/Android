@@ -245,7 +245,9 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
 			onBackPressed();
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 		}
 		if (item.getItemId() == R.id.menu_refresh) {
 			// Toast.makeText(this, "Please Wait..Page is Refreshing",
@@ -933,20 +935,27 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	private boolean validateLastDateInput() {
 		try {
-			Date firstDate = dateFormatter.parse(stDate);
+//			Date firstDate = dateFormatter.parse(stDate);
 			Date lastDate = dateFormatter.parse(lstDate);
 			Date CurrentDate = d;
-			if (lastDate.after(CurrentDate)) {
+		   if(etDateFrom.getText().toString().length()==0){
 				CommonTask.ShowMessage(this,
-						"To date can't be greater than current date");
-				etDateTo.setText("");
-				return false;
-			} else if (lastDate.before(firstDate)) {
-				CommonTask.ShowMessage(this,
-						"To date can't be less than From date");
+						"Please select Start Date first.");
 				etDateTo.setText("");
 				return false;
 			}
+			 else if (lastDate.after(CurrentDate)) {
+				CommonTask.ShowMessage(this,
+						"End Date can't be greater than Current Date");
+				etDateTo.setText("");
+				return false;
+			} else if (lastDate.before(tobesetFromDate)) {
+				CommonTask.ShowMessage(this,
+						"End Date can't be less than Start date");
+				etDateTo.setText("");
+				return false;
+			}
+			
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -956,10 +965,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	}
 
 	public void showError() {
-		CommonTask.ShowMessage(this, "Please select FromDate First.");
+		CommonTask.ShowMessage(this, "Please select Start Date First.");
 	}
 	public void showFirstDateError() {
-		CommonTask.ShowMessage(this, "From Date should not be Greater than current date.");
+		CommonTask.ShowMessage(this, "Start Date can't be greater than Current Date.");
 	}
 
 	public boolean sendGetDeviceRequest(int userId, int roomId) {
@@ -993,7 +1002,9 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		case INITIAL_STATE:
 			// MainActionbarBase.currentMenuIndex = MainActionbarBase
 			// .getLastIndex();
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			// fragmentBackStack.clear();
 			Intent homeIntent = new Intent(this, Home_.class);
 			homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -1023,8 +1034,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				// deviceLogListView.setAdapter(null);
 				// dLogAdapter.clear();
 			}
-//			etDateFrom.setText("");
-//			etDateTo.setText("");
+			etDateFrom.setText("");
+			etDateTo.setText("");
 //			bSearch.setVisibility(View.INVISIBLE);
 			getSupportActionBar().setTitle("Device Control");
 			vfRoom.setDisplayedChild(2);
@@ -1097,7 +1108,9 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.bCamera:
 			// cancelAsyncOnVisibleFlipper();
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			currentFragment = CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))
 				stackIndex.push(String.valueOf(6));
@@ -1108,7 +1121,9 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		case R.id.bRoom:
 			break;
 		case R.id.bDashboard:
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			// cancelAsyncOnVisibleFlipper();
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
 			Home.navDrawerAdapter.setSelectedPosition(ALLDEVICE_FRAGMENT);
@@ -1142,8 +1157,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			etDateFrom.setInputType(InputType.TYPE_NULL);
 			etDateTo.setInputType(InputType.TYPE_NULL);
-			 etDateFrom.setText(fromDate);
-			 etDateTo.setText(toDate);
+//			 etDateFrom.setText(fromDate);
+//			 etDateTo.setText(toDate);
+			etDateFrom.setHint("Start Date");
+			etDateTo.setHint("End Date");
 			etDateFrom.requestFocus();
 		    setDateTimeField();
 		    bSearch.setVisibility(View.INVISIBLE);
@@ -1178,10 +1195,10 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 			});
 			break;
 		case R.id.tvToday:
-			  String tDelims = "T"; 
-			  String[] tTokens =dateFormatter.format(d).toString().split(tDelims);
-			  etDateFrom.setText(tTokens[0]); 
-			  etDateTo.setText(tTokens[0]);
+			  /*String tDelims = "T"; 
+			  String[] tTokens =dateFormatter.format(d).toString().split(tDelims);*/
+			  etDateFrom.setText(""); 
+			  etDateTo.setText("");
 //			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#2C5197"));
@@ -1196,11 +1213,11 @@ toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 			if (tvEmptyLog.isShown()) {
 				tvEmptyLog.setVisibility(View.GONE);
 			}
-			 String yDelims = "T"; 
+			/* String yDelims = "T"; 
 			  String[] yTokens = dateFormatter .format(d.getTime() - 24 * 60 * 60 * 1000).toString()
-					  .split(yDelims); 
-			 etDateFrom.setText(yTokens[0]);
-			 etDateTo.setText(yTokens[0]);
+					  .split(yDelims); */
+			 etDateFrom.setText("");
+			 etDateTo.setText("");
 //			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#2C5197"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));

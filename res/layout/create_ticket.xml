@@ -65,7 +65,6 @@
             android:background="@drawable/cellbg_dropdown"
             android:paddingLeft="15dp"
             android:paddingRight="0dp"
-            android:entries="@array/camera_arrays"
             android:textColor="#FFFFFF" />
 
         

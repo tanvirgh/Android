@@ -1253,7 +1253,9 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		// Log.d("backcount",""+getSupportFragmentManager().getBackStackEntryCount());
 		if (currentFragment == ALLDEVICE_FRAGMENT) {
 			if (backState == DeviceTypeState.INITIAL_STATE) {
+				if(MainActionbarBase.stackIndex!=null){
 				MainActionbarBase.stackIndex.removeAllElements();
+				}
 				Intent intent = new Intent(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_HOME);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1276,6 +1278,8 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				LoadDeviceDetailsContent(deviceTypeId);
 			}
 			if (backState == DeviceTypeState.VIEWLOG_STATE) {
+				etDateFrom.setText("");
+				etDateTo.setText("");
 				getSupportActionBar().setTitle("Device Control");
 				vfDeviceType.setDisplayedChild(2);
 				backState = DeviceTypeState.PROPERTY_STATE;
@@ -1726,7 +1730,9 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.bCamera:
 			// cancelAsyncOnVisibleFlipper();
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			currentFragment = CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))
 				stackIndex.push(String.valueOf(6));
@@ -1736,7 +1742,9 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			break;
 		case R.id.bRoom:
 			// cancelAsyncOnVisibleFlipper();
+			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
+			}
 			currentFragment = ROOM_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(5)))
 				stackIndex.push(String.valueOf(5));
@@ -1788,8 +1796,10 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			etDateFrom.setInputType(InputType.TYPE_NULL);
 			etDateTo.setInputType(InputType.TYPE_NULL);
-			etDateFrom.setText(fromDate);
-			etDateTo.setText(toDate);
+//			etDateFrom.setText(fromDate);
+//			etDateTo.setText(toDate);
+			etDateFrom.setHint("Start Date");
+			etDateTo.setHint("End Date");
 			etDateFrom.requestFocus();
 			setDateTimeField();
 			bSearch.setVisibility(View.INVISIBLE);
@@ -1799,6 +1809,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		case R.id.etDateFrom:
 			if (fromDatePickerDialog != null)
 				fromDatePickerDialog.show();
+			fromDatePickerDialog.getDatePicker().getCalendarView().setBackgroundResource(R.drawable.abs__ab_solid_light_holo);
 
 			fromDatePickerDialog.setOnCancelListener(new OnCancelListener() {
 
@@ -1829,11 +1840,11 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			break;
 		case R.id.tvToday:
 
-			String tDelims = "T";
+			/*String tDelims = "T";
 			String[] tTokens = dateFormatter.format(d).toString()
-					.split(tDelims);
-			etDateFrom.setText(tTokens[0]);
-			etDateTo.setText(tTokens[0]);
+					.split(tDelims);*/
+			etDateFrom.setText("");
+			etDateTo.setText("");
 
 			// bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
@@ -1850,12 +1861,12 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				tvEmptyLog.setVisibility(View.GONE);
 			}
 
-			String yDelims = "T";
+		/*	String yDelims = "T";
 			String[] yTokens = dateFormatter
 					.format(d.getTime() - 24 * 60 * 60 * 1000).toString()
-					.split(yDelims);
-			etDateFrom.setText(yTokens[0]);
-			etDateTo.setText(yTokens[0]);
+					.split(yDelims);*/
+			etDateFrom.setText("");
+			etDateTo.setText("");
 
 			// bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#2C5197"));
@@ -1917,17 +1928,23 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	private boolean validateLastDateInput() {
 
 		try {
-			Date firstDate = dateFormatter.parse(stDate);
+//			Date firstDate = dateFormatter.parse(stDate);
 			Date lastDate = dateFormatter.parse(lstDate);
 			Date CurrentDate = d;
-			if (lastDate.after(CurrentDate)) {
+			 if(etDateFrom.getText().toString().length()==0){
+					CommonTask.ShowMessage(this,
+							"Please select Start Date first.");
+					etDateTo.setText("");
+					return false;
+				}
+			 else if (lastDate.after(CurrentDate)) {
 				CommonTask.ShowMessage(this,
-						"To date can't be greater than current date");
+						"End date can't be greater than Current Date");
 				etDateTo.setText("");
 				return false;
-			} else if (lastDate.before(firstDate)) {
+			} else if (lastDate.before(tobesetFromDate)) {
 				CommonTask.ShowMessage(this,
-						"To date can't be less than From date");
+						"End date can't be less than Start date");
 				etDateTo.setText("");
 				return false;
 			}
@@ -1940,12 +1957,12 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	}
 
 	public void showError() {
-		CommonTask.ShowMessage(this, "Please select FromDate First");
+		CommonTask.ShowMessage(this, "Please select Start Date First");
 	}
 
 	public static void showFirstDateError() {
 		CommonTask.ShowMessage(Home.context,
-				"From Date should not be Greater than current date.");
+				"Start Date can't be Greater than Current Date.");
 	}
 
 	public void startDeviceProgress() {

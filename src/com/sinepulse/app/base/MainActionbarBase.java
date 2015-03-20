@@ -484,7 +484,9 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 						.ShowMessage(
 								MainActionbarBase.this,
 								"You are in Local Mode.Support menu is not accesible in this mode.Please switch to Internet mode to access this Menu.");
+				if(stackIndex!=null){
 				stackIndex.removeAllElements();
+				}
 				if (!stackIndex.contains(String.valueOf(0)))
 					stackIndex.push(String.valueOf(0));
 				Intent dashboardIntent = new Intent(this, Home_.class);

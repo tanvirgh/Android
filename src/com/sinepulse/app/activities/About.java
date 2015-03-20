@@ -69,7 +69,9 @@ public class About extends MainActionbarBase implements OnClickListener {
 	@Override
 	@Click({R.id.bCamera,R.id.bDashboard,R.id.bRoom})
 	public void onClick(View v) {
+		if(MainActionbarBase.stackIndex!=null){
 		MainActionbarBase.stackIndex.removeAllElements();
+		}
 		switch (v.getId()) {
 		case R.id.bDashboard:
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);

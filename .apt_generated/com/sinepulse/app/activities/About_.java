@@ -81,9 +81,9 @@ public final class About_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        bCamera = ((Button) hasViews.findViewById(id.bCamera));
         bRoom = ((Button) hasViews.findViewById(id.bRoom));
         bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
+        bCamera = ((Button) hasViews.findViewById(id.bCamera));
         if (hasViews.findViewById(id.bCamera)!= null) {
             hasViews.findViewById(id.bCamera).setOnClickListener(new OnClickListener() {
 
