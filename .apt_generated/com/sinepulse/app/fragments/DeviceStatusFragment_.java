@@ -68,13 +68,13 @@ public final class DeviceStatusFragment_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
+        flipper = ((ViewFlipper) hasViews.findViewById(com.sinepulse.app.R.id.vfBasket));
+        basketLayout = ((LinearLayout) hasViews.findViewById(com.sinepulse.app.R.id.basketview));
         basketListView = ((ListView) hasViews.findViewById(com.sinepulse.app.R.id.lvBasket));
         ivStep2 = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.step2imagetext));
         basketHeading = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvBasketHeadingText));
         checkoutBasketButton = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bCheckoutBasket));
         ivStep1 = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.step1imagetext));
-        flipper = ((ViewFlipper) hasViews.findViewById(com.sinepulse.app.R.id.vfBasket));
-        basketLayout = ((LinearLayout) hasViews.findViewById(com.sinepulse.app.R.id.basketview));
         if (hasViews.findViewById(com.sinepulse.app.R.id.step1imagetext)!= null) {
             hasViews.findViewById(com.sinepulse.app.R.id.step1imagetext).setOnClickListener(new OnClickListener() {
 

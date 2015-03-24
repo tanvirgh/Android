@@ -534,7 +534,8 @@ public class CommonTask {
 			if(networkInfo!=null){
 				networkState = networkInfo.getState();
 				if (networkState == NetworkInfo.State.CONNECTED
-						|| networkState == NetworkInfo.State.CONNECTING) {
+					  || networkState == NetworkInfo.State.CONNECTING
+						) {
 					return true;
 				}
 			}
@@ -544,7 +545,8 @@ public class CommonTask {
 			
 				networkState = networkInfo.getState();
 				if (networkState == NetworkInfo.State.CONNECTED
-						|| networkState == NetworkInfo.State.CONNECTING) {
+					  || networkState == NetworkInfo.State.CONNECTING
+						) {
 					return true;
 				}
 			}
@@ -552,6 +554,39 @@ public class CommonTask {
 		}
 		return false;
 	}
+	
+	public static boolean isNetworkStateChanged(Context context) {
+
+		ConnectivityManager connectivityManager = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = null;
+		State networkState = null;
+		if (connectivityManager != null) {
+			networkInfo = connectivityManager
+					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			if(networkInfo!=null){
+				networkState = networkInfo.getState();
+				if (networkState == NetworkInfo.State.CONNECTED
+						) {
+					return true;
+				}
+			}
+			networkInfo = connectivityManager
+					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			if(networkInfo!=null){
+			
+				networkState = networkInfo.getState();
+				if (networkState == NetworkInfo.State.CONNECTED
+						) {
+					return true;
+				}
+			}
+			
+		}
+		return false;
+	}
+	
+	
 
 	/**
 	 * User for getting exception message

@@ -209,7 +209,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (activityVisible) {
-				if (CommonTask.isNetworkAvailable(MainActionbarBase.this) == false) {
+				if (CommonTask.isNetworkStateChanged(MainActionbarBase.this) == false) {
 					msg = AppMsg.makeText(MainActionbarBase.this,
 							getString(R.string.networkError),
 							AppMsg.STYLE_ALERT_ALWAYS_VISIBLE);
@@ -248,6 +248,8 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 						AppMsg.cancelAll();
 					}
 				}
+				
+				
 			}
 
 		}
@@ -255,32 +257,32 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	};
 	boolean activityVisible = false;
 
-	public BroadcastReceiver conChangeReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			ConnectivityManager connectivityManager = (ConnectivityManager) context
-					.getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo activeNetInfo = connectivityManager
-					.getActiveNetworkInfo();
-			NetworkInfo mobNetInfo = connectivityManager
-					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-			if (activeNetInfo != null) {
-				CommonTask
-						.ShowNetworkChangeConfirmation(
-								MainActionbarBase.this,
-								"Network State has been changed.Please log in to continue.",
-								showNetworkChangeEvent());
-			}
-			if (mobNetInfo != null) {
-				CommonTask
-						.ShowNetworkChangeConfirmation(
-								MainActionbarBase.this,
-								"Network State has been changed.Please log in to continue.",
-								showNetworkChangeEvent());
-			}
-		}
-	};
+//	public BroadcastReceiver conChangeReceiver = new BroadcastReceiver() {
+//
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
+//			ConnectivityManager connectivityManager = (ConnectivityManager) context
+//					.getSystemService(Context.CONNECTIVITY_SERVICE);
+//			NetworkInfo activeNetInfo = connectivityManager
+//					.getActiveNetworkInfo();
+//			NetworkInfo mobNetInfo = connectivityManager
+//					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+//			if (activeNetInfo != null) {
+//				CommonTask
+//						.ShowNetworkChangeConfirmation(
+//								MainActionbarBase.this,
+//								"Network State has been changed.Please log in to continue.",
+//								showNetworkChangeEvent());
+//			}
+//			if (mobNetInfo != null) {
+//				CommonTask
+//						.ShowNetworkChangeConfirmation(
+//								MainActionbarBase.this,
+//								"Network State has been changed.Please log in to continue.",
+//								showNetworkChangeEvent());
+//			}
+//		}
+//	};
 	
 	
 

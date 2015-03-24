@@ -68,18 +68,18 @@ public final class UserLogFragment_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        bCamera = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bCamera));
-        bDeliverydate = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bDeliverydate));
-        bDashboard = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bDashboard));
-        tvToday = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvToday));
-        etDateFrom = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etDateFrom));
-        deviceLogProgressBar = ((ProgressBar) hasViews.findViewById(com.sinepulse.app.R.id.deviceLogProgressBar));
-        bRoom = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bRoom));
-        bSearch = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bSearch));
-        etDateTo = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etDateTo));
         deviceLogListView = ((ListView) hasViews.findViewById(com.sinepulse.app.R.id.lvLogList));
-        tvYesterday = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvYesterday));
+        bSearch = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bSearch));
+        bDeliverydate = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bDeliverydate));
+        etDateTo = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etDateTo));
+        etDateFrom = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etDateFrom));
+        bRoom = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bRoom));
         tvEmptyLog = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvEmptyLog));
+        bDashboard = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bDashboard));
+        deviceLogProgressBar = ((ProgressBar) hasViews.findViewById(com.sinepulse.app.R.id.deviceLogProgressBar));
+        bCamera = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bCamera));
+        tvYesterday = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvYesterday));
+        tvToday = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvToday));
         if (hasViews.findViewById(com.sinepulse.app.R.id.bDeliverydate)!= null) {
             hasViews.findViewById(com.sinepulse.app.R.id.bDeliverydate).setOnClickListener(new OnClickListener() {
 

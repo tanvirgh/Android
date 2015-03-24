@@ -143,7 +143,7 @@ public class VideoActivity extends MainActionbarBase implements
 				continueStreaming();
 
 			} else if (status.equals("Mobiledata enabled")) {
-				if(spinnerValue==1)
+				if(streamingButton.getText().toString()=="Start Streaming")
 				CommonTask
 						.ShowConfirmation(
 								this,

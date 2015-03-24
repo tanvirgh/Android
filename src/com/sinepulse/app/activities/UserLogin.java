@@ -25,6 +25,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
@@ -37,6 +41,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -109,7 +114,6 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		UserLogin.context = this;
 		mSupportActionBar = getSupportActionBar();
 		mSupportActionBar.hide();
-
 		// specifyAppMode();
 	}
 
@@ -142,6 +146,8 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		// } else {
 		// Log.d(TAG, "Service Not running");
 		// }
+		
+
 	}
 
 	@Override

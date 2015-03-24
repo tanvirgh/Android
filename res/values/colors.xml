@@ -54,6 +54,7 @@
     <color name="paste">#35b6f0</color>
     <color name="lime">#FF4500</color>
     <color name="gray">#f7f7f7</color>
+    <color name="dark_gray">#4c4c4c</color>
     <color name="gray_ash">#8b8f8f</color>
     <color name="background">#55000000</color>
     <color name="list_row_divider">#55dcdcdc</color>

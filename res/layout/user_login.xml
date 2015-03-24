@@ -36,17 +36,6 @@
             android:windowSoftInputMode="stateHidden" >
         </com.sinepulse.app.custom.controls.CustomEditText>
 
-      <!--   <ImageView
-            android:id="@+id/logInImageView"
-            android:layout_width="fill_parent"
-            android:layout_height="5dp"
-            android:layout_below="@+id/etUserName"
-            android:layout_above="@+id/etUserPassword"
-            android:layout_marginTop="12dp"
-           android:layout_marginBottom="8dp"
-            android:background="@color/red"
-            android:contentDescription="@string/todo" /> -->
-
         <com.sinepulse.app.custom.controls.CustomEditText
             android:id="@+id/etUserPassword"
             android:layout_width="fill_parent"
@@ -55,7 +44,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/bg_cell_dark"
             android:drawableLeft="@drawable/passkey"
             android:drawablePadding="10dp"
@@ -77,10 +66,23 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="13dp"
             android:background="@drawable/login_button_mb"
             android:gravity="center_horizontal|center" >
         </com.sinepulse.app.custom.controls.CustomButton>
+
+        <ImageView
+            android:id="@+id/aboutImageView02"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/etUserName"
+           android:layout_marginLeft="15dp"
+           android:layout_marginTop="3dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/dark_gray"
+            android:contentDescription="@string/todo" />
+
     </RelativeLayout>
 
     <ProgressBar

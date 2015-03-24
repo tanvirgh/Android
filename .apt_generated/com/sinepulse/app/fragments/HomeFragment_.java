@@ -64,23 +64,23 @@ public final class HomeFragment_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
+        thirdtRowRightUp = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.thirdRowRightUp));
+        btn_total_power = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.btn_total_power));
+        thirdRowRightDown = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.thirdRowRightDown));
+        home_btn_bulb = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.home_btn_bulb));
+        firstRowRightUp = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.firstRowRightUp));
+        bRoom = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bRoom));
+        bDashboard = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bDashboard));
+        firstRowRightDown = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.firstRowRightDown));
         home_btn_curtain = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.home_btn_curtain));
         thirdRowLeft = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.thirdRowLeft));
+        secondRowLeft = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.secondRowLeft));
         secondRowRightDown = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.secondRowRightDown));
         home_btn_room = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.home_btn_room));
-        firstRowLeft = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.firstRowLeft));
-        home_btn_bulb = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.home_btn_bulb));
-        thirdRowRightDown = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.thirdRowRightDown));
-        thirdtRowRightUp = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.thirdRowRightUp));
-        firstRowRightDown = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.firstRowRightDown));
-        home_btn_fan = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.home_btn_fan));
-        firstRowRightUp = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.firstRowRightUp));
         bCamera = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bCamera));
         secondtRowRightUp = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.secondRowRightUp));
-        btn_total_power = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.btn_total_power));
-        bRoom = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bRoom));
-        secondRowLeft = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.secondRowLeft));
-        bDashboard = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bDashboard));
+        firstRowLeft = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.firstRowLeft));
+        home_btn_fan = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.home_btn_fan));
         afterViewsLoaded();
     }
 
