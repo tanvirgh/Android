@@ -337,7 +337,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		int ip = wifiInfo.getIpAddress();
 		String ipAddress = Formatter.formatIpAddress(ip);
 		String[] tokens = ipAddress.split("\\.");
-		tokens[3] = "151";
+		tokens[3] = "111";
 		ipAddress = tokens[0] + "." + tokens[1] + "." + tokens[2] + "."
 				+ tokens[3];
 		// Log.d("WIFI Ip", ipAddress);

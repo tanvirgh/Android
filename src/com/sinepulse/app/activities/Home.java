@@ -1311,6 +1311,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 					CommonValues.getInstance().summary.deviceSummaryArray
 							.clear();
 					CommonValues.getInstance().userId = 0;
+					CommonValues.getInstance().ApiKey="";
 					CommonValues.getInstance().currentAction = CommonIdentifier.Action_LogOut;
 					if (asyncLogOutTask != null) {
 						asyncLogOutTask.cancel(true);

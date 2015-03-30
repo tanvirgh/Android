@@ -119,6 +119,13 @@ public class JsonParser  extends MainActionbarBase{
 			try {
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
+				//API key
+				try {
+					CommonValues.getInstance().ApiKey=jObject.getString("ApiKey");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				jData = jObject.getJSONObject("Data");
 				jArray = jData.getJSONArray("DeviceSummary");
 				for (int i = 0; i < jArray.length(); i++) {
@@ -208,6 +215,7 @@ public class JsonParser  extends MainActionbarBase{
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
+			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
 			String json = "";
 
 			// 3. build jsonObject
@@ -409,6 +417,7 @@ public class JsonParser  extends MainActionbarBase{
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
+			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
 			String json = "";
 
 			// 3. build jsonObject
@@ -517,6 +526,7 @@ public class JsonParser  extends MainActionbarBase{
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
+			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
 			String json = "";
 
 			// 3. build jsonObject
@@ -797,7 +807,8 @@ public class JsonParser  extends MainActionbarBase{
 			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
-//			httpPost.addHeader("Cookie",cookieID );
+			httpPost.addHeader("Cookie",cookieID );
+			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
 			String json = "";
 
 			// 3. build jsonObject
@@ -869,6 +880,7 @@ public class JsonParser  extends MainActionbarBase{
 			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			HttpGet httpGet = new HttpGet(url);
 			httpGet.addHeader("Cookie",cookieID );
+			httpGet.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity httpEntity = httpResponse.getEntity();
 			is = httpEntity.getContent();
@@ -982,6 +994,7 @@ public class JsonParser  extends MainActionbarBase{
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 //			httpPost.addHeader("Cookie",cookieID );
+//			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
 			String json = "";
 
 			// 3. build jsonObject

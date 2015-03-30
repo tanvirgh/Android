@@ -150,7 +150,10 @@ public class VideoActivity extends MainActionbarBase implements
 								"Video Stream will consume high Data Volume.Do you want to continue?",
 								ShowCameraEvent());
 				else{
-					continueStreaming();
+//					releaseVideoProperties();
+//					continueStreaming();
+					Player.getInstance().refreshPlay(playPort);
+					
 				}
 				
 			}
@@ -348,6 +351,7 @@ public class VideoActivity extends MainActionbarBase implements
 	 * 
 	 */
 	private void releaseVideoProperties() {
+		
 		if (surface != null && player != null) {
 			if (surface.getHolder().getSurface().isValid() && -1 != playPort) {
 				Player.getInstance().closeStream(playPort);
@@ -356,7 +360,8 @@ public class VideoActivity extends MainActionbarBase implements
 				playPort = -1;
 				Player.getInstance().stop(userId);
 			}
-			// hcNetSdk.NET_DVR_Logout_V30(userId);
+//			hcNetSdk.NET_DVR_StopPlayBack(playPort);
+			hcNetSdk.NET_DVR_Logout_V30(userId);
 			hcNetSdk.NET_DVR_Cleanup();
 			playPort = -1;
 		}
@@ -579,6 +584,13 @@ public class VideoActivity extends MainActionbarBase implements
 			this.passWord = passWord;
 
 		}
+		
+		@Override
+		protected void onPreExecute() {
+			startProgress();
+			streamingButton.setEnabled(false);
+			
+		}
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -645,6 +657,7 @@ public class VideoActivity extends MainActionbarBase implements
 				e.printStackTrace();
 			}
 			catchErrorIfNecessary();
+			
 
 			return null;
 
@@ -652,11 +665,15 @@ public class VideoActivity extends MainActionbarBase implements
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			// TODO Auto-generated method stub
 			// super.onPostExecute(result);
+			android.os.AsyncTask.Status status = getStatus();
+			if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
+			stopProgress();
+			streamingButton.setEnabled(true);
 			if (Player.getInstance().getPort() == -1) {
 				showVideoLoadingError();
 			}
+		}
 		}
 
 	}

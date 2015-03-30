@@ -35,6 +35,7 @@ public class CommonValues {
 	public int userId =0;
 	public String appToken="";
 	public String localIp="";
+	public String ApiKey="";
 	public ArrayList<Room> roomList=new ArrayList<Room>();
 	public ArrayList<Device> deviceList=new ArrayList<Device>();
 	public ArrayList<DeviceProperty> devicePropertyList=new ArrayList<DeviceProperty>();
