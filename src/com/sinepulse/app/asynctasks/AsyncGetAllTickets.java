@@ -29,6 +29,8 @@ public class AsyncGetAllTickets extends AsyncTask<Void, Void, Boolean> {
 	protected void onPreExecute() {
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
 		parentActivity.startProgress();
+//		parentActivity.refresh.setEnabled(false);
+		
 		
 	}
 	
@@ -42,6 +44,7 @@ public class AsyncGetAllTickets extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		parentActivity.stopProgress();
+		
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
@@ -51,6 +54,7 @@ public class AsyncGetAllTickets extends AsyncTask<Void, Void, Boolean> {
 					@Override
 					public void run() {
 						parentActivity.setAllTicketListViewAdapter();
+//						parentActivity.refresh.setEnabled(true);
 					}
 				});
 		

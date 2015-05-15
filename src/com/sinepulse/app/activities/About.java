@@ -5,10 +5,13 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
@@ -29,6 +32,8 @@ public class About extends MainActionbarBase implements OnClickListener {
 	protected Button bRoom;
 	@ViewById(R.id.bDashboard)
 	protected Button bDashboard;
+	@ViewById(R.id.tvAboutHeadingText1)
+	protected TextView tvAboutHeadingText1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +72,7 @@ public class About extends MainActionbarBase implements OnClickListener {
 	}
 	
 	@Override
-	@Click({R.id.bCamera,R.id.bDashboard,R.id.bRoom})
+	@Click({R.id.bCamera,R.id.bDashboard,R.id.bRoom,R.id.tvAboutHeadingText1})
 	public void onClick(View v) {
 		if(MainActionbarBase.stackIndex!=null){
 		MainActionbarBase.stackIndex.removeAllElements();
@@ -100,6 +105,12 @@ public class About extends MainActionbarBase implements OnClickListener {
 			roomIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(roomIntent);
 			
+			break;
+		case R.id.tvAboutHeadingText1:
+			Intent viewIntent = new Intent(
+					"android.intent.action.VIEW",
+					Uri.parse("https://play.google.com/store/apps/details?id=com.sinepulse.app"));
+			startActivity(viewIntent);
 			break;
 		default:
 			break;

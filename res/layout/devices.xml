@@ -6,7 +6,7 @@
     android:background="@color/list_divider_bg"
     android:orientation="vertical" >
 
-    <TextView
+    <com.sinepulse.app.custom.controls.CustomTextView
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:background="#FF333333" />

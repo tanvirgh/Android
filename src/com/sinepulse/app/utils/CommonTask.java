@@ -566,18 +566,7 @@ public class CommonTask {
 				}
 			}
 		}
-//		if (lastConType.equals("Wifi")) {
-//			mobnetworkInfo = connectivityManager
-//					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-//			if (mobnetworkInfo != null) {
-//
-//				networkState = mobnetworkInfo.getState();
-//				if (networkState == NetworkInfo.State.CONNECTED) {
-//					lastConType = "";
-//					return false;
-//				}
-//			}
-//		}
+
 		if (connectivityManager != null) {
 			// Check Wifi
 			wifinetworkInfo = connectivityManager

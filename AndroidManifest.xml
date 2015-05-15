@@ -52,10 +52,12 @@
         android:icon="@drawable/launcher_icon"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:configChanges="mcc|mnc"
+        android:alwaysRetainTaskState="true"
         android:theme="@style/app_theme" >
         <activity
             android:name=".activities.SplashScreen"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:uiOptions="splitActionBarWhenNarrow" >
@@ -67,13 +69,13 @@
         </activity>
         <activity
             android:name=".activities.Home_"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode|mcc|mnc"
             android:isScrollContainer="false"
             android:label="Dashboard"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
+            android:alwaysRetainTaskState="true"
             android:windowSoftInputMode="stateVisible|adjustResize" >
-
             <!-- android:configChanges="keyboardHidden|orientation|keyboard -->
         </activity>
         <activity
@@ -87,7 +89,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.UserLogin_"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>
@@ -98,12 +100,12 @@
         </activity>
         <activity
             android:name=".activities.About_"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.UserInformation"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
@@ -114,7 +116,7 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".activities.VideoStreamActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:label="@string/title_activity_room_manager"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
@@ -128,41 +130,43 @@
         </activity>
         <activity
             android:name=".activities.RoomManager_"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".activities.UserLogActivity_"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".activities.UserProfileActivity_"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".activities.ChangePasswordActivity_"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".activities.SupportActivity_"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".activities.VideoActivity_"
             android:label="@string/title_activity_video"
-            android:parentActivityName=".base.MainActionbarBase" >
+            android:configChanges="orientation|screenSize|keyboardHidden|mcc|mnc"
+            >
+            <!--   android:parentActivityName=".base.MainActionbarBase" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sinepulse.app.base.MainActionbarBase" />
+                android:value="com.sinepulse.app.base.MainActionbarBase" /> -->
         </activity>
 
        <!--  <receiver

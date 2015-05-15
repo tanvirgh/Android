@@ -19,7 +19,7 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:gravity="center">
-             <TextView
+             <com.sinepulse.app.custom.controls.CustomTextView
                   android:id="@+id/texttoast"
                   android:paddingLeft="10dip"
                   android:paddingRight="10dip"

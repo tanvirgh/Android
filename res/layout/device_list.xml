@@ -3,10 +3,12 @@
     android:id="@+id/rlDeviceByTypeDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
-    android:background="@drawable/sh_background" >
+    android:padding="20dp"
+     >
 
-    <Button
+   <!--   android:layout_margin="20dp" -->
+   
+    <com.sinepulse.app.custom.controls.CustomButton
         android:id="@+id/btAddDevice"
         style="@style/HomeButton"
         android:layout_width="wrap_content"

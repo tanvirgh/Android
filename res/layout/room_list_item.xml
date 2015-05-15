@@ -3,67 +3,67 @@
     android:id="@+id/roomlistRowItem"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-   android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal"
-    >
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal" >
 
-    <ImageView
+   <!--  <ImageView
         android:id="@+id/ivListItemImage"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="7dp"
+        android:contentDescription="@string/todo"
         android:scaleType="fitXY"
         android:singleLine="true"
-       android:contentDescription="@string/todo"
-        android:src="@drawable/ic_home" />
+        android:src="@drawable/ic_home" /> -->
 
     <RelativeLayout
         android:id="@+id/rlItemDetails"
         android:layout_width="0dp"
         android:layout_height="52dp"
+        android:layout_marginLeft="20dp"
         android:layout_weight="1"
         android:gravity="left|center"
-        android:orientation="vertical"
-        android:layout_marginLeft="20dp" >
+        android:orientation="vertical" >
 
-        <TextView
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/room_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_centerVertical="true"
+            android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            android:textStyle="bold"  />
+            android:textStyle="bold" />
+
         <ImageView
-        android:id="@+id/ivListItemImageRight"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginBottom="3dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="7dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:scaleType="fitXY"
-        android:singleLine="true"
-       android:contentDescription="@string/todo"
-        android:src="@drawable/icon_arrow_color" />
-        <TextView
+            android:id="@+id/ivListItemImageRight"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="7dp"
+            android:contentDescription="@string/todo"
+            android:scaleType="fitXY"
+            android:singleLine="true"
+            android:src="@drawable/arrow_search_selected" />
+
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/room_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/room_name"
             android:layout_marginRight="20dp"
+            android:layout_toRightOf="@+id/room_name"
             android:gravity="right"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold"
             android:visibility="gone" />
     </RelativeLayout>
-
 
 </LinearLayout>

@@ -3,8 +3,7 @@
     android:id="@+id/rlDeviceByTypeDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="25dp"
-    android:background="@drawable/sh_background" >
+    android:layout_margin="25dp" >
 
     <RelativeLayout
         android:id="@+id/top"
@@ -24,7 +23,6 @@
             android:layout_centerVertical="true"
             android:contentDescription="@string/app_name"
             android:src="@drawable/fanmedium_tab" />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -64,7 +62,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="35dp"
                 android:layout_toRightOf="@+id/list_image"
-               android:background="@drawable/cellbg_dropdown"
+                android:background="@drawable/cellbg_dropdown"
                 android:prompt="@string/camera_prompt"
                 android:visibility="visible" />
 
@@ -84,18 +82,16 @@
                 android:textColor="#000000"
                 android:textOff=""
                 android:textOn="" />
-
-           
         </RelativeLayout>
 
-         <ProgressBar
-             android:id="@+id/devicePropertyProgressBar"
-             android:layout_width="45dp"
-             android:layout_height="45dp"
-             android:layout_alignRight="@+id/tvDeviceName"
-             android:layout_below="@+id/thumbnail"
-             android:layout_marginTop="20dp"
-             android:visibility="visible" />
+        <ProgressBar
+            android:id="@+id/devicePropertyProgressBar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_below="@+id/thumbnail"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:visibility="visible" />
 
         <RelativeLayout
             android:id="@+id/propertyMiddleView"
@@ -115,23 +111,24 @@
                 android:layout_height="90dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-               android:layout_centerInParent="true"
+                android:layout_centerInParent="true"
                 android:layout_marginBottom="350dp"
-                 android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:background="@drawable/slider_bg"
                 android:max="100"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:visibility="invisible" />
-             <TextView
+
+            <TextView
                 android:id="@+id/tvProgressValue"
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="220dp"
+                android:text="progress value"
                 android:textColor="#FFFFFF"
                 android:textSize="25sp"
-               android:text="progress value"
                 android:textStyle="bold"
                 android:visibility="invisible" />
 
@@ -139,6 +136,7 @@
                 android:id="@+id/porda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:visibility="invisible" >
 
                 <include
@@ -146,40 +144,34 @@
                     layout="@layout/ovalshape" />
             </RelativeLayout>
 
-           
+            <com.sinepulse.app.custom.controls.CustomButton
+                android:id="@+id/btShowLog"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="20dp"
+               android:layout_marginRight="15dp"
+                android:layout_toRightOf="@+id/tvProgressValue"
+                android:background="@drawable/left_curved_button_bg_selected"
+                android:gravity="center"
+                android:text="Activities"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tvDeviceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/btShowLog"
+                android:layout_centerHorizontal="true"
+                android:text="DeviceName"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold" />
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tvDeviceName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignTop="@+id/btShowLog"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-             android:layout_marginTop="20dp"
-            android:text="DeviceName"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-        <com.sinepulse.app.custom.controls.CustomButton
-            android:id="@+id/btShowLog"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/tvDeviceName"
-            android:background="@drawable/left_curved_button_bg_selected"
-            android:gravity="center"
-           android:text="Activities"
-            android:textSize="22sp"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
     </RelativeLayout>
 
 </RelativeLayout>

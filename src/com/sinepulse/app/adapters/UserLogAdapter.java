@@ -111,7 +111,7 @@ public class UserLogAdapter extends ArrayAdapter<DevicePropertyLog> {
 		}
 		dlh.rowID = position;
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm a");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd  HH:mm ");
 		Long timeInMillis = Long.valueOf(deviceLogEntity.getLoggedAt().getTime());
 		Date LoggedAt = new Date(timeInMillis);
 		 dlh.tv_date.setText(formatter.format(LoggedAt));
@@ -127,10 +127,10 @@ public class UserLogAdapter extends ArrayAdapter<DevicePropertyLog> {
 				result="ed   Off";
 			}
 		}else {
-			result="  set to "+deviceLogEntity.getValue()+"%";
+			result="  set to "+""+deviceLogEntity.getValue()+"%";
 		}
 		 
-		 String text ="<font color=\"#2C5197\"><bold><u>"+deviceLogEntity.getDeviceName() +" </bold></u></font>"+" - "+deviceLogEntity.getPropertyName()+result;
+		 String text ="<font color=\"#6699ff\"><bold>"+deviceLogEntity.getDeviceName() +" </bold></font>"+"   "+deviceLogEntity.getPropertyName()+""+result;
 		 dlh.tv_log.setText(Html.fromHtml(text));
 
 		if (_position != position) {

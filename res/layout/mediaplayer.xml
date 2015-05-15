@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/videoScreen"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/sh_background"
@@ -27,15 +28,19 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/spinner_camera"
         android:layout_alignParentTop="true"
-         android:layout_marginBottom="0dp"
+        android:layout_marginBottom="0dp"
        android:background="@drawable/video_bg"
        android:gravity="center_vertical" >
 
         <com.sinepulse.app.fragments.LiveSurface
             android:id="@+id/surface"
             android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:layout_margin="10dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
+           android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+           android:background="@drawable/custom_border"
             android:layout_above="@+id/spinner_camera" />
     </RelativeLayout>
      <ProgressBar
@@ -60,9 +65,9 @@
     </Spinner>
     
 
-     <Button
+     <com.sinepulse.app.custom.controls.CustomButton
          android:id="@+id/MyStreamButton"
-         android:layout_width="255dp"
+         android:layout_width="260dp"
          android:layout_height="42dp"
          android:layout_above="@+id/bottom"
          android:layout_centerHorizontal="true"
@@ -71,6 +76,8 @@
          android:drawableLeft="@drawable/ic_people"
          android:gravity="center_horizontal|center"
          android:text="Start Streaming"
+         android:textSize="15sp"
+        android:textStyle="bold"
          android:textColor="#FFFFFF" />
       <include
         android:id="@+id/bottom"

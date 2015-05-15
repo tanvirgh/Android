@@ -1,5 +1,9 @@
 package com.sinepulse.app.base;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -11,9 +15,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.inputmethod.InputMethodManager;
@@ -38,6 +44,7 @@ import com.sinepulse.app.activities.SupportActivity_;
 import com.sinepulse.app.activities.UserLogActivity_;
 import com.sinepulse.app.activities.UserProfileActivity_;
 import com.sinepulse.app.asynctasks.AsyncLogOutTask;
+import com.sinepulse.app.utils.CommonConstraints;
 import com.sinepulse.app.utils.CommonIdentifier;
 import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
@@ -117,7 +124,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		com.actionbarsherlock.view.MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.actionbarmenu, menu);
 
-		// CommonValues.getInstance().menuList = menu;
+//		 CommonValues.getInstance().menuList = (android.view.Menu) menu;
 
 		this.actionBarMenu = menu;
 		return true;
@@ -187,6 +194,16 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		Editor editor = getSharedPreferences("clear_cache", Context.MODE_PRIVATE).edit();
+	    editor.clear();
+	    editor.commit();
+		try {
+			
+	         trimCache(this);
+	      } catch (Exception e) {
+	         // TODO Auto-generated catch block
+	         e.printStackTrace();
+	      }
 	}
 
 	@Override
@@ -238,7 +255,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 						CommonTask
 								.ShowNetworkChangeConfirmation(
 										MainActionbarBase.this,
-										"Network State has been changed.Please log in to continue.",
+										"Network State has been changed.Please log in again to continue.",
 										showNetworkChangeEvent());
 
 					}
@@ -338,6 +355,10 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 
 		IntentFilter filter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
+//		filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+//		filter.addAction("android.net.wifi.STATE_CHANGE");
+//		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+		
 		registerReceiver(mConnReceiver, filter);
 //		registerReceiver(conChangeReceiver, filter);
 
@@ -503,7 +524,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 				stackIndex.push(String.valueOf(7));
 			Intent viewIntent = new Intent(
 					"android.intent.action.VIEW",
-					Uri.parse("http://dev.sinepulse.com/SmartHome/Web/Dev/en/Analysis"));
+					Uri.parse("http://dev.sinepulse.com/SmartHome/Web/Dev"));
 			startActivity(viewIntent);
 			break;
 
@@ -518,5 +539,31 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		refresh.setVisible(false);
 		invalidateOptionsMenu();
 	}
+	
+	public static void trimCache(Context context) {
+	      try {
+	         File dir = context.getCacheDir();
+	         if (dir != null && dir.isDirectory()) {
+	            deleteDir(dir);
+	         }
+	      } catch (Exception e) {
+	         // TODO: handle exception
+	      }
+	   }
+
+	   public static boolean deleteDir(File dir) {
+	      if (dir != null && dir.isDirectory()) {
+	         String[] children = dir.list();
+	         for (int i = 0; i < children.length; i++) {
+	            boolean success = deleteDir(new File(dir, children[i]));
+	            if (!success) {
+	               return false;
+	            }
+	         }
+	      }
+
+	      // The directory is now empty so delete it
+	      return dir.delete();
+	   }
 
 }

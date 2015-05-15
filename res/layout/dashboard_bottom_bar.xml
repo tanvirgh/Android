@@ -8,7 +8,7 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/bg_bottom" >
 
-        <Button
+        <com.sinepulse.app.custom.controls.CustomButton
             android:id="@+id/bRoom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
             android:contentDescription="@string/save"
            />
 
-        <Button
+        <com.sinepulse.app.custom.controls.CustomButton
             android:id="@+id/bDashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             android:contentDescription="@string/save"
             />
 
-        <Button
+        <com.sinepulse.app.custom.controls.CustomButton
             android:id="@+id/bCamera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

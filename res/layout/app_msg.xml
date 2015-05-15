@@ -6,7 +6,7 @@
     android:minHeight="48dp"
     android:orientation="vertical" >
 
-    <TextView
+    <com.sinepulse.app.custom.controls.CustomTextView
         android:id="@android:id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

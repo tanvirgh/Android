@@ -25,7 +25,7 @@
         android:layout_toLeftOf="@+id/btdevice_value"
         android:padding="5dp" >
 
-        <TextView
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/tvroom_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <TextView
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/tvdevice_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

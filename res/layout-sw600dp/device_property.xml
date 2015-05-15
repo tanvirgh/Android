@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="25dp"
-    android:background="@drawable/sh_background" >
+   >
 
     <RelativeLayout
         android:id="@+id/top"
@@ -139,7 +139,8 @@
                 android:id="@+id/porda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible" >
+                android:layout_centerInParent="true"
+                android:visibility="invisible" >
 
                 <include
                     android:id="@+id/curtainadcontrol"
@@ -157,7 +158,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignTop="@+id/btShowLog"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="15dp"
              android:layout_marginTop="15dp"
             android:text="DeviceName"
             android:textColor="#FFFFFF"
@@ -170,9 +171,9 @@
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:layout_toRightOf="@+id/tvDeviceName"
             android:background="@drawable/left_curved_button_bg_selected"
             android:gravity="center"

@@ -30,6 +30,7 @@ public class AsyncGetCameraInfo extends AsyncTask<Void, Void, Boolean> {
 	protected void onPreExecute() {
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
 		parentActivity.startProgress();
+		parentActivity.streamingButton.setEnabled(false);
 		
 	}
 	
@@ -53,6 +54,7 @@ public class AsyncGetCameraInfo extends AsyncTask<Void, Void, Boolean> {
 			@Override
 			public void run() {
 				parentActivity.setCameraInfo();
+				parentActivity.streamingButton.setEnabled(true);
 			}
 		});
 		

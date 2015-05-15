@@ -65,10 +65,10 @@ public class JsonParser  extends MainActionbarBase{
 		try {
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpParameters,
+//			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			String json = "";
@@ -121,7 +121,9 @@ public class JsonParser  extends MainActionbarBase{
 				jObject = new JSONObject(result);
 				//API key
 				try {
+					if(CommonValues.getInstance().connectionMode=="Local"){
 					CommonValues.getInstance().ApiKey=jObject.getString("ApiKey");
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -209,13 +211,15 @@ public class JsonParser  extends MainActionbarBase{
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpParameters,
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
+			if(CommonValues.getInstance().connectionMode=="Local"){
 			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
+			}
 			String json = "";
 
 			// 3. build jsonObject
@@ -410,14 +414,16 @@ public class JsonParser  extends MainActionbarBase{
 
 		try{
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpParameters,
-					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
+//			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
+					7000);
+			HttpConnectionParams.setSoTimeout(httpclient.getParams(), 7000);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
+			if(CommonValues.getInstance().connectionMode=="Local"){
 			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
+			}
 			String json = "";
 
 			// 3. build jsonObject
@@ -519,14 +525,16 @@ public class JsonParser  extends MainActionbarBase{
 
 		try{
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpParameters,
+//			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
+			if(CommonValues.getInstance().connectionMode=="Local"){
 			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
+			}
 			String json = "";
 
 			// 3. build jsonObject
@@ -639,26 +647,39 @@ public class JsonParser  extends MainActionbarBase{
 				userProfile.setFirstName(jUserProfile.getString("FirstName"));
 				userProfile.setLastName(jUserProfile.getString("LastName"));
 				userProfile.setMiddleName(jUserProfile.getString("MiddleName"));
+				
+				userProfile.setUserName(jUserProfile.getString("UserName"));
 				userProfile.setEmail(jUserProfile.getString("Email"));
-				userProfile.setCellPhone(jUserProfile.getString("CellPhone"));
 				userProfile.setSex(jUserProfile.getString("Sex"));
+				String results = jUserProfile
+						.getString("DateOfBirth").replaceAll("^/Date\\(", "");
+
+				results = results.substring(0, results.indexOf('+'));
+				Long timeInMillis = Long.valueOf(results);
+				Date dateOfBirth = new Date(timeInMillis);
+				userProfile.setDateOfBirth(dateOfBirth);
+				
+				userProfile.setCellPhone(jUserProfile.getString("CellPhone"));
+				
 				userProfile.setSocialSecurityNumber(jUserProfile
 						.getString("SocialSecurityNumber"));
 
 				Address address = new Address();
 				JSONObject addressJson = new JSONObject();
+				if(!jUserProfile.isNull("Address")){
 				addressJson = jUserProfile.getJSONObject("Address");
 				address.setAddress1(addressJson.getString("Address1"));
 				address.setAddress2(addressJson.getString("Address2"));
 				userProfile.setAddress(address);
+				}
 
-				City city = new City();
-				JSONObject cityJson = new JSONObject();
-				cityJson = addressJson.getJSONObject("City");
-				city.setCountry(cityJson.getString("Country"));
-				city.setName(cityJson.getString("Name"));
-				city.setState(cityJson.getString("State"));
-				userProfile.getAddress().setCity(city);
+//				City city = new City();
+//				JSONObject cityJson = new JSONObject();
+//				cityJson = addressJson.getJSONObject("City");
+//				city.setCountry(cityJson.getString("Country"));
+//				city.setName(cityJson.getString("Name"));
+//				city.setState(cityJson.getString("State"));
+//				userProfile.getAddress().setCity(city);
 
 				CommonValues.getInstance().profile = userProfile;
 
@@ -801,14 +822,16 @@ public class JsonParser  extends MainActionbarBase{
 		try {
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpParameters,
+//			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
+			if(CommonValues.getInstance().connectionMode=="Local"){
 			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
+			}
 			String json = "";
 
 			// 3. build jsonObject
@@ -874,13 +897,15 @@ public class JsonParser  extends MainActionbarBase{
 	public static String sendHttpGetRequest(String url, InputStream is,
 			String result, DefaultHttpClient httpClient) {
 		try {
-			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpParameters,
+//			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(),
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpClient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
 			HttpGet httpGet = new HttpGet(url);
 			httpGet.addHeader("Cookie",cookieID );
+			if(CommonValues.getInstance().connectionMode=="Local"){
 			httpGet.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
+			}
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity httpEntity = httpResponse.getEntity();
 			is = httpEntity.getContent();
@@ -987,10 +1012,10 @@ public class JsonParser  extends MainActionbarBase{
 		try {
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpParameters,
+//			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 //			httpPost.addHeader("Cookie",cookieID );

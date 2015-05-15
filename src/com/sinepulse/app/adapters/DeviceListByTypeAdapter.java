@@ -140,9 +140,9 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 			dth.btdevice_value.setEnabled(true);
 		}
 		if (deviceByTypeEntity.IsOn) {
-			dth.onOffImage.setImageResource(R.drawable.greenled);
+			dth.onOffImage.setImageResource(R.drawable.greenled_medium);
 		} else {
-			dth.onOffImage.setImageResource(R.drawable.redled);
+			dth.onOffImage.setImageResource(R.drawable.redled_medium);
 		}
 
 		dth.btdevice_value

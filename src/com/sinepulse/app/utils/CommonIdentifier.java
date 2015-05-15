@@ -30,6 +30,7 @@ public class CommonIdentifier {
 	public static String Action_Summary ="summary";
 	public static String Action_SingleTicket="singleticket";
 	public static String Action_CameraInfo="camerainfo";
+	public static String Action_DvrInfo="dvrinfo";
 	
 	
 

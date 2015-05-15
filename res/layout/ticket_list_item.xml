@@ -15,7 +15,7 @@
          android:gravity="left|center"
         android:padding="5dp" >
         
-         <TextView
+         <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/tvTicketNumber"
             android:layout_width="35dp"
             android:layout_height="wrap_content"
@@ -30,13 +30,13 @@
             android:textSize="12sp"
             android:textStyle="bold" />
 
-          <TextView
+          <com.sinepulse.app.custom.controls.CustomTextView
               android:id="@+id/tvTktSubject"
               android:layout_width="100dp"
               android:layout_height="wrap_content"
               android:layout_alignBaseline="@+id/tvTicketNumber"
               android:layout_alignBottom="@+id/tvTicketNumber"
-              android:layout_marginLeft="7dp"
+              android:layout_marginLeft="8dp"
               android:layout_toRightOf="@+id/tvTicketNumber"
               android:ellipsize="end"
               android:singleLine="true"
@@ -48,7 +48,7 @@
               android:textSize="12sp"
               android:textStyle="bold" />
 
-          <TextView
+          <com.sinepulse.app.custom.controls.CustomTextView
               android:id="@+id/tvTktSubmissionDate"
               android:layout_width="70dp"
               android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
               android:textSize="12sp"
               android:textStyle="bold" />
 
-          <TextView
+          <com.sinepulse.app.custom.controls.CustomTextView
               android:id="@+id/tvTktStatus"
               android:layout_width="60dp"
               android:layout_height="wrap_content"

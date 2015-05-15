@@ -16,7 +16,7 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1" >
 
-        <TextView
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/secondRowLeft"
             style="@style/HomeButton"
             android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
             android:background="@drawable/bgled"
           android:layout_marginTop="8dp" >
 
-            <TextView
+            <com.sinepulse.app.custom.controls.CustomTextView
                 android:id="@+id/secondRowRightUp"
                 style="@style/HomeButton"
                 android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
             android:layout_marginTop="3dp" 
             android:layout_marginBottom="5dp">
 
-            <TextView
+            <com.sinepulse.app.custom.controls.CustomTextView
                 android:id="@+id/secondRowRightDown"
                 style="@style/HomeButton"
                 android:layout_width="wrap_content"

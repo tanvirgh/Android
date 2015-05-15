@@ -3,9 +3,12 @@
  */
 package com.sinepulse.app.asynctasks;
 
+import com.sinepulse.app.activities.UserLogin;
 import com.sinepulse.app.activities.UserLogin_;
+import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.utils.CommonValues;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 /**
@@ -14,10 +17,10 @@ import android.os.AsyncTask;
  */
 public class CheckMC extends AsyncTask<Void, Void, Boolean> {
 	private String mcUrl;
-	UserLogin_  parentActivity;
+	Context parentActivity;
 	boolean isSolvedLocal=false;
 
-	public CheckMC(String mcUrl, UserLogin_  parentActivity,boolean isSolvedLocal) {
+	public CheckMC(String mcUrl, Context  parentActivity,boolean isSolvedLocal) {
 		this.mcUrl = mcUrl;
 		this.parentActivity = parentActivity;
         this.isSolvedLocal=isSolvedLocal;
@@ -25,7 +28,7 @@ public class CheckMC extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
-		parentActivity.sendMCStatusRequest(mcUrl);
+		((UserLogin) parentActivity).sendMCStatusRequest(mcUrl);
 		return null;
 	}
 
@@ -34,7 +37,7 @@ public class CheckMC extends AsyncTask<Void, Void, Boolean> {
 		// bUserLogin.setEnabled(true);
 				if (isSolvedLocal == true) {
 					// proceedLoginProcess();
-					parentActivity.saveLocalIpInPreference();
+					((UserLogin) parentActivity).saveLocalIpInPreference();
 					CommonValues.getInstance().connectionMode="Local";
 //					Toast.makeText(parentActivity, "Local Mode", Toast.LENGTH_SHORT)
 //							.show();

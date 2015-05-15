@@ -19,13 +19,13 @@
             android:layout_weight="1"
             android:orientation="horizontal" >
 
-            <Button
+            <com.sinepulse.app.custom.controls.CustomButton
                 android:id="@+id/home_btn_feature1"
                 style="@style/HomeButton"
                 android:onClick="onClickFeature"
                 android:text="@string/title_feature1" />
 
-            <Button
+            <com.sinepulse.app.custom.controls.CustomButton
                 android:id="@+id/home_btn_feature2"
                 style="@style/HomeButton"
                 android:onClick="onClickFeature"
@@ -38,13 +38,13 @@
             android:layout_weight="1"
             android:orientation="horizontal" >
 
-            <Button
+            <com.sinepulse.app.custom.controls.CustomButton
                 android:id="@+id/home_btn_feature3"
                 style="@style/HomeButton"
                 android:onClick="onClickFeature"
                 android:text="@string/title_feature3" />
 
-            <Button
+            <com.sinepulse.app.custom.controls.CustomButton
                 android:id="@+id/home_btn_feature4"
                 style="@style/HomeButton"
                 android:onClick="onClickFeature"
@@ -57,13 +57,13 @@
             android:layout_weight="1"
             android:orientation="horizontal" >
 
-            <Button
+            <com.sinepulse.app.custom.controls.CustomButton
                 android:id="@+id/home_btn_feature5"
                 style="@style/HomeButton"
                 android:onClick="onClickFeature"
                 android:text="@string/title_feature5" />
 
-            <Button
+            <com.sinepulse.app.custom.controls.CustomButton
                 android:id="@+id/home_btn_feature6"
                 style="@style/HomeButton"
                 android:onClick="onClickFeature"

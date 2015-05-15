@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/logbgnew" >
+    android:background="@drawable/logbgnewpre" >
 
     <RelativeLayout
         android:id="@+id/rlOnlinePaymentHeading"
@@ -11,34 +11,32 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="18dp"
-        android:layout_marginTop="14dp"
-        android:gravity="center" >
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:visibility="visible" >
 
-        <TextView
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/tvUserProfileHeadingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/userProfileProgressBar"
             android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/userimage"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
-            android:paddingBottom="8dp"
-            android:paddingLeft="0dp"
+            android:paddingLeft="40dp"
             android:paddingRight="30dp"
-            android:paddingTop="5dp"
-            android:text=" User Profile"
+            android:text="   Profile"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:textStyle="bold" />
-
-        <ProgressBar
-            android:id="@+id/userProfileProgressBar"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="0dp" />
     </RelativeLayout>
+     <ProgressBar
+                android:id="@+id/userProfileProgressBar"
+                android:layout_width="240dp"
+                android:layout_height="30dp"
+               android:layout_marginTop="15dp"
+                android:layout_marginLeft="42dp"
+                android:layout_below="@+id/rlOnlinePaymentHeading" />
 
     <ScrollView
         android:id="@+id/body"
@@ -46,16 +44,18 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom"
         android:layout_below="@+id/rlOnlinePaymentHeading"
-        android:layout_marginBottom="10dp" >
+        android:layout_marginBottom="5dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="0dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="5dp"
             android:orientation="vertical" >
+
+           
 
             <RelativeLayout
                 android:id="@+id/rlFirstName"
@@ -63,13 +63,13 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="32dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
 
                 <!-- android:background="@drawable/online_payment_first_row" -->
 
-                <TextView
+                <com.sinepulse.app.custom.controls.CustomTextView
                     android:id="@+id/tvFirstName"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                     android:textSize="12dp" />
                 <!-- android:text="Fornavn" -->
 
-                <EditText
+                <com.sinepulse.app.custom.controls.CustomEditText
                     android:id="@+id/etFirstName"
                     android:layout_width="170dp"
                     android:layout_height="25dp"
@@ -90,60 +90,53 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/tvFirstName"
-                    android:background="@drawable/setting_username_background"
+                    android:background="@drawable/userprofile_et_bg"
                     android:focusable="false"
+                   android:ellipsize="end"
                     android:paddingLeft="5dp"
                     android:paddingRight="0dp"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rlLastName"
+                android:id="@+id/rlUserName"
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="2dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:visibility="gone" >
+                android:focusableInTouchMode="true" >
 
-                <TextView
-                    android:id="@+id/tvLastName"
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvUSerName"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
                     android:paddingLeft="5dp"
                     android:paddingRight="0dp"
-                    android:text="Efternavn"
+                    android:text="User Name"
                     android:textColor="@color/textColor"
                     android:textSize="12dp" />
 
-                <TextView
-                    android:id="@+id/tvLastNameMenderoty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="58dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="left"
-                    android:text="*"
-                    android:textColor="@color/textColor"
-                    android:textSize="15dp" />
-
-                <EditText
-                    android:id="@+id/etLastName"
-                    android:layout_width="fill_parent"
+                <com.sinepulse.app.custom.controls.CustomEditText
+                    android:id="@+id/etUserName"
+                    android:layout_width="170dp"
                     android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toRightOf="@+id/tvLastName"
-                    android:background="@drawable/setting_username_background"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/tvUSerName"
+                    android:background="@drawable/userprofile_et_bg"
+                    android:ems="10"
                     android:focusable="false"
+                    android:lines="1"
+					android:scrollHorizontally="true"
+					android:ellipsize="end"
+					android:singleLine="true"
+					android:editable="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="0dp"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -152,11 +145,11 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="2dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
 
-                <TextView
+                <com.sinepulse.app.custom.controls.CustomTextView
                     android:id="@+id/tvEmail"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
@@ -168,19 +161,96 @@
                     android:textColor="@color/textColor"
                     android:textSize="12sp" />
 
-                <EditText
+                <com.sinepulse.app.custom.controls.CustomEditText
                     android:id="@+id/etEmail"
                     android:layout_width="170dp"
                     android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_alignParentBottom="true"
                     android:layout_toRightOf="@+id/tvEmail"
-                    android:background="@drawable/setting_username_background"
+                    android:background="@drawable/userprofile_et_bg"
+                    android:ems="10"
+                    android:lines="1"
+					android:scrollHorizontally="true"
+					android:ellipsize="end"
+					android:singleLine="true"
+					android:editable="false"
                     android:focusable="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="0dp"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlSex"
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvSex"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="Sex"
+                    android:textColor="@color/textColor"
+                    android:textSize="12sp" />
+
+                <com.sinepulse.app.custom.controls.CustomEditText
+                    android:id="@+id/etSex"
+                    android:layout_width="170dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/tvSex"
+                    android:background="@drawable/userprofile_et_bg"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rldob"
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvdob"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="Date Of Birth"
+                    android:textColor="@color/textColor"
+                    android:textSize="12sp" />
+
+                <com.sinepulse.app.custom.controls.CustomEditText
+                    android:id="@+id/etdob"
+                    android:layout_width="170dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/tvdob"
+                    android:background="@drawable/userprofile_et_bg"
+                    android:ems="10"
+                    android:ellipsize="end"
+                    android:focusable="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -189,11 +259,11 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="2dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
 
-                <TextView
+                <com.sinepulse.app.custom.controls.CustomTextView
                     android:id="@+id/tvAddress"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
@@ -201,97 +271,23 @@
                     android:gravity="left"
                     android:paddingLeft="5dp"
                     android:paddingRight="0dp"
-                    android:text="Address1"
+                    android:text="Address"
                     android:textColor="@color/textColor"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
-                <EditText
+                <com.sinepulse.app.custom.controls.CustomEditText
                     android:id="@+id/etAddress"
                     android:layout_width="170dp"
                     android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_alignParentBottom="true"
                     android:layout_toRightOf="@+id/tvAddress"
-                    android:background="@drawable/setting_username_background"
+                    android:background="@drawable/userprofile_et_bg"
+                    android:ems="10"
+                    android:ellipsize="end"
                     android:focusable="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="0dp"
-                    android:textSize="12dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rlAddress2"
-                android:layout_width="fill_parent"
-                android:layout_height="35dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="1dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true" >
-
-                <TextView
-                    android:id="@+id/tvAddress2"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:gravity="left"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:text="Address2"
-                    android:textColor="@color/textColor"
-                    android:textSize="12dp" />
-
-                <EditText
-                    android:id="@+id/etAddress2"
-                    android:layout_width="170dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toRightOf="@+id/tvAddress2"
-                    android:background="@drawable/setting_username_background"
-                    android:focusable="false"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:textSize="12dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rlCity"
-                android:layout_width="fill_parent"
-                android:layout_height="35dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="1dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true" >
-
-                <TextView
-                    android:id="@+id/tvCity"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:gravity="left"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:text="City"
-                    android:textColor="@color/textColor"
-                    android:textSize="12dp" />
-
-                <EditText
-                    android:id="@+id/etCity"
-                    android:layout_width="170dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toRightOf="@+id/tvCity"
-                    android:background="@drawable/setting_username_background"
-                    android:focusable="false"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -300,11 +296,11 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="2dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
 
-                <TextView
+                <com.sinepulse.app.custom.controls.CustomTextView
                     android:id="@+id/tvTelephone"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
@@ -314,36 +310,37 @@
                     android:paddingRight="0dp"
                     android:text="Cell Phone"
                     android:textColor="@color/textColor"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
-                <EditText
+                <com.sinepulse.app.custom.controls.CustomEditText
                     android:id="@+id/etTelephone"
                     android:layout_width="170dp"
                     android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_alignParentBottom="true"
                     android:layout_toRightOf="@+id/tvTelephone"
-                    android:background="@drawable/setting_username_background"
+                    android:background="@drawable/userprofile_et_bg"
+                    android:ems="10"
+                    android:ellipsize="end"
                     android:focusable="false"
                     android:inputType="textPhonetic"
                     android:paddingLeft="5dp"
                     android:paddingRight="0dp"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rlSex"
+                android:id="@+id/rlSex2"
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="1dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true" >
+                android:focusableInTouchMode="true"
+                android:visibility="gone" >
 
-                <TextView
-                    android:id="@+id/tvSex"
+                <com.sinepulse.app.custom.controls.CustomTextView
+                    android:id="@+id/tvSex2"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -354,15 +351,15 @@
                     android:textColor="@color/textColor"
                     android:textSize="12dp" />
 
-                <EditText
-                    android:id="@+id/etSex"
+                <com.sinepulse.app.custom.controls.CustomEditText
+                    android:id="@+id/etSex2"
                     android:layout_width="170dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:layout_toRightOf="@+id/tvSex"
-                    android:background="@drawable/setting_username_background"
+                    android:layout_toRightOf="@+id/tvSex2"
+                    android:background="@drawable/userprofile_et_bg"
                     android:focusable="false"
                     android:inputType="textPhonetic"
                     android:paddingLeft="5dp"
@@ -378,9 +375,10 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="1dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true" >
+                android:focusableInTouchMode="true"
+                android:visibility="gone" >
 
-                <TextView
+                <com.sinepulse.app.custom.controls.CustomTextView
                     android:id="@+id/tvSocialSecurity"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
@@ -392,13 +390,13 @@
                     android:textColor="@color/textColor"
                     android:textSize="12dp" />
 
-                <EditText
+                <com.sinepulse.app.custom.controls.CustomEditText
                     android:id="@+id/etSocialSecurity"
                     android:layout_width="170dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/tvSocialSecurity"
-                    android:background="@drawable/setting_username_background"
+                    android:background="@drawable/userprofile_et_bg"
                     android:ems="10"
                     android:focusable="false"
                     android:inputType="textPhonetic"
@@ -407,7 +405,7 @@
                     android:textSize="12dp" >
 
                     <requestFocus />
-                </EditText>
+                </com.sinepulse.app.custom.controls.CustomEditText>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
@@ -415,12 +413,13 @@
     <RelativeLayout
         android:id="@+id/bottom"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
+       android:layout_marginTop="10dp"
         android:background="@drawable/bg_bottom"
         android:padding="5dp" >
 
-        <Button
+        <com.sinepulse.app.custom.controls.CustomButton
             android:id="@+id/bRoom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -430,7 +429,7 @@
             android:background="@drawable/room_button_selector"
             android:contentDescription="@string/save" />
 
-        <Button
+        <com.sinepulse.app.custom.controls.CustomButton
             android:id="@+id/bDashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -439,7 +438,7 @@
             android:background="@drawable/dashboard_button_selector"
             android:contentDescription="@string/save" />
 
-        <Button
+        <com.sinepulse.app.custom.controls.CustomButton
             android:id="@+id/bCamera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

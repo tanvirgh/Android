@@ -37,7 +37,9 @@ public class HomeAutomationApplication extends Application{
 		initializeCommonInstance();	
 		// The following line triggers the initialization of ACRA
         ACRA.init(this);
+        
 	}
+	
 
 	// Initialize Instances
 	private void initializeCommonInstance() {

@@ -26,11 +26,11 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.sinepulse.app.R;
-import com.sinepulse.app.activities.RoomManager_;
-import com.sinepulse.app.activities.VideoActivity_;
+import com.sinepulse.app.activities.VideoActivity;
 import com.sinepulse.app.adapters.UserLogAdapter;
 import com.sinepulse.app.asynctasks.AsyncGetUserLogInfo;
 import com.sinepulse.app.base.MainActionbarBase;
+import com.sinepulse.app.entities.RoomManager;
 import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
@@ -168,13 +168,13 @@ public class UserLogFragment extends SherlockFragment implements
 			((MainActionbarBase) getActivity()).displayFragment(0);
 			break;
 		case R.id.bCamera:
-			Intent cameraIntent = new Intent(getActivity(), VideoActivity_.class);
-			cameraIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			startActivity(cameraIntent);
+//			Intent cameraIntent = new Intent(getActivity(), VideoActivity.class);
+//			cameraIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//			startActivity(cameraIntent);
 			
 			break;
 		case R.id.bRoom:
-			Intent roomIntent = new Intent(getActivity(), RoomManager_.class);
+			Intent roomIntent = new Intent(getActivity(), RoomManager.class);
 			roomIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(roomIntent);
 			

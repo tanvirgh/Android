@@ -28,7 +28,7 @@ public class AsyncGetCurtainPresetValues extends AsyncTask<Void, Void, Boolean> 
 
 	@Override
 	protected void onPreExecute() {
-//		parentActivity.startDevicePropertyProgress();
+		parentActivity.startDevicePropertyProgress();
 		
 	}
 	
@@ -44,7 +44,7 @@ public class AsyncGetCurtainPresetValues extends AsyncTask<Void, Void, Boolean> 
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
-//		parentActivity.stopDevicePropertyProgress();
+		parentActivity.stopDevicePropertyProgress();
 				parentActivity.runOnUiThread(new Runnable() {
 					
 					@Override

@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sh_background"
     android:orientation="vertical" >
 
     <com.sinepulse.app.custom.controls.CustomButton
@@ -26,33 +25,34 @@
         android:layout_width="fill_parent"
         android:layout_height="35dp"
         android:layout_below="@+id/bCreateTIcket"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="25dp"
-        android:background="@color/gray_ash"
+        android:background="@drawable/tkt_header"
         android:gravity="left|center_horizontal"
         android:orientation="vertical" >
 
-        <TextView
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/tvTicketNo"
-            android:layout_width="60dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
-            android:text="Ticket No"
-            android:gravity="center"
+            android:text="  No."
+            android:gravity="left|center"
             android:textColor="#FFFFFF"
             android:textSize="13sp"
             android:textStyle="bold"
             android:visibility="visible" />
 
-        <TextView
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/tvSubject"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/tvTicketNo"
+            
             android:gravity="center"
             android:text="Subject"
             android:textColor="#FFFFFF"
@@ -60,7 +60,7 @@
             android:textStyle="bold"
             android:visibility="visible" />
 
-        <TextView
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/tvSubmission"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             android:textStyle="bold"
             android:visibility="visible" />
 
-        <TextView
+        <com.sinepulse.app.custom.controls.CustomTextView
             android:id="@+id/tvStatus"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
         android:layout_below="@+id/rlHeader"
         android:gravity="left|center"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="9dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
         tools:listitem="@layout/ticket_list_item" >

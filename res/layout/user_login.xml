@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sh_background"
+    android:background="@drawable/sh_background_lyt"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -16,13 +16,13 @@
         <com.sinepulse.app.custom.controls.CustomEditText
             android:id="@+id/etUserName"
             android:layout_width="fill_parent"
-            android:layout_height="55dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/bg_cell_dark"
-            android:drawableLeft="@drawable/username1"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/bg_cell_light"
+            android:drawableLeft="@drawable/username1mb"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:hint="@string/username"
@@ -30,7 +30,7 @@
             android:maxLines="1"
             android:paddingLeft="7dp"
             android:paddingRight="0dp"
-            android:text="admin@d.com"
+            android:text=""
             android:textColor="@color/white"
             android:textCursorDrawable="@drawable/custom_cursor"
             android:windowSoftInputMode="stateHidden" >
@@ -39,21 +39,21 @@
         <com.sinepulse.app.custom.controls.CustomEditText
             android:id="@+id/etUserPassword"
             android:layout_width="fill_parent"
-            android:layout_height="55dp"
+            android:layout_height="50dp"
             android:layout_below="@+id/etUserName"
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/bg_cell_dark"
-            android:drawableLeft="@drawable/passkey"
+            android:background="@drawable/bg_cell_light"
+            android:drawableLeft="@drawable/passkeymb"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:hint="@string/password"
             android:inputType="textPassword"
             android:paddingLeft="7dp"
             android:paddingRight="0dp"
-            android:text="123456"
+            android:text=""
             android:textColor="@color/white"
             android:textCursorDrawable="@drawable/custom_cursor" >
         </com.sinepulse.app.custom.controls.CustomEditText>
@@ -77,10 +77,10 @@
             android:layout_height="2dp"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/etUserName"
-           android:layout_marginLeft="15dp"
-           android:layout_marginTop="3dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/dark_gray"
+           android:layout_marginLeft="25dp"
+           android:layout_marginTop="2dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/log_in_page_devider"
             android:contentDescription="@string/todo" />
 
     </RelativeLayout>

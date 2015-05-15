@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.TextView;
 import com.sinepulse.app.R.id;
 import com.sinepulse.app.R.layout;
 import org.androidannotations.api.SdkVersionHelper;
@@ -81,6 +82,7 @@ public final class About_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
+        tvAboutHeadingText1 = ((TextView) hasViews.findViewById(id.tvAboutHeadingText1));
         bRoom = ((Button) hasViews.findViewById(id.bRoom));
         bCamera = ((Button) hasViews.findViewById(id.bCamera));
         bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
@@ -110,6 +112,18 @@ public final class About_
         }
         if (hasViews.findViewById(id.bRoom)!= null) {
             hasViews.findViewById(id.bRoom).setOnClickListener(new OnClickListener() {
+
+
+                @Override
+                public void onClick(View view) {
+                    About_.this.onClick(view);
+                }
+
+            }
+            );
+        }
+        if (hasViews.findViewById(id.tvAboutHeadingText1)!= null) {
+            hasViews.findViewById(id.tvAboutHeadingText1).setOnClickListener(new OnClickListener() {
 
 
                 @Override

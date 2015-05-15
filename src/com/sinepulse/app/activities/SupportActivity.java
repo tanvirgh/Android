@@ -14,6 +14,8 @@ import org.androidannotations.annotations.ViewById;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -26,9 +28,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.OnMenuVisibilityListener;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.adapters.AllTicketListAdapter;
@@ -36,6 +40,7 @@ import com.sinepulse.app.asynctasks.AsyncCreateTicket;
 import com.sinepulse.app.asynctasks.AsyncGetAllTickets;
 import com.sinepulse.app.asynctasks.AsyncGetTicketType;
 import com.sinepulse.app.asynctasks.AsyncLoadTicketDetails;
+import com.sinepulse.app.asynctasks.AsyncRefreshDashBoard;
 import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.utils.CommonIdentifier;
 import com.sinepulse.app.utils.CommonTask;
@@ -48,7 +53,8 @@ import com.sinepulse.app.utils.JsonParser;
  * 
  */
 @EActivity(R.layout.help_page)
-public class SupportActivity extends MainActionbarBase implements OnClickListener, OnItemClickListener {
+public class SupportActivity extends MainActionbarBase implements
+		OnClickListener, OnItemClickListener{
 
 	public static ActionBar mSupportActionBar;
 	@ViewById(R.id.bCamera)
@@ -87,8 +93,10 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 	public EditText etTktMessage;
 	@ViewById(R.id.etTicketNo)
 	public EditText etTicketNo;
+//	@ViewById(R.id.menu_refresh)
+//	public Button refresh;
 	InputMethodManager imm;
-	
+
 	private AllTicketListAdapter tAdapter;
 	public static final int INITIAL_STATE = -1, VIEWSINGLETICKET_STATE = 0,
 			CREATETICKET_STATE = 1;
@@ -99,32 +107,62 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 	};
 
 	public static TicketsState backState = TicketsState.INITIAL_STATE;
-	AsyncGetTicketType asyncGetTicketType=null;
-	AsyncCreateTicket asyncCreateTicket=null;
-	AsyncGetAllTickets asyncGetAllTickets=null;
-	AsyncLoadTicketDetails asyncLoadTicketDetails=null;
-//	public static Context context;
+	AsyncGetTicketType asyncGetTicketType = null;
+	AsyncCreateTicket asyncCreateTicket = null;
+	AsyncGetAllTickets asyncGetAllTickets = null;
+	AsyncLoadTicketDetails asyncLoadTicketDetails = null;
+
+	// public static Context context;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// setTheme(R.style.settinglistbackground);
 		super.onCreate(savedInstanceState);
-//		HelpActivity.context = this;
+		// HelpActivity.context = this;
 		createMenuBar();
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-		
-		
 
 	}
-
+	private boolean isReached = false;
 	@AfterViews
 	void afterViewLoaded() {
 		backState = TicketsState.INITIAL_STATE;
-//		btSubmitTicket.setEnabled(false);
+		// btSubmitTicket.setEnabled(false);
 		vfTicket.setDisplayedChild(0);
+//		View refreshbtn=findViewById(R.id.menu_refresh);
 		loadAllTicketList();
-		
+		etMessage.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+//				getTenCharPerLineString(etMessage.getText().toString().trim());
+//				etMessage.setText(getTenCharPerLineString(etMessage.getText().toString().trim()));
+				/* if(etMessage.getText().length()==35 && !isReached) {
+					 etMessage.append("\n");
+			            isReached = true;
+				}
+			        // if edittext has less than 10chars & boolean has changed, reset
+				 else{
+			        	isReached = false;
+			        }*/
+				}
+				
+		});
+
 	}
 
 	/**
@@ -135,9 +173,26 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 		if (asyncGetAllTickets != null) {
 			asyncGetAllTickets.cancel(true);
 		}
-		asyncGetAllTickets = new AsyncGetAllTickets(this,CommonValues.getInstance().userId);
+		asyncGetAllTickets = new AsyncGetAllTickets(this,
+				CommonValues.getInstance().userId);
 		asyncGetAllTickets.execute();
+//		View refreshbtn=findViewById(R.id.menu_refresh);
+		
 	}
+	public String getTenCharPerLineString(String text){
+
+	    String tenCharPerLineString = "";
+	    while (text.length() > 10) {
+
+	        String buffer = text.substring(0, 10);
+	        tenCharPerLineString = tenCharPerLineString + buffer + "/n";
+	        text = text.substring(10);
+	    }
+
+	    tenCharPerLineString = tenCharPerLineString + text.substring(0);
+	    return tenCharPerLineString;
+	}
+	
 
 	private void createMenuBar() {
 		mSupportActionBar = getSupportActionBar();
@@ -145,16 +200,17 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 				R.drawable.tool_bar));
 
 		mSupportActionBar.setIcon(R.drawable.sp_logo);
-		mSupportActionBar.setTitle("Help");
+		mSupportActionBar.setTitle("Support");
 		mSupportActionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
-
 			onBackPressed();
-
+		}
+		if (item.getItemId() == R.id.menu_refresh && vfTicket.getDisplayedChild()==0) {
+			loadAllTicketList();
 		}
 		return true;
 	}
@@ -162,17 +218,19 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		hideRefreshMenu(menu);
+		setActionBarMenuVisibility(true);
 		return prepared;
 	}
 
 	@Override
-	@Click({ R.id.bCamera, R.id.bDashboard, R.id.bRoom, R.id.bCreateTIcket,R.id.btSubmitTicket })
+	@Click({ R.id.bCamera, R.id.bDashboard, R.id.bRoom, R.id.bCreateTIcket,
+			R.id.btSubmitTicket })
 	public void onClick(View v) {
+		
 		switch (v.getId()) {
 		case R.id.bDashboard:
-			if(MainActionbarBase.stackIndex!=null){
-			MainActionbarBase.stackIndex.removeAllElements();
+			if (MainActionbarBase.stackIndex != null) {
+				MainActionbarBase.stackIndex.removeAllElements();
 			}
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
 			Home.navDrawerAdapter.setSelectedPosition(ALLDEVICE_FRAGMENT);
@@ -184,10 +242,10 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 			startActivity(homeIntent);
 			break;
 		case R.id.bCamera:
-//			spType.setEnabled(false);
+			// spType.setEnabled(false);
 			spType.setAdapter(null);
-			if(MainActionbarBase.stackIndex!=null){
-			MainActionbarBase.stackIndex.removeAllElements();
+			if (MainActionbarBase.stackIndex != null) {
+				MainActionbarBase.stackIndex.removeAllElements();
 			}
 			currentFragment = CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))
@@ -198,8 +256,8 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 
 			break;
 		case R.id.bRoom:
-			if(MainActionbarBase.stackIndex!=null){
-			MainActionbarBase.stackIndex.removeAllElements();
+			if (MainActionbarBase.stackIndex != null) {
+				MainActionbarBase.stackIndex.removeAllElements();
 			}
 			currentFragment = ROOM_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(5)))
@@ -210,31 +268,39 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 
 			break;
 		case R.id.btSubmitTicket:
-			if(validateSubmitTicketWindow()){
-			String Subject=etSubject.getText().toString().trim();
-			String Details=etMessage.getText().toString().trim();
-			int TicketTypeId=CommonValues.getInstance().ticketTypeList.get(spType.getSelectedItemPosition()).Id;
-			if (asyncCreateTicket != null) {
-				asyncCreateTicket.cancel(true);
-			}
-			asyncCreateTicket = new AsyncCreateTicket(this,CommonValues.getInstance().userId,Subject,Details,TicketTypeId);
-			asyncCreateTicket.execute();
+			if (validateSubmitTicketWindow()) {
+				String Subject = etSubject.getText().toString().trim();
+				
+				String Details = etMessage.getText().toString().trim();
+				
+				
+				int TicketTypeId = CommonValues.getInstance().ticketTypeList
+						.get(spType.getSelectedItemPosition()).Id;
+				if (asyncCreateTicket != null) {
+					asyncCreateTicket.cancel(true);
+				}
+				asyncCreateTicket = new AsyncCreateTicket(this,
+						CommonValues.getInstance().userId, Subject, Details,
+						TicketTypeId);
+				asyncCreateTicket.execute();
 			}
 
 			break;
 		case R.id.bCreateTIcket:
+			setActionBarMenuVisibility(false);
 			imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			etSubject.requestFocus();
-//			CommonTask.showSoftKeybord(etSubject);
+			// CommonTask.showSoftKeybord(etSubject);
 			getSupportActionBar().setTitle("Create Ticket");
 			vfTicket.setInAnimation(CommonTask.inFromRightAnimation());
 			vfTicket.setOutAnimation(CommonTask.outToLeftAnimation());
 			vfTicket.setDisplayedChild(1);
-			backState=TicketsState.CREATETICKET_STATE;
+			backState = TicketsState.CREATETICKET_STATE;
 			if (asyncGetTicketType != null) {
 				asyncGetTicketType.cancel(true);
 			}
-			asyncGetTicketType = new AsyncGetTicketType(this,CommonValues.getInstance().userId);
+			asyncGetTicketType = new AsyncGetTicketType(this,
+					CommonValues.getInstance().userId);
 			asyncGetTicketType.execute();
 
 			break;
@@ -262,23 +328,24 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 	public void onBackPressed() {
 		vfTicket.setInAnimation(CommonTask.inFromLeftAnimation());
 		vfTicket.setOutAnimation(CommonTask.outToRightAnimation());
+		setActionBarMenuVisibility(true);
 		switch (backState) {
 		case INITIAL_STATE:
-			if(MainActionbarBase.stackIndex!=null){
-			MainActionbarBase.stackIndex.removeAllElements();
+			if (MainActionbarBase.stackIndex != null) {
+				MainActionbarBase.stackIndex.removeAllElements();
 			}
 			Intent homeIntent = new Intent(this, Home_.class);
 			homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(homeIntent);
 			break;
 		case VIEWSINGLETICKET_STATE:
-			mSupportActionBar.setTitle("Help");
+			mSupportActionBar.setTitle("Support");
 			vfTicket.setDisplayedChild(0);
 			backState = TicketsState.INITIAL_STATE;
 			loadAllTicketList();
 			break;
 		case CREATETICKET_STATE:
-			mSupportActionBar.setTitle("Help");
+			mSupportActionBar.setTitle("Support");
 			vfTicket.setDisplayedChild(0);
 			backState = TicketsState.INITIAL_STATE;
 			loadAllTicketList();
@@ -298,29 +365,32 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 			return true;
 		}
 		return false;
-		
+
 	}
 
 	public void setTIcketTypeResponseData() {
 		String[] ticketTypeValues = getTicketTypeValues();
 		ArrayAdapter<String> ticketTypeAdapter = new ArrayAdapter<String>(this,
 				R.layout.spinner_item, ticketTypeValues);
-		ticketTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ticketTypeAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spType.setAdapter(ticketTypeAdapter);
-//		spType.setSelection(presetItemPosition + 1);
-		
+		// spType.setSelection(presetItemPosition + 1);
+
 	}
 
 	private String[] getTicketTypeValues() {
 		// TODO Auto-generated method stub
-		if (CommonValues.getInstance().ticketTypeList != null && CommonValues.getInstance().ticketTypeList.size()>0) {
+		if (CommonValues.getInstance().ticketTypeList != null
+				&& CommonValues.getInstance().ticketTypeList.size() > 0) {
 			String[] ticketTypeArray = new String[CommonValues.getInstance().ticketTypeList
 					.size()];
-			for (int i = 0; i < CommonValues.getInstance().ticketTypeList.size(); i++) {
-				ticketTypeArray[i] = CommonValues.getInstance().ticketTypeList.get(i)
-						.getTypeName();
+			for (int i = 0; i < CommonValues.getInstance().ticketTypeList
+					.size(); i++) {
+				ticketTypeArray[i] = CommonValues.getInstance().ticketTypeList
+						.get(i).getTypeName();
 			}
-//			shouldSetPreset = false;
+			// shouldSetPreset = false;
 			return ticketTypeArray;
 		} else {
 			// shouldSetPreset = true;
@@ -329,17 +399,19 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 		}
 	}
 
-	public boolean sendCreateTicketRequest(int userId,String Subject,String Details,Integer TicketTypeId) {
+	public boolean sendCreateTicketRequest(int userId, String Subject,
+			String Details, Integer TicketTypeId) {
 		String createTicketUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ String.valueOf(userId) + "/newTicket";
 
-		if (JsonParser.postCreateTicketRequest(createTicketUrl,Subject,Details,TicketTypeId) != null) {
+		if (JsonParser.postCreateTicketRequest(createTicketUrl, Subject,
+				Details, TicketTypeId) != null) {
 			return true;
 		}
 		return false;
-		
+
 	}
-	
+
 	public void startProgress() {
 		pbTicket.setVisibility(View.VISIBLE);
 	}
@@ -350,6 +422,7 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 			pbTicket.setVisibility(View.GONE);
 		}
 	}
+
 	public void startCreateTktProgress() {
 		pbCreateTicket.setVisibility(View.VISIBLE);
 	}
@@ -360,6 +433,7 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 			pbCreateTicket.setVisibility(View.GONE);
 		}
 	}
+
 	public void startSingleTktProgress() {
 		pbSingleTicket.setVisibility(View.VISIBLE);
 	}
@@ -379,12 +453,14 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 			return true;
 		}
 		return false;
-		
+
 	}
-	
+
 	public void setAllTicketListViewAdapter() {
-		if (CommonValues.getInstance().allTicketList != null && CommonValues.getInstance().allTicketList.size()>0) {
-			tAdapter = new AllTicketListAdapter(this, R.layout.ticket_list_item,
+		if (CommonValues.getInstance().allTicketList != null
+				&& CommonValues.getInstance().allTicketList.size() > 0) {
+			tAdapter = new AllTicketListAdapter(this,
+					R.layout.ticket_list_item,
 					CommonValues.getInstance().allTicketList);
 			ticketListView.setAdapter(tAdapter);
 			tAdapter.setTouchEnabled(false);
@@ -399,6 +475,7 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		setActionBarMenuVisibility(false);
 		vfTicket.setInAnimation(CommonTask.inFromRightAnimation());
 		vfTicket.setOutAnimation(CommonTask.outToLeftAnimation());
 		getSupportActionBar().setTitle("Ticket Detials");
@@ -408,20 +485,22 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 		if (asyncLoadTicketDetails != null) {
 			asyncLoadTicketDetails.cancel(true);
 		}
-		asyncLoadTicketDetails = new AsyncLoadTicketDetails(this,CommonValues.getInstance().userId,CommonValues.getInstance().allTicketList.get(position).getId());
+		asyncLoadTicketDetails = new AsyncLoadTicketDetails(this,
+				CommonValues.getInstance().userId,
+				CommonValues.getInstance().allTicketList.get(position).getId());
 		asyncLoadTicketDetails.execute();
-		
+
 	}
 
 	public void resetCreateTicketWindow() {
 		etSubject.setText("");
 		etMessage.setText("");
-		
+
 	}
 
 	public boolean loadTicketDetails(int userId, int ticketId) {
 		String getViewTicketUrl = CommonURL.getInstance().GetCommonURL + "/"
-				+ userId + "/tickets"+"/"+ticketId;
+				+ userId + "/tickets" + "/" + ticketId;
 
 		if (JsonParser.getViewTicketRequest(getViewTicketUrl) != null) {
 			return true;
@@ -431,28 +510,32 @@ public class SupportActivity extends MainActionbarBase implements OnClickListene
 
 	public void setSingleTicketData() {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Long timeInMillis = Long.valueOf(CommonValues.getInstance().singleTicket.getSubmissionDate().getTime());
+		Long timeInMillis = Long
+				.valueOf(CommonValues.getInstance().singleTicket
+						.getSubmissionDate().getTime());
 		Date LoggedAt = new Date(timeInMillis);
 		etDate.setText(formatter.format(LoggedAt));
-		etTktSubject.setText(CommonValues.getInstance().singleTicket.getSubject());
+		etTktSubject.setText(CommonValues.getInstance().singleTicket
+				.getSubject());
 		etStatus.setText(CommonValues.getInstance().singleTicket.getStatus());
-		etTktMessage.setText(CommonValues.getInstance().singleTicket.getDetails());
-		etTicketNo.setText(String.valueOf(CommonValues.getInstance().singleTicket.getId()));
-		
+		etTktMessage.setText(CommonValues.getInstance().singleTicket
+				.getDetails());
+		etTicketNo
+				.setText(String.valueOf(CommonValues.getInstance().singleTicket
+						.getId()));
+
 	}
-	
-private boolean validateSubmitTicketWindow() {
-		
-		if (etSubject.getText().toString().trim().equals("")){
+
+	private boolean validateSubmitTicketWindow() {
+
+		if (etSubject.getText().toString().trim().equals("")) {
 			etSubject.setError("Please provide Ticket Subject.");
 			return false;
-		}
-		else if( etMessage.getText().toString().trim().equals("")){
+		} else if (etMessage.getText().toString().trim().equals("")) {
 			etMessage.setError("Please provide Ticket Details.");
 			return false;
 		}
-		
-		
+
 		else {
 			etSubject.setError(null);
 			etMessage.setError(null);
@@ -460,6 +543,16 @@ private boolean validateSubmitTicketWindow() {
 		}
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setActionBarMenuVisibility(boolean visibility) {
+		if (MainActionbarBase.actionBarMenu != null) {
+			int size = MainActionbarBase.actionBarMenu.size();
+			for (int i = 0; i < size; i++) {
+				MainActionbarBase.actionBarMenu.getItem(i).setVisible(
+						visibility);
+			}
+		}
 	}
 
 }

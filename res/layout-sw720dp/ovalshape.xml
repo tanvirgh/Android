@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
      android:id="@+id/curtainControl"
     android:layout_width="match_parent"
-    android:layout_marginTop="115dp"
+    android:layout_marginTop="0dp"
     android:layout_height="400dp" >
 
     

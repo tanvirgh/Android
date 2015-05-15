@@ -3,8 +3,8 @@
     android:id="@+id/rlDeviceByTypeDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="15dp"
-    android:background="@drawable/sh_background" >
+    android:padding="20dp"
+   >
 
      <RelativeLayout
         android:id="@+id/top"
@@ -25,7 +25,7 @@
          android:layout_marginLeft="10dp"
          android:gravity="center_vertical|center_horizontal" />
 
-      <TextView
+      <com.sinepulse.app.custom.controls.CustomTextView
           android:id="@+id/tvdeviceValue"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -52,6 +52,7 @@
         android:id="@+id/lvDeviceList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+       android:dividerHeight="2dp"
         android:layout_below="@+id/top"
         android:layout_marginTop="7dp"
         tools:listitem="@layout/device_typewise_listitem_view" >
