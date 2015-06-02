@@ -295,10 +295,20 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		String getRoomUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ String.valueOf(userId) + "/rooms";
 
-		if (JsonParser.getRoomRequest(getRoomUrl) != null) {
+		if (JsonParser.getRoomRequest(getRoomUrl) != null && JsonParser.getRoomRequest(getRoomUrl) !="") {
 			return true;
-		}
+		}else{
+			RoomManager.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					asyncGetRoomInfo.cancel(true);
+				}
+			});
+			
 		return false;
+		}
 	}
 
 	public void setupRoomListViewAdapter() {
@@ -311,11 +321,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			roomListView.setEnabled(true);
 			roomListView.setOnItemClickListener(this);
 		} else {
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "No Data returned from server.");
 		}
 
 	}
@@ -338,12 +344,12 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			deviceListView.setEnabled(true);
 			deviceListView.setOnItemClickListener(this);
 		} else {
-//			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "No Data returned from Server");
+//			CommonTask
+//			.ShowNetworkChangeConfirmation(
+//					this,
+//					"Network State has been changed.Please log in again to continue.",
+//					showNetworkChangeEvent());
 		}
 
 	}
@@ -363,11 +369,11 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			roomListView.setSelectionFromTop(position, view.getTop());
 			roomManagerEntity = rAdapter.getItemAtPosition(position);
 			btAddDevice.setText("  " + roomManagerEntity.Name);
-			// btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-			// R.drawable.icon_room_medium, 0, 0, 0);
-			// new DisplayRoomDetails(RoomManagerFragment.this,
-			// roomManagerEntity.Id);
 			roomid = roomManagerEntity.getId();
+			if(CommonValues.getInstance().deviceList!=null){
+				CommonValues.getInstance().deviceList.clear();
+				deviceListView.setAdapter(null);
+				}
 			LoadRoomDetailsContent(roomid);
 
 			// displayFragment(7);
@@ -423,10 +429,20 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		String getDevicePropertyUrl = CommonURL.getInstance().GetCommonURL
 				+ "/" + CommonValues.getInstance().userId + "/properties?id="
 				+ DeviceId;
-		if (JsonParser.getDevicePropertyRequest(getDevicePropertyUrl) != null) {
+		if (JsonParser.getDevicePropertyRequest(getDevicePropertyUrl) != null && JsonParser.getDevicePropertyRequest(getDevicePropertyUrl) !="") {
 			return true;
-		}
+		}else{
+			RoomManager.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					asyncGetDeviceProperty.cancel(true);
+				}
+			});
+			
 		return false;
+		}
 
 	}
 
@@ -525,12 +541,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 						.get(i));
 			}
 		} else {
-//			CommonTask.ShowMessage(this, "Network Problem.Please Retry.");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "No Data Returned From Server.");
 		}
 	}
 
@@ -700,7 +711,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 					boolean isChecked) {
 				sendSetProperty(CommonValues.getInstance().userId,
 						(isChecked ? 1 : 0), deviceId, 1);
-				// toggleButton2.setEnabled(false);
+				buttonView.setEnabled(false);
 			}
 		});
 		/*
@@ -771,10 +782,20 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				+ userId + "/property?id=" + deviceId + "&propertyid="
 				+ propertyId + "&value=" + value;
 		System.out.println(setPropertyUrl);
-		if (JsonParser.setProptyerRequest(setPropertyUrl) != null) {
+		if (JsonParser.setProptyerRequest(setPropertyUrl) != null && JsonParser.setProptyerRequest(setPropertyUrl) !="") {
 			return true;
-		}
+		}else{
+			RoomManager.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					asyncGetSetPropertyFromRoom.cancel(true);
+				}
+			});
+			
 		return false;
+		}
 
 	}
 
@@ -786,7 +807,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 						.get(i));
 			}
 		} else {
-			CommonTask.ShowMessage(this, "Network Error.Please try Later");
+			CommonTask.ShowMessage(this, "No Data Returned From Server.");
 		}
 
 	}
@@ -821,10 +842,22 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				+ CommonValues.getInstance().userId + "/device/"
 				+ String.valueOf(deviceId) + "/activities";
 		if (JsonParser.postDeviceLogRequest(getDeviceLogUrl, FilterType,
-				fromDate, toDate) != null) {
+				fromDate, toDate) != null && JsonParser.postDeviceLogRequest(getDeviceLogUrl, FilterType,
+						fromDate, toDate) !="") {
 			return true;
-		}
+		}else{
+			RoomManager.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask.ShowMessage(RoomManager.this, "No Data Returned From Server.");
+//					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+//					asyncGetDeviceLogInfo.cancel(true);
+				}
+			});
+			
 		return false;
+		}
 
 	}
 
@@ -843,118 +876,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				tvEmptyLog.setText("Sorry! No Log Available");
 			}
 		} else {
-//			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "No Data Returned from Server");
+			
 		}
 
-		// }
-
-		// Dialog dialog;
-		//
-		// private void showCalendar(final View v) {
-		// dialog = new Dialog(this);
-		// dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		// dialog.setContentView(R.layout.delivery_date);
-		// dialog.setCancelable(true);
-		//
-		// final CalendarView calendarView1 = (CalendarView) dialog
-		// .findViewById(R.id.calendarView1);
-		//
-		// calendarView1.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// calendarView1.getDate();
-		//
-		// }
-		// });
-		// calendarView1.setOnDateChangeListener(new OnDateChangeListener() {
-		//
-		// @Override
-		// @SuppressWarnings("deprecation")
-		// public void onSelectedDayChange(CalendarView view, int year,
-		// int month, int dayOfMonth) {
-		// tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-		// tvToday.setTextColor(Color.parseColor("#bdbdbd"));
-		// SimpleDateFormat formatter = new SimpleDateFormat(
-		// "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-		// if (etDateFrom != null && v.getId() == R.id.etDateFrom) {
-		// fromDate = formatter.format(
-		// new Date(year - 1900, month, dayOfMonth))
-		// .toString();
-		// String delims = "T";
-		// String[] tokens = fromDate.split(delims);
-		// try {
-		// Date firstDate = formatter.parse(fromDate);
-		// Date CurrentDate = d;
-		// if(firstDate.after(CurrentDate)){
-		// showFirstDateError();
-		// }else{
-		// etDateFrom.setText(tokens[0]);
-		// }
-		// } catch (ParseException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// if (etDateTo != null && v.getId() == R.id.etDateTo) {
-		// if (etDateFrom.getText().toString().length() > 0) {
-		// toDate = formatter.format(
-		// new Date(year - 1900, month, dayOfMonth))
-		// .toString();
-		// String delims = "T";
-		// String[] tokens = toDate.split(delims);
-		// if (validateLastDateInput()) {
-		// etDateTo.setText(tokens[0]);
-		// bSearch.setVisibility(View.VISIBLE);
-		// }
-		// } else {
-		// showError();
-		// }
-		// }
-		// // dialog.cancel();
-		// }
-		// });
-		//
-		// // Date ok button
-		// Button button = (Button) dialog.findViewById(R.id.Button01);
-		// button.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// dialog.cancel();
-		//
-		// }
-		// });
-		// // Date cancel button
-		// Button button2 = (Button) dialog.findViewById(R.id.Button02);
-		// button2.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// dialog.cancel();
-		//
-		// }
-		// });
-		//
-		// // now that the dialog is set up, it's time to show it
-		// dialog.show();
-
-		/*
-		 * bSearch.setOnClickListener(new OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) {
-		 * tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-		 * tvToday.setTextColor(Color.parseColor("#bdbdbd")); if
-		 * (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-		 * deviceLogListView.setAdapter(null); dLogAdapter.clear(); }
-		 * LoadDeviceLogContent(deviceManagerEntity.Id, 3, stserverDate,
-		 * lstserverDate);
-		 * 
-		 * } });
-		 */
 
 	}
 
@@ -1002,10 +927,20 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				+ String.valueOf(userId) + "/devices?roomid=" + roomId
 				+ "&typeId=0";
 
-		if (JsonParser.getDevicesRequest(getDeviceUrl) != null) {
+		if (JsonParser.getDevicesRequest(getDeviceUrl) != null && JsonParser.getDevicesRequest(getDeviceUrl) !="") {
 			return true;
-		}
+		}else{
+			RoomManager.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					asyncGetDeviceInfo.cancel(true);
+				}
+			});
+			
 		return false;
+		}
 
 	}
 
@@ -1109,9 +1044,9 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		}
 		if (vfRoom.getDisplayedChild() == 3) {
 //			getSupportActionBar().setTitle("Activities");
-			bSearch.setVisibility(View.INVISIBLE);
-			LoadDeviceLogContent(deviceManagerEntity.Id, 1, formatter.format(d)
-					.toString(), formatter.format(d).toString());
+//			bSearch.setVisibility(View.INVISIBLE);
+//			LoadDeviceLogContent(deviceManagerEntity.Id, 1, formatter.format(d)
+//					.toString(), formatter.format(d).toString());
 
 		}
 		bRoom.setBackground(getResources().getDrawable(R.drawable.roomselected));
@@ -1151,6 +1086,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.bCamera:
 			// cancelAsyncOnVisibleFlipper();
+//			Toast.makeText(RoomManager.this, "No Servilance System Available", Toast.LENGTH_SHORT).show();
 			if (MainActionbarBase.stackIndex != null) {
 				MainActionbarBase.stackIndex.removeAllElements();
 			}
@@ -1162,6 +1098,13 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			startActivity(cameraIntent);
 			break;
 		case R.id.bRoom:
+			if (vfRoom.getDisplayedChild() == 0) {
+				return;
+			} else {
+				getSupportActionBar().setTitle("Rooms");
+				new AsyncGetRoom(RoomManager.this,CommonValues.getInstance().userId).execute();
+				vfRoom.setDisplayedChild(0);
+			}
 			break;
 		case R.id.bDashboard:
 			if (MainActionbarBase.stackIndex != null) {
@@ -1249,10 +1192,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			 bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#6699ff"));
-			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
+		/*	if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 				deviceLogListView.setAdapter(null);
 				dLogAdapter.clear();
-			}
+			}*/
 			LoadDeviceLogContent(deviceManagerEntity.DeviceTypeId, 1, formatter
 					.format(d).toString(), formatter.format(d).toString());
 			break;
@@ -1270,10 +1213,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			 bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#6699ff"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
-			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
+		/*	if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 				deviceLogListView.setAdapter(null);
 				dLogAdapter.clear();
-			}
+			}*/
 			LoadDeviceLogContent(deviceManagerEntity.DeviceTypeId, 2, formatter
 					.format(d.getTime() - 24 * 60 * 60 * 1000).toString(),
 					formatter.format(d.getTime() - 24 * 60 * 60 * 1000)

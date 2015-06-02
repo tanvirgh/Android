@@ -521,8 +521,8 @@ public class CommonTask {
 		NetworkInfo networkInfo = null;
 		State networkState = null;
 		if (connectivityManager != null) {
-			networkInfo = connectivityManager
-					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			networkInfo = connectivityManager.
+					getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 			if (networkInfo != null) {
 				networkState = networkInfo.getState();
 				if (networkState == NetworkInfo.State.CONNECTED
@@ -543,7 +543,14 @@ public class CommonTask {
 
 		}
 		return false;
+		
+	/*	if(connectivityManager.getBackgroundDataSetting()==true){
+			return true;
+		}else{
+			return false;
+		}*/
 	}
+	
 
 	public static String lastConType = "";
 

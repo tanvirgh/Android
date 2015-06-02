@@ -101,8 +101,8 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 
 		final DeviceByTypeHolder dth;
 		deviceByTypeEntity = deviceByTypeList.get(position);
-//		System.out.println("ISonInAdapter " + deviceByTypeEntity.IsOn);
 		deviceByTypeEntity.RowId = position;
+		
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -42,11 +42,16 @@ public class AsyncCheckServerStateAndSaveServerInfo extends AsyncTask<Void, Void
 	@Override
 	protected void onPostExecute(Boolean result) {
 		saveLogInData.stopmenuProgress();
+		android.os.AsyncTask.Status status = getStatus();
+		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
+			if (saveLogInData != null) {
 		if (!CommonValues.getInstance().IsServerConnectionError) {
 			saveLogInData.setUserInfoAfterSave();
 		} else {
 			CommonTask.ShowMessage(saveLogInData,
-					saveLogInData.getString(R.string.wronguserpass));
+					CommonValues.getInstance().loginError);
+		}
+			}
 		}
 
 	}

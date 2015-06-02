@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.sinepulse.app.R;
+import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.NetworkUtil;
 
 /**
@@ -15,16 +17,17 @@ import com.sinepulse.app.utils.NetworkUtil;
  * @author Tac
  * 
  */
-public class SplashScreen extends Activity {
+public class SplashScreen extends SherlockFragmentActivity {
 
 	// how long until we go to the next activity
 	protected boolean _active = true;
-	protected int _splashTime = 5000; // time to display the splash screen in ms
+	protected int _splashTime = 1000; // time to display the splash screen in ms
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+//		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 		setContentView(R.layout.splash);
 		/*if (getIntent().getBooleanExtra("EXIT", false)) {
 		    finish();
@@ -50,21 +53,25 @@ public class SplashScreen extends Activity {
 					int waited = 0;
 					while (_active && (waited < _splashTime)) {
 						sleep(100);
+//						System.out.println("wait  :"+waited);
 						if (_active) {
 							waited += 100;
 						}
 					}
+				
 
 				} catch (InterruptedException e) {
 					// do nothing
 				} finally {
-					SplashScreen.this.finish();
+					
 					Intent intent = new Intent(
 							"com.sinepulse.app.activities.UserLogin");
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+					intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 //					CommonValues.getInstance().homeIntent=intent;
 					startActivity(intent);
+//					overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+					SplashScreen.this.finish();
+					
 				}
 			}
 		};
@@ -79,6 +86,12 @@ public class SplashScreen extends Activity {
 
 		return true;
 	}
+	@Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+//        finish();
+    }
 	
 
 }

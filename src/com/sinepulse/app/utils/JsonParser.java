@@ -119,6 +119,7 @@ public class JsonParser  extends MainActionbarBase{
 			try {
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
+				if(jObject.getString("Success").equalsIgnoreCase("True")){
 				//API key
 				try {
 					if(CommonValues.getInstance().connectionMode=="Local"){
@@ -130,7 +131,9 @@ public class JsonParser  extends MainActionbarBase{
 				}
 				jData = jObject.getJSONObject("Data");
 				jArray = jData.getJSONArray("DeviceSummary");
-				for (int i = 0; i < jArray.length(); i++) {
+				int lengthofArray= jArray.length();
+				
+				for (int i = 0; i < lengthofArray; i++) {
 					DeviceSummary dSummary = new DeviceSummary();
 					dSummary.setDeviceCount(jArray.getJSONObject(i).getInt(
 							"DeviceCount"));
@@ -150,7 +153,16 @@ public class JsonParser  extends MainActionbarBase{
 						.getInt("RoomCount"));
 				CommonValues.getInstance().userId = jData.getInt("UserId");
 
-			} catch (JSONException e) {
+			}
+				else{
+					CommonValues.getInstance().IsServerConnectionError = true;
+					CommonValues.getInstance().loginError=jObject.getString("Message");
+					
+					}
+				}
+			
+			
+			catch (JSONException e) {
 				Log.e("log_tag", "Error parsing data " + e.toString());
 				CommonValues.getInstance().IsServerConnectionError = true;
 			}
@@ -174,7 +186,8 @@ public class JsonParser  extends MainActionbarBase{
 				jObject = new JSONObject(result);
 				jData = jObject.getJSONObject("Data");
 				jArray = jData.getJSONArray("DeviceSummary");
-				for (int i = 0; i < jArray.length(); i++) {
+				int lengthofArray= jArray.length();
+				for (int i = 0; i < lengthofArray; i++) {
 					DeviceSummary dSummary = new DeviceSummary();
 					dSummary.setDeviceCount(jArray.getJSONObject(i).getInt(
 							"DeviceCount"));
@@ -291,10 +304,10 @@ public class JsonParser  extends MainActionbarBase{
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
 				roomArray = jObject.getJSONArray("Data");
-
+				int lengthofArray=roomArray.length();
 				ArrayList<Room> roomCount = new ArrayList<Room>();
 
-				for (int i = 0; i < roomArray.length(); i++) {
+				for (int i = 0; i <lengthofArray ; i++) {
 					Room room = new Room();
 					room.setName((roomArray.getJSONObject(i)).getString("Name"));
 					room.setId(roomArray.getJSONObject(i).getInt("Id"));
@@ -328,10 +341,10 @@ public class JsonParser  extends MainActionbarBase{
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
 				deviceArray = jObject.getJSONArray("Data");
-
+				int lengthofArray=deviceArray.length();
 				ArrayList<Device> deviceCount = new ArrayList<Device>();
 
-				for (int i = 0; i < deviceArray.length(); i++) {
+				for (int i = 0; i < lengthofArray; i++) {
 					Device device = new Device();
 					device.setName((deviceArray.getJSONObject(i))
 							.getString("Name"));
@@ -373,10 +386,10 @@ public class JsonParser  extends MainActionbarBase{
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
 				devicePropertyArray = jObject.getJSONArray("Data");
-
+				int lengthofArray=devicePropertyArray.length();
 				ArrayList<DeviceProperty> devicePropertyCount = new ArrayList<DeviceProperty>();
 
-				for (int i = 0; i < devicePropertyArray.length(); i++) {
+				for (int i = 0; i < lengthofArray; i++) {
 					DeviceProperty deviceProperty = new DeviceProperty();
 				
 					deviceProperty.setDeviceId(devicePropertyArray
@@ -409,15 +422,15 @@ public class JsonParser  extends MainActionbarBase{
 	public static String postUserLogRequest(String url,int filterType,String fromDate,String toDate) {
 		InputStream is = null;
 		String result = "";
-		JSONArray deviceLogArray = null;
+		JSONArray userLogArray = null;
 //		DefaultHttpClient httpClient = new DefaultHttpClient();
 
 		try{
 			HttpClient httpclient = new DefaultHttpClient();
 //			HttpParams httpParameters = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
-					7000);
-			HttpConnectionParams.setSoTimeout(httpclient.getParams(), 7000);
+					35000);
+			HttpConnectionParams.setSoTimeout(httpclient.getParams(), 35000);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
@@ -468,18 +481,18 @@ public class JsonParser  extends MainActionbarBase{
 			try {
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
-				deviceLogArray = jObject.getJSONArray("Data");
+				userLogArray = jObject.getJSONArray("Data");
+				int lengthofArray=userLogArray.length();
+				ArrayList<DevicePropertyLog> userLogCount = new ArrayList<DevicePropertyLog>();
 
-				ArrayList<DevicePropertyLog> deviceLogCount = new ArrayList<DevicePropertyLog>();
-
-				for (int i = 0; i < deviceLogArray.length(); i++) {
+				for (int i = 0; i < lengthofArray; i++) {
 					DevicePropertyLog devicePropertyLog = new DevicePropertyLog();
-					devicePropertyLog.setUserId(deviceLogArray.getJSONObject(i)
+					devicePropertyLog.setUserId(userLogArray.getJSONObject(i)
 							.getInt("UserId"));
-					devicePropertyLog.setDevicePropertyId(deviceLogArray
+					devicePropertyLog.setDevicePropertyId(userLogArray
 							.getJSONObject(i).getInt("PropertyId"));
 
-					String results = deviceLogArray.getJSONObject(i)
+					String results = userLogArray.getJSONObject(i)
 							.getString("LoggedAt").replaceAll("^/Date\\(", "");
 
 					results = results.substring(0, results.indexOf('+'));
@@ -488,24 +501,24 @@ public class JsonParser  extends MainActionbarBase{
 
 					devicePropertyLog.setLoggedAt(LoggedAt);
 
-					devicePropertyLog.setUserName(deviceLogArray.getJSONObject(
+					devicePropertyLog.setUserName(userLogArray.getJSONObject(
 							i).getString("UserName"));
-					devicePropertyLog.setDeviceName(deviceLogArray
+					devicePropertyLog.setDeviceName(userLogArray
 							.getJSONObject(i).getString("DeviceName"));
-					devicePropertyLog.setPropertyId(deviceLogArray
+					devicePropertyLog.setPropertyId(userLogArray
 							.getJSONObject(i).getInt("PropertyId"));
-					devicePropertyLog.setPropertyName(deviceLogArray
+					devicePropertyLog.setPropertyName(userLogArray
 							.getJSONObject(i).getString("PropertyName"));
-					devicePropertyLog.setValue(deviceLogArray
+					devicePropertyLog.setValue(userLogArray
 							.getJSONObject(i).getString("Value"));
-					deviceLogCount.add(devicePropertyLog);
+					userLogCount.add(devicePropertyLog);
 				}
 
 				if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 					CommonValues.getInstance().deviceLogDetailList.clear();
 				}
 				CommonValues.getInstance().deviceLogDetailList
-						.addAll(deviceLogCount);
+						.addAll(userLogCount);
 
 			} catch (JSONException e) {
 				Log.e("log_tag", "Error parsing data " + e.toString());
@@ -527,8 +540,8 @@ public class JsonParser  extends MainActionbarBase{
 			HttpClient httpclient = new DefaultHttpClient();
 //			HttpParams httpParameters = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
-					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
+					35000);
+			HttpConnectionParams.setSoTimeout(httpclient.getParams(), 35000);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
@@ -580,10 +593,10 @@ public class JsonParser  extends MainActionbarBase{
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
 				deviceLogArray = jObject.getJSONArray("Data");
-
+				int lengthofArray=deviceLogArray.length();
 				ArrayList<DevicePropertyLog> deviceLogCount = new ArrayList<DevicePropertyLog>();
 
-				for (int i = 0; i < deviceLogArray.length(); i++) {
+				for (int i = 0; i < lengthofArray; i++) {
 					DevicePropertyLog devicePropertyLog = new DevicePropertyLog();
 					devicePropertyLog.setUserId(deviceLogArray.getJSONObject(i)
 							.getInt("UserId"));
@@ -740,8 +753,9 @@ public class JsonParser  extends MainActionbarBase{
 				devicePropertyArray = jObject.getJSONArray("Data");
 //				DeviceProperty deviceProperty = new DeviceProperty();
 				ArrayList<DeviceProperty> devicePropertyValues = new ArrayList<DeviceProperty>();
+				int arrayLength=devicePropertyArray.length();
 
-				for (int i = 0; i < devicePropertyArray.length(); i++) {
+				for (int i = 0; i < arrayLength; i++) {
 					DeviceProperty deviceProperty = new DeviceProperty();
 				
 					deviceProperty.setDeviceId(devicePropertyArray
@@ -783,10 +797,11 @@ public class JsonParser  extends MainActionbarBase{
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
 				curtainPresetArray = jObject.getJSONArray("Data");
+				int arrayLength=curtainPresetArray.length();
 //				DeviceProperty deviceProperty = new DeviceProperty();
 				ArrayList<Preset> curtainPresetValues = new ArrayList<Preset>();
 
-				for (int i = 0; i < curtainPresetArray.length(); i++) {
+				for (int i = 0; i < arrayLength; i++) {
 					Preset presetProperty = new Preset();
 				
 					presetProperty.setDescription(curtainPresetArray
@@ -984,8 +999,9 @@ public class JsonParser  extends MainActionbarBase{
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
 				ticketTypeArray = jObject.getJSONArray("Data");
+				int arrayLength=ticketTypeArray.length();
 				ArrayList<TicketType> tTypeArrayValues = new ArrayList<TicketType>();
-				for (int i = 0; i < ticketTypeArray.length(); i++) {
+				for (int i = 0; i < arrayLength; i++) {
 					TicketType tType = new TicketType();
 				
 					tType.setId(ticketTypeArray.getJSONObject(i).getInt("Id"));
@@ -1088,8 +1104,10 @@ public class JsonParser  extends MainActionbarBase{
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
 				allTicketArray = jObject.getJSONArray("Data");
+				int arrayLength=allTicketArray.length();
 				ArrayList<Ticket> allTicketArrayValues = new ArrayList<Ticket>();
-				for (int i = 0; i < allTicketArray.length(); i++) {
+				
+				for (int i = 0; i < arrayLength; i++) {
 					Ticket allTicket = new Ticket();
 				
 					allTicket.setId(allTicketArray.getJSONObject(i).getInt("Id"));

@@ -3,13 +3,10 @@
  */
 package com.sinepulse.app.asynctasks;
 
-import com.sinepulse.app.activities.UserLogin;
-import com.sinepulse.app.activities.UserLogin_;
+import android.os.AsyncTask;
+
 import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.utils.CommonValues;
-
-import android.content.Context;
-import android.os.AsyncTask;
 
 /**
  * @author tanvir.ahmed
@@ -17,10 +14,10 @@ import android.os.AsyncTask;
  */
 public class CheckMC extends AsyncTask<Void, Void, Boolean> {
 	private String mcUrl;
-	Context parentActivity;
+	MainActionbarBase parentActivity;
 	boolean isSolvedLocal=false;
 
-	public CheckMC(String mcUrl, Context  parentActivity,boolean isSolvedLocal) {
+	public CheckMC(String mcUrl, MainActionbarBase  parentActivity,boolean isSolvedLocal) {
 		this.mcUrl = mcUrl;
 		this.parentActivity = parentActivity;
         this.isSolvedLocal=isSolvedLocal;
@@ -28,16 +25,21 @@ public class CheckMC extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
-		((UserLogin) parentActivity).sendMCStatusRequest(mcUrl);
+//		parentActivity.startmenuProgress();
+		parentActivity.sendMCStatusRequest(mcUrl);
 		return null;
 	}
 
 	@Override
 	protected void onPostExecute(Boolean result) {
+//		parentActivity.stopmenuProgress();
 		// bUserLogin.setEnabled(true);
+		android.os.AsyncTask.Status status = getStatus();
+		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
+			if (parentActivity != null) {
 				if (isSolvedLocal == true) {
 					// proceedLoginProcess();
-					((UserLogin) parentActivity).saveLocalIpInPreference();
+					parentActivity.saveLocalIpInPreference();
 					CommonValues.getInstance().connectionMode="Local";
 //					Toast.makeText(parentActivity, "Local Mode", Toast.LENGTH_SHORT)
 //							.show();
@@ -48,6 +50,8 @@ public class CheckMC extends AsyncTask<Void, Void, Boolean> {
 				}
 				
 			}
+		}
+	}
 		
 	}
 

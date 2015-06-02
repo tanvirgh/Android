@@ -100,7 +100,7 @@
     <string name="title_feature4">Feature 4</string>
     <string name="title_feature5">Feature 5</string>
     <string name="title_feature6">Feature 6</string>
-    <string name="networkError">No Netwok Connectivity ! Please Check  your Network Connection.</string>
+    <string name="networkError">No Netwok Connectivity ! \nPlease Check  your Network Connection.</string>
     <string name="Room_nameHint">Type Room Name</string>
     <string name="Device_numHint">Total Device</string>
     <string name="EnterPays_TextView_ZeroValue">0</string>

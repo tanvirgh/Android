@@ -55,7 +55,7 @@
         android:layout_width="295dip"
         android:layout_height="fill_parent"
         android:layout_gravity="start"
-        android:background="@drawable/sh_background"
+        android:background="@drawable/sh_background_lyt"
         android:choiceMode="singleChoice"
         android:divider="@color/list_row_divider"
         android:dividerHeight="2dp"

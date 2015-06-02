@@ -54,12 +54,13 @@ public class AsyncGetCameraInfo extends AsyncTask<Void, Void, Boolean> {
 			@Override
 			public void run() {
 				parentActivity.setCameraInfo();
-				parentActivity.streamingButton.setEnabled(true);
+				
 			}
 		});
 		
 			}
 		}
+		parentActivity.streamingButton.setEnabled(true);
 	}
 	}
 	

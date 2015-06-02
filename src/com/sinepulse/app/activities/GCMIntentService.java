@@ -58,6 +58,7 @@ public class GCMIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
+		
 		Bundle extras = intent.getExtras();
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 		// The getMessageType() intent parameter must be the intent you received
@@ -66,7 +67,7 @@ public class GCMIntentService extends IntentService {
 		// Log.d("ExtraBundle",extras.toString());
 		String messageType = gcm.getMessageType(intent);
 
-		if (!extras.isEmpty()) { // has effect of unparcelling Bundle
+		if (!extras.isEmpty() && extras!=null) { // has effect of unparcelling Bundle
 			if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR
 					.equals(messageType)) {
 //				sendNotification("Send error: " + extras.toString());
@@ -86,10 +87,15 @@ public class GCMIntentService extends IntentService {
 				// Log.i(TAG, "Completed work @ " +
 				// SystemClock.elapsedRealtime());
 				// Post notification of received message.
+				String action="";
+				JSONObject jsonObj=null;
 				try {
-					JSONObject jsonObj = new JSONObject(
+					jsonObj = new JSONObject(
 							extras.getString("header"));
-					String action = jsonObj.getString("Action");
+					
+					if(jsonObj!=null){
+					 action = jsonObj.getString("Action");
+					}
 					if (action.equals("DeviceStatus")) {
 
 						if (getCurrentVisibleView("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.RoomManager_}")) {
@@ -241,6 +247,8 @@ public class GCMIntentService extends IntentService {
 	 * @return
 	 * @throws JSONException
 	 */
+//	JSONObject jsonMessage=null;
+//	JSONObject jsonDevice=null;
 	public Device parseGCMDevice(Bundle extras) throws JSONException {
 		JSONObject jsonMessage = new JSONObject(extras.getString("message"));
 		String deviceData = jsonMessage.getString("Data");

@@ -18,6 +18,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.asynctasks.AsyncPostChangePassRequest;
@@ -193,6 +195,7 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 			startActivity(homeIntent);
 			break;
 		case R.id.bCamera:
+//			Toast.makeText(ChangePasswordActivity.this, "No Servilance System Available", Toast.LENGTH_SHORT).show();
 			MainActionbarBase.stackIndex.removeAllElements();
 			currentFragment=CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))

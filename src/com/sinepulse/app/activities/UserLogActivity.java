@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
@@ -113,6 +114,15 @@ public class UserLogActivity extends MainActionbarBase implements
 		dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 		setDateTimeField();
 	}
+	/*@Override
+	public void onSaveInstanceState(Bundle savedInstanceState){
+		super.onSaveInstanceState(savedInstanceState);
+	}
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	    // Always call the superclass so it can restore the view hierarchy
+	    super.onRestoreInstanceState(savedInstanceState);
+	   
+	}*/
 
 	@AfterViews
 	void afterViewLoaded() {
@@ -223,8 +233,8 @@ public class UserLogActivity extends MainActionbarBase implements
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#6699ff"));
 			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-				deviceLogListView.setAdapter(null);
-				uLogAdapter.clear();
+//				deviceLogListView.setAdapter(null);
+//				uLogAdapter.clear();
 			}
 			loadUserLogInfo(CommonValues.getInstance().userId, 1, formatter
 					.format(d).toString(), formatter.format(d).toString());
@@ -244,8 +254,8 @@ public class UserLogActivity extends MainActionbarBase implements
 			tvYesterday.setTextColor(Color.parseColor("#6699ff"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
 			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-				deviceLogListView.setAdapter(null);
-				uLogAdapter.clear();
+//				deviceLogListView.setAdapter(null);
+//				uLogAdapter.clear();
 			}
 			loadUserLogInfo(CommonValues.getInstance().userId, 2, formatter
 					.format(d.getTime() - 24 * 60 * 60 * 1000).toString(),
@@ -266,7 +276,8 @@ public class UserLogActivity extends MainActionbarBase implements
 			startActivity(homeIntent);
 			break;
 		case R.id.bCamera:
-			if (MainActionbarBase.stackIndex != null) {
+			Toast.makeText(UserLogActivity.this, "No Servilance System Available", Toast.LENGTH_SHORT).show();
+			/*if (MainActionbarBase.stackIndex != null) {
 				MainActionbarBase.stackIndex.removeAllElements();
 			}
 			currentFragment = CAMERA_FRAGMENT;
@@ -274,7 +285,7 @@ public class UserLogActivity extends MainActionbarBase implements
 				stackIndex.push(String.valueOf(6));
 			Intent cameraIntent = new Intent(this, VideoActivity_.class);
 			cameraIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			startActivity(cameraIntent);
+			startActivity(cameraIntent);*/
 
 			break;
 		case R.id.bRoom:
@@ -394,10 +405,22 @@ public class UserLogActivity extends MainActionbarBase implements
 				+ String.valueOf(userId) + "/activities";
 
 		if (JsonParser.postUserLogRequest(postUserLogUrl, FilterType, fromDate,
-				toDate) != null) {
+				toDate) != null && JsonParser.postUserLogRequest(postUserLogUrl, FilterType, fromDate,
+						toDate) !="") {
 			return true;
-		}
+		}else{
+			UserLogActivity.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask.ShowMessage(UserLogActivity.this, "No Data returned from Server");
+//					CommonTask.ShowNetworkChangeConfirmation(UserLogActivity.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					asyncGetUserLogInfo.cancel(true);
+				}
+			});
+			
 		return false;
+		}
 	}
 
 	/**
@@ -417,12 +440,12 @@ public class UserLogActivity extends MainActionbarBase implements
 				tvEmptyLog.setText("Sorry ! No Log Available ");
 			}
 		} else {
-//			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "No Data returned from Server");
+//			CommonTask
+//			.ShowNetworkChangeConfirmation(
+//					this,
+//					"Network State has been changed.Please log in again to continue.",
+//					showNetworkChangeEvent());
 		}
 
 	}
@@ -450,7 +473,7 @@ public class UserLogActivity extends MainActionbarBase implements
 	@Override
 	public void onResume() {
 		this.setTitle("Activities");
-		loadTodaysLog();
+//		loadTodaysLog();
 		/*
 		 * if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 		 * deviceLogListView.setAdapter(null); uLogAdapter.clear(); }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
@@ -89,6 +90,7 @@ public class About extends MainActionbarBase implements OnClickListener {
 			startActivity(homeIntent);
 			break;
 		case R.id.bCamera:
+//			Toast.makeText(About.this, "No Servilance System Available", Toast.LENGTH_SHORT).show();
 			currentFragment=CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))
 				stackIndex.push(String.valueOf(6));

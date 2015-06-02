@@ -124,21 +124,42 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 		drh.rowID = position;
 		drh.tvdevice_name.setText(deviceByRoomEntity.getName());
 		if (deviceByRoomEntity.getDeviceTypeId() == 1) {
+			if (deviceByRoomEntity.IsOn){
+				drh.ivDeviceListItemImage
+				.setBackgroundResource(R.drawable.fan_on);
+			}else{
 			drh.ivDeviceListItemImage
-					.setBackgroundResource(R.drawable.fanmedium);
+					.setBackgroundResource(R.drawable.fan_off);
+			}
 		}
 		if (deviceByRoomEntity.getDeviceTypeId() == 2) {
+			if (deviceByRoomEntity.IsOn){
+				drh.ivDeviceListItemImage
+				.setBackgroundResource(R.drawable.bulbon);
+			}else{
 			drh.ivDeviceListItemImage
-					.setBackgroundResource(R.drawable.bulbmedium);
+					.setBackgroundResource(R.drawable.bulb_off);
+			}
 		}
 		if (deviceByRoomEntity.getDeviceTypeId() == 3) {
+			if (deviceByRoomEntity.IsOn){
+				drh.ivDeviceListItemImage
+				.setBackgroundResource(R.drawable.ac_medium);
+			}else{
 			drh.ivDeviceListItemImage
 					.setBackgroundResource(R.drawable.ac_medium);
+			}
 		}
 		if (deviceByRoomEntity.getDeviceTypeId() == 4) {
+			if (deviceByRoomEntity.IsOn){
+				drh.ivDeviceListItemImage
+				.setBackgroundResource(R.drawable.curtainmedium);
+			}else{
 			drh.ivDeviceListItemImage
 					.setBackgroundResource(R.drawable.curtainmedium_off);
+			}
 		}
+		
 		drh.btdevice_value.setOnCheckedChangeListener(null);
 		if(deviceByRoomEntity.IsActionPending){
 			drh.btdevice_value.setChecked(!deviceByRoomEntity.IsOn);

@@ -3,29 +3,15 @@
     android:id="@+id/videoScreen"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/sh_background"
+    android:background="@drawable/sh_background_lyt"
     android:orientation="vertical" >
 
-  <!--   <RelativeLayout
-        android:id="@+id/rlControlButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:visibility="gone"
-        android:gravity="center_vertical" >
-
-        <Button
-            android:id="@+id/btnRefresh"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/refresh_button_selector" />
-    </RelativeLayout> -->
+  
 
     <RelativeLayout
         android:id="@+id/rlVideoView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/spinner_camera"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="0dp"
@@ -36,12 +22,14 @@
             android:id="@+id/surface"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="60dp"
-           android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-           android:background="@drawable/custom_border"
-            android:layout_above="@+id/spinner_camera" />
+            android:layout_marginTop="38dp"
+            android:background="@drawable/custom_border"
+            android:layout_marginBottom="38dp"
+           android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+           />
+        <!--  android:background="@drawable/custom_border" -->
+            
     </RelativeLayout>
      <ProgressBar
             android:id="@+id/pbCamera"

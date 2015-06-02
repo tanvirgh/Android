@@ -242,6 +242,7 @@ public class SupportActivity extends MainActionbarBase implements
 			startActivity(homeIntent);
 			break;
 		case R.id.bCamera:
+//			Toast.makeText(SupportActivity.this, "No Servilance System Available", Toast.LENGTH_SHORT).show();
 			// spType.setEnabled(false);
 			spType.setAdapter(null);
 			if (MainActionbarBase.stackIndex != null) {

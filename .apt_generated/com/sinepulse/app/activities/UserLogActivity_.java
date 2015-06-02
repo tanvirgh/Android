@@ -85,18 +85,18 @@ public final class UserLogActivity_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        bSearch = ((Button) hasViews.findViewById(id.bSearch));
-        bDeliverydate = ((Button) hasViews.findViewById(id.bDeliverydate));
-        deviceLogListView = ((ListView) hasViews.findViewById(id.lvLogList));
         bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
-        userLogProgressBar = ((ProgressBar) hasViews.findViewById(id.userLogProgressBar));
-        tvToday = ((TextView) hasViews.findViewById(id.tvToday));
-        etDateTo = ((EditText) hasViews.findViewById(id.etDateTo));
-        bRoom = ((Button) hasViews.findViewById(id.bRoom));
         tvYesterday = ((TextView) hasViews.findViewById(id.tvYesterday));
-        etDateFrom = ((EditText) hasViews.findViewById(id.etDateFrom));
+        etDateTo = ((EditText) hasViews.findViewById(id.etDateTo));
+        tvToday = ((TextView) hasViews.findViewById(id.tvToday));
+        bDeliverydate = ((Button) hasViews.findViewById(id.bDeliverydate));
         tvEmptyLog = ((TextView) hasViews.findViewById(id.tvEmptyLog));
+        etDateFrom = ((EditText) hasViews.findViewById(id.etDateFrom));
+        bRoom = ((Button) hasViews.findViewById(id.bRoom));
+        bSearch = ((Button) hasViews.findViewById(id.bSearch));
+        deviceLogListView = ((ListView) hasViews.findViewById(id.lvLogList));
         bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        userLogProgressBar = ((ProgressBar) hasViews.findViewById(id.userLogProgressBar));
         if (hasViews.findViewById(id.bDeliverydate)!= null) {
             hasViews.findViewById(id.bDeliverydate).setOnClickListener(new OnClickListener() {
 

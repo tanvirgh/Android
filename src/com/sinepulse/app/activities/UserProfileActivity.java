@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
@@ -218,6 +219,7 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 			startActivity(homeIntent);
 			break;
 		case R.id.bCamera:
+//			Toast.makeText(UserProfileActivity.this, "No Servilance System Available", Toast.LENGTH_SHORT).show();
 			currentFragment=CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))
 				stackIndex.push(String.valueOf(6));

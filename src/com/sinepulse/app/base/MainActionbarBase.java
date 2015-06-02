@@ -2,11 +2,19 @@ package com.sinepulse.app.base;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -15,20 +23,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.text.format.Formatter;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -42,12 +52,15 @@ import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.activities.Home_;
 import com.sinepulse.app.activities.SupportActivity_;
 import com.sinepulse.app.activities.UserLogActivity_;
+import com.sinepulse.app.activities.UserLogin;
 import com.sinepulse.app.activities.UserProfileActivity_;
 import com.sinepulse.app.asynctasks.AsyncLogOutTask;
+import com.sinepulse.app.asynctasks.CheckMC;
 import com.sinepulse.app.utils.CommonConstraints;
-import com.sinepulse.app.utils.CommonIdentifier;
 import com.sinepulse.app.utils.CommonTask;
+import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
+import com.sinepulse.app.utils.JsonParser;
 
 /**
  * @author Tanvir Ahmed Chowdhury used for loading sherlock action bar,set
@@ -61,6 +74,9 @@ import com.sinepulse.app.utils.CommonValues;
  */
 
 public class MainActionbarBase extends SherlockFragmentActivity {
+	
+	protected static String connnectionState = "NONE";
+	CheckMC checkMC = null;
 	// public Intent settingIntent;
 	public static final int INITAIL_STATE = -1;
 	public static final int SETTINGS_ACTIVITY = 0, ABOUT_ACTIVITY = 1,
@@ -154,33 +170,6 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		return true;
 	}
 
-	// defining the state and start of various activities
-	/**
-	 * Selecting an item from the menu
-	 */
-	// public void manageActivity() {
-	//
-	// switch (currentMenuIndex) {
-	//
-	// case SETTINGS_ACTIVITY:
-	//
-	// if (settingIntent == null) {
-	// settingIntent = new Intent(MainActionbarBase.this,
-	// Settings.class);
-	// settingIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-	// }
-	//
-	// if (!stackIndex.contains(String.valueOf(0)))
-	// stackIndex.push(String.valueOf(0));
-	// startActivity(settingIntent);
-	// break;
-	//
-	// default:
-	// goHome(MainActionbarBase.this);
-	// break;
-	// }
-	// }
-
 	// method used for return back to homescreen from any activity
 	public void goHome(Context activity) {
 		if (!(activity instanceof Home)) {
@@ -205,16 +194,11 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	         e.printStackTrace();
 	      }
 	}
-
+	boolean isappinBackground=false;
 	@Override
 	protected void onPause() {
 		super.onPause();
-		// CLose the search view and clear the input fields when
-		// leaving...tanvir
-		/*
-		 * if (mSearchView != null) { mSearchView.onActionViewCollapsed();
-		 * mSearchView.setQuery("", false); mSearchView.clearFocus(); }
-		 */
+		isappinBackground=true;
 		unregisterReceiver(mConnReceiver);
 //		unregisterReceiver(conChangeReceiver);
 	}
@@ -232,20 +216,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 							getString(R.string.networkError),
 							AppMsg.STYLE_ALERT_ALWAYS_VISIBLE);
 					msg.show();
-					// check if it is from login screen or not...if so do
-					// nothing.else back to login screen
-					ArrayList<String> runningactivities = new ArrayList<String>();
-
-					ActivityManager activityManager = (ActivityManager) getBaseContext()
-							.getSystemService(Context.ACTIVITY_SERVICE);
-
-					List<RunningTaskInfo> services = activityManager
-							.getRunningTasks(Integer.MAX_VALUE);
-
-					for (int i1 = 0; i1 < services.size(); i1++) {
-						runningactivities.add(0,
-								services.get(i1).topActivity.toString());
-					}
+					ArrayList<String> runningactivities = checkActivityVisibility();
 					if (runningactivities
 							.contains("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.UserLogin_}") == true) {
 						// return true;
@@ -273,37 +244,9 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		}
 
 	};
+	
+	
 	boolean activityVisible = false;
-
-//	public BroadcastReceiver conChangeReceiver = new BroadcastReceiver() {
-//
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			ConnectivityManager connectivityManager = (ConnectivityManager) context
-//					.getSystemService(Context.CONNECTIVITY_SERVICE);
-//			NetworkInfo activeNetInfo = connectivityManager
-//					.getActiveNetworkInfo();
-//			NetworkInfo mobNetInfo = connectivityManager
-//					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-//			if (activeNetInfo != null) {
-//				CommonTask
-//						.ShowNetworkChangeConfirmation(
-//								MainActionbarBase.this,
-//								"Network State has been changed.Please log in to continue.",
-//								showNetworkChangeEvent());
-//			}
-//			if (mobNetInfo != null) {
-//				CommonTask
-//						.ShowNetworkChangeConfirmation(
-//								MainActionbarBase.this,
-//								"Network State has been changed.Please log in to continue.",
-//								showNetworkChangeEvent());
-//			}
-//		}
-//	};
-	
-	
-
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -326,6 +269,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					
+					  clearAppData();
 					  Intent loginintent = new Intent(
 					  "com.sinepulse.app.activities.UserLogin");
 					  loginintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -348,19 +292,39 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		return dialogClickListener;
 
 	}
-
+	boolean isWifiChanged=false;
 	@Override
 	protected void onResume() {
 		super.onResume();
+//		ConnectivityManager connectivityManager = (ConnectivityManager) this
+//				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if(isappinBackground==true){
+			ArrayList<String> runningactivities = checkActivityVisibility();
+			if (runningactivities
+					.contains("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.UserLogin_}") == true) {
+				// return true;
+				return;
+			} else {
+
+				connectByHostNameLocal();
+
+			}
+			
+		
+		}
 
 		IntentFilter filter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
-//		filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-//		filter.addAction("android.net.wifi.STATE_CHANGE");
-//		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
 		
 		registerReceiver(mConnReceiver, filter);
 //		registerReceiver(conChangeReceiver, filter);
+		/*if(connectivityManager.getBackgroundDataSetting()==true){
+		CommonTask.ShowNetworkChangeConfirmation(MainActionbarBase.this, "Changed", showNetworkChangeEvent());
+		
+	}else{
+		
+		return ;
+	}*/
 
 		// on resume, if network is not available we again show the alert
 		// message
@@ -382,6 +346,25 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 				AppMsg.cancelAll();
 			}
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public ArrayList<String> checkActivityVisibility() {
+		ArrayList<String> runningactivities = new ArrayList<String>();
+
+		ActivityManager activityManager = (ActivityManager) getBaseContext()
+				.getSystemService(Context.ACTIVITY_SERVICE);
+
+		List<RunningTaskInfo> services = activityManager
+				.getRunningTasks(Integer.MAX_VALUE);
+
+		for (int i1 = 0; i1 < services.size(); i1++) {
+			runningactivities.add(0,
+					services.get(i1).topActivity.toString());
+		}
+		return runningactivities;
 	}
 
 	// override this method in child classes in order to be notified about
@@ -448,14 +431,6 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			currentFragment = SETTINGS_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(2)))
 				stackIndex.push(String.valueOf(2));
-
-			/*
-			 * if (userProfileFragment == null) { userProfileFragment = new
-			 * UserProfileFragment_(); } fragtmentTransaction =
-			 * getSupportFragmentManager() .beginTransaction();
-			 * fragtmentTransaction.remove(userProfileFragment);
-			 * fragtmentTransaction.commit(); fragment = userProfileFragment;
-			 */
 			Intent userProfileIntent = new Intent(this,
 					UserProfileActivity_.class);
 			startActivity(userProfileIntent);
@@ -465,15 +440,6 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			currentFragment = CHANGEPASSWORD_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(3)))
 				stackIndex.push(String.valueOf(3));
-			// if (changePasswordFragment == null) {
-			// changePasswordFragment = new ChangePasswordFragment_();
-			// }
-			// fragtmentTransaction = getSupportFragmentManager()
-			// .beginTransaction();
-			// fragtmentTransaction.remove(changePasswordFragment);
-			// fragtmentTransaction.commit();
-			// fragment = changePasswordFragment;
-			// break;
 			Intent changePassIntent = new Intent(this,
 					ChangePasswordActivity_.class);
 			startActivity(changePassIntent);
@@ -483,16 +449,6 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			currentFragment = ABOUT_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(5)))
 				stackIndex.push(String.valueOf(5));
-			// if (aboutFragment == null) {
-			// aboutFragment = new AboutFragment_();
-			//
-			// }
-			// fragtmentTransaction = getSupportFragmentManager()
-			// .beginTransaction();
-			// fragtmentTransaction.remove(aboutFragment);
-			// fragtmentTransaction.commit();
-			// fragment = aboutFragment;
-			// break;
 			Intent aboutIntent = new Intent(this, About_.class);
 			startActivity(aboutIntent);
 			break;
@@ -524,7 +480,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 				stackIndex.push(String.valueOf(7));
 			Intent viewIntent = new Intent(
 					"android.intent.action.VIEW",
-					Uri.parse("http://dev.sinepulse.com/SmartHome/Web/Dev"));
+					Uri.parse("http://dev.sinepulse.com/SmartHome/Web/Dev/en/Page/Help"));
 			startActivity(viewIntent);
 			break;
 
@@ -565,5 +521,229 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	      // The directory is now empty so delete it
 	      return dir.delete();
 	   }
+	   
+	   String urlForMc="";
+	   boolean isSolvedLocal = false;
+	   
+	   /**
+		 * try to resolve the connectivity by Appropriate host name.local
+		 */
+
+		public void connectByHostNameLocal() {
+		//CommonValues.getInstance().hostNameSuffix
+			connnectionState = "Local";
+			urlForMc = "http://sinepulsemctest" +".sinepulse.bd.local"+ "/api/is-online";
+			if (checkMC != null) {
+				checkMC.cancel(true);
+			}
+
+			checkMC = new CheckMC(urlForMc,  MainActionbarBase.this,isSolvedLocal);
+			checkMC.execute();
+
+		}
+		/**
+		 * try to resolve the connectivity by Appropriate host name
+		 */
+		public void connectByHostName() {
+			
+			connnectionState = "RasPeri";
+			urlForMc = "http://sinepulsemctest/api/is-online";
+			if (checkMC != null) {
+				checkMC.cancel(true);
+			}
+
+			checkMC = new CheckMC(urlForMc, MainActionbarBase.this,isSolvedLocal);
+			checkMC.execute();
+
+		}
+		
+		/**
+		 * Failed to resolve with host name..Lets try with replacing WIFI IP last
+		 * sub net mask and attempt to connect.
+		 */
+
+		public void connectByIp() {
+			WifiManager wifiMgr = (WifiManager) getSystemService(WIFI_SERVICE);
+			WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+
+			int ip = wifiInfo.getIpAddress();
+			@SuppressWarnings("deprecation")
+			String ipAddress = Formatter.formatIpAddress(ip);
+			String[] tokens = ipAddress.split("\\.");
+			tokens[3] = "136";
+			ipAddress = tokens[0] + "." + tokens[1] + "." + tokens[2] + "."
+					+ tokens[3];
+			// Log.d("WIFI Ip", ipAddress);
+			urlForMc = "http://" + ipAddress + "/api/is-online";
+			if (checkMC != null) {
+				checkMC.cancel(true);
+			}
+			connnectionState = "IP";
+			checkMC = new CheckMC(urlForMc, MainActionbarBase.this,isSolvedLocal);
+//			checkMC.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			checkMC.execute();
+		}
+		
+		public boolean sendMCStatusRequest(String mcUrl) {
+
+			if (getMcStatus(mcUrl) != null && getMcStatus(mcUrl) != "") {
+				return true;
+			}else{
+//				fireNetworkChangeEvent();
+				return false;
+			}
+			
+		}
+
+
+		public String getMcStatus(String url) {
+
+			InputStream is = null;
+			String result = "";
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+
+			try {
+//				HttpParams httpParameters = new BasicHttpParams();
+				HttpConnectionParams.setConnectionTimeout(httpClient.getParams(),
+						CommonConstraints.TIMEOUT_MILLISEC);
+				HttpConnectionParams.setSoTimeout(httpClient.getParams(),
+						CommonConstraints.TIMEOUT_MILLISEC);
+				HttpGet httpGet = new HttpGet(url);
+				HttpResponse httpResponse = httpClient.execute(httpGet);
+				HttpEntity httpEntity = httpResponse.getEntity();
+				is = httpEntity.getContent();
+
+				if (is != null) {
+					result = JsonParser.convertInputStreamToString(is);
+				} else {
+					result = "Did not work!";
+					CommonValues.getInstance().IsServerConnectionError = true;
+				}
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	 		if (result != null && !result.equals("")) {
+
+				try {
+					JSONObject jObject = null;
+					jObject = new JSONObject(result);
+					// String
+					// host=(jObject.getJSONObject("Data")).getString("hostname");
+					String Ip = (jObject.getJSONObject("Data")).getString("ip");
+					if(Ip!=null && Ip!=""){
+					CommonValues.getInstance().localIp = Ip;
+					}
+					String baseUrlForMC = "http://" + Ip + "/api/";
+					CommonURL.getInstance().assignValues(baseUrlForMC);
+					isSolvedLocal = true;
+					isWifiChanged=true;
+					if(CommonValues.getInstance().connectionMode=="Internet"){
+						fireNetworkChangeEvent();	
+					}
+					CommonValues.getInstance().connectionMode="Local";
+					if(CommonValues.getInstance().localIp!=null &&CommonValues.getInstance().localIp!="" ){
+					saveLocalIpInPreference();
+					}
+
+				}
+
+				catch (JSONException e) {
+					Log.e("log_tag", "Error parsing data " + e.toString());
+				}
+			} else {
+
+				if (connnectionState.equals("Local")) {
+					//..Lets try with host name 
+					if (checkMC != null) {
+						checkMC.cancel(true);
+					}
+					isSolvedLocal = false;
+					urlForMc="";
+					connectByHostName();
+					
+				}
+				else if (connnectionState.equals("RasPeri")) {
+					// Failed to resolve with host name..Lets try with replacing
+					// WIFI IP last sub net...Step3
+					if (checkMC != null) {
+						checkMC.cancel(true);
+					}
+					
+					isSolvedLocal = false;
+					urlForMc="";
+					connectByIp();
+					
+				} 
+				else if (connnectionState.equals("IP")) {
+					if (checkMC != null) {
+						checkMC.cancel(true);
+					}
+					if(isWifiChanged==false && CommonValues.getInstance().connectionMode=="Local"){
+						fireNetworkChangeEvent();
+						
+					}
+					// Both Host and IP resolve process failed...Lets assign the
+					// Internet URL as base URL
+					isSolvedLocal = false;
+					CommonURL.getInstance().assignValues(
+							CommonURL.getInstance().remoteBaseUrl);
+					CommonValues.getInstance().connectionMode="Internet";
+
+				}
+			}
+
+			// 11. return result
+			return result;
+		}
+
+		/**
+		 * 
+		 */
+		public void fireNetworkChangeEvent() {
+			MainActionbarBase.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask
+					.ShowNetworkChangeConfirmation(
+							MainActionbarBase.this,
+							"Network State has been changed.Please log in again to continue.",
+							showNetworkChangeEvent());
+					
+				}
+			});
+		}
+		public void saveLocalIpInPreference() {
+			CommonTask.SavePreferences(this, CommonConstraints.PREF_URL_KEY,
+					CommonConstraints.PREF_LOCALIP_KEY,
+					CommonValues.getInstance().localIp);
+		}
+		
+		public void clearAppData() {
+			CommonValues.getInstance().userId = 0;
+			CommonValues.getInstance().ApiKey="";
+			Editor editor = getSharedPreferences("clear_cache", Context.MODE_PRIVATE).edit();
+			editor.clear();
+			editor.commit();
+			trimCache(MainActionbarBase.this);
+		}
+		
+		/**
+		 * 
+		 */
+		public void removePreferenceLoginData() {
+			SharedPreferences password = UserLogin.context.getSharedPreferences(
+					CommonConstraints.PREF_PASSWORD_KEY,
+					UserLogin.context.MODE_PRIVATE);
+			password.edit().remove(CommonConstraints.PREF_PASSWORD_KEY).commit();
+			SharedPreferences userName = UserLogin.context.getSharedPreferences(
+					CommonConstraints.PREF_LOGINUSER_NAME,
+					UserLogin.context.MODE_PRIVATE);
+			userName.edit().remove(CommonConstraints.PREF_LOGINUSER_NAME).commit();
+		}
 
 }

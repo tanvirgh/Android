@@ -3,6 +3,7 @@
  */
 package com.sinepulse.app.asynctasks;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.Home;
@@ -16,6 +17,7 @@ public class AsyncLogOutTask extends AsyncTask<Void, Void, Boolean> {
 	
 	Home parentActivity;
 	private int userId;
+	ProgressDialog progress ;
 	
 	public AsyncLogOutTask(Home _parentActivity, int userId) {
 		this.parentActivity=_parentActivity;
@@ -27,8 +29,15 @@ public class AsyncLogOutTask extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected void onPreExecute() {
+		super.onPreExecute();
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
 //		parentActivity.startNavDrawerProgress();
+		progress = new ProgressDialog(parentActivity);
+		progress.setTitle("Please wait");
+		progress.setMessage("Logging out...");
+		progress.setCancelable(true);
+		progress.show();
+
 		
 	}
 	
@@ -42,11 +51,14 @@ public class AsyncLogOutTask extends AsyncTask<Void, Void, Boolean> {
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
+		progress.dismiss();
+//		super.onPostExecute(result);
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
 //		parentActivity.stopNavDrawerProgress();
+				
 	   parentActivity.redirectToLogInPage();
 	}
 		}

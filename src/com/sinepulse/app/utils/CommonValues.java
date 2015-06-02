@@ -64,8 +64,10 @@ public class CommonValues {
 	public int ErrorCode = CommonConstraints.NO_EXCEPTION;
 
 	static CommonValues commonValuesInstance;
+	public String loginError;
 	public boolean logoutResponse=false;
 	public String connectionMode="";
+	public String hostNameSuffix="";
 
 	/**
 	 * Return Instance

@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/rlDashboardBottomBar"
         android:layout_below="@+id/include1" 
-        android:paddingBottom="10dp">
+        android:paddingBottom="6dp">
 
         <LinearLayout
             android:layout_width="fill_parent"

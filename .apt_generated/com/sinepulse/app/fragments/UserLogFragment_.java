@@ -68,18 +68,18 @@ public final class UserLogFragment_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        bDashboard = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bDashboard));
-        tvYesterday = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvYesterday));
         tvEmptyLog = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvEmptyLog));
+        bSearch = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bSearch));
+        bDashboard = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bDashboard));
         tvToday = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvToday));
         bDeliverydate = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bDeliverydate));
-        deviceLogListView = ((ListView) hasViews.findViewById(com.sinepulse.app.R.id.lvLogList));
-        bCamera = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bCamera));
-        bSearch = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bSearch));
-        etDateFrom = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etDateFrom));
         deviceLogProgressBar = ((ProgressBar) hasViews.findViewById(com.sinepulse.app.R.id.deviceLogProgressBar));
-        etDateTo = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etDateTo));
         bRoom = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bRoom));
+        etDateTo = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etDateTo));
+        deviceLogListView = ((ListView) hasViews.findViewById(com.sinepulse.app.R.id.lvLogList));
+        etDateFrom = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etDateFrom));
+        tvYesterday = ((TextView) hasViews.findViewById(com.sinepulse.app.R.id.tvYesterday));
+        bCamera = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bCamera));
         if (hasViews.findViewById(com.sinepulse.app.R.id.bDeliverydate)!= null) {
             hasViews.findViewById(com.sinepulse.app.R.id.bDeliverydate).setOnClickListener(new OnClickListener() {
 
