@@ -42,25 +42,15 @@ public class AsyncRefreshDashBoard extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		((Home) parentActivity).stopDashBoardProgress();
+		
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
-			
-		
 		((Home) parentActivity).runOnUiThread(new Runnable() {
-			
 			@Override
 			public void run() {
-				((Home) parentActivity).setDashBoardTopRowData();
-				// FirstRowData(Bulb)
-				((Home) parentActivity).setDashBoardFanData();
-				// Second Row Data(Fan)
-				((Home) parentActivity).setDashBoardBulbData();
-				// Third Row Data(Curtain)
-				((Home) parentActivity).setDashBoardAcData();
-				// Forth Row Data(AC)
-				((Home) parentActivity).setDashBoardCurtainData();
+				((Home) parentActivity).setDashBoardData();
 			}
 		});
 		

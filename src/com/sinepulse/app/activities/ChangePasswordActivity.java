@@ -47,11 +47,11 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 
 	InputMethodManager imm;
 	@ViewById(R.id.etOldPass)
-	public EditText etOldPass;
+	public  EditText etOldPass;
 	@ViewById(R.id.etNewPassword)
-	public EditText etNewPassword;
+	public  EditText etNewPassword;
 	@ViewById(R.id.etConfirmPassword)
-	public EditText etConfirmPassword;
+	public  EditText etConfirmPassword;
 	@ViewById(R.id.bSavePassword)
 	public Button bSavePassword;
 	@ViewById(R.id.pbChangePass)
@@ -115,6 +115,7 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		hideRefreshMenu(menu);
+		setConnectionNodeImage(menu);
 		return prepared;
 	}
 
@@ -233,7 +234,6 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 		}
 		else if (etConfirmPassword.getText().toString().trim().equals("")) {
 			etConfirmPassword.setError("Please provide confirm password");
-			
 			return false;
 		} else if (!etOldPass.getText().toString()
 				.equals(CommonTask.getPassword(this))) {
@@ -241,6 +241,9 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 //			bSavePassword.setEnabled(false);
 			return false;
 			
+		}else if(etOldPass.getText().toString().equals(etNewPassword.getText().toString()) && etOldPass.getText().toString().equals(etConfirmPassword.getText().toString())){
+			etNewPassword.setError("Current password and New Password are same");
+			return false;
 		}
 		
 		else {
@@ -257,13 +260,19 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	/**
 	 * 
 	 */
-	public boolean sendChamgePassReq(String currentPass, String newPass) {
-		String changePassUrl = CommonURL.getInstance().GetCommonURL+ "/" + CommonValues.getInstance().userId + "/passChange";
+//	public boolean ispassChanged=false;
+	public boolean sendChangePassReq(String currentPass, String newPass) {
+		
+//		String changePassUrl = CommonURL.getInstance().GetCommonURL+ "/" + CommonValues.getInstance().userId + "/passChange";
+		String changePassUrl = CommonURL.getInstance().RootUrl+  "passchange";
 		if (JsonParser.postChangePassRequest(changePassUrl, currentPass,
-				newPass) != null) {
+				newPass) != null && JsonParser.postChangePassRequest(changePassUrl, currentPass,
+						newPass) !="") {
+			
 			return true;
-		}
+		}else{
 		return false;
+		}
 	}
 
 	public void resetChangePassWindow() {

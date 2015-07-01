@@ -92,6 +92,12 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 		
 	}
 	@Override
+	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		boolean prepared = super.onPrepareOptionsMenu(menu);
+		setConnectionNodeImage(menu);
+		return prepared;
+	}
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
 			 onBackPressed();
@@ -123,9 +129,10 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	
 public boolean sendGetUserProfileRequest(Integer userId) {
 		
-		String getUserProfileUrl=CommonURL.getInstance().GetCommonURL+"/"+String.valueOf(userId)+"/profile";
+//		String getUserProfileUrl=CommonURL.getInstance().GetCommonURL+"/"+String.valueOf(userId)+"/profile";
+	String getUserProfileUrl=CommonURL.getInstance().RootUrl+"profile";
 
-		if (JsonParser.getUserProfileRequest(getUserProfileUrl) != null) {
+		if (JsonParser.getUserProfileRequest(getUserProfileUrl) != null && JsonParser.getUserProfileRequest(getUserProfileUrl) != "") {
 			return true;
 		}
 		return false;

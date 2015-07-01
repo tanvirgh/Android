@@ -493,9 +493,9 @@ public class RoomManagerFragment extends SherlockFragment implements
 	public boolean setPropertyRequestFromRoom(int userId, int deviceId,int propertyId, int value) {
 		String setPropertyUrl = CommonURL.getInstance().GetCommonURL
 				+ "/" + userId + "/property?id="+ deviceId+"&propertyid="+propertyId+"&value="+value;
-		if (JsonParser.setProptyerRequest(setPropertyUrl) != null) {
-			return true;
-		}
+//		if (JsonParser.setProptyerRequest(setPropertyUrl) != null) {
+//			return true;
+//		}
 		return false;
 		
 	}
@@ -537,9 +537,9 @@ public class RoomManagerFragment extends SherlockFragment implements
 		String getDeviceLogUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ CommonValues.getInstance().userId + "/device/"
 				+ String.valueOf(deviceId) + "/activities";
-		if (JsonParser.postDeviceLogRequest(getDeviceLogUrl,FilterType, fromDate, toDate) != null) {
+		/*if (JsonParser.postDeviceLogRequest(getDeviceLogUrl,FilterType, fromDate, toDate) != null) {
 			return true;
-		}
+		}*/
 		return false;
 
 	}

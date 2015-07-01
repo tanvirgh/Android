@@ -6,11 +6,11 @@
         android:icon="@drawable/refresh1"
         android:showAsAction="always"
         android:title="@string/refresh"/>
-   <!--  <item
-        android:id="@+id/menu_basket_scan"
-        android:actionLayout="@layout/tab_indicator"
+    <item
+        android:id="@+id/menu_conn_indicatior"
+        android:icon="@drawable/local"
         android:showAsAction="always"
-        android:title="@string/scan"/> -->
+        android:title="@string/scan"/>
 
     <!-- The Overflow Menu -->
 

@@ -4,6 +4,7 @@
     <style name="app_theme" parent="android:Theme.NoTitleBar" />
 
     <style name="AppTheme" parent="Theme.Sherlock.Light">
+       
         <item name="searchViewSearchIcon">@drawable/refresh1</item>
         <item name="searchViewCloseIcon">@drawable/navigation_cancel</item>
         <item name="actionBarTabStyle">@style/ActionBarTabStyle.AppTheme</item>
@@ -12,16 +13,17 @@
         <item name="android:actionBarStyle">@style/ActionBar.Solid.AppTheme</item>
         <item name="actionBarDivider">@drawable/abs__list_divider_holo_dark</item>
         <item name="android:actionBarDivider">@drawable/abs__list_divider_holo_dark</item>
+      
 
         <!-- action bar back icon -->
         <item name="homeAsUpIndicator">@drawable/up_icon</item>
         <item name="android:homeAsUpIndicator">@drawable/up_icon</item>
 
         <!-- action bar button text style -->
-        <!--
+        
         <item name="actionMenuTextAppearance">@style/ActionBar.ActionMenuTextAppearance.AppTheme</item>
 		<item name="android:actionMenuTextAppearance">@style/ActionBar.ActionMenuTextAppearance.AppTheme</item>
-        -->
+       
         <!--
 		<item name="actionBarItemBackground">@drawable/normal_rounded_button_bg</item>
 		<item name="android:actionBarItemBackground">@drawable/normal_rounded_button_bg</item>
@@ -43,23 +45,25 @@
         <item name="dropdownListPreferredItemHeight">30dp</item>
         <item name="android:actionBarWidgetTheme">@style/MyStyle</item>
         <item name="actionBarWidgetTheme">@style/MyStyle</item>
+        
     </style>
-    <!--
+    
     <style name="AppTheme.ActionBarStyle" parent="Widget.Sherlock.ActionBar">
         <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
         <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
         <item name="android:height">50dp</item>
-        <item name="android:icon">@drawable/vikinglogo</item>  
-        
-         <item name="background">@color/black</item>
+        <item name="android:icon">@drawable/sp_logo</item>  
+         <item name="background">@drawable/tool_bar</item>
          <item name="android:background">@color/white</item>
          <item name="popupMenuStyle">@style/MyActionWidgetTheme</item>
         
         
     </style>
-    -->
+   
     <style name="AppTheme.ActionBar.TitleTextStyle" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
         <item name="android:textColor">@color/white</item>
+         <item name="android:textStyle">bold</item>
+        
     </style>
 
     <style name="main_menu">
@@ -171,7 +175,7 @@
     <!-- action bar button text style -->
     <style name="ActionBar.ActionMenuTextAppearance.AppTheme" parent="TextAppearance.Sherlock.Widget.ActionBar.Menu">
         <item name="android:textSize">25sp</item>
-        <item name="android:textStyle">normal</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
     </style>
 

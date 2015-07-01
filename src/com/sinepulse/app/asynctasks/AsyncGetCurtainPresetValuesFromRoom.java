@@ -15,13 +15,11 @@ public class AsyncGetCurtainPresetValuesFromRoom extends AsyncTask<Void, Void, B
 	
 //	RoomManagerFragment parentActivity;
 	RoomManager parentActivity ;
-	public int userId;
 	private int deviceId;
 	
-	public AsyncGetCurtainPresetValuesFromRoom(RoomManager _parentActivity, int userId,int deviceId) {
+	public AsyncGetCurtainPresetValuesFromRoom(RoomManager _parentActivity,int deviceId) {
 		this.parentActivity=_parentActivity;
 		this.deviceId=deviceId;
-		this.userId=userId;
 		
 	}
 	
@@ -35,7 +33,7 @@ public class AsyncGetCurtainPresetValuesFromRoom extends AsyncTask<Void, Void, B
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
-		parentActivity.sendCurtainPresetRequest(userId,deviceId);
+		parentActivity.sendCurtainPresetRequest(deviceId);
 		return null;
 	}
 	

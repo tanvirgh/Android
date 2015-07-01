@@ -3,8 +3,7 @@
     android:id="@+id/rlDeviceByTypeDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="15dp"
-    >
+    android:layout_margin="15dp" >
 
     <RelativeLayout
         android:id="@+id/top"
@@ -18,8 +17,7 @@
             android:layout_width="80dp"
             android:layout_height="95dp"
             android:layout_centerHorizontal="true"
-            android:contentDescription="@string/app_name"
-            />
+            android:contentDescription="@string/app_name" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -98,7 +96,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="5dp"
             android:orientation="vertical" >
 
             <SeekBar
@@ -121,17 +119,28 @@
                 android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="46dp"
+                android:layout_marginBottom="50dp"
                 android:textColor="#FFFFFF"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:visibility="invisible" />
+
+            <RelativeLayout
+                android:id="@+id/knob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible" >
+
+                <include
+                    android:id="@+id/curtainadcontrol"
+                    layout="@layout/knob_layout" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/porda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible" >
+                android:visibility="invisible" >
 
                 <include
                     android:id="@+id/curtainadcontrol"
@@ -145,8 +154,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="3dp"
                 android:layout_marginLeft="12dp"
+                android:layout_marginRight="3dp"
                 android:layout_toRightOf="@+id/tvDeviceName"
                 android:background="@drawable/left_curved_button_bg_selected"
                 android:gravity="center"
@@ -161,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/btShowLog"
                 android:layout_centerHorizontal="true"
-               android:layout_marginBottom="5dp"
+                android:layout_marginBottom="5dp"
                 android:text="DeviceName"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"

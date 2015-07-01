@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.sinepulse.app.activities.ChangePasswordActivity;
+import com.sinepulse.app.utils.CommonTask;
+import com.sinepulse.app.utils.CommonValues;
 
 /**
  * @author tanvir.ahmed
@@ -36,19 +38,37 @@ public class AsyncPostChangePassRequest extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected Boolean doInBackground(Void... params) {
 //		deviceStatusFrg.sendGetDeviceRequest(userId);
-		parentActivity.sendChamgePassReq(currentPass,newPass);
+		parentActivity.sendChangePassReq(currentPass,newPass);
 		return null;
 	}
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
+		parentActivity.stopProgress();
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
-			if (parentActivity != null) {
-		        parentActivity.stopProgress();
-				parentActivity.resetChangePassWindow();
-				Toast.makeText(parentActivity, "Password Change Successful", Toast.LENGTH_SHORT).show();
-	}
+			parentActivity.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					if (parentActivity != null) {
+						if(CommonValues.getInstance().isPasswordChanged==true){
+							CommonTask.ShowMessage(parentActivity, "Password Change Successful.");
+							parentActivity.resetChangePassWindow();
+						}else{
+							CommonTask.ShowMessage(parentActivity, "Password Change Failed.");
+							if(CommonValues.getInstance().IsServerConnectionError){
+								CommonTask.ShowAlertMessage(parentActivity,
+										CommonValues.getInstance().alertObj);
+						}
+						
+						}
+						
+			}
+					
+				}
+			});
+			
 		}
 	}
 }

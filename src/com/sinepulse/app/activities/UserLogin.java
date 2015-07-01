@@ -101,7 +101,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		UserLogin.context = this;
 		mSupportActionBar = getSupportActionBar();
 		mSupportActionBar.hide();
-		getHostnameSuffix();
+//		getHostnameSuffix();
 	}
 
 	@AfterViews
@@ -346,8 +346,8 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	 * Method that check whether the application is connected to server or not
 	 */
 
-	public boolean isConnectedToServer(String AppToken) {
-		return CommonTask.isValidLogIn(etUserName.getText().toString(),
+	public boolean isConnectedToServer(String AppToken,Context context) {
+		return CommonTask.isValidLogIn(context,etUserName.getText().toString(),
 				etUserPassword.getText().toString(), AppToken);
 	}
 
@@ -516,16 +516,16 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
         
     }
 	
-	 @Override
+	/* @Override
 	 protected void onStop() {
-		 super.onStop();
+//		 super.onStop();
 		
 	 }
 	 @Override
 	 protected void onPause() {
-		 super.onPause();
-		 lock.release();
-	 }
+//		 super.onPause();
+//		 lock.release();
+	 }*/
 	
 	 String requiredHostNameSuffix="";
 	  private void getHostnameSuffix() {

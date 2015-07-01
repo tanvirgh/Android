@@ -15,13 +15,11 @@ public class AsyncGetCurtainPresetValues extends AsyncTask<Void, Void, Boolean> 
 	
 //	DisplayDeviceDetails  deviceDetails ;
 	Home parentActivity;
-	public int userId;
 	private int deviceId;
 	
-	public AsyncGetCurtainPresetValues(Home _parentActivity, int userId,int deviceId) {
+	public AsyncGetCurtainPresetValues(Home _parentActivity, int deviceId) {
 		this.parentActivity=_parentActivity;
 		this.deviceId=deviceId;
-		this.userId=userId;
 		
 	}
 	
@@ -35,7 +33,7 @@ public class AsyncGetCurtainPresetValues extends AsyncTask<Void, Void, Boolean> 
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
-		parentActivity.sendCurtainPresetRequest(userId,deviceId);
+		parentActivity.sendCurtainPresetRequest(deviceId);
 		return null;
 	}
 	

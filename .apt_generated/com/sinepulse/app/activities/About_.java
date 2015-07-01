@@ -82,10 +82,10 @@ public final class About_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        tvAboutHeadingText1 = ((TextView) hasViews.findViewById(id.tvAboutHeadingText1));
-        bRoom = ((Button) hasViews.findViewById(id.bRoom));
-        bCamera = ((Button) hasViews.findViewById(id.bCamera));
         bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
+        bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        bRoom = ((Button) hasViews.findViewById(id.bRoom));
+        tvAboutHeadingText1 = ((TextView) hasViews.findViewById(id.tvAboutHeadingText1));
         if (hasViews.findViewById(id.bCamera)!= null) {
             hasViews.findViewById(id.bCamera).setOnClickListener(new OnClickListener() {
 

@@ -7,6 +7,7 @@ import android.view.Menu;
 
 import com.sinepulse.app.activities.Home_;
 import com.sinepulse.app.activities.RoomManager_;
+import com.sinepulse.app.entities.Alert;
 import com.sinepulse.app.entities.Device;
 import com.sinepulse.app.entities.DeviceProperty;
 import com.sinepulse.app.entities.DevicePropertyLog;
@@ -45,11 +46,13 @@ public class CommonValues {
 	public ArrayList<TicketType> ticketTypeList=new ArrayList<TicketType>();
 	public ArrayList<Ticket> allTicketList=new ArrayList<Ticket>();
 	public Ticket singleTicket=new Ticket();
+	public Alert alertObj;
 //	public TicketType ticketType=new TicketType();
 	public RoomManager_ roomManager=new RoomManager_();
 	public Home_ home=new Home_();
 	
 	public ArrayList<DevicePropertyLog> deviceLogDetailList=new ArrayList<DevicePropertyLog>();
+	public ArrayList<DevicePropertyLog> userLogDetailList=new ArrayList<DevicePropertyLog>();
 	public Menu menuList = null;
 	public Intent homeIntent = null;
 	public Intent saveServerInfo = null;
@@ -64,8 +67,9 @@ public class CommonValues {
 	public int ErrorCode = CommonConstraints.NO_EXCEPTION;
 
 	static CommonValues commonValuesInstance;
-	public String loginError;
+	public  boolean isPasswordChanged=false;
 	public boolean logoutResponse=false;
+	public boolean shouldSendLogReq=true;
 	public String connectionMode="";
 	public String hostNameSuffix="";
 

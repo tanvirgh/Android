@@ -3,6 +3,8 @@
  */
 package com.sinepulse.app.asynctasks;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.UserLogActivity;
@@ -14,18 +16,22 @@ import com.sinepulse.app.utils.CommonValues;
  */
 public class AsyncGetUserLogInfo extends AsyncTask<Void, Void, Boolean> {
 	
-	UserLogActivity parentActivity;
-	private int userId;
+	Context parentActivity;
+	
 	public String fromDate;
 	public String toDate;
 	public int FilterType;
+	public int PageNumber;
+	public int ChunkSize;
+//	private boolean interrupttask=false;
 	
-	public AsyncGetUserLogInfo(UserLogActivity userLogFragment, int userId,int FilterType,String fromDate,String toDate) {
-		this.parentActivity=userLogFragment;
-		this.userId=userId;
+	public AsyncGetUserLogInfo(Context parentActivity,int FilterType,String fromDate,String toDate,int PageNumber,int ChunkSize) {
+		this.parentActivity=parentActivity;
 		this.fromDate=fromDate;
 		this.toDate=toDate;
 		this.FilterType=FilterType;
+		this.PageNumber=PageNumber;
+		this.ChunkSize=ChunkSize;
 		
 	}
 	
@@ -33,30 +39,37 @@ public class AsyncGetUserLogInfo extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPreExecute() {
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
-		parentActivity.startProgress();
+		((UserLogActivity) parentActivity).startProgress();
 		
 	}
 	
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
-//		deviceStatusFrg.sendGetDeviceRequest(userId);
-		parentActivity.sendGetUserLogRequest(userId,FilterType,fromDate,toDate);
+	/*	while (interrupttask==true) {
+		      if (isCancelled()) break;
+		    }*/
+		((UserLogActivity) parentActivity).sendGetUserLogRequest(FilterType,fromDate,toDate,PageNumber,ChunkSize);
 		return null;
 	}
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
-		parentActivity.stopProgress();
+		((UserLogActivity) parentActivity).stopProgress();
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
-		parentActivity.runOnUiThread(new Runnable() {
+		((Activity) parentActivity).runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				parentActivity.setupUserLogAdapter();
+				if(CommonValues.getInstance().shouldSendLogReq==false){
+					((UserLogActivity) parentActivity).refreshAdapter();
+//					interrupttask=true;
+					return;
+				}
+				((UserLogActivity) parentActivity).setupUserLogAdapter();
 			}
 		});
 		

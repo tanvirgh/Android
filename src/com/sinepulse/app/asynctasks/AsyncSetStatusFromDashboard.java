@@ -17,17 +17,16 @@ public class AsyncSetStatusFromDashboard extends AsyncTask<Void, Void, Boolean> 
 	DeviceListByTypeAdapter displayDetails;
 	Context parentActivity;
 	private int deviceId;
-	private int userId;
-	private boolean isChecked;
+//	private int userId;
+//	private boolean isChecked;
 	private int value;
 //	AsyncProcessRequestFromDashboard mListener;
 
 	public AsyncSetStatusFromDashboard(DeviceListByTypeAdapter displayDetails,
-			Context _parentActivity, int deviceId, int userId, int value) {
+			Context _parentActivity, int deviceId,  int value) {
 		this.parentActivity = _parentActivity;
 		this.displayDetails = displayDetails;
 		this.deviceId = deviceId;
-		this.userId = userId;
 		this.value = value;
 
 	}
@@ -45,7 +44,7 @@ public class AsyncSetStatusFromDashboard extends AsyncTask<Void, Void, Boolean> 
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		
-		displayDetails.sendSetStatusRequest(userId, deviceId, value);
+		displayDetails.sendSetStatusRequest(deviceId, value);
 //		SystemClock.sleep(2000);
 //		mListener.startSendingTask();
 		return null;

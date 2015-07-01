@@ -69,6 +69,7 @@ public class About extends MainActionbarBase implements OnClickListener {
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		hideRefreshMenu(menu);
+		setConnectionNodeImage(menu);
 		return prepared;
 	}
 	

@@ -16,16 +16,20 @@ public class AsyncGetLogFromRoomFragment extends AsyncTask<Void, Void, Boolean> 
 //	RoomManagerFragment parentActivity;
 	RoomManager parentActivity ;
 	private int deviceId;
-	public String fromDate;
-	public String toDate;
+	public String fromsDate;
+	public String tosDate;
 	public int FilterType;
+	public int PageNumber;
+	public int ChunkSize;
 	
-	public AsyncGetLogFromRoomFragment(RoomManager roomManagerFragment, int deviceId,int FilterType,String fromDate,String toDate) {
+	public AsyncGetLogFromRoomFragment(RoomManager roomManagerFragment, int deviceId,int FilterType,String fromsDate,String tosDate,int PageNumber,int ChunkSize) {
 		this.parentActivity=roomManagerFragment;
 		this.deviceId=deviceId;
-		this.fromDate=fromDate;
-		this.toDate=toDate;
+		this.fromsDate=fromsDate;
+		this.tosDate=tosDate;
 		this.FilterType=FilterType;
+		this.PageNumber=PageNumber;
+		this.ChunkSize=ChunkSize;
 		
 	}
 	
@@ -41,7 +45,7 @@ public class AsyncGetLogFromRoomFragment extends AsyncTask<Void, Void, Boolean> 
 	@Override
 	protected Boolean doInBackground(Void... params) {
 //		deviceStatusFrg.sendGetDeviceRequest(userId);
-		parentActivity.sendGetDeviceLogRequest(deviceId,FilterType,fromDate,toDate);
+		parentActivity.sendGetDeviceLogRequest(deviceId,FilterType,fromsDate,tosDate,PageNumber,ChunkSize);
 		return null;
 	}
 	
@@ -57,6 +61,10 @@ public class AsyncGetLogFromRoomFragment extends AsyncTask<Void, Void, Boolean> 
 				
 				@Override
 				public void run() {
+					if(CommonValues.getInstance().shouldSendLogReq==false){
+						parentActivity.refreshAdapter();
+						return;
+					}
 					parentActivity.setupDeviceLogAdapter();
 				}
 			});

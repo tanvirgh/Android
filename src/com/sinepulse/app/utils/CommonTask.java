@@ -44,6 +44,8 @@ import com.sinepulse.app.R;
 import com.sinepulse.app.animations.AlphaAnimationListener;
 import com.sinepulse.app.animations.DisplayNextView;
 import com.sinepulse.app.animations.Flip3dAnimation;
+import com.sinepulse.app.base.MainActionbarBase;
+import com.sinepulse.app.entities.Alert;
 import com.sinepulse.app.entities.LogInInfo;
 
 /**
@@ -164,6 +166,29 @@ public class CommonTask {
 						});
 		AlertDialog alert = builder.create();
 		alert.show();
+	}
+	
+	public static void ShowAlertMessage(Context context, Alert alert) {
+		String connectionNode="";
+		if(CommonValues.getInstance().connectionMode.equals("Local")){
+			connectionNode="[MC]: ";
+		}else{
+			connectionNode="[GSB]: ";
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(alert.title +" "+alert.type+" ["+alert.code+"]")
+				.setIcon(R.drawable.warning)
+				.setMessage(connectionNode+alert.details)
+				.setCancelable(false)
+				.setNegativeButton(R.string.button_ok,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
+		AlertDialog alertDg = builder.create();
+		alertDg.show();
 	}
 
 	public static void ShowConfirmation(Context context, String message,
@@ -360,7 +385,7 @@ public class CommonTask {
 	}
 
 	// This Method Checks the successful log in status
-	public static boolean isValidLogIn(String userName, String password,
+	public static boolean isValidLogIn(Context context,String userName, String password,
 			String AppToken) {
 
 		LogInInfo logInInfo = new LogInInfo();
@@ -370,7 +395,7 @@ public class CommonTask {
 		logInInfo.setAppType("1");
 
 		// String asd=CommonURL.getInstance().baseUrl;
-		if (JsonParser.postLogInRequest(
+		if (JsonParser.postLogInRequest(context,
 				CommonURL.getInstance().LoginCustomerURL, logInInfo) != null) {
 			return true;
 		}

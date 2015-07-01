@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.sinepulse.app.R;
+import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.activities.Wamp;
 import com.sinepulse.app.asynctasks.AsyncProcessRequestFromDashboard;
 import com.sinepulse.app.asynctasks.AsyncSetDeviceStatus;
 import com.sinepulse.app.entities.Device;
@@ -50,6 +52,7 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 	public static Device orderLine;
 	public ArrayList<Device> requestQueue = new ArrayList<Device>();
 	int onOffValue;
+//	Wamp wamp=new Wamp();
 
 	public DeviceListByTypeAdapter(Context Home, int layoutResourceId,
 			ArrayList<Device> deviceList) {
@@ -168,6 +171,8 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 						requestQueue.add(orderLine);
 						processRequestQueue();
 						
+//						wamp.connectWampClient();
+						
 
 					}
 
@@ -219,15 +224,15 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 	}
 
 	AsyncProcessRequestFromDashboard asyncProcessRequestListener = new AsyncProcessRequestFromDashboard() {
-
+          
 		@Override
 		public void onTaskPreExecute() {
-
+          Home.startDeviceProgress();
 		}
 
 		@Override
 		public void onTaskPostExecute(Object object) {
-
+			Home.stopDeviceProgress();
 			setStatusResponseData();
 			if (requestQueue.size() > 0) {
 				requestQueue.remove(0);
@@ -239,7 +244,7 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 		@Override
 		public void startSendingTask() {
 			if (tobeProcessedLine != null ) {
-				sendSetStatusRequest(CommonValues.getInstance().userId,
+				sendSetStatusRequest(
 						tobeProcessedLine.Id,
 						onOffValue);
 			}
@@ -249,6 +254,8 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 		public void onDoInBackground() {
 			startSendingTask();
 		}
+
+		
 	};
 
 	
@@ -298,12 +305,15 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 		}
 	};
 
-	public boolean sendSetStatusRequest(int userId, int deviceId, int onOffValue) {
+	public boolean sendSetStatusRequest(int deviceId, int onOffValue) {
 
-		String setStatusUrl = CommonURL.getInstance().GetCommonURL + "/"
-				+ userId + "/status?id=" + deviceId + "&status=" + onOffValue;
-		if (JsonParser.setStatusRequest(setStatusUrl) != null) {
-//			System.out.println(setStatusUrl);
+//		String setStatusUrl = CommonURL.getInstance().GetCommonURL + "/"
+//				+ userId + "/status?id=" + deviceId + "&status=" + onOffValue;
+		String setStatusUrl = CommonURL.getInstance().RootUrl + "status" ;
+		boolean status=onOffValue==1?true:false;
+		
+		if (JsonParser.postSetStatusRequest(setStatusUrl,deviceId,status) != null) {
+			System.out.println(setStatusUrl);
 			return true;
 		}
 		return false;

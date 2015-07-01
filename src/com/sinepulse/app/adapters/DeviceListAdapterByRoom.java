@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.sinepulse.app.R;
+import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.activities.RoomManager;
 import com.sinepulse.app.asynctasks.AsyncProcessRequestFromDashboard;
 import com.sinepulse.app.asynctasks.AsyncSetDeviceStatus;
 import com.sinepulse.app.entities.Device;
@@ -241,12 +243,12 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 
 		@Override
 		public void onTaskPreExecute() {
-
+			RoomManager.startDeviceProgress();
 		}
 
 		@Override
 		public void onTaskPostExecute(Object object) {
-
+			RoomManager.stopDeviceProgress();
 			setStatusResponseData();
 			if (requestQueue.size() > 0) {
 				requestQueue.remove(0);
@@ -258,9 +260,7 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 		@Override
 		public void startSendingTask() {
 			if (tobeProcessedLine != null ) {
-				sendSetStatusRequest(CommonValues.getInstance().userId,
-						tobeProcessedLine.Id,
-						onOffValue);
+				sendSetStatusRequest(tobeProcessedLine.Id,onOffValue);
 			}
 		}
 
@@ -317,12 +317,14 @@ boolean touchEnabled = true;
 	};
 	
 
-	public boolean sendSetStatusRequest(int userId, int deviceId, int onOffValue) {
+	public boolean sendSetStatusRequest(int deviceId, int onOffValue) {
 		
-		String setStatusUrl = CommonURL.getInstance().GetCommonURL
-				+ "/" + userId + "/status?id="+ deviceId+"&status="+onOffValue;
-		if (JsonParser.setStatusRequest(setStatusUrl) != null) {
-//			System.out.println(setStatusUrl);
+//		String setStatusUrl = CommonURL.getInstance().GetCommonURL
+//				+ "/" + userId + "/status?id="+ deviceId+"&status="+onOffValue;
+		String setStatusUrl = CommonURL.getInstance().RootUrl + "status" ;
+		boolean status=onOffValue==1?true:false;
+		if (JsonParser.postSetStatusRequest(setStatusUrl,deviceId,status) != null) {
+			System.out.println(setStatusUrl);
 			return true;
 		}
 		return false;

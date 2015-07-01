@@ -17,15 +17,19 @@ import org.androidannotations.annotations.ViewById;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.CalendarView.OnDateChangeListener;
@@ -70,7 +74,7 @@ public class UserLogActivity extends MainActionbarBase implements
 	@ViewById(R.id.lvLogList)
 	public ListView deviceLogListView;
 	@ViewById(R.id.userLogProgressBar)
-	public ProgressBar userLogProgressBar;
+	public static ProgressBar userLogProgressBar;
 	@ViewById(R.id.bDeliverydate)
 	public Button bDeliverydate;
 	@ViewById(R.id.bSearch)
@@ -105,6 +109,12 @@ public class UserLogActivity extends MainActionbarBase implements
 	Date tobesetFromDate = new Date();
 	Date tobesetToDate = new Date();
 
+	int FilterType = 0;
+	String fromsDate = "";
+	String tosDate = "";
+	int PageNumber = 0;
+	int ChunkSize = 30;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -114,15 +124,6 @@ public class UserLogActivity extends MainActionbarBase implements
 		dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 		setDateTimeField();
 	}
-	/*@Override
-	public void onSaveInstanceState(Bundle savedInstanceState){
-		super.onSaveInstanceState(savedInstanceState);
-	}
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
-	    // Always call the superclass so it can restore the view hierarchy
-	    super.onRestoreInstanceState(savedInstanceState);
-	   
-	}*/
 
 	@AfterViews
 	void afterViewLoaded() {
@@ -131,8 +132,6 @@ public class UserLogActivity extends MainActionbarBase implements
 		/*
 		 * fromDate=formatter.format(d).toString();
 		 * toDate=formatter.format(d).toString();
-		 */
-		/*
 		 * fromDate = dateFormatter.format(d).toString(); toDate =
 		 * dateFormatter.format(d).toString(); etDateFrom.setText(fromDate);
 		 * etDateTo.setText(toDate);
@@ -159,6 +158,12 @@ public class UserLogActivity extends MainActionbarBase implements
 		mSupportActionBar.setDisplayHomeAsUpEnabled(true);
 
 	}
+	@Override
+	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		boolean prepared = super.onPrepareOptionsMenu(menu);
+		setConnectionNodeImage(menu);
+		return prepared;
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -175,14 +180,21 @@ public class UserLogActivity extends MainActionbarBase implements
 	 * 
 	 */
 	public void loadTodaysLog() {
-		// SimpleDateFormat formatter = new
-		// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-		// Date d=new Date();
-		// etDateFrom.setText(formatter.format(d).toString());
+
 		tvToday.setTextColor(Color.parseColor("#6699ff"));
 		tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-		loadUserLogInfo(CommonValues.getInstance().userId, 1,
-				formatter.format(d).toString(), formatter.format(d).toString());
+		/*
+		 * esl.FilterType=1; esl.fromDate=formatter.format(d).toString();
+		 * esl.toDate=formatter.format(d).toString();
+		 */
+		FilterType = 1;
+		fromsDate = formatter.format(d).toString();
+		tosDate = formatter.format(d).toString();
+		PageNumber = 1;
+		// ChunkSize=40;
+
+		loadUserLogInfo(FilterType, fromsDate, tosDate, PageNumber, ChunkSize);
+
 	}
 
 	@Override
@@ -229,15 +241,15 @@ public class UserLogActivity extends MainActionbarBase implements
 			 */
 			etDateFrom.setText("");
 			etDateTo.setText("");
-			 bSearch.setVisibility(View.INVISIBLE);
+			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#6699ff"));
-			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-//				deviceLogListView.setAdapter(null);
-//				uLogAdapter.clear();
+			if (CommonValues.getInstance().userLogDetailList.size() > 0) {
+				clearPreviousData();
 			}
-			loadUserLogInfo(CommonValues.getInstance().userId, 1, formatter
-					.format(d).toString(), formatter.format(d).toString());
+			// loadUserLogInfo(CommonValues.getInstance().userId, 1, formatter
+			// .format(d).toString(), formatter.format(d).toString());
+			loadTodaysLog();
 			break;
 		case R.id.tvYesterday:
 			if (tvEmptyLog.isShown()) {
@@ -250,17 +262,27 @@ public class UserLogActivity extends MainActionbarBase implements
 			 */
 			etDateFrom.setText("");
 			etDateTo.setText("");
-			 bSearch.setVisibility(View.INVISIBLE);
+			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#6699ff"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
-			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-//				deviceLogListView.setAdapter(null);
-//				uLogAdapter.clear();
+			if (CommonValues.getInstance().userLogDetailList.size() > 0) {
+				clearPreviousData();
 			}
-			loadUserLogInfo(CommonValues.getInstance().userId, 2, formatter
-					.format(d.getTime() - 24 * 60 * 60 * 1000).toString(),
-					formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
-							.toString());
+			/*
+			 * esl.FilterType=2; esl.fromDate=formatter .format(d.getTime() - 24
+			 * * 60 * 60 * 1000).toString(); esl.toDate=formatter
+			 * .format(d.getTime() - 24 * 60 * 60 * 1000).toString();
+			 */
+			FilterType = 2;
+			fromsDate = formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
+					.toString();
+			tosDate = formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
+					.toString();
+			PageNumber = 1;
+			// ChunkSize=40;
+
+			loadUserLogInfo(FilterType, fromsDate, tosDate, PageNumber,
+					ChunkSize);
 			break;
 		case R.id.bDashboard:
 			if (MainActionbarBase.stackIndex != null) {
@@ -276,8 +298,9 @@ public class UserLogActivity extends MainActionbarBase implements
 			startActivity(homeIntent);
 			break;
 		case R.id.bCamera:
-			Toast.makeText(UserLogActivity.this, "No Servilance System Available", Toast.LENGTH_SHORT).show();
-			/*if (MainActionbarBase.stackIndex != null) {
+			// Toast.makeText(UserLogActivity.this,
+			// "No Servilance System Available", Toast.LENGTH_SHORT).show();
+			if (MainActionbarBase.stackIndex != null) {
 				MainActionbarBase.stackIndex.removeAllElements();
 			}
 			currentFragment = CAMERA_FRAGMENT;
@@ -285,7 +308,7 @@ public class UserLogActivity extends MainActionbarBase implements
 				stackIndex.push(String.valueOf(6));
 			Intent cameraIntent = new Intent(this, VideoActivity_.class);
 			cameraIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			startActivity(cameraIntent);*/
+			startActivity(cameraIntent);
 
 			break;
 		case R.id.bRoom:
@@ -303,40 +326,45 @@ public class UserLogActivity extends MainActionbarBase implements
 		case R.id.bSearch:
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
-			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-				deviceLogListView.setAdapter(null);
-				uLogAdapter.clear();
+			if (CommonValues.getInstance().userLogDetailList.size() > 0) {
+				clearPreviousData();
 			}
-			if(validateEmptyDateInput()){
-			loadUserLogInfo(CommonValues.getInstance().userId, 3,
-					stserverDate, lstserverDate);
+			if (validateEmptyDateInput()) {
+				/*
+				 * esl.FilterType=3; esl.fromDate=stserverDate;
+				 * esl.toDate=lstserverDate;
+				 */
+				FilterType = 3;
+				fromsDate = stserverDate;
+				tosDate = lstserverDate;
+				PageNumber = 1;
+				// ChunkSize=40;
+
+				loadUserLogInfo(FilterType, fromsDate, tosDate, PageNumber,
+						ChunkSize);
 			}
 			break;
 		default:
 			break;
 		}
 
-		/*bSearch.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-					deviceLogListView.setAdapter(null);
-					uLogAdapter.clear();
-				}
-				loadUserLogInfo(CommonValues.getInstance().userId, 3,
-						stserverDate, lstserverDate);
-
-			}
-		});*/
 
 	}
 
 	/**
 	 * 
 	 */
+	private void clearPreviousData() {
+		deviceLogListView.setAdapter(null);
+		uLogAdapter.clear();
+		CommonValues.getInstance().userLogDetailList.clear();
+	}
+
+	/**
+	 * 
+	 */
 	public boolean validateEmptyDateInput() {
-		 if(etDateTo.getText().toString().length() == 0){
+		if (etDateTo.getText().toString().length() == 0) {
 			CommonTask.ShowMessage(this, "End Date Can't be blank");
 			return false;
 		}
@@ -352,8 +380,7 @@ public class UserLogActivity extends MainActionbarBase implements
 				CommonTask.ShowMessage(this, "Please select Start Date first.");
 				etDateTo.setText("");
 				return false;
-			} 
-			else if (lastDate.after(CurrentDate)) {
+			} else if (lastDate.after(CurrentDate)) {
 				CommonTask.ShowMessage(this,
 						"End date can't be greater than Current Date");
 				etDateTo.setText("");
@@ -386,79 +413,119 @@ public class UserLogActivity extends MainActionbarBase implements
 				.ShowMessage(this, "End Date can't  be less than Start date.");
 	}
 
-	private void loadUserLogInfo(int userId, int FilterType, String fromDate,
-			String toDate) {
+	private void loadUserLogInfo(int FilterType, String fromsDate,
+			String tosDate, int PageNumber, int ChunkSize) {
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_User_Activities;
 		if (asyncGetUserLogInfo != null) {
 			asyncGetUserLogInfo.cancel(true);
 		}
-		asyncGetUserLogInfo = new AsyncGetUserLogInfo(this,
-				CommonValues.getInstance().userId, FilterType, fromDate, toDate);
+		asyncGetUserLogInfo = new AsyncGetUserLogInfo(this, FilterType,
+				fromsDate, tosDate, PageNumber, ChunkSize);
 		asyncGetUserLogInfo.execute();
 
 	}
 
-	public boolean sendGetUserLogRequest(Integer userId, int FilterType,
-			String fromDate, String toDate) {
+	public boolean sendGetUserLogRequest(int FilterType, String fromsDate,
+			String tosDate, int PageNumber, int ChunkSize) {
 
-		String postUserLogUrl = CommonURL.getInstance().GetCommonURL + "/"
-				+ String.valueOf(userId) + "/activities";
+		// String postUserLogUrl = CommonURL.getInstance().GetCommonURL + "/"
+		// + String.valueOf(userId) + "/activities";
+		String postUserLogUrl = CommonURL.getInstance().RootUrl
+				+ "myactivities";
 
-		if (JsonParser.postUserLogRequest(postUserLogUrl, FilterType, fromDate,
-				toDate) != null && JsonParser.postUserLogRequest(postUserLogUrl, FilterType, fromDate,
-						toDate) !="") {
+		if (JsonParser.postUserLogRequest(postUserLogUrl, FilterType,
+				fromsDate, tosDate, PageNumber, ChunkSize, shouldAppendList) != null
+				&& JsonParser.postUserLogRequest(postUserLogUrl, FilterType,
+						fromsDate, tosDate, PageNumber, ChunkSize,
+						shouldAppendList) != "") {
 			return true;
-		}else{
-			UserLogActivity.this.runOnUiThread(new Runnable() {
-				
-				@Override
-				public void run() {
-					CommonTask.ShowMessage(UserLogActivity.this, "No Data returned from Server");
-//					CommonTask.ShowNetworkChangeConfirmation(UserLogActivity.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
-					asyncGetUserLogInfo.cancel(true);
-				}
-			});
-			
-		return false;
+		} else {
+			return false;
 		}
 	}
 
 	/**
 	 * 
 	 */
+	boolean shouldAppendList = false;
+
 	public void setupUserLogAdapter() {
-		if (CommonValues.getInstance().deviceLogDetailList != null) {
-			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
+		if (CommonValues.getInstance().userLogDetailList != null) {
+			if (CommonValues.getInstance().userLogDetailList.size() > 0) {
 				tvEmptyLog.setVisibility(View.INVISIBLE);
 				uLogAdapter = new UserLogAdapter(this, R.layout.log_list_item,
-						CommonValues.getInstance().deviceLogDetailList);
+						CommonValues.getInstance().userLogDetailList);
 				deviceLogListView.setAdapter(uLogAdapter);
 				uLogAdapter.setTouchEnabled(false);
 				deviceLogListView.setEnabled(true);
+
+				deviceLogListView
+						.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+							@Override
+							public void onScrollStateChanged(AbsListView view,
+									int scrollState) {
+								int threshold = 1;
+								int count = deviceLogListView.getCount();
+
+								if (scrollState == SCROLL_STATE_IDLE) {
+
+									if (deviceLogListView
+											.getLastVisiblePosition() >= count
+											- threshold) {
+										if (CommonValues.getInstance().shouldSendLogReq == true) {
+											CommonValues.getInstance().shouldSendLogReq = false;
+										}
+										shouldAppendList = true;
+										// Execute LoadMoreData AsyncTask
+										CommonValues.getInstance().currentAction = CommonIdentifier.Action_User_Activities;
+										PageNumber = PageNumber += 1;
+
+										if (asyncGetUserLogInfo != null) {
+											asyncGetUserLogInfo.cancel(true);
+										}
+										asyncGetUserLogInfo = new AsyncGetUserLogInfo(
+												UserLogActivity.this,
+												FilterType, fromsDate, tosDate,
+												PageNumber, ChunkSize);
+										asyncGetUserLogInfo.execute();
+									}
+								}
+							}
+
+							@Override
+							public void onScroll(AbsListView view,
+									int firstVisibleItem, int visibleItemCount,
+									int totalItemCount) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+
 			} else {
 				tvEmptyLog.setVisibility(View.VISIBLE);
 				tvEmptyLog.setText("Sorry ! No Log Available ");
 			}
 		} else {
 			CommonTask.ShowMessage(this, "No Data returned from Server");
-//			CommonTask
-//			.ShowNetworkChangeConfirmation(
-//					this,
-//					"Network State has been changed.Please log in again to continue.",
-//					showNetworkChangeEvent());
+			 /*CommonTask
+			 .ShowNetworkChangeConfirmation(
+			 this,
+			 "Network State has been changed.Please log in again to continue.",
+			 showNetworkChangeEvent());*/
 		}
+
+	}
+
+	public void refreshAdapter() {
+		CommonValues.getInstance().shouldSendLogReq = true;
+		uLogAdapter.notifyDataSetChanged();
 
 	}
 
 	@Override
 	public void onBackPressed() {
-		// if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-		// CommonValues.getInstance().deviceLogDetailList.clear();
-		// deviceLogListView.setAdapter(null);
-		// uLogAdapter.clear();
-		// }
-		// etDateFrom.setText("");
-		// etDateTo.setText("");
+
 		backState = UserLogSate.INITIAL_STATE;
 		if (MainActionbarBase.stackIndex != null) {
 			MainActionbarBase.stackIndex.removeAllElements();
@@ -473,14 +540,8 @@ public class UserLogActivity extends MainActionbarBase implements
 	@Override
 	public void onResume() {
 		this.setTitle("Activities");
-//		loadTodaysLog();
-		/*
-		 * if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-		 * deviceLogListView.setAdapter(null); uLogAdapter.clear(); }
-		 */
-//		 etDateFrom.setText("");
-//		 etDateTo.setText("");
-//		 bSearch.setVisibility(View.INVISIBLE);
+		// loadTodaysLog();
+
 		fragmentPaused = false;
 		super.onResume();
 

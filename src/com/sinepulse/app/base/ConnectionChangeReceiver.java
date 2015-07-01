@@ -29,7 +29,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		ConnectivityManager connectivityManager = (ConnectivityManager) context
+		/*ConnectivityManager connectivityManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 		NetworkInfo mobNetInfo = connectivityManager
@@ -56,7 +56,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver
 					CommonValues.getInstance().userId);
 			asyncLogOutTask.execute();
 		}
-
+*/
 	}
 
 }

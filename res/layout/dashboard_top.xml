@@ -15,7 +15,7 @@
             style="@style/HomeButton"
             android:layout_weight="1"
             android:drawableTop="@drawable/voltage"
-            android:text="54 walts in use" 
+            android:text="0.0 walts in use" 
             android:drawablePadding="5dp"
             android:paddingBottom="25dp"
             android:textSize="15sp"

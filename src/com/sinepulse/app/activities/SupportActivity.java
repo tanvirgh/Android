@@ -219,6 +219,7 @@ public class SupportActivity extends MainActionbarBase implements
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		setActionBarMenuVisibility(true);
+		setConnectionNodeImage(menu);
 		return prepared;
 	}
 

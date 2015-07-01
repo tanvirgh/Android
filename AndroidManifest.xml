@@ -115,20 +115,7 @@
             android:finishOnTaskLaunch="true"
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Dialog" />
-        <activity
-            android:name=".activities.VideoStreamActivity"
-            android:configChanges="orientation|keyboardHidden|mcc|mnc"
-            android:label="@string/title_activity_room_manager"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
-        <activity
-            android:name=".activities.VideoStreamActivity_"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="Video Stream"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
+      
         <activity
             android:name=".activities.RoomManager_"
             android:configChanges="orientation|keyboardHidden|mcc|mnc"
@@ -162,12 +149,15 @@
         <activity
             android:name=".activities.VideoActivity_"
             android:label="@string/title_activity_video"
-            android:configChanges="orientation|screenSize|keyboardHidden|mcc|mnc"
-            >
-            <!--   android:parentActivityName=".base.MainActionbarBase" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sinepulse.app.base.MainActionbarBase" /> -->
+            android:configChanges="orientation|screenSize|keyboardHidden|mcc|mnc">
+        </activity>
+         <activity
+            android:name=".activities.Wamp"
+            android:configChanges="orientation|keyboardHidden|mcc|mnc"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:alwaysRetainTaskState="true"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
 
        <!--  <receiver
@@ -196,7 +186,8 @@
           By default, it must be named .GCMIntentService, unless the
           application uses a custom BroadcastReceiver that redefines its name.
         -->
-        <service android:name=".GCMIntentService" />
+        
+        <service android:name="com.sinepulse.app.activities.GCMIntentService" />
 
         <meta-data
             android:name="com.google.android.gms.version"

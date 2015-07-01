@@ -51,15 +51,23 @@ public class GCMIntentService extends IntentService {
 	public static final int NOTIFICATION_ID = 1;
 	private NotificationManager mNotificationManager;
 	NotificationCompat.Builder builder;
+	JSONObject jsonObj = null;
 
 	public GCMIntentService() {
 		super("GCMIntentService");
 	}
+	@Override
+	  public void onStart(Intent intent, int startId) {
+	    if (intent != null) {
+	      super.onStart(intent, startId);
+	    }
+	  }
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		
 		Bundle extras = intent.getExtras();
+		 String from=extras.getString("from");
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 		// The getMessageType() intent parameter must be the intent you received
 		// in your BroadcastReceiver.
@@ -79,16 +87,20 @@ public class GCMIntentService extends IntentService {
 			} else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE
 					.equals(messageType)) {
 				// This loop represents the service doing some work.
-				/*
-				 * for (int i = 0; i < 5; i++) { Log.i(TAG, "Working... " + (i +
-				 * 1) + "/5 @ " + SystemClock.elapsedRealtime()); try {
-				 * Thread.sleep(5000); } catch (InterruptedException e) { } }
-				 */
-				// Log.i(TAG, "Completed work @ " +
-				// SystemClock.elapsedRealtime());
+				for (int i = 0; i < 5; i++) {
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+					}
+				}
 				// Post notification of received message.
+				 if(from.equals("google.com/iid"))
+                 {
+                     //related to google ... DO NOT PERFORM ANY ACTION
+                 }
+                 else { 
 				String action="";
-				JSONObject jsonObj=null;
+//				JSONObject jsonObj=null;
 				try {
 					jsonObj = new JSONObject(
 							extras.getString("header"));
@@ -174,7 +186,7 @@ public class GCMIntentService extends IntentService {
 												public void run() {
 													if(CommonValues.getInstance().connectionMode.equals("Internet")){
 													CommonValues.getInstance().roomManager
-															.setPropertyResponseData();
+															.setDevicePropertyData();
 													}
 												}
 											});
@@ -208,6 +220,7 @@ public class GCMIntentService extends IntentService {
 					e.printStackTrace();
 				}
 			}
+		}
 		}
 		// Release the wake lock provided by the WakefulBroadcastReceiver.
 		WakefulBroadcastReceiver.completeWakefulIntent(intent);

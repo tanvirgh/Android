@@ -25,11 +25,11 @@
             android:layout_centerVertical="true"
             android:ellipsize="end"
               android:singleLine="true"
-            android:text="58 w"
+            android:text="0.0 w"
             android:paddingLeft="20dp"
             android:paddingRight="0dp"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="normal" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -57,7 +57,7 @@
         android:paddingLeft="0dp">
 
         <RelativeLayout
-            android:layout_width="40dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:background="@drawable/bgled"
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
-                android:text="3 "
+                android:text="0 "
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -83,7 +83,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="40dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
              android:background="@drawable/bgled"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:paddingLeft="5dp"
-                android:text="4 "
+                android:text="0 "
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

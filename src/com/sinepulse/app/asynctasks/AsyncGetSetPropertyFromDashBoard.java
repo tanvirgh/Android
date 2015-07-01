@@ -17,14 +17,12 @@ public class AsyncGetSetPropertyFromDashBoard extends AsyncTask<Void, Void, Bool
 //	DeviceListByTypeAdapter parentActivity;
 	Home parentActivity;
 	private int deviceId;
-	private int userId;
 	private int propertyId;
 	private int value;
 	
-	public AsyncGetSetPropertyFromDashBoard(Home _parentActivity,int userId,int deviceId,int propertyId,int value) {
+	public AsyncGetSetPropertyFromDashBoard(Home _parentActivity,int deviceId,int propertyId,int value) {
 		this.parentActivity=_parentActivity;
 		this.deviceId=deviceId;
-		this.userId=userId;
 		this.propertyId=propertyId;
 		this.value=value;
 		
@@ -40,7 +38,7 @@ public class AsyncGetSetPropertyFromDashBoard extends AsyncTask<Void, Void, Bool
 
 	@Override
 	protected Boolean doInBackground(Void... params) {
-		parentActivity.setPropertyRequestFromDashboard(userId,deviceId,propertyId,value);
+		parentActivity.setPropertyRequestFromDashboard(deviceId,propertyId,value);
 		return null;
 	}
 	
@@ -49,12 +47,14 @@ public class AsyncGetSetPropertyFromDashBoard extends AsyncTask<Void, Void, Bool
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
+				parentActivity.stopDevicePropertyProgress();
 		parentActivity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				parentActivity.stopDevicePropertyProgress();
+				
 				parentActivity.setPropertyResponseData();
+				parentActivity.shouldResend=false;
 			}
 		});
 		

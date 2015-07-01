@@ -48,8 +48,14 @@ public class AsyncCheckServerStateAndSaveServerInfo extends AsyncTask<Void, Void
 		if (!CommonValues.getInstance().IsServerConnectionError) {
 			saveLogInData.setUserInfoAfterSave();
 		} else {
-			CommonTask.ShowMessage(saveLogInData,
-					CommonValues.getInstance().loginError);
+			if(CommonValues.getInstance().IsServerConnectionError){
+			CommonTask.ShowAlertMessage(saveLogInData,
+					CommonValues.getInstance().alertObj);
+			}
+//			else{
+//				CommonTask.ShowMessage(saveLogInData,
+//						"No Data Returned From Server");
+//			}
 		}
 			}
 		}
@@ -60,7 +66,7 @@ public class AsyncCheckServerStateAndSaveServerInfo extends AsyncTask<Void, Void
 		
 		
 		// save LogIn screen information in shared preference
-		if (saveLogInData.isConnectedToServer(Apptoken)) {
+		if (saveLogInData.isConnectedToServer(Apptoken,saveLogInData)) {
 			saveLogInData.saveUsernameAndPassword();
 		}else{
 			CommonValues.getInstance().IsServerConnectionError=true;

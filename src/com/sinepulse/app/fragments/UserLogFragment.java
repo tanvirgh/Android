@@ -287,9 +287,9 @@ public class UserLogFragment extends SherlockFragment implements
 		String postUserLogUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ String.valueOf(userId) + "/activities";
 
-		if (JsonParser.postUserLogRequest(postUserLogUrl, FilterType, fromDate, toDate) != null) {
+		/*if (JsonParser.postUserLogRequest(postUserLogUrl, FilterType, fromDate, toDate) != null) {
 			return true;
-		}
+		}*/
 		return false;
 	}
 

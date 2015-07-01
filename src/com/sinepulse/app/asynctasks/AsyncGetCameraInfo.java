@@ -17,11 +17,11 @@ public class AsyncGetCameraInfo extends AsyncTask<Void, Void, Boolean> {
 //	RoomManagerFragment  roomManagerFrg ;
 	VideoActivity  parentActivity ;
 	
-	private int logedInUserId;
+//	private int logedInUserId;
 	
-	public AsyncGetCameraInfo(VideoActivity parentActivity, int logedInUserId) {
+	public AsyncGetCameraInfo(VideoActivity parentActivity) {
 		this.parentActivity = parentActivity;
-		this.logedInUserId=logedInUserId;
+//		this.logedInUserId=logedInUserId;
 		
 	}
 	
@@ -38,7 +38,7 @@ public class AsyncGetCameraInfo extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		
-		parentActivity.sendGetCameraInfoRequest(logedInUserId);
+		parentActivity.sendGetCameraInfoRequest();
 		return null;
 	}
 	

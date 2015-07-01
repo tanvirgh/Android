@@ -96,9 +96,8 @@ public class VideoActivity extends MainActionbarBase implements
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		MenuItem refresh = menu.findItem(R.id.menu_refresh);
-		refresh.setVisible(false);
-		invalidateOptionsMenu();
+		hideRefreshMenu(menu);
+		setConnectionNodeImage(menu);
 		return prepared;
 	};
 
@@ -126,8 +125,7 @@ public class VideoActivity extends MainActionbarBase implements
 		if (asyncGetCameraInfo != null) {
 			asyncGetCameraInfo.cancel(true);
 		}
-		asyncGetCameraInfo = new AsyncGetCameraInfo(this,
-				CommonValues.getInstance().userId);
+		asyncGetCameraInfo = new AsyncGetCameraInfo(this);
 		asyncGetCameraInfo.execute();
 	}
 
@@ -177,11 +175,11 @@ public class VideoActivity extends MainActionbarBase implements
 			break;
 		case R.id.bDashboard:
 			// loadingDevicesTask.cancel(true);
+//			releaseVideoProperties();
+			playPort = -1;
 			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
 			}
-//			releaseVideoProperties();
-			playPort = -1;
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
 			Home.navDrawerAdapter.setSelectedPosition(ALLDEVICE_FRAGMENT);
 			currentFragment = ALLDEVICE_FRAGMENT;
@@ -461,9 +459,9 @@ public class VideoActivity extends MainActionbarBase implements
 						System.out.println("Open player successfully.");
 					} else {
 						// System.out.println("Open player failed.");
-						CommonTask
-								.ShowMessage((Context) realplayCallback,
-										"Some error occured in HIK Vision SDK.Please try watching Stream later");
+//						CommonTask
+//								.ShowMessage((VideoActivity) realplayCallback,
+//										"Some error occured in HIK Vision SDK.Please try watching Stream later");
 					}
 				}
 
@@ -542,15 +540,23 @@ public class VideoActivity extends MainActionbarBase implements
 		}
 	}
 
-	public boolean sendGetCameraInfoRequest(int logedInUserId) {
+	public boolean sendGetCameraInfoRequest() {
 
-		String getCameraInfoUrl = CommonURL.getInstance().GetCommonURL + "/"
-				+ logedInUserId + "/home" + "/camera";
+//		String getCameraInfoUrl = CommonURL.getInstance().GetCommonURL + "/"
+//				+ logedInUserId + "/home" + "/camera";
+		String getCameraInfoUrl = CommonURL.getInstance().RootUrl + "camera";
 
 		if (JsonParser.getcameraInfoRequest(getCameraInfoUrl) != null && JsonParser.getcameraInfoRequest(getCameraInfoUrl) != "") {
 			return true;
 		}else{
-			CommonTask.ShowMessage(this, "No Data Returned From Server.");
+			VideoActivity.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask.ShowMessage(VideoActivity.this, "No Data Returned From Server.");
+				}
+			});
+			
 		return false;
 		}
 	}
@@ -640,7 +646,7 @@ public class VideoActivity extends MainActionbarBase implements
 			if (mPlayId < 0)
 			{
 				dvrOff=true;
-			 	return dvrOff;
+//			 	return dvrOff;
 			}
 
 			catchErrorIfNecessary();

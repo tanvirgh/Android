@@ -11,6 +11,7 @@ import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.R;
 
 import android.app.Application;
+import android.content.Context;
 
 /**
  * Automatically call at the application startup
@@ -29,14 +30,17 @@ import android.app.Application;
 												resDialogCommentPrompt = R.string.crash_dialog_comment_prompt, // optional. when defined, adds a user text field input with this text resource as a label
 												resDialogOkToast = R.string.crash_dialog_ok_toast )// optional. displays a Toast message when the user accepts to send a report.
 public class HomeAutomationApplication extends Application{
+//	 public static Context context;
 
 	@Override
 	public void onCreate() {		
 		super.onCreate();
+//		context = getApplicationContext();
 		// Create instances so that we can use whole over the application
 		initializeCommonInstance();	
 		// The following line triggers the initialization of ACRA
         ACRA.init(this);
+        
         
 	}
 	
