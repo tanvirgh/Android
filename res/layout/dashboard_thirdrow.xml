@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/thirdRow"
-    android:baselineAligned="false"
     android:layout_width="fill_parent"
-   android:layout_height="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_below="@+id/secondRow"
     android:layout_marginTop="10dp"
-     android:background="@drawable/bgmedium"
+    android:background="@drawable/bgmedium"
+    android:baselineAligned="false"
     android:onClick="middleViewClicked"
     android:orientation="horizontal" >
 
@@ -24,27 +24,41 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:ellipsize="end"
-              android:singleLine="true"
-            android:text="0.0 w"
-            android:paddingLeft="20dp"
+            android:paddingLeft="15dp"
             android:paddingRight="0dp"
-            android:textSize="24sp"
+            android:singleLine="true"
+            android:text="0.00"
+            android:textSize="22sp"
+            android:textStyle="normal" />
+         <com.sinepulse.app.custom.controls.CustomTextView
+            android:id="@+id/thirdRowLeftR"
+            style="@style/HomeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/thirdRowLeft"
+             android:paddingLeft="5dp"
+            android:paddingRight="0dp"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="W"
+            android:textSize="23sp"
             android:textStyle="normal" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="0dp"
-         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical" >
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1" >
 
         <ImageView
             android:id="@+id/thirdRowImage"
             style="@style/HomeButton"
             android:layout_centerInParent="true"
-            android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:src="@drawable/ac_large_mb"/>
+            android:paddingTop="5dp"
+            android:src="@drawable/ac_large_mb" />
     </RelativeLayout>
 
     <LinearLayout
@@ -52,16 +66,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:orientation="vertical" 
-         android:paddingRight="15dp"
-        android:paddingLeft="0dp">
+        android:orientation="vertical"
+        android:paddingLeft="0dp"
+        android:paddingRight="15dp" >
 
         <RelativeLayout
-            android:layout_width="45dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
-            android:background="@drawable/bgled"
-          android:layout_marginTop="8dp" >
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bgled" >
 
             <com.sinepulse.app.custom.controls.CustomTextView
                 android:id="@+id/thirdRowRightUp"
@@ -76,19 +90,20 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/thirdRowRightUp"
-                android:src="@drawable/greenled" 
-                android:layout_alignParentTop="true">
+                android:src="@drawable/greenled" >
             </ImageView>
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="45dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
-             android:background="@drawable/bgled"
-            android:layout_marginTop="3dp" 
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/bgled" >
 
             <com.sinepulse.app.custom.controls.CustomTextView
                 android:id="@+id/thirdRowRightDown"
@@ -104,9 +119,10 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/thirdRowRightDown"
-                android:src="@drawable/redled"
-                android:layout_alignParentTop="true" >
+                android:src="@drawable/redled" >
             </ImageView>
         </RelativeLayout>
     </LinearLayout>

@@ -11,7 +11,8 @@ import com.sinepulse.app.activities.RoomManager;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
- * @author Tanvir
+ * Get all device list from server for home tab through asynchronous call.
+ * @author tanvir.ahmed
  *
  */
 public class AsyncGetDevices extends AsyncTask<Void, Void, Boolean> {
@@ -32,7 +33,7 @@ public class AsyncGetDevices extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPreExecute() {
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
-		((RoomManager) parentActivity).startDeviceProgress();
+		RoomManager.startDeviceProgress();
 		
 	}
 	

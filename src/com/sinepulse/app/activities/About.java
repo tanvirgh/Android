@@ -14,12 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.base.MainActionbarBase;
 
 /**
- * Display about section of the apps with version no and necessary details of the app.
+ * Display about section of the application with build version no and necessary details .
  * @author tac
  *
  */
@@ -35,6 +36,7 @@ public class About extends MainActionbarBase implements OnClickListener {
 	protected Button bDashboard;
 	@ViewById(R.id.tvAboutHeadingText1)
 	protected TextView tvAboutHeadingText1;
+	private Menu actionBarMenu;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,9 +69,10 @@ public class About extends MainActionbarBase implements OnClickListener {
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		hideRefreshMenu(menu);
-		setConnectionNodeImage(menu);
+		setConnectionNodeImage(actionBarMenu);
 		return prepared;
 	}
 	

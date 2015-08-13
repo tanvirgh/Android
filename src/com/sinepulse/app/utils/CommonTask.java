@@ -191,15 +191,29 @@ public class CommonTask {
 		alertDg.show();
 	}
 
-	public static void ShowConfirmation(Context context, String message,
+	public static void ShowConfirmation(Context context, Alert alert,
 			DialogInterface.OnClickListener event) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		/*AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning)
 				.setMessage(message)
 				.setPositiveButton(R.string.button_yes, event)
 				.setNegativeButton(R.string.button_no, event);
 		AlertDialog alert = builder.create();
-		alert.show();
+		alert.show();*/
+		String connectionNode="";
+		if(CommonValues.getInstance().connectionMode.equals("Local")){
+			connectionNode="[MC]: ";
+		}else{
+			connectionNode="[GSB]: ";
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(alert.title +" "+alert.type+" ["+alert.code+"]")
+				.setIcon(R.drawable.warning)
+				.setMessage(connectionNode+alert.details)
+				.setPositiveButton(R.string.button_yes, event)
+				.setNegativeButton(R.string.button_no, event);
+		AlertDialog alertDg = builder.create();
+		alertDg.show();
 	}
 
 	public static void ShowNetworkChangeConfirmation(Context context,
@@ -350,7 +364,7 @@ public class CommonTask {
 		// }
 	}
 
-	public static String getBaseUrl(Context context) {
+	public static String getLocalServerIpfromPreference(Context context) {
 		String baseUrlIp = "";
 		// SharedPreferences sharedPreferences = context.getSharedPreferences(
 		// "settings", Context.MODE_PRIVATE);
@@ -586,6 +600,7 @@ public class CommonTask {
 		NetworkInfo mobnetworkInfo = null;
 		NetworkInfo wifinetworkInfo = null;
 		State networkState = null;
+		
 		if (lastConType.equals("Mobile")) {
 			wifinetworkInfo = connectivityManager
 					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -609,6 +624,9 @@ public class CommonTask {
 				if (networkState == NetworkInfo.State.CONNECTED) {
 					lastConType = "Wifi";
 					return true;
+				}else if(networkState == NetworkInfo.State.DISCONNECTED && lastConType.equals("Wifi")){
+					lastConType = "";
+					return false;
 				}
 			}
 			// Check mobile

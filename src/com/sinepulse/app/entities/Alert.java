@@ -87,9 +87,11 @@ public class Alert {
 		customAlertMap.put(400, "No Connection");
 		customAlertMap.put(410, "Mc and GSB unreachable");
 		customAlertMap.put(420, "Connection Timeout");
-		customAlertMap.put(510, "Camera streaming failed");
+		customAlertMap.put(510, "DVR is switched off / Configuration settings problem.");
 		customAlertMap.put(511, "Ip/Port is not accessible for camera feed");
 		customAlertMap.put(520, "Internal app data parsing failed");
+		customAlertMap.put(512, "Authentication Error.");
+		customAlertMap.put(530, "Video Stream will consume high Data Volume.Do you want to continue?");
 		return customAlertMap;
 		
 	}

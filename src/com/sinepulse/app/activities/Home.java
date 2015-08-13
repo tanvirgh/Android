@@ -11,33 +11,25 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.rest.Post;
 
 import android.annotation.TargetApi;
-import android.app.ActivityManager;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.SharedPreferences.Editor;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.InputType;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.ActionProvider;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
@@ -46,9 +38,9 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -62,13 +54,8 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.AbsListView;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,6 +63,7 @@ import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
 import com.sinepulse.app.R;
+import com.sinepulse.app.activities.CircularSeekBar.OnCircularSeekBarChangeListener;
 import com.sinepulse.app.adapters.DeviceListByTypeAdapter;
 import com.sinepulse.app.adapters.DeviceLogAdapter;
 import com.sinepulse.app.adapters.NavDrawerListAdapter;
@@ -84,14 +72,12 @@ import com.sinepulse.app.asynctasks.AsyncGetDeviceLogInfo;
 import com.sinepulse.app.asynctasks.AsyncGetDeviceProperty;
 import com.sinepulse.app.asynctasks.AsyncGetDevicesByType;
 import com.sinepulse.app.asynctasks.AsyncGetSetPropertyFromDashBoard;
-import com.sinepulse.app.asynctasks.AsyncGetUserLogInfo;
 import com.sinepulse.app.asynctasks.AsyncLogOutTask;
 import com.sinepulse.app.asynctasks.AsyncRefreshDashBoard;
 import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.entities.Device;
 import com.sinepulse.app.entities.DeviceProperty;
 import com.sinepulse.app.entities.DevicePropertyLog;
-import com.sinepulse.app.utils.CommonConstraints;
 import com.sinepulse.app.utils.CommonIdentifier;
 import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonURL;
@@ -100,6 +86,9 @@ import com.sinepulse.app.utils.JsonParser;
 import com.sinepulse.app.utils.NavDrawerItem;
 
 /**
+ * This is the central page of the application.Dashbaord.You can view your Home Automation
+ * System Summary report here.Also by clicking on particular device you can navigate to corresponding
+ * device control page.Also navigation drawer Items are managed from this page.
  * 
  * @author tac
  * 
@@ -108,7 +97,7 @@ import com.sinepulse.app.utils.NavDrawerItem;
 @TargetApi(13)
 @EActivity(R.layout.main)
 public class Home extends MainActionbarBase implements OnClickListener,
-		OnTouchListener, OnSeekBarChangeListener {
+		OnTouchListener {
 
 
 	// private static final int INITIAL_STATE = -1;
@@ -164,8 +153,10 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	public Button btShowLog;
 	@ViewById(R.id.list_image)
 	public ImageView list_image;
-	@ViewById(R.id.seekBar1)
-	public SeekBar seekBar1;
+	@ViewById(R.id.circularSeekBar1)
+	public CircularSeekBar circularSeekBar1;
+	@ViewById(R.id.knob)
+	public RelativeLayout knob;
 	@ViewById(R.id.porda)
 	public RelativeLayout porda;
 	@ViewById(R.id.ivDevice)
@@ -301,6 +292,8 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	String tosDate = "";
 	int PageNumber = 0;
 	int ChunkSize = 30;
+	@ViewById(R.id.tvCircleProgressValue)
+	public TextView tvCircleProgressValue;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -403,8 +396,8 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			public void onDrawerOpened(View drawerView) {
 				getSupportActionBar().setTitle(mDrawerTitle);
 				// calling onPrepareOptionsMenu() to hide action bar icons
-				Log.d("drawerselectedposition",
-						"" + mDrawerList.getCheckedItemPosition());
+//				Log.d("drawerselectedposition",
+//						"" + mDrawerList.getCheckedItemPosition());
 				supportInvalidateOptionsMenu();
 				isDrawerOpen = true;
 				isSearchExpanded = false;
@@ -467,14 +460,12 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
 		}
 	}
-
 	public void setDashBoardCurtainData() {
 		if (CommonValues.getInstance().summary != null
 				&& CommonValues.getInstance().summary.deviceSummaryArray.size() > 0) {
 			fourthRowLeft
-					.setText(String.valueOf((CommonValues.getInstance().summary.deviceSummaryArray
-							.get(3)).PowerUsage)
-							+ " w");
+					.setText(String.format( "%.2f",CommonValues.getInstance().summary.deviceSummaryArray
+							.get(3).PowerUsage));
 
 			int curtainOn = CommonValues.getInstance().summary.deviceSummaryArray
 					.get(3).RunningDeviceCount;
@@ -497,9 +488,8 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		if (CommonValues.getInstance().summary != null
 				&& CommonValues.getInstance().summary.deviceSummaryArray.size() > 0) {
 			thirdRowLeft
-					.setText(String.valueOf((CommonValues.getInstance().summary.deviceSummaryArray
-							.get(2)).PowerUsage)
-							+ " w");
+					.setText(String.format( "%.2f",CommonValues.getInstance().summary.deviceSummaryArray
+							.get(2).PowerUsage));
 
 			int acOn = CommonValues.getInstance().summary.deviceSummaryArray
 					.get(2).RunningDeviceCount;
@@ -521,9 +511,8 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		if (CommonValues.getInstance().summary != null
 				&& CommonValues.getInstance().summary.deviceSummaryArray.size() > 0) {
 			secondRowLeft
-					.setText(String.valueOf((CommonValues.getInstance().summary.deviceSummaryArray
-							.get(1)).PowerUsage)
-							+ " w");
+					.setText(String.format( "%.2f",CommonValues.getInstance().summary.deviceSummaryArray
+							.get(1).PowerUsage));
 
 			int bulbOn = CommonValues.getInstance().summary.deviceSummaryArray
 					.get(1).RunningDeviceCount;
@@ -545,9 +534,8 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		if (CommonValues.getInstance().summary != null
 				&& CommonValues.getInstance().summary.deviceSummaryArray.size() > 0) {
 			firstRowLeft
-					.setText(String.valueOf((CommonValues.getInstance().summary.deviceSummaryArray
-							.get(0)).PowerUsage)
-							+ " w");
+					.setText(String.format( "%.2f",(CommonValues.getInstance().summary.deviceSummaryArray
+							.get(0)).PowerUsage));
 
 			int fanOn = CommonValues.getInstance().summary.deviceSummaryArray
 					.get(0).RunningDeviceCount;
@@ -569,9 +557,9 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		if (CommonValues.getInstance().summary != null
 				&& CommonValues.getInstance().summary.deviceSummaryArray.size() > 0) {
 			// Total power
-
+//			String.format( "%.2f", CommonValues.getInstance().summary.TotalPower )
 			btn_total_power
-					.setText(CommonValues.getInstance().summary.TotalPower
+					.setText(String.format( "%.2f", CommonValues.getInstance().summary.TotalPower )
 							+ "  Watts in use");
 
 			// Total Rooms
@@ -644,6 +632,10 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		mSupportActionBar.setIcon(R.drawable.sp_logo);
 		mSupportActionBar.setDisplayHomeAsUpEnabled(true);
 	}*/
+	
+	/*
+	 * Click event for enter into corresponding device control page.
+	 */
 
 	public void middleViewClicked(View v) {
 
@@ -651,7 +643,6 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		// http://projects.sinepulse.com/issues/2216
 		mDrawerToggle.setHomeAsUpIndicator(R.drawable.up_icon);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 		vfDeviceType.setInAnimation(CommonTask.inFromRightAnimation());
 		vfDeviceType.setOutAnimation(CommonTask.outToLeftAnimation());
 		getSupportActionBar().setTitle("All Devices");
@@ -663,7 +654,8 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		}
 
 		switch (v.getId()) {
-		case R.id.include2:
+		
+		case R.id.include2://Fan
 			// new DisplayDeviceDetails(Home.this,
 			// CommonValues.getInstance().summary.deviceSummaryArray
 			// .get(0).DeviceTypeId);
@@ -671,19 +663,19 @@ public class Home extends MainActionbarBase implements OnClickListener,
 					.get(0).DeviceTypeId;
 			LoadDeviceDetailsContent(deviceTypeId);
 			break;
-		case R.id.include3:
+		case R.id.include3://Light
 			deviceTypeId = CommonValues.getInstance().summary.deviceSummaryArray
 					.get(1).DeviceTypeId;
 			LoadDeviceDetailsContent(deviceTypeId);
 			break;
-		case R.id.include4:
+		case R.id.include4://AC
 			// deviceTypeId =
 			// CommonValues.getInstance().summary.deviceSummaryArray
 			// .get(2).DeviceTypeId;
 			// LoadDeviceDetailsContent(deviceTypeId);
 
 			break;
-		case R.id.include5:
+		case R.id.include5://Curtain
 			deviceTypeId = CommonValues.getInstance().summary.deviceSummaryArray
 					.get(3).DeviceTypeId;
 			LoadDeviceDetailsContent(deviceTypeId);
@@ -693,6 +685,9 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			break;
 		}
 	}
+	/*
+	 * Load corresponding device details content through asynchronous call
+	 */
 
 	public static void LoadDeviceDetailsContent(int deviceType) {
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_All_Device_Dashboard;
@@ -723,7 +718,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 					CommonTask
 							.ShowNetworkChangeConfirmation(
 									Home.this,
-									"Network State has changed.Please log in again to continue.",
+									"Network State/Configuration Settings has changed.Please log in again to continue.",
 									showNetworkChangeEvent());
 					asyncGetDeviceByType.cancel(true);
 				}
@@ -856,7 +851,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 					CommonTask
 							.ShowNetworkChangeConfirmation(
 									Home.this,
-									"Network State has changed.Please log in again to continue.",
+									"Network State/Configuration Settings has changed.Please log in again to continue.",
 									showNetworkChangeEvent());
 					asyncGetDeviceProperty.cancel(true);
 				}
@@ -899,8 +894,26 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			}
 			break;
 		case 2:// Dimming Light & Fan
+			circularSeekBar1.setOnSeekBarChangeListener(null);
+			if (property.IsActionPending) {
+				/*if(shouldResend==true){
+				CommonTask.ShowMessage(RoomManager.this, "Previous Dimming request has not completed yet");
+				}*/
+				circularSeekBar1.setProgress(Integer.parseInt(property
+						  .getPendingValue()));
+				tvCircleProgressValue.setText(property.getPendingValue() + " %");
+				setSeekbarInactiveColor();
+				
+			}else{
+				circularSeekBar1.setProgress(Integer.parseInt(property.getValue()));
+				tvCircleProgressValue.setText(property.getValue() + " %");
+				setSeekbarActiveColour();
+			}
 
-			seekBar1.setOnSeekBarChangeListener(null);
+		
+			break;
+		case 3:// Dimming Fan(Knob)
+			/*seekBar1.setOnSeekBarChangeListener(null);
 			if (property.IsActionPending) {
 				seekBar1.setProgress(Integer.parseInt(property
 						.getPendingValue()));
@@ -912,22 +925,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				seekBar1.setEnabled(true);
 				tvProgressValue.setText("Dimming : " + property.getValue()
 						+ " %");
-			}
-
-			break;
-		case 3:// Dimming Fan(Knob)
-			/*
-			 * seekBar1.setOnSeekBarChangeListener(null); if
-			 * (property.IsActionPending) {
-			 * 
-			 * seekBar1.setProgress(Integer.parseInt(property
-			 * .getPendingValue())); seekBar1.setEnabled(false);
-			 * tvProgressValue.setText(property.getPendingValue() + " %"); }
-			 * else {
-			 * seekBar1.setProgress(Integer.parseInt(property.getValue()));
-			 * seekBar1.setEnabled(true);
-			 * tvProgressValue.setText(property.getValue() + " %"); }
-			 */
+			}*/
 			break;
 		case 6:// Preset
 			if (property.IsActionPending) {
@@ -962,7 +960,40 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				buttonView.setEnabled(false);
 			}
 		});
-		seekBar1.setOnSeekBarChangeListener(this);
+		
+circularSeekBar1.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(CircularSeekBar seekBar) {
+				seekBarProgressValue = circularSeekBar1.getProgress();
+				if(shouldResend==true){
+					CommonTask.ShowMessage(Home.this, "Previous Dimming request has not completed yet");
+					setSeekbarInactiveColor();
+					return;
+				}else{
+					setSeekbarActiveColour();
+				if (deviceManagerEntity.DeviceTypeId == 1) {
+					sendSetProperty(
+							seekBarProgressValue, deviceId, 2);
+					
+				} else if (deviceManagerEntity.DeviceTypeId == 2) {
+					sendSetProperty(seekBarProgressValue, deviceId, 2);
+					
+				}
+				}
+				tvCircleProgressValue.setText(String.valueOf(seekBarProgressValue) + " %");
+				
+			}
+			@Override
+			public void onStartTrackingTouch(CircularSeekBar seekBar) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void onProgressChanged(CircularSeekBar circularSeekBar,
+					int progress, boolean fromUser) {
+				// TODO Auto-generated method stub
+			}
+		});
 		up.setOnTouchListener(this);
 		down.setOnTouchListener(this);
 		right.setOnTouchListener(this);
@@ -1045,42 +1076,39 @@ public class Home extends MainActionbarBase implements OnClickListener,
 
 	public void setDevicePropertyControlData(int deviceTypeId) {
 		switch (deviceTypeId) {
+		
 		case 1:// Fan
-				// hideRotatingKnob();
-				// getSupportActionBar().setTitle("Fan Control");
-			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
-			seekBar1.setVisibility(View.VISIBLE);
-			tvProgressValue.setVisibility(View.VISIBLE);
+//			tvProgressValue.setVisibility(View.VISIBLE);
+		    
 			porda.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.INVISIBLE);
+			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
+			knob.setVisibility(View.VISIBLE);
+			
 			break;
 		case 2:// Light
-			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
-			seekBar1.setVisibility(View.VISIBLE);
-			tvProgressValue.setVisibility(View.VISIBLE);
+//			tvProgressValue.setVisibility(View.VISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.INVISIBLE);
+			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
+			knob.setVisibility(View.VISIBLE);
+			
 			break;
 		case 3:// Ac
-				// hideRotatingKnob();
-				// getSupportActionBar().setTitle("AC Control");
-			ivDevice.setImageDrawable(getResources().getDrawable(
-					R.drawable.ac_large));
-			seekBar1.setVisibility(View.INVISIBLE);
-			tvProgressValue.setVisibility(View.INVISIBLE);
+//			tvProgressValue.setVisibility(View.INVISIBLE);
+			knob.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.INVISIBLE);
+			ivDevice.setImageDrawable(getResources().getDrawable(
+					R.drawable.ac_large));
 			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
 			break;
 		case 4:// Curtain
-				// hideRotatingKnob();
-				// getSupportActionBar().setTitle("Curtain Control");
+			knob.setVisibility(View.INVISIBLE);
+//			tvProgressValue.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.VISIBLE);
-			loadCurtainPresetValues(deviceManagerEntity.Id);
-			seekBar1.setVisibility(View.INVISIBLE);
-
-			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.VISIBLE);
+			loadCurtainPresetValues(deviceManagerEntity.Id);
 			tvDeviceName.setText(deviceManagerEntity.Name + "  ");
 			break;
 
@@ -1144,18 +1172,6 @@ public class Home extends MainActionbarBase implements OnClickListener,
 						shouldAppendList) != "") {
 			return true;
 		} else {
-			Home.this.runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					CommonTask
-							.ShowMessage(Home.this,
-									" End of List.No more data available for your search parameter.");
-					// CommonTask.ShowNetworkChangeConfirmation(Home.this,
-					// "Network State has changed.Please log in again to continue.",
-					// showNetworkChangeEvent());
-				}
-			});
 
 			return false;
 		}
@@ -1224,7 +1240,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			CommonTask
 					.ShowNetworkChangeConfirmation(
 							this,
-							"Network State has been changed.Please log in again to continue.",
+							"Network State/Configuration Settings has been changed.Please log in again to continue.",
 							showNetworkChangeEvent());
 		}
 	}
@@ -1234,6 +1250,10 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		dLogAdapter.notifyDataSetChanged();
 
 	}
+	
+	/*
+	 * navigation Drawer Item Click event.
+	 */
 
 	ExpandableListView.OnGroupClickListener groupClickListener = new ExpandableListView.OnGroupClickListener() {
 		@Override
@@ -1267,7 +1287,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		} else {
 			CommonTask
 					.ShowMessage(this,
-							"Something went wrong while logout.Please exit the app and login again.");
+							"Sorry ! something went wrong while logout.please exit the app and login again.");
 		}
 	}
 
@@ -1367,6 +1387,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			}
 			if (backState == DeviceTypeState.PROPERTY_STATE) {
 				// clearDeviceByTypeData();
+				hideLastDisplayedView();
 				getSupportActionBar().setTitle("All Devices");
 				vfDeviceType.setDisplayedChild(1);
 				backState = DeviceTypeState.DEVICE_STATE;
@@ -1414,6 +1435,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				case DialogInterface.BUTTON_POSITIVE:
 					CommonValues.getInstance().summary.deviceSummaryArray
 							.clear();
+					CommonValues.getInstance().userId = 0;
 					CommonValues.getInstance().currentAction = CommonIdentifier.Action_LogOut;
 					if (asyncLogOutTask != null) {
 						asyncLogOutTask.cancel(true);
@@ -1459,7 +1481,6 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		super.onDestroy();
 	}
 
-	public static boolean showSettingsScreen = false;
 	
 	Wamp wamp=new Wamp();
 	@Override
@@ -1467,6 +1488,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		super.onResume();
 		if(CommonValues.getInstance().connectionMode=="Local"){
 			wamp.connectWampClient(this);
+			
 			}
 		findViewById(R.id.include4).setEnabled(false);
 		findViewById(R.id.include4).setOnClickListener(null);
@@ -1894,6 +1916,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			if (vfDeviceType.getDisplayedChild() == 0) {
 				return;
 			} else {
+				hideLastDisplayedView();
 				mDrawerToggle.setDrawerIndicatorEnabled(true);
 				getSupportActionBar().setTitle("Dashboard");
 				new AsyncRefreshDashBoard(Home.this).execute();
@@ -1902,6 +1925,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 				tvdeviceValue.setText("");
 				btAddDevice.setBackgroundResource(0);
 				vfDeviceType.setDisplayedChild(0);
+				
 			}
 			break;
 		case R.id.btShowLog:
@@ -2046,6 +2070,22 @@ public class Home extends MainActionbarBase implements OnClickListener,
 			break;
 		}
 
+	}
+
+	/**
+	 * Hide the previously displayed view from  flipper for next/another call as Ui will be 
+	 * Different for each individual call.
+	 */
+	private void hideLastDisplayedView() {
+		if(porda.isShown()){
+			porda.setVisibility(View.GONE);
+		}
+		if(knob.isShown()){
+			knob.setVisibility(View.GONE);
+		}
+		if(spinner1.isShown()){
+			spinner1.setVisibility(View.GONE);
+		}
 	}
 
 	/**
@@ -2198,7 +2238,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 					CommonTask
 							.ShowNetworkChangeConfirmation(
 									Home.this,
-									"Network State has changed.Please log in again to continue.",
+									"Network State/Configuration Settings has changed.Please log in again to continue.",
 									showNetworkChangeEvent());
 					asyncGetSetPropertyFromDashBoard.cancel(true);
 				}
@@ -2380,7 +2420,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 					CommonTask
 							.ShowNetworkChangeConfirmation(
 									Home.this,
-									"Network State has changed.Please log in again to continue.",
+									"Network State/Configuration Settings has changed.Please log in again to continue.",
 									showNetworkChangeEvent());
 					asyncRefreshDashBoard.cancel(true);
 				}
@@ -2465,7 +2505,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 
 	}
 
-	@Override
+	/*@Override
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 	}
@@ -2486,6 +2526,17 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		}
 		tvProgressValue.setText("Dimming : "
 				+ String.valueOf(seekBarProgressValue) + " %");
+	}
+	*/
+	private void setSeekbarActiveColour() {
+		circularSeekBar1.setCircleColor(Color.rgb(190, 190, 190));
+		circularSeekBar1.setPointerColor(Color.argb(235, 74, 138, 255));
+		circularSeekBar1.setCircleProgressColor(Color.argb(235, 74, 138, 255));
+	}
+	private void setSeekbarInactiveColor() {
+		circularSeekBar1.setCircleColor(getResources().getColor(R.color.dark_gray));
+		circularSeekBar1.setPointerColor(getResources().getColor(R.color.dark_gray));
+		circularSeekBar1.setCircleProgressColor(R.color.dark_gray);
 	}
 
 }

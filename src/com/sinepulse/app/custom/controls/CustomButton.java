@@ -25,8 +25,8 @@ public class CustomButton extends SafeButton{
 	private void initialize(Context context) {
 		if(!isInEditMode())
 		{
-		this.setTypeface(Typeface.createFromAsset(context.getAssets(),
-				"fonts/Roboto-Regular.ttf"));
+//		this.setTypeface(Typeface.createFromAsset(context.getAssets(),
+//				"fonts/Roboto-Regular.ttf"));
 		ButtonTooltipHelper.setup(this);
 		}
 	}

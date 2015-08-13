@@ -11,6 +11,7 @@ import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * Get all device list type wise from server for home tab through asynchronous call.
  * @author tanvir.ahmed
  *
  */
@@ -33,7 +34,7 @@ public class AsyncGetDevicesByType extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPreExecute() {
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
-		((Home) parentActivity).startDeviceProgress();
+		Home.startDeviceProgress();
 		
 	}
 	
@@ -46,7 +47,7 @@ public class AsyncGetDevicesByType extends AsyncTask<Void, Void, Boolean> {
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
-		((Home) parentActivity).stopDeviceProgress();
+		Home.stopDeviceProgress();
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {

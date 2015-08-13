@@ -9,6 +9,7 @@ import com.sinepulse.app.activities.RoomManager;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * Fetch device activities info from server based on search parameter through asynchronous call
  * @author tanvir.ahmed
  *
  */

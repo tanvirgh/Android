@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.sinepulse.app.activities.SupportActivity;
 
 /**
+ * Send the ticket details (created by user) to server asynchronously
  * @author tanvir.ahmed
  *
  */

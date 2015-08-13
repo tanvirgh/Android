@@ -72,6 +72,7 @@ public class CommonValues {
 	public boolean shouldSendLogReq=true;
 	public String connectionMode="";
 	public String hostNameSuffix="";
+	public String nsdResolvedIp;
 
 	/**
 	 * Return Instance

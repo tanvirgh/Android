@@ -5,6 +5,12 @@ import android.os.AsyncTask;
 import com.sinepulse.app.activities.RoomManager;
 import com.sinepulse.app.utils.CommonValues;
 
+/**
+ * Get all Room list from server  through asynchronous call.
+ * @author tanvir.ahmed
+ *
+ */
+
 public class AsyncGetRoom extends AsyncTask<Void, Void, Boolean> {
 	
 //	RoomManagerFragment  roomManagerFrg ;

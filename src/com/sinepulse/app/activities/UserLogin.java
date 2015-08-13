@@ -47,6 +47,11 @@ import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.NetworkUtil;
 
 /**
+ * This class represents the log in Screen.The major work done here is resolving
+ * the host name when application is in local mode.if host name resolve failed
+ * it connects to Internet mode. Beside resolving host name this class send the
+ * log in request to server with GCM registration id and after a valid login
+ * this will redirect you to application dash board.
  * 
  * @author tavnir
  * 
@@ -97,11 +102,12 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-//		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+		// overridePendingTransition(R.anim.slide_in_left,
+		// R.anim.slide_out_left);
 		UserLogin.context = this;
 		mSupportActionBar = getSupportActionBar();
 		mSupportActionBar.hide();
-//		getHostnameSuffix();
+		// getHostnameSuffix();
 	}
 
 	@AfterViews
@@ -112,8 +118,8 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		CommonTask.showSoftKeybord(etUserName);
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-		// Check device for Play Services APK. If check succeeds, proceed with
-		// GCM registration.
+		// Check device for Play Services APK. If succeeds, proceed with GCM
+		// registration.
 		try {
 			GCMRegistrar.checkDevice(this);
 		} catch (Exception e) {
@@ -135,12 +141,13 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 				registerInBackground();
 				// Log.d(TAG, regid);
 			} else {
-//				CommonTask.ShowMessage(this, "GCM Registration ID."+regid);
+				// CommonTask.ShowMessage(this, "GCM Registration ID."+regid);
 				// Log.d(TAG, regid);
 			}
 
 		} else {
-			CommonTask.ShowMessage(this, "No valid Google Play Services APK found.");
+			CommonTask.ShowMessage(this,
+					"No valid Google Play Services APK found.");
 		}
 		// if (isMyServiceRunning()) {
 		// Log.d(TAG, "Service running");
@@ -185,6 +192,13 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 
 		switch (v.getId()) {
 		case R.id.bUserLogin:
+			selectAppMode();
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			proceedLoginProcess();
 			break;
 		default:
@@ -194,7 +208,8 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	}
 
 	/**
-	 * 
+	 * Perform GCM registration works and send log in request o server with GCM
+	 * reg id.
 	 */
 	public void proceedLoginProcess() {
 		if (validateLoginInfo()) {
@@ -204,6 +219,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 			backState = INITIAL_STATE;
 			imm.hideSoftInputFromWindow(bUserLogin.getWindowToken(), 0);
 			if (CommonTask.isEmpty(regid)) {
+
 				registerInBackground();
 			} else {
 				String GcmRegId = getRegistrationId(getApplicationContext());
@@ -214,7 +230,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	}
 
 	/**
-	 * Save UserName and Password through async call
+	 * Save UserName and Password through async call to server for log in
 	 */
 	public void saveUserInfo(String GcmRegistrationId) {
 		if (asyncSaveLogInInfo != null) {
@@ -226,11 +242,12 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	}
 
 	/**
-	 * Use for loading the username,password from SharedPreferences which is
+	 * Use for loading the user name,password from SharedPreferences which is
 	 * already saved before from login screen input
 	 */
 	public void loadPreferences() {
-		etUserName.setText(CommonTask.getBaseUrl(UserLogin.context));
+		etUserName.setText(CommonTask
+				.getLocalServerIpfromPreference(UserLogin.context));
 		etUserPassword.setText(CommonTask.getPassword(UserLogin.context));
 	}
 
@@ -243,30 +260,16 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		pbFirstPage.setVisibility(View.INVISIBLE);
 	}
 
-	@Override
-	protected void onResume() {
-		// if (selectAppMode() == true) {
-		//
-		// } else {
-		// CommonTask.ShowMessage(this, "Failed to resolve service mode.");
-		// }
-		selectAppMode();
-		etUserPassword.clearFocus();
-		super.onResume();
-	}
-
 	/**
-	 * 
+	 * Resolve host name for local access of the application
 	 */
 	public void selectAppMode() {
 		if (CommonTask.isNetworkAvailable(this)) {
 			resolveNetworkState();
-		/*	try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+			/*
+			 * try { Thread.sleep(3000); } catch (InterruptedException e) {
+			 * e.printStackTrace(); }
+			 */
 			// return true;
 		} else {
 			// CommonTask.ShowMessage(this,
@@ -277,50 +280,45 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	}
 
 	/**
-	 * 
+	 * (1) Connected to GSM? Try Internet mode. Connected to Wifi? Go to step 2
+	 * (2) Check if any IP is already saved as Local. If yes, try Local; else
+	 * goto step 3 (3) Try resolving both MC HOST names first if that gives any
+	 * ip. If yes, try Local; saving the ip as Local. Else goto step 4 (4)Try
+	 * with XXX.XXX.XXX.LOCALIP (XX… comes from Wifi IP). If yes, try Local;
+	 * else try Internet mode.
 	 */
 	public void resolveNetworkState() {
 		final String status = NetworkUtil.getConnectivityStatusString(this);
 		if (status.equals("Wifi enabled")) {
-			if (CommonTask.isEmpty(CommonTask.getBaseUrl(this))) {
-				// If SharedPreference is empty try resolving with host
-				// name.local...Step1
-				connectByHostNameLocal();
+			if (CommonTask.isEmpty(CommonTask
+					.getLocalServerIpfromPreference(this))) {
+				// connectByHostNameLocal();
+				connectByIp();
 
 			} else {
-				// Already have an IP in Preference...Lets try to connect with
-				// that...Step2
-				urlForMc = "http://" + CommonTask.getBaseUrl(this)
+				urlForMc = "http://"
+						+ CommonTask.getLocalServerIpfromPreference(this)
 						+ "/api/is-online";
 				connnectionState = "IP";
 				if (checkMC != null) {
 					checkMC.cancel(true);
 				}
-				
+
 				checkMC = new CheckMC(urlForMc, (UserLogin_) this, false);
-				 checkMC.execute();
-//				checkMC.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+				checkMC.execute();
 
 			}
-//			 connectByHostNameLocal();
-			/* try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+			// connectByHostNameLocal();
 		} else if (status.equals("Mobiledata enabled")) {
 			CommonURL.getInstance().assignValues(
 					CommonURL.getInstance().remoteBaseUrl);
 			CommonValues.getInstance().connectionMode = "Internet";
-			// Log.d("NInfo", "GSM");
 		} else {
 			CommonValues.getInstance().IsServerConnectionError = true;
+//			CommonValues.getInstance().connectionMode = "";
 
 		}
 	}
-
-	
 
 	@Override
 	public void onBackPressed() {
@@ -341,16 +339,19 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 						.toString());
 	}
 
-
 	/**
 	 * Method that check whether the application is connected to server or not
 	 */
 
-	public boolean isConnectedToServer(String AppToken,Context context) {
-		return CommonTask.isValidLogIn(context,etUserName.getText().toString(),
-				etUserPassword.getText().toString(), AppToken);
+	public boolean isConnectedToServer(String AppToken, Context context) {
+		return CommonTask.isValidLogIn(context,
+				etUserName.getText().toString(), etUserPassword.getText()
+						.toString(), AppToken);
 	}
 
+	/*
+	 * Pre log in form validation works.
+	 */
 	private boolean validateLoginInfo() {
 		if (etUserName.getText().toString().trim().equals("")) {
 			etUserName.setError("Please Provide User Name");
@@ -375,27 +376,27 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	public void setUserInfoAfterSave() {
 		// CommonTask.loadSettings(this);
 		// CommonValues.getInstance().loginuser = new UserInformation();
-		
+
 		Intent homeIntent = new Intent(this, Home_.class);
 		startActivity(homeIntent);
-//		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 		// though this is not recommended to use this method but here it has
 		// been used for a custom requirement..Tanvir
 		finish();
 
 	}
 
-	private boolean isMyServiceRunning() {
-		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager
-				.getRunningServices(Integer.MAX_VALUE)) {
-			if ("com.sinepulse.app.activities.GCMIntentService"
-					.equals(service.service.getClassName())) {
-				return true;
-			}
-		}
-		return false;
-	}
+	// private boolean isMyServiceRunning() {
+	// ActivityManager manager = (ActivityManager)
+	// getSystemService(ACTIVITY_SERVICE);
+	// for (RunningServiceInfo service : manager
+	// .getRunningServices(Integer.MAX_VALUE)) {
+	// if ("com.sinepulse.app.activities.GCMIntentService"
+	// .equals(service.service.getClassName())) {
+	// return true;
+	// }
+	// }
+	// return false;
+	// }
 
 	public String getRegistrationId(Context context) {
 
@@ -509,89 +510,85 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		}
 		return true;
 	}
-	
+
 	@Override
-    protected void onStart() {
-        super.onStart();
-        
-    }
-	
-	/* @Override
-	 protected void onStop() {
-//		 super.onStop();
-		
-	 }
-	 @Override
-	 protected void onPause() {
-//		 super.onPause();
-//		 lock.release();
-	 }*/
-	
-	 String requiredHostNameSuffix="";
-	  private void getHostnameSuffix() {
-			 
-	        new Thread(new Runnable() {
-	 
-	            @Override
-	            public void run() {
-	                android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) getSystemService(android.content.Context.WIFI_SERVICE);
-	                /*Allows an application to receive 
-	                Wifi Multicast packets. Normally the Wifi stack 
-	                filters out packets not explicitly addressed to 
-	                this device. Acquiring a MulticastLock will cause 
-	                the stack to receive packets addressed to multicast
-	                addresses. Processing these extra packets can 
-	                cause a noticable battery drain and should be 
-	                disabled when not needed. */
-	                lock = wifi.createMulticastLock(getClass().getSimpleName());
-	                /*Controls whether this is a reference-counted or 
-	                non-reference- counted MulticastLock. 
-	                Reference-counted MulticastLocks keep track of the 
-	                number of calls to acquire() and release(), and 
-	                only stop the reception of multicast packets when 
-	                every call to acquire() has been balanced with a 
-	                call to release(). Non-reference- counted 
-	                MulticastLocks allow the reception of multicast 
-	                packets whenever acquire() is called and stop 
-	                accepting multicast packets whenever release() is 
-	                called.*/
-	                lock.setReferenceCounted(false);
-	                 
-	                try {
-	                    InetAddress addr = getLocalIpAddress();
-	                    InetAddress addr1 = InetAddress.getByName(addr.getHostName());
-	                    String hostname = addr1.getHostName(); 
-	                    String Delims="\\.";
-	                    String[] actualHostName=hostname.split(Delims);
-	                   
-	                    for(int i=1;i<actualHostName.length;i++){
-	                    	requiredHostNameSuffix=requiredHostNameSuffix+"."+actualHostName[i];
-	                    	
-	                    }
-	                    CommonValues.getInstance().hostNameSuffix=requiredHostNameSuffix.trim();
-	                    lock.acquire();
-	                }
-	                   catch (IOException e) {
-	                    e.printStackTrace();
-	                    return;
-	                }
-	         
-	        }}).start();
-	
-}
-	  
-	  private InetAddress getLocalIpAddress() {
-	    	WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-//	        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-	        int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
-	        InetAddress address = null;
-	        try {
-	        	address = InetAddress.getByName(String.format(Locale.ENGLISH,
-	                "%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff)));
-	        } catch (UnknownHostException e) {
-	            e.printStackTrace();
-	        }
-	        return address;
-	    }
+	protected void onStart() {
+		super.onStart();
+
+	}
+
+	@Override
+	protected void onStop() {
+		 super.onStop();
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		// lock.release();
+	}
+
+	@Override
+	protected void onResume() {
+		// if (selectAppMode() == true) {
+		// } else {
+		// CommonTask.ShowMessage(this, "Failed to resolve service mode.");
+		// }
+		selectAppMode();
+		etUserPassword.clearFocus();
+		super.onResume();
+	}
+
+	// String requiredHostNameSuffix="";
+	// private void getHostnameSuffix() {
+	//
+	// new Thread(new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager)
+	// getSystemService(android.content.Context.WIFI_SERVICE);
+	// lock = wifi.createMulticastLock(getClass().getSimpleName());
+	// lock.setReferenceCounted(false);
+	//
+	// try {
+	// InetAddress addr = getLocalIpAddress();
+	// InetAddress addr1 = InetAddress.getByName(addr.getHostName());
+	// String hostname = addr1.getHostName();
+	// String Delims="\\.";
+	// String[] actualHostName=hostname.split(Delims);
+	//
+	// for(int i=1;i<actualHostName.length;i++){
+	// requiredHostNameSuffix=requiredHostNameSuffix+"."+actualHostName[i];
+	//
+	// }
+	// CommonValues.getInstance().hostNameSuffix=requiredHostNameSuffix.trim();
+	// lock.acquire();
+	// }
+	// catch (IOException e) {
+	// e.printStackTrace();
+	// return;
+	// }
+	//
+	// }}).start();
+	//
+	// }
+
+	// private InetAddress getLocalIpAddress() {
+	// WifiManager wifiManager = (WifiManager)
+	// getSystemService(Context.WIFI_SERVICE);
+	// // WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+	// int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
+	// InetAddress address = null;
+	// try {
+	// address = InetAddress.getByName(String.format(Locale.ENGLISH,
+	// "%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >>
+	// 16 & 0xff), (ipAddress >> 24 & 0xff)));
+	// } catch (UnknownHostException e) {
+	// e.printStackTrace();
+	// }
+	// return address;
+	// }
 
 }

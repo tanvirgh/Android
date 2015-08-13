@@ -27,21 +27,21 @@ public class CustomTextView extends TextView {
 		{
 		if(getTypeface()!=null){
 			if( getTypeface().isItalic() == true){
-				this.setTypeface(Typeface.createFromAsset(context.getAssets(),
-						"fonts/Roboto-Regular.ttf"),Typeface.ITALIC);
+//				this.setTypeface(Typeface.createFromAsset(context.getAssets(),
+//						"fonts/Roboto-Regular.ttf"),Typeface.ITALIC);
 				
 			} else if( getTypeface().isBold() == true){
-				this.setTypeface(Typeface.createFromAsset(context.getAssets(),
-						"fonts/Roboto-Regular.ttf"),Typeface.BOLD);
+//				this.setTypeface(Typeface.createFromAsset(context.getAssets(),
+//						"fonts/Roboto-Regular.ttf"),Typeface.BOLD);
 				
 			}else{
-				this.setTypeface(Typeface.createFromAsset(context.getAssets(),
-						"fonts/Roboto-Regular.ttf"));
+//				this.setTypeface(Typeface.createFromAsset(context.getAssets(),
+//						"fonts/Roboto-Regular.ttf"));
 			}
 			
 		}else{
-			this.setTypeface(Typeface.createFromAsset(context.getAssets(),
-					"fonts/Roboto-Regular.ttf"));
+//			this.setTypeface(Typeface.createFromAsset(context.getAssets(),
+//					"fonts/Roboto-Regular.ttf"));
 		}
 		}
 				

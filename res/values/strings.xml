@@ -16,7 +16,7 @@
 -->
 <resources>
 
-    <string name="app_name">Smart Home</string>
+    <string name="app_name">Smart Home(Test)</string>
     <string name="hyperlink"><a href="https://play.google.com/store/apps/details?id=com.sinepulse.app">Send Feedback</a></string>
     <string name="desc">Smart Home is a app that enables its users to regulate various home appliances remotely.\n Smart Home combines technology and services to facilitate your better living quality, enhanced security and energy efficiency.</string>
     <string name="aboutText">Smart Home SinePulse  \n\nVersion : 0.1.1 \n \n@ SinePulse GmbH. (All Rights Reserved)</string>

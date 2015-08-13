@@ -2,15 +2,14 @@ package com.sinepulse.app.asynctasks;
 
 import android.os.AsyncTask;
 
-import com.sinepulse.app.R;
 import com.sinepulse.app.activities.UserLogin;
 import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
- * @author Tanvir Ahmed Chowdhury 
  * use for saving users information from home tab
  *  Asynchronously
+ *  @author tanvir.ahmed
  */
 
 public class AsyncCheckServerStateAndSaveServerInfo extends AsyncTask<Void, Void, Boolean> {

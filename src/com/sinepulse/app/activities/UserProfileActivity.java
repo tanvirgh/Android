@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.asynctasks.AsyncGetUserProfile;
@@ -32,6 +33,8 @@ import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
 
 /**
+ * this class will show the user profile related information through
+ * asynchronous call to server.this is a view only page.
  * @author tanvir.ahmed
  *
  */
@@ -73,6 +76,7 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	protected Button bRoom;
 	@ViewById(R.id.bDashboard)
 	protected Button bDashboard;
+	private Menu actionBarMenu;
 	
 	
 	@Override
@@ -93,8 +97,9 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		setConnectionNodeImage(menu);
+		setConnectionNodeImage(actionBarMenu);
 		return prepared;
 	}
 	@Override
@@ -111,6 +116,7 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	
 	@AfterViews
 	void afterViewLoaded(){
+		
 		loadUserInformation();
 		
 		
@@ -143,20 +149,25 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 	 * 
 	 */
 	public void setUserInformation() {
+//		setConnectionNodeImage(actionBarMenu);
 		if(CommonValues.getInstance().profile!=null){
 		UserProfile userProfile = CommonValues.getInstance().profile;
 		String name="";  
-		if(!userProfile.getFirstName().equalsIgnoreCase("null") ){
+		if(userProfile.getFirstName()!=null ){
 			name= userProfile.getFirstName();
 			
-		} if(!userProfile.getMiddleName().equalsIgnoreCase("null")){
+		} if(userProfile.getMiddleName()!=null){
 			name=name+" "+userProfile.getMiddleName();
 			
-		} if(!userProfile.getLastName().equalsIgnoreCase("null")){
+		} if(userProfile.getLastName()!=null){
 			name=name+" "+userProfile.getLastName();
 			
 		}
+		if(name.length()>0){
 		etFirstName.setText(name);
+		}else{
+			etFirstName.setText("");
+		}
 		
 		
 		etUserName.setText(userProfile.getUserName());
@@ -186,11 +197,11 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 		
 		}else{
 //			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+//			CommonTask
+//			.ShowNetworkChangeConfirmation(
+//					this,
+//					"Network State/Configuration Settings has been changed.Please log in again to continue.",
+//					showNetworkChangeEvent());
 		}
 	}
 	

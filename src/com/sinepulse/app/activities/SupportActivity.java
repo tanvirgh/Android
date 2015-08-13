@@ -33,6 +33,7 @@ import android.widget.ViewFlipper;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnMenuVisibilityListener;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.adapters.AllTicketListAdapter;
@@ -49,6 +50,9 @@ import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
 
 /**
+ * This class is used to submit application problems through ticket.user can note down his problem details and submit.
+ * so that corresponding support team can solve his problem faster.
+ * this option is available only in Internet mode.
  * @author tanvir.ahmed
  * 
  */
@@ -96,6 +100,7 @@ public class SupportActivity extends MainActionbarBase implements
 //	@ViewById(R.id.menu_refresh)
 //	public Button refresh;
 	InputMethodManager imm;
+	private Menu actionBarMenu;
 
 	private AllTicketListAdapter tAdapter;
 	public static final int INITIAL_STATE = -1, VIEWSINGLETICKET_STATE = 0,
@@ -217,9 +222,10 @@ public class SupportActivity extends MainActionbarBase implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		setActionBarMenuVisibility(true);
-		setConnectionNodeImage(menu);
+		setConnectionNodeImage(actionBarMenu);
 		return prepared;
 	}
 
@@ -459,6 +465,7 @@ public class SupportActivity extends MainActionbarBase implements
 	}
 
 	public void setAllTicketListViewAdapter() {
+//		setConnectionNodeImage(actionBarMenu);
 		if (CommonValues.getInstance().allTicketList != null
 				&& CommonValues.getInstance().allTicketList.size() > 0) {
 			tAdapter = new AllTicketListAdapter(this,

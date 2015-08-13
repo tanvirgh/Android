@@ -9,6 +9,7 @@ import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * Fetch device properties information from server  through asynchronous call
  * @author tanvir.ahmed
  *
  */

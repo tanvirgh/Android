@@ -28,12 +28,18 @@ import com.sinepulse.app.entities.Device;
 import com.sinepulse.app.entities.DeviceProperty;
 import com.sinepulse.app.utils.CommonValues;
 
+/**
+ * This class will receive the wamp notification and update the application Ui accordingly.
+ * @author tanvir.ahmed
+ *
+ */
+
 public class Wamp extends MainActionbarBase  {
 	
 	WampClient client;
 	String LOG_WAMP = "WAMP";
 	// config
-	String WAMP_HOST = "ws://192.168.11.111:9090/";
+	String WAMP_HOST = "ws://192.168.11.74:9090/";
 	String WAMP_REALM = "devicewampmessaging";
 	int MIN_RECONNECT_INTERVAL = 5; // sec
 	String TOPIC_ID = "sinepulsemcmobile";

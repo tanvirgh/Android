@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.asynctasks.AsyncPostChangePassRequest;
@@ -30,11 +31,13 @@ import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
 
 /**
+ * This class is used to change users password through a asynchronous call to server.
  * @author tanvir.ahmed
  *
  */
 @EActivity(R.layout.change_password)
 public class ChangePasswordActivity extends MainActionbarBase implements OnClickListener{
+	public Menu actionBarMenu;
 
 	public static final int INITIAL_STATE = -1;
 
@@ -113,9 +116,11 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		hideRefreshMenu(menu);
-		setConnectionNodeImage(menu);
+		setConnectionNodeImage(actionBarMenu);
+		
 		return prepared;
 	}
 

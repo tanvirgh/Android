@@ -9,6 +9,7 @@ import com.sinepulse.app.activities.VideoActivity;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * fetch camera related information from server through asynchronous call
  * @author tanvir.ahmed
  *
  */

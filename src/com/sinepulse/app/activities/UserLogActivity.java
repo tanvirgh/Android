@@ -40,6 +40,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.adapters.UserLogAdapter;
@@ -52,6 +53,8 @@ import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
 
 /**
+ * This class will be used to view users activity on system.there are different search parameter 
+ * for searching users activity.this page is a view only page.
  * @author tanvir.ahmed
  * 
  */
@@ -108,6 +111,7 @@ public class UserLogActivity extends MainActionbarBase implements
 	private SimpleDateFormat dateFormatter;
 	Date tobesetFromDate = new Date();
 	Date tobesetToDate = new Date();
+	private Menu actionBarMenu;
 
 	int FilterType = 0;
 	String fromsDate = "";
@@ -128,6 +132,7 @@ public class UserLogActivity extends MainActionbarBase implements
 	@AfterViews
 	void afterViewLoaded() {
 		bSearch.setVisibility(View.INVISIBLE);
+		
 		loadTodaysLog();
 		/*
 		 * fromDate=formatter.format(d).toString();
@@ -160,8 +165,9 @@ public class UserLogActivity extends MainActionbarBase implements
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		setConnectionNodeImage(menu);
+		setConnectionNodeImage(actionBarMenu);
 		return prepared;
 	}
 
@@ -180,6 +186,7 @@ public class UserLogActivity extends MainActionbarBase implements
 	 * 
 	 */
 	public void loadTodaysLog() {
+		
 
 		tvToday.setTextColor(Color.parseColor("#6699ff"));
 		tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
@@ -450,6 +457,7 @@ public class UserLogActivity extends MainActionbarBase implements
 	boolean shouldAppendList = false;
 
 	public void setupUserLogAdapter() {
+//		setConnectionNodeImage(actionBarMenu);
 		if (CommonValues.getInstance().userLogDetailList != null) {
 			if (CommonValues.getInstance().userLogDetailList.size() > 0) {
 				tvEmptyLog.setVisibility(View.INVISIBLE);
@@ -541,7 +549,6 @@ public class UserLogActivity extends MainActionbarBase implements
 	public void onResume() {
 		this.setTitle("Activities");
 		// loadTodaysLog();
-
 		fragmentPaused = false;
 		super.onResume();
 

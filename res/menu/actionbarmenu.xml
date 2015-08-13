@@ -10,7 +10,7 @@
         android:id="@+id/menu_conn_indicatior"
         android:icon="@drawable/local"
         android:showAsAction="always"
-        android:title="@string/scan"/>
+        android:title=""/>
 
     <!-- The Overflow Menu -->
 

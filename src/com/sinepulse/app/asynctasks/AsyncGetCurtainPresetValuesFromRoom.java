@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.sinepulse.app.activities.RoomManager;
 
 /**
+ * Fetch Curtain preset values from server for Room tab through asynchronous call
  * @author tanvir.ahmed
  *
  */

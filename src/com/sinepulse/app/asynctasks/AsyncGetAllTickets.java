@@ -8,6 +8,7 @@ import com.sinepulse.app.activities.SupportActivity;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * Fetch all ticket details info from server through asynchronous call
  * @author tanvir.ahmed
  *
  */

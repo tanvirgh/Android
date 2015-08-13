@@ -54,6 +54,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.activities.CircularSeekBar.OnCircularSeekBarChangeListener;
@@ -76,6 +77,14 @@ import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
+
+/**
+ * This class represents the room list in the smart home system.If u click on certain room
+ * corresponding room device list will be shown.By clicking on particular device you can enter into
+ * device details page from where you can control devices.
+ * @author tanvir.ahmed
+ *
+ */
 
 @EActivity(R.layout.room_status)
 public class RoomManager extends MainActionbarBase implements OnClickListener,
@@ -111,8 +120,6 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	public Button btShowLog;
 	@ViewById(R.id.list_image)
 	public ImageView list_image;
-	@ViewById(R.id.seekBar1)
-	public SeekBar seekBar1;
 	@ViewById(R.id.porda)
 	public RelativeLayout porda;
 	@ViewById(R.id.knob)
@@ -153,8 +160,6 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	public Button streamingButton;
 	@ViewById(R.id.bRoom)
 	public Button bRoom;
-	@ViewById(R.id.tvProgressValue)
-	public TextView tvProgressValue;
 	String fromDate = "";
 	String toDate = "";
 	int seekBarProgressValue = 0;
@@ -188,7 +193,6 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	public CircularSeekBar circularSeekBar1;
 	@ViewById(R.id.tvCircleProgressValue)
 	public TextView tvCircleProgressValue;
-	
 
 	public DeviceListAdapterByRoom dAdapter;
 	boolean isRoomVisible = false;
@@ -211,11 +215,12 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	RelativeLayout panel;
 	Date tobesetFromDate = new Date();
 	Date tobesetToDate = new Date();
-	int FilterType=0;
-	String fromsDate="";
-	String tosDate="";
-	int PageNumber=0;
-	int ChunkSize=30;
+	int FilterType = 0;
+	String fromsDate = "";
+	String tosDate = "";
+	int PageNumber = 0;
+	int ChunkSize = 30;
+	private Menu actionBarMenu;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -232,7 +237,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		gestureDetector = new GestureDetector(this, new GestureListener());
 		backState = RoomsState.INITIAL_STATE;
 		vfRoom.setDisplayedChild(0);
-//		btAddRoom.setText("Room List");
+		// btAddRoom.setText("Room List");
 		fromDate = dateFormatter.format(d).toString();
 		toDate = dateFormatter.format(d).toString();
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_All_Room;
@@ -253,11 +258,12 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		mSupportActionBar.setDisplayHomeAsUpEnabled(true);
 		mSupportActionBar.setTitle(R.string.create_room);
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		this.actionBarMenu = menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		setConnectionNodeImage(menu);
+		setConnectionNodeImage(actionBarMenu);
 		return prepared;
 	}
 
@@ -300,11 +306,12 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				SimpleDateFormat formatter = new SimpleDateFormat(
 						"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 				Date d = new Date();
-				FilterType=1;
-				fromsDate=formatter.format(d).toString();
-				tosDate=formatter.format(d).toString();
-				PageNumber=1;
-				LoadDeviceLogContent(deviceManagerEntity.Id, FilterType, fromsDate, tosDate,PageNumber,ChunkSize);
+				FilterType = 1;
+				fromsDate = formatter.format(d).toString();
+				tosDate = formatter.format(d).toString();
+				PageNumber = 1;
+				LoadDeviceLogContent(deviceManagerEntity.Id, FilterType,
+						fromsDate, tosDate, PageNumber, ChunkSize);
 				break;
 			default:
 				break;
@@ -315,29 +322,35 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	public boolean sendGetRoomRequest(Integer userId) {
 
-//		String getRoomUrl = CommonURL.getInstance().GetCommonURL + "/"
-//				+ String.valueOf(userId) + "/rooms";
+		// String getRoomUrl = CommonURL.getInstance().GetCommonURL + "/"
+		// + String.valueOf(userId) + "/rooms";
 		String getRoomUrl = CommonURL.getInstance().RootUrl + "rooms";
 
-		if (JsonParser.getRoomRequest(getRoomUrl) != null && JsonParser.getRoomRequest(getRoomUrl) !="") {
+		if (JsonParser.getRoomRequest(getRoomUrl) != null
+				&& JsonParser.getRoomRequest(getRoomUrl) != "") {
 			return true;
-		}else{
+		} else {
 			RoomManager.this.runOnUiThread(new Runnable() {
-				
+
 				@Override
 				public void run() {
-					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					CommonTask
+							.ShowNetworkChangeConfirmation(
+									RoomManager.this,
+									"Network State/Configuration Settings has changed.Please log in again to continue.",
+									showNetworkChangeEvent());
 					asyncGetRoomInfo.cancel(true);
 				}
 			});
-			
-		return false;
+
+			return false;
 		}
 	}
 
 	public void setupRoomListViewAdapter() {
-		if (CommonValues.getInstance().roomList != null && CommonValues.getInstance().roomList.size()>0 )
-		{
+//		setConnectionNodeImage(actionBarMenu);
+		if (CommonValues.getInstance().roomList != null
+				&& CommonValues.getInstance().roomList.size() > 0) {
 			rAdapter = new RoomListAdapter(this, R.layout.room_list_item,
 					CommonValues.getInstance().roomList);
 			roomListView.setAdapter(rAdapter);
@@ -360,8 +373,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	public void setupDeviceListViewAdapter() {
 		// rAdapter.clear();
-		if (CommonValues.getInstance().deviceList != null && CommonValues.getInstance().deviceList.size()>0) {
-			dAdapter = new DeviceListAdapterByRoom(this, R.layout.device_item_view,
+		if (CommonValues.getInstance().deviceList != null
+				&& CommonValues.getInstance().deviceList.size() > 0) {
+			dAdapter = new DeviceListAdapterByRoom(this,
+					R.layout.device_item_view,
 					CommonValues.getInstance().deviceList);
 			deviceListView.setAdapter(dAdapter);
 			dAdapter.setTouchEnabled(false);
@@ -369,11 +384,11 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			deviceListView.setOnItemClickListener(this);
 		} else {
 			CommonTask.ShowMessage(this, "No Data returned from Server");
-//			CommonTask
-//			.ShowNetworkChangeConfirmation(
-//					this,
-//					"Network State has been changed.Please log in again to continue.",
-//					showNetworkChangeEvent());
+			// CommonTask
+			// .ShowNetworkChangeConfirmation(
+			// this,
+			// "Network State has been changed.Please log in again to continue.",
+			// showNetworkChangeEvent());
 		}
 
 	}
@@ -394,16 +409,16 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			roomManagerEntity = rAdapter.getItemAtPosition(position);
 			btAddDevice.setText("  " + roomManagerEntity.Name);
 			roomid = roomManagerEntity.getId();
-			if(CommonValues.getInstance().deviceList!=null){
+			if (CommonValues.getInstance().deviceList != null) {
 				CommonValues.getInstance().deviceList.clear();
 				deviceListView.setAdapter(null);
-				}
+			}
 			LoadRoomDetailsContent(roomid);
 
 			// displayFragment(7);
 			break;
 		case R.id.lvDeviceList:
-//			getSupportActionBar().setTitle("Device Control");
+			// getSupportActionBar().setTitle("Device Control");
 			vfRoom.setInAnimation(CommonTask.inFromRightAnimation());
 			vfRoom.setOutAnimation(CommonTask.outToLeftAnimation());
 			vfRoom.setDisplayedChild(2);
@@ -413,15 +428,15 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			deviceListView.setSelectionFromTop(position, view.getTop());
 			deviceManagerEntity = dAdapter.getItemAtPosition(position);
 			deviceTypeId = deviceManagerEntity.DeviceTypeId;
-			if(deviceTypeId==1){
+			if (deviceTypeId == 1) {
 				getSupportActionBar().setTitle("Fan Control");
-				}else if(deviceTypeId==2){
-					getSupportActionBar().setTitle("Light Control");
-				}else if(deviceTypeId==3){
-					getSupportActionBar().setTitle("Ac Control");
-				}else if(deviceTypeId==4){
-					getSupportActionBar().setTitle("Curtain Control");
-				}
+			} else if (deviceTypeId == 2) {
+				getSupportActionBar().setTitle("Light Control");
+			} else if (deviceTypeId == 3) {
+				getSupportActionBar().setTitle("Ac Control");
+			} else if (deviceTypeId == 4) {
+				getSupportActionBar().setTitle("Curtain Control");
+			}
 
 			loadDeviceProperty(deviceTypeId, deviceManagerEntity.Id);
 			if (deviceManagerEntity.DeviceTypeId == 4) {
@@ -450,66 +465,64 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	public boolean sendGetDevicePropertyRequest(int DeviceId) {
 
-//		String getDevicePropertyUrl = CommonURL.getInstance().GetCommonURL
-//				+ "/" + CommonValues.getInstance().userId + "/properties?id="
-//				+ DeviceId;
-		String getDevicePropertyUrl = CommonURL.getInstance().RootUrl + "properties?deviceId="+ DeviceId;
-		
-		if (JsonParser.getDevicePropertyRequest(getDevicePropertyUrl) != null && JsonParser.getDevicePropertyRequest(getDevicePropertyUrl) !="") {
+		// String getDevicePropertyUrl = CommonURL.getInstance().GetCommonURL
+		// + "/" + CommonValues.getInstance().userId + "/properties?id="
+		// + DeviceId;
+		String getDevicePropertyUrl = CommonURL.getInstance().RootUrl
+				+ "properties?deviceId=" + DeviceId;
+
+		if (JsonParser.getDevicePropertyRequest(getDevicePropertyUrl) != null
+				&& JsonParser.getDevicePropertyRequest(getDevicePropertyUrl) != "") {
 			return true;
-		}else{
+		} else {
 			RoomManager.this.runOnUiThread(new Runnable() {
-				
+
 				@Override
 				public void run() {
-					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					CommonTask
+							.ShowNetworkChangeConfirmation(
+									RoomManager.this,
+									"Network State/Configuration Settings has changed.Please log in again to continue.",
+									showNetworkChangeEvent());
 					asyncGetDeviceProperty.cancel(true);
 				}
 			});
-			
-		return false;
+
+			return false;
 		}
 
 	}
 
 	public void setDevicePropertyControlData(int deviceTypeId) {
 		// rAdapter.clear();
-//		hideRotatingKnob();
+		// hideRotatingKnob();
 		switch (deviceTypeId) {
 		case 1:// Fan
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
 			knob.setVisibility(View.VISIBLE);
-			seekBar1.setVisibility(View.INVISIBLE);
-			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 2:// Light
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
 			knob.setVisibility(View.VISIBLE);
-			seekBar1.setVisibility(View.INVISIBLE);
-			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 3:// AC
-			// hideRotatingKnob();
+				// hideRotatingKnob();
 			ivDevice.setImageDrawable(getResources().getDrawable(
 					R.drawable.ac_large));
 			knob.setVisibility(View.INVISIBLE);
-			seekBar1.setVisibility(View.INVISIBLE);
-			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
 			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 4:// Curtain
-			// hideRotatingKnob();
+				// hideRotatingKnob();
 			spinner1.setVisibility(View.VISIBLE);
 			loadCurtainPresetValues(deviceManagerEntity.Id);
 			knob.setVisibility(View.INVISIBLE);
-			seekBar1.setVisibility(View.INVISIBLE);
-			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.VISIBLE);
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
 			break;
@@ -520,14 +533,12 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		setDevicePropertyData();
 	}
 
-	
-
 	private void loadCurtainPresetValues(int deviceId) {
 		if (asyncGetCurtainPresetValuesFromRoom != null) {
 			asyncGetCurtainPresetValuesFromRoom.cancel(true);
 		}
 		asyncGetCurtainPresetValuesFromRoom = new AsyncGetCurtainPresetValuesFromRoom(
-				this,deviceId);
+				this, deviceId);
 		asyncGetCurtainPresetValuesFromRoom.execute();
 
 	}
@@ -562,16 +573,20 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		case 2:// Dimming Light & Fan
 			circularSeekBar1.setOnSeekBarChangeListener(null);
 			if (property.IsActionPending) {
-				/*if(shouldResend==true){
-				CommonTask.ShowMessage(RoomManager.this, "Previous Dimming request has not completed yet");
-				}*/
+				/*
+				 * if(shouldResend==true){
+				 * CommonTask.ShowMessage(RoomManager.this,
+				 * "Previous Dimming request has not completed yet"); }
+				 */
 				circularSeekBar1.setProgress(Integer.parseInt(property
-						  .getPendingValue()));
-				tvCircleProgressValue.setText(property.getPendingValue() + " %");
+						.getPendingValue()));
+				tvCircleProgressValue
+						.setText(property.getPendingValue() + " %");
 				setSeekbarInactiveColor();
-				
-			}else{
-				circularSeekBar1.setProgress(Integer.parseInt(property.getValue()));
+
+			} else {
+				circularSeekBar1.setProgress(Integer.parseInt(property
+						.getValue()));
 				tvCircleProgressValue.setText(property.getValue() + " %");
 				setSeekbarActiveColour();
 			}
@@ -579,16 +594,16 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			break;
 		case 3:// Dimming Fan(Knob)
 			/*
-			  seekBar1.setOnSeekBarChangeListener(null); if
-			  (property.IsActionPending) {
-			  seekBar1.setProgress(Integer.parseInt(property
-			  .getPendingValue())); seekBar1.setEnabled(false);
-			  tvProgressValue.setText("Dimming : "+property.getPendingValue() +
-			  " %"); } else {
-			 seekBar1.setProgress(Integer.parseInt(property.getValue()));
-			  seekBar1.setEnabled(true);
-			  tvProgressValue.setText("Dimming : "+property.getValue() + " %");
-			  }
+			 * seekBar1.setOnSeekBarChangeListener(null); if
+			 * (property.IsActionPending) {
+			 * seekBar1.setProgress(Integer.parseInt(property
+			 * .getPendingValue())); seekBar1.setEnabled(false);
+			 * tvProgressValue.setText("Dimming : "+property.getPendingValue() +
+			 * " %"); } else {
+			 * seekBar1.setProgress(Integer.parseInt(property.getValue()));
+			 * seekBar1.setEnabled(true);
+			 * tvProgressValue.setText("Dimming : "+property.getValue() + " %");
+			 * }
 			 */
 			break;
 		case 6:// Preset
@@ -646,47 +661,49 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		 * (CommonValues.getInstance().userId,progress,2,property.DeviceId); }
 		 * });
 		 */
-		circularSeekBar1.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener() {
-			
-			@Override
-			public void onStopTrackingTouch(CircularSeekBar seekBar) {
-				seekBarProgressValue = circularSeekBar1.getProgress();
-				if(shouldResend==true){
-					CommonTask.ShowMessage(RoomManager.this, "Previous Dimming request has not completed yet");
-					setSeekbarInactiveColor();
-					return;
-				}else{
-					setSeekbarActiveColour();
-				if (deviceManagerEntity.DeviceTypeId == 1) {
-					sendSetProperty(
-							seekBarProgressValue, deviceId, 2);
-					
-				} else if (deviceManagerEntity.DeviceTypeId == 2) {
-					sendSetProperty(seekBarProgressValue, deviceId, 2);
-					
-				}
-				}
-				tvCircleProgressValue.setText(String.valueOf(seekBarProgressValue) + " %");
-				
-				
-				
-			}
+		circularSeekBar1
+				.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener() {
 
-			
-			
-			@Override
-			public void onStartTrackingTouch(CircularSeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onProgressChanged(CircularSeekBar circularSeekBar,
-					int progress, boolean fromUser) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+					@Override
+					public void onStopTrackingTouch(CircularSeekBar seekBar) {
+						seekBarProgressValue = circularSeekBar1.getProgress();
+						if (shouldResend == true) {
+							CommonTask
+									.ShowMessage(RoomManager.this,
+											"Previous Dimming request has not completed yet");
+							setSeekbarInactiveColor();
+							return;
+						} else {
+							setSeekbarActiveColour();
+							if (deviceManagerEntity.DeviceTypeId == 1) {
+								sendSetProperty(seekBarProgressValue, deviceId,
+										2);
+
+							} else if (deviceManagerEntity.DeviceTypeId == 2) {
+								sendSetProperty(seekBarProgressValue, deviceId,
+										2);
+
+							}
+						}
+						tvCircleProgressValue.setText(String
+								.valueOf(seekBarProgressValue) + " %");
+
+					}
+
+					@Override
+					public void onStartTrackingTouch(CircularSeekBar seekBar) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onProgressChanged(
+							CircularSeekBar circularSeekBar, int progress,
+							boolean fromUser) {
+						// TODO Auto-generated method stub
+
+					}
+				});
 		up.setOnTouchListener(this);
 		down.setOnTouchListener(this);
 		right.setOnTouchListener(this);
@@ -694,31 +711,29 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		pause.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				sendSetProperty(1, deviceId,
-						7);
+				sendSetProperty(1, deviceId, 7);
 			}
 		});
 		reset.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				sendSetProperty( 1, deviceId,
-						8);
+				sendSetProperty(1, deviceId, 8);
 				reset.setEnabled(false);
 			}
 		});
 		calibration.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				sendSetProperty(1, deviceId,
-						9);
+				sendSetProperty(1, deviceId, 9);
 				calibration.setEnabled(false);
 			}
 		});
 	}
-    public boolean shouldResend=false;
-	public void sendSetProperty( int value, int DeviceId,
-			int propertyId) {
-		shouldResend=true;
+
+	public boolean shouldResend = false;
+
+	public void sendSetProperty(int value, int DeviceId, int propertyId) {
+		shouldResend = true;
 		if (asyncGetSetPropertyFromRoom != null) {
 			asyncGetSetPropertyFromRoom.cancel(true);
 		}
@@ -728,39 +743,47 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	}
 
-	public boolean setPropertyRequestFromRoom(int deviceId,
-			int propertyId, int value) {
-//		String setPropertyUrl = CommonURL.getInstance().GetCommonURL + "/"
-//				+ userId + "/property?id=" + deviceId + "&propertyid="
-//				+ propertyId + "&value=" + value;
-//		System.out.println(setPropertyUrl);
-		String setPropertyUrl=CommonURL.getInstance().RootUrl+"property";
-		if (JsonParser.postSetPropertyRequest(setPropertyUrl,deviceId,propertyId,value) != null && JsonParser.postSetPropertyRequest(setPropertyUrl,deviceId,propertyId,value) !="") {
+	public boolean setPropertyRequestFromRoom(int deviceId, int propertyId,
+			int value) {
+		// String setPropertyUrl = CommonURL.getInstance().GetCommonURL + "/"
+		// + userId + "/property?id=" + deviceId + "&propertyid="
+		// + propertyId + "&value=" + value;
+		// System.out.println(setPropertyUrl);
+		String setPropertyUrl = CommonURL.getInstance().RootUrl + "property";
+		if (JsonParser.postSetPropertyRequest(setPropertyUrl, deviceId,
+				propertyId, value) != null
+				&& JsonParser.postSetPropertyRequest(setPropertyUrl, deviceId,
+						propertyId, value) != "") {
 			return true;
-		}else{
+		} else {
 			RoomManager.this.runOnUiThread(new Runnable() {
-				
+
 				@Override
 				public void run() {
-					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					CommonTask
+							.ShowNetworkChangeConfirmation(
+									RoomManager.this,
+									"Network State/Configuration Settings has changed.Please log in again to continue.",
+									showNetworkChangeEvent());
 					asyncGetSetPropertyFromRoom.cancel(true);
 				}
 			});
-			
-		return false;
+
+			return false;
 		}
 
 	}
 
-	/*public void setPropertyResponseData() {
-		assignDevicePropertyFromRoom();
-	}*/
+	/*
+	 * public void setPropertyResponseData() { assignDevicePropertyFromRoom(); }
+	 */
 
 	/**
 	 * 
 	 */
 	public void setDevicePropertyData() {
-		if (CommonValues.getInstance().devicePropertyList != null && CommonValues.getInstance().devicePropertyList.size()>0) {
+		if (CommonValues.getInstance().devicePropertyList != null
+				&& CommonValues.getInstance().devicePropertyList.size() > 0) {
 			for (int i = 0; i < CommonValues.getInstance().devicePropertyList
 					.size(); i++) {
 				setDevicePropertyValues(CommonValues.getInstance().devicePropertyList
@@ -783,44 +806,55 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	}
 
 	private void LoadDeviceLogContent(int deviceId, int FilterType,
-			String fromsDate, String tosDate,int PageNumber,int ChunkSize) {
+			String fromsDate, String tosDate, int PageNumber, int ChunkSize) {
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_Activities;
 		if (asyncGetDeviceLogInfo != null) {
 			asyncGetDeviceLogInfo.cancel(true);
 		}
 		asyncGetDeviceLogInfo = new AsyncGetLogFromRoomFragment(this, deviceId,
-				FilterType, fromsDate, tosDate,PageNumber,ChunkSize);
+				FilterType, fromsDate, tosDate, PageNumber, ChunkSize);
 		asyncGetDeviceLogInfo.execute();
 
 	}
 
 	public boolean sendGetDeviceLogRequest(int deviceId, int FilterType,
-			String fromsDate, String tosDate,int PageNumber,int ChunkSize) {
+			String fromsDate, String tosDate, int PageNumber, int ChunkSize) {
 
-//		String getDeviceLogUrl = CommonURL.getInstance().GetCommonURL + "/"
-//				+ CommonValues.getInstance().userId + "/device/"
-//				+ String.valueOf(deviceId) + "/activities";
-		String getDeviceLogUrl = CommonURL.getInstance().RootUrl  +"deviceactivities";
-		if (JsonParser.postDeviceLogRequest(getDeviceLogUrl,deviceId, FilterType,
-				fromsDate, tosDate,PageNumber,ChunkSize,shouldAppendList) != null && JsonParser.postDeviceLogRequest(getDeviceLogUrl,deviceId, FilterType,
-						fromDate, toDate,PageNumber,ChunkSize,shouldAppendList) !="") {
+		// String getDeviceLogUrl = CommonURL.getInstance().GetCommonURL + "/"
+		// + CommonValues.getInstance().userId + "/device/"
+		// + String.valueOf(deviceId) + "/activities";
+		String getDeviceLogUrl = CommonURL.getInstance().RootUrl
+				+ "deviceactivities";
+		if (JsonParser.postDeviceLogRequest(getDeviceLogUrl, deviceId,
+				FilterType, fromsDate, tosDate, PageNumber, ChunkSize,
+				shouldAppendList) != null
+				&& JsonParser.postDeviceLogRequest(getDeviceLogUrl, deviceId,
+						FilterType, fromDate, toDate, PageNumber, ChunkSize,
+						shouldAppendList) != "") {
 			return true;
-		}else{
+		} else {
 			RoomManager.this.runOnUiThread(new Runnable() {
-				
+
 				@Override
 				public void run() {
-//					CommonTask.ShowMessage(RoomManager.this, "No Data Returned From Server.");
-					CommonTask.ShowMessage(RoomManager.this, " End of List.No more data available for your search parameter.");
-//					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					// CommonTask.ShowMessage(RoomManager.this,
+					// "No Data Returned From Server.");
+					CommonTask
+							.ShowMessage(RoomManager.this,
+									" End of List.No more data available for your search parameter.");
+					// CommonTask.ShowNetworkChangeConfirmation(RoomManager.this,
+					// "Network State has changed.Please log in again to continue.",
+					// showNetworkChangeEvent());
 				}
 			});
-			
-		return false;
+
+			return false;
 		}
 
 	}
-	boolean shouldAppendList=false;
+
+	boolean shouldAppendList = false;
+
 	public void setupDeviceLogAdapter() {
 		if (CommonValues.getInstance().deviceLogDetailList != null) {
 			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
@@ -831,57 +865,64 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				deviceLogListView.setAdapter(dLogAdapter);
 				dLogAdapter.setTouchEnabled(false);
 				deviceLogListView.setEnabled(true);
-				
-            deviceLogListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-					
-					@Override
-					public void onScrollStateChanged(AbsListView view, int scrollState) {
-						int threshold = 1; 
-	                    int count = deviceLogListView.getCount(); 
 
-	                    if (scrollState == SCROLL_STATE_IDLE) { 
-	                        if (deviceLogListView.getLastVisiblePosition() >= count 
-	                                - threshold) { 
-	                        	if(CommonValues.getInstance().shouldSendLogReq==true){
-		                    		CommonValues.getInstance().shouldSendLogReq=false;
-		                    	}
-	                        	shouldAppendList=true;
-	                            // Execute LoadMoreData AsyncTask 
-	                        	CommonValues.getInstance().currentAction = CommonIdentifier.Action_Activities;
-	                        	PageNumber=PageNumber+=1;
-	                    		if (asyncGetDeviceLogInfo != null) {
-	                    			asyncGetDeviceLogInfo.cancel(true);
-	                    		}
-	                    		asyncGetDeviceLogInfo = new AsyncGetLogFromRoomFragment(RoomManager.this, deviceId,FilterType, fromsDate, tosDate,PageNumber,ChunkSize);
-	                    		asyncGetDeviceLogInfo.execute();
-	                        } 
-	                    } 
-						
-					}
-					
-					@Override
-					public void onScroll(AbsListView view, int firstVisibleItem,
-							int visibleItemCount, int totalItemCount) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
-				
+				deviceLogListView
+						.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+							@Override
+							public void onScrollStateChanged(AbsListView view,
+									int scrollState) {
+								int threshold = 1;
+								int count = deviceLogListView.getCount();
+
+								if (scrollState == SCROLL_STATE_IDLE) {
+									if (deviceLogListView
+											.getLastVisiblePosition() >= count
+											- threshold) {
+										if (CommonValues.getInstance().shouldSendLogReq == true) {
+											CommonValues.getInstance().shouldSendLogReq = false;
+										}
+										shouldAppendList = true;
+										// Execute LoadMoreData AsyncTask
+										CommonValues.getInstance().currentAction = CommonIdentifier.Action_Activities;
+										PageNumber = PageNumber += 1;
+										if (asyncGetDeviceLogInfo != null) {
+											asyncGetDeviceLogInfo.cancel(true);
+										}
+										asyncGetDeviceLogInfo = new AsyncGetLogFromRoomFragment(
+												RoomManager.this, deviceId,
+												FilterType, fromsDate, tosDate,
+												PageNumber, ChunkSize);
+										asyncGetDeviceLogInfo.execute();
+									}
+								}
+
+							}
+
+							@Override
+							public void onScroll(AbsListView view,
+									int firstVisibleItem, int visibleItemCount,
+									int totalItemCount) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+
 			} else {
 				tvEmptyLog.setVisibility(View.VISIBLE);
 				tvEmptyLog.setText("Sorry! No Log Available");
 			}
 		} else {
 			CommonTask.ShowMessage(this, "No Data Returned from Server");
-			
+
 		}
 
-
 	}
-	public void refreshAdapter(){
-		CommonValues.getInstance().shouldSendLogReq=true;
+
+	public void refreshAdapter() {
+		CommonValues.getInstance().shouldSendLogReq = true;
 		dLogAdapter.notifyDataSetChanged();
-		
+
 	}
 
 	private boolean validateLastDateInput() {
@@ -924,26 +965,30 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	public boolean sendGetDeviceRequest(int userId, int roomId) {
 
-//		String getDeviceUrl = CommonURL.getInstance().GetCommonURL + "/"
-//				+ String.valueOf(userId) + "/devices?roomid=" + roomId
-//				+ "&typeId=0";
-		String getDeviceUrl = CommonURL.getInstance().RootUrl+ 
-				 "devices?roomid=" + roomId
-				+ "&typeId=0";
+		// String getDeviceUrl = CommonURL.getInstance().GetCommonURL + "/"
+		// + String.valueOf(userId) + "/devices?roomid=" + roomId
+		// + "&typeId=0";
+		String getDeviceUrl = CommonURL.getInstance().RootUrl
+				+ "devices?roomid=" + roomId + "&typeId=0";
 
-		if (JsonParser.getDevicesRequest(getDeviceUrl) != null && JsonParser.getDevicesRequest(getDeviceUrl) !="") {
+		if (JsonParser.getDevicesRequest(getDeviceUrl) != null
+				&& JsonParser.getDevicesRequest(getDeviceUrl) != "") {
 			return true;
-		}else{
+		} else {
 			RoomManager.this.runOnUiThread(new Runnable() {
-				
+
 				@Override
 				public void run() {
-					CommonTask.ShowNetworkChangeConfirmation(RoomManager.this, "Network State has changed.Please log in again to continue.", showNetworkChangeEvent());
+					CommonTask
+							.ShowNetworkChangeConfirmation(
+									RoomManager.this,
+									"Network State/Configuration Settings has changed.Please log in again to continue.",
+									showNetworkChangeEvent());
 					asyncGetDeviceInfo.cancel(true);
 				}
 			});
-			
-		return false;
+
+			return false;
 		}
 
 	}
@@ -953,10 +998,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		// this.setTitle(R.string.Home);
 		// spinner1.setEnabled(false);
 		super.onPause();
-	/*	if(CommonValues.getInstance().connectionMode=="Local"){
-			if(wamp!=null)
-		wamp.stopWampClient();
-		}*/
+		/*
+		 * if(CommonValues.getInstance().connectionMode=="Local"){
+		 * if(wamp!=null) wamp.stopWampClient(); }
+		 */
 
 	}
 
@@ -989,6 +1034,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			// dAdapter.clear();
 			break;
 		case PROPERTY_STATE:
+			hideLastDisplayedView();
 			getSupportActionBar().setTitle("Devices");
 			vfRoom.setInAnimation(CommonTask.inFromLeftAnimation());
 			vfRoom.setOutAnimation(CommonTask.outToRightAnimation());
@@ -997,22 +1043,22 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			LoadRoomDetailsContent(roomid);
 			break;
 		case VIEWLOG_STATE:
-//			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-//				// deviceLogListView.setAdapter(null);
-//				// dLogAdapter.clear();
-//			}
+			// if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
+			// // deviceLogListView.setAdapter(null);
+			// // dLogAdapter.clear();
+			// }
 			etDateFrom.setText("");
 			etDateTo.setText("");
 			// bSearch.setVisibility(View.INVISIBLE);
-			if(deviceTypeId==1){
+			if (deviceTypeId == 1) {
 				getSupportActionBar().setTitle("Fan Control");
-				}else if(deviceTypeId==2){
-					getSupportActionBar().setTitle("Light Control");
-				}else if(deviceTypeId==3){
-					getSupportActionBar().setTitle("Ac Control");
-				}else if(deviceTypeId==4){
-					getSupportActionBar().setTitle("Curtain Control");
-				}
+			} else if (deviceTypeId == 2) {
+				getSupportActionBar().setTitle("Light Control");
+			} else if (deviceTypeId == 3) {
+				getSupportActionBar().setTitle("Ac Control");
+			} else if (deviceTypeId == 4) {
+				getSupportActionBar().setTitle("Curtain Control");
+			}
 			vfRoom.setDisplayedChild(2);
 			backState = RoomsState.PROPERTY_STATE;
 			loadDeviceProperty(deviceManagerEntity.DeviceTypeId,
@@ -1025,16 +1071,18 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		// return backHandled;
 
 	}
-	Wamp wamp=new Wamp();
+
+	Wamp wamp = new Wamp();
+
 	@Override
 	public void onResume() {
-		super.onResume();
-		if(CommonValues.getInstance().connectionMode=="Local"){
-		wamp.connectWampClient(this);
+
+		if (CommonValues.getInstance().connectionMode == "Local") {
+			wamp.connectWampClient(this);
 		}
 		CommonValues.getInstance().roomManager = (RoomManager_) this;
 		if (vfRoom.getDisplayedChild() == 0) {
-//			getSupportActionBar().setTitle("Rooms");
+			// getSupportActionBar().setTitle("Rooms");
 			if (asyncGetRoomInfo != null) {
 				asyncGetRoomInfo.cancel(true);
 			}
@@ -1044,7 +1092,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 		}
 		if (vfRoom.getDisplayedChild() == 1) {
-//			getSupportActionBar().setTitle("Devices");
+			// getSupportActionBar().setTitle("Devices");
 			LoadRoomDetailsContent(roomid);
 
 		}
@@ -1054,14 +1102,13 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 		}
 		if (vfRoom.getDisplayedChild() == 3) {
-//			getSupportActionBar().setTitle("Activities");
-//			bSearch.setVisibility(View.INVISIBLE);
-//			LoadDeviceLogContent(deviceManagerEntity.Id, 1, formatter.format(d)
-//					.toString(), formatter.format(d).toString());
+			// LoadDeviceLogContent(deviceManagerEntity.Id, 1,
+			// formatter.format(d)
+			// .toString(), formatter.format(d).toString());
 
 		}
 		bRoom.setBackground(getResources().getDrawable(R.drawable.roomselected));
-		
+		super.onResume();
 
 	}
 
@@ -1097,7 +1144,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.bCamera:
 			// cancelAsyncOnVisibleFlipper();
-//			Toast.makeText(RoomManager.this, "No Servilance System Available", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(RoomManager.this,
+			// "No Servilance System Available", Toast.LENGTH_SHORT).show();
 			if (MainActionbarBase.stackIndex != null) {
 				MainActionbarBase.stackIndex.removeAllElements();
 			}
@@ -1112,8 +1160,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			if (vfRoom.getDisplayedChild() == 0) {
 				return;
 			} else {
+				hideLastDisplayedView();
 				getSupportActionBar().setTitle("Rooms");
-				new AsyncGetRoom(RoomManager.this,CommonValues.getInstance().userId).execute();
+				new AsyncGetRoom(RoomManager.this,
+						CommonValues.getInstance().userId).execute();
 				vfRoom.setDisplayedChild(0);
 			}
 			break;
@@ -1161,11 +1211,12 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			etDateFrom.requestFocus();
 			setDateTimeField();
 			bSearch.setVisibility(View.INVISIBLE);
-			FilterType=1;
-			fromsDate=formatter.format(d).toString();
-			tosDate=formatter.format(d).toString();
-			PageNumber=1;
-			LoadDeviceLogContent(deviceManagerEntity.Id, FilterType, fromsDate, tosDate,PageNumber,ChunkSize);
+			FilterType = 1;
+			fromsDate = formatter.format(d).toString();
+			tosDate = formatter.format(d).toString();
+			PageNumber = 1;
+			LoadDeviceLogContent(deviceManagerEntity.Id, FilterType, fromsDate,
+					tosDate, PageNumber, ChunkSize);
 			break;
 		case R.id.etDateFrom:
 			if (fromDatePickerDialog != null)
@@ -1202,19 +1253,20 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			 */
 			etDateFrom.setText("");
 			etDateTo.setText("");
-			 bSearch.setVisibility(View.INVISIBLE);
+			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
 			tvToday.setTextColor(Color.parseColor("#6699ff"));
 			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 				clearPreviousLogData();
-				
+
 			}
-			
-			FilterType=1;
-			fromsDate=formatter.format(d).toString();
-			tosDate=formatter.format(d).toString();
-			PageNumber=1;
-			LoadDeviceLogContent(deviceManagerEntity.Id, FilterType, fromsDate, tosDate,PageNumber,ChunkSize);
+
+			FilterType = 1;
+			fromsDate = formatter.format(d).toString();
+			tosDate = formatter.format(d).toString();
+			PageNumber = 1;
+			LoadDeviceLogContent(deviceManagerEntity.Id, FilterType, fromsDate,
+					tosDate, PageNumber, ChunkSize);
 			break;
 		case R.id.tvYesterday:
 			if (tvEmptyLog.isShown()) {
@@ -1227,20 +1279,20 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			 */
 			etDateFrom.setText("");
 			etDateTo.setText("");
-			 bSearch.setVisibility(View.INVISIBLE);
+			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#6699ff"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
 			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 				clearPreviousLogData();
 			}
-			FilterType=2;
-			fromsDate=formatter
-					.format(d.getTime() - 24 * 60 * 60 * 1000).toString();
-			tosDate=formatter
-					.format(d.getTime() - 24 * 60 * 60 * 1000).toString();
-			PageNumber=1;
-			LoadDeviceLogContent(deviceManagerEntity.DeviceTypeId, FilterType,fromsDate ,
-					tosDate,PageNumber,ChunkSize);
+			FilterType = 2;
+			fromsDate = formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
+					.toString();
+			tosDate = formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
+					.toString();
+			PageNumber = 1;
+			LoadDeviceLogContent(deviceManagerEntity.DeviceTypeId, FilterType,
+					fromsDate, tosDate, PageNumber, ChunkSize);
 			break;
 		case R.id.bSearch:
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
@@ -1248,13 +1300,13 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 				clearPreviousLogData();
 			}
-			if(validateEmptyDateInput()){
-				FilterType=3;
-				fromsDate=stserverDate;
-				tosDate=lstserverDate;
-				PageNumber=1;
-			LoadDeviceLogContent(deviceManagerEntity.Id, FilterType, fromsDate,
-					tosDate,PageNumber,ChunkSize);
+			if (validateEmptyDateInput()) {
+				FilterType = 3;
+				fromsDate = stserverDate;
+				tosDate = lstserverDate;
+				PageNumber = 1;
+				LoadDeviceLogContent(deviceManagerEntity.Id, FilterType,
+						fromsDate, tosDate, PageNumber, ChunkSize);
 			}
 
 			break;
@@ -1273,9 +1325,9 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		dLogAdapter.clear();
 		CommonValues.getInstance().deviceLogDetailList.clear();
 	}
-	
+
 	public boolean validateEmptyDateInput() {
-		 if(etDateTo.getText().toString().length() == 0){
+		if (etDateTo.getText().toString().length() == 0) {
 			CommonTask.ShowMessage(this, "End Date Can't be blank");
 			return false;
 		}
@@ -1338,10 +1390,11 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		}
 	}
 
-	public boolean sendCurtainPresetRequest( int deviceId) {
-//		String curtainPresetUrl = CommonURL.getInstance().GetCommonURL + "/"
-//				+ userId + "/devices/" + deviceId + "/presets";
-		String curtainPresetUrl = CommonURL.getInstance().RootUrl + "presets?"+ "deviceId=" + deviceId ;
+	public boolean sendCurtainPresetRequest(int deviceId) {
+		// String curtainPresetUrl = CommonURL.getInstance().GetCommonURL + "/"
+		// + userId + "/devices/" + deviceId + "/presets";
+		String curtainPresetUrl = CommonURL.getInstance().RootUrl + "presets?"
+				+ "deviceId=" + deviceId;
 		if (JsonParser.setPresetRequest(curtainPresetUrl) != null) {
 			return true;
 		}
@@ -1362,8 +1415,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				if (shouldSetPreset) {
-					sendSetProperty(
-							position, deviceId, 6);
+					sendSetProperty(position, deviceId, 6);
 				}
 				shouldSetPreset = true;
 				spinner1.setSelection(position);
@@ -1436,8 +1488,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
 			Log.d("Tap", "Double");
-			sendSetProperty(
-					10 * curtainMultiplier, deviceId, curtainPropertyId);
+			sendSetProperty(10 * curtainMultiplier, deviceId, curtainPropertyId);
 			return true;
 		}
 
@@ -1445,16 +1496,14 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			Log.d("Tap", "Single");
-			sendSetProperty(
-					5 * curtainMultiplier, deviceId, curtainPropertyId);
+			sendSetProperty(5 * curtainMultiplier, deviceId, curtainPropertyId);
 			return super.onSingleTapUp(e);
 		}
 
 		@Override
 		public void onLongPress(MotionEvent e) {
 			Log.d("Tap", "Long");
-			sendSetProperty(
-					15 * curtainMultiplier, deviceId, curtainPropertyId);
+			sendSetProperty(15 * curtainMultiplier, deviceId, curtainPropertyId);
 			super.onLongPress(e);
 		}
 	}
@@ -1571,23 +1620,31 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				newCalendar.get(Calendar.DAY_OF_MONTH));
 
 	}
-	/**
-	 * 
-	 */
+
 	private void setSeekbarActiveColour() {
 		circularSeekBar1.setCircleColor(Color.rgb(190, 190, 190));
 		circularSeekBar1.setPointerColor(Color.argb(235, 74, 138, 255));
 		circularSeekBar1.setCircleProgressColor(Color.argb(235, 74, 138, 255));
 	}
 
-	/**
-	 * 
-	 */
 	private void setSeekbarInactiveColor() {
-		circularSeekBar1.setCircleColor(getResources().getColor(R.color.dark_gray));
-		circularSeekBar1.setPointerColor(getResources().getColor(R.color.dark_gray));
+		circularSeekBar1.setCircleColor(getResources().getColor(
+				R.color.dark_gray));
+		circularSeekBar1.setPointerColor(getResources().getColor(
+				R.color.dark_gray));
 		circularSeekBar1.setCircleProgressColor(R.color.dark_gray);
 	}
-	
+
+	private void hideLastDisplayedView() {
+		if (porda.isShown()) {
+			porda.setVisibility(View.GONE);
+		}
+		if (knob.isShown()) {
+			knob.setVisibility(View.GONE);
+		}
+		if (spinner1.isShown()) {
+			spinner1.setVisibility(View.GONE);
+		}
+	}
 
 }

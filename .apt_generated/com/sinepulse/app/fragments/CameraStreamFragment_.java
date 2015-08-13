@@ -66,9 +66,9 @@ public final class CameraStreamFragment_
     @Override
     public void onViewChanged(HasViews hasViews) {
         bCamera = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bCamera));
+        spCamera = ((Spinner) hasViews.findViewById(com.sinepulse.app.R.id.spinner_camera));
         surface = ((LiveSurface) hasViews.findViewById(com.sinepulse.app.R.id.surface));
         streamingButton = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.MyStreamButton));
-        spCamera = ((Spinner) hasViews.findViewById(com.sinepulse.app.R.id.spinner_camera));
         if (hasViews.findViewById(com.sinepulse.app.R.id.MyStreamButton)!= null) {
             hasViews.findViewById(com.sinepulse.app.R.id.MyStreamButton).setOnClickListener(new OnClickListener() {
 

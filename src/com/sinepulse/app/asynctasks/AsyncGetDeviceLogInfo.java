@@ -6,10 +6,10 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.Home;
-import com.sinepulse.app.activities.UserLogActivity;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * Fetch device activities info from server based on search parameter through asynchronous call
  * @author tanvir.ahmed
  *
  */

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.sinepulse.app.activities.Home;
 
 /**
+ * Fetch Curtain preset values from server for Home tab through asynchronous call
  * @author tanvir.ahmed
  *
  */

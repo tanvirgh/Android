@@ -15,18 +15,21 @@ import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.sinepulse.app.R;
+import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.utils.CommonTask;
+import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.NetworkUtil;
 
 /**
- * Application Launcher class This class activity perform a splash screen with a
- * time interval After showing this class redirect to home screen as application
- * default
+ * Application Launcher class This activity class perform a splash screen with a
+ * time interval .After showing splash this class will redirect to home
+ * screen(dash board) as application default
  * 
- * @author Tac
+ * @author tavnir
  * 
  */
 public class SplashScreen extends SherlockFragmentActivity {
@@ -51,17 +54,6 @@ public class SplashScreen extends SherlockFragmentActivity {
 		/*
 		 * if (getIntent().getBooleanExtra("EXIT", false)) { finish(); }
 		 */
-		try {
-//			testNetworkName();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		mRPiAddress = "";
-//		mNsdManager = (NsdManager)(getApplicationContext().getSystemService(Context.NSD_SERVICE));
-//		initializeResolveListener();
-//		initializeDiscoveryListener();
-//		mNsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
 
 		// The workaround I chose to implement to resolve this issue is to check
 		// for the Intent.
@@ -79,7 +71,19 @@ public class SplashScreen extends SherlockFragmentActivity {
 			finish();
 			return;
 		}
+		// NSD ****Hostname resolve realted
+		mRPiAddress = "";
+		mNsdManager = (NsdManager) (getApplicationContext()
+				.getSystemService(this.NSD_SERVICE));
+		// initRegistrationListener();
+		initializeDiscoveryListener();
+		initializeResolveListener();
+
+		mNsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD,
+				mDiscoveryListener);
+		
 		// thread for displaying the SplashScreen
+		
 		Thread splashTread = new Thread() {
 			@Override
 			public void run() {
@@ -102,9 +106,7 @@ public class SplashScreen extends SherlockFragmentActivity {
 					intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 					// CommonValues.getInstance().homeIntent=intent;
 					startActivity(intent);
-					// overridePendingTransition(R.anim.slide_in_left,
-					// R.anim.slide_out_left);
-					SplashScreen.this.finish();
+//					SplashScreen.this.finish();
 
 				}
 			}
@@ -121,96 +123,109 @@ public class SplashScreen extends SherlockFragmentActivity {
 		return true;
 	}
 
+	String requiredServiceName = "";
+
+	private void initializeDiscoveryListener() {
+
+		// Instantiate a new DiscoveryListener
+		mDiscoveryListener = new NsdManager.DiscoveryListener() {
+
+			// Called as soon as service discovery begins.
+			@Override
+			public void onDiscoveryStarted(String regType) {
+			}
+
+			@Override
+			public void onServiceFound(NsdServiceInfo service) {
+				// A service was found! Do something with it.
+				String name = service.getServiceName();
+				String type = service.getServiceType();
+
+				//the service name returns name with mac address.So split this to get only the service name
+				String Delims = "\\[";
+				String[] requiredServiceArray = name.split(Delims);
+				requiredServiceName = requiredServiceArray[0];
+
+				if (type.equals(SERVICE_TYPE)
+						&& (requiredServiceName.trim().equals("sinepulsemctest"))) {
+					try {
+						mNsdManager.resolveService(service, mResolveListener);
+						
+						mNsdManager.stopServiceDiscovery(this);
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				
+			}
+
+			@Override
+			public void onServiceLost(NsdServiceInfo service) {
+				// When the network service is no longer available.
+				// Internal bookkeeping code goes here.
+			}
+
+			@Override
+			public void onDiscoveryStopped(String serviceType) {
+			}
+
+			@Override
+			public void onStartDiscoveryFailed(String serviceType, int errorCode) {
+				mNsdManager.stopServiceDiscovery(this);
+			}
+
+			@Override
+			public void onStopDiscoveryFailed(String serviceType, int errorCode) {
+				mNsdManager.stopServiceDiscovery(this);
+			}
+		};
+	}
+
+	private void initializeResolveListener() {
+		mResolveListener = new NsdManager.ResolveListener() {
+
+			@Override
+			public void onResolveFailed(NsdServiceInfo serviceInfo,
+					int errorCode) {
+				// Called when the resolve fails. Use the error code to debug.
+//				Log.e("NSD", "Resolve failed" + errorCode);
+			}
+
+			@Override
+			public void onServiceResolved(NsdServiceInfo serviceInfo) {
+				mServiceInfo = serviceInfo;
+
+				// Port is being returned as 9. Not needed.
+				// int port = mServiceInfo.getPort();
+				InetAddress host = mServiceInfo.getHost();
+				String address = host.getHostAddress();
+				Log.d("NSD", "Resolved address = " + address);
+				mRPiAddress = address;
+				CommonValues.getInstance().nsdResolvedIp = mRPiAddress;
+				if (address != null && !address.equals("")) {
+					Toast.makeText(
+							SplashScreen.this,
+							"NSD output : "
+									+ CommonValues.getInstance().nsdResolvedIp,
+							Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(SplashScreen.this,
+							"NSD output : " + "Failed to Resolve IP",
+							Toast.LENGTH_SHORT).show();
+				}
+
+			}
+		};
+	}
+
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		// finish();
+//		 finish();
 	}
-	
-	 private void initializeDiscoveryListener() {
 
-	     // Instantiate a new DiscoveryListener
-	     mDiscoveryListener = new NsdManager.DiscoveryListener() {
-
-	         //  Called as soon as service discovery begins.
-	         @Override
-	         public void onDiscoveryStarted(String regType) {
-	         }
-
-	         @Override
-	         public void onServiceFound(NsdServiceInfo service) {
-	             // A service was found!  Do something with it.
-	             String name = service.getServiceName();
-	             String type = service.getServiceType();
-	             Log.d("NSD", "Service Name=" + name);
-	             Log.d("NSD", "Service Type=" + type);
-	             if (type.equals(SERVICE_TYPE) && name.contains("sinepulsemcdev") ) {
-	                 Log.d("NSD", "Service Found @ '" + name + "'");
-	                 mNsdManager.resolveService(service, mResolveListener);
-	                 
-//	                 mNsdManager.unregisterService(service);
-//	                 mNsdManager.stopServiceDiscovery(mDiscoveryListener);
-	             }
-	         }
-
-	         @Override
-	         public void onServiceLost(NsdServiceInfo service) {
-	             // When the network service is no longer available.
-	             // Internal bookkeeping code goes here.
-	         }
-
-	         @Override
-	         public void onDiscoveryStopped(String serviceType) {
-	         }
-
-	         @Override
-	         public void onStartDiscoveryFailed(String serviceType, int errorCode) {
-	             mNsdManager.stopServiceDiscovery(this);
-	         }
-
-	         @Override
-	         public void onStopDiscoveryFailed(String serviceType, int errorCode) {
-	             mNsdManager.stopServiceDiscovery(this);
-	         }
-	     };
-	 }
-
-	 private void initializeResolveListener() {
-	     mResolveListener = new NsdManager.ResolveListener() {
-
-	         @Override
-	         public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
-	             // Called when the resolve fails.  Use the error code to debug.
-	             Log.e("NSD", "Resolve failed" + errorCode);
-	         }
-
-	         @Override
-	         public void onServiceResolved(NsdServiceInfo serviceInfo) {
-	             mServiceInfo = serviceInfo;
-	             // Port is being returned as 9. Not needed.
-	             //int port = mServiceInfo.getPort();
-	             InetAddress host = mServiceInfo.getHost();
-	             String address = host.getHostAddress();
-	             Log.d("NSD", "Resolved address = " + address);
-	             mRPiAddress = address;
-	         }
-	     };
-	 }
-	 
-	 public void testNetworkName() throws Exception {
-	        Enumeration<NetworkInterface> it_ni = NetworkInterface.getNetworkInterfaces();
-	        while (it_ni.hasMoreElements()) {
-	            NetworkInterface ni = it_ni.nextElement();
-	            Enumeration<InetAddress> it_ia = ni.getInetAddresses();
-	            if (it_ia.hasMoreElements()) {
-	                Log.i("Tan1", "++ NI:   " + ni.getDisplayName());
-	                while (it_ia.hasMoreElements()) {
-	                    InetAddress ia = it_ia.nextElement();
-	                    Log.i("Tan2", "-- IA:   " + ia.getCanonicalHostName());
-	                    Log.i("Tan3", "-- host: " + ia.getHostAddress());
-	                }
-	            }
-	        }
-	    }
 }
