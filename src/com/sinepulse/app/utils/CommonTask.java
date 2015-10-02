@@ -38,6 +38,7 @@ import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.animations.AlphaAnimationListener;
 import com.sinepulse.app.animations.DisplayNextView;
 import com.sinepulse.app.animations.Flip3dAnimation;
+import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.entities.Alert;
 import com.sinepulse.app.entities.LogInInfo;
 
@@ -561,18 +562,20 @@ public class CommonTask {
 
 	}
 	
-	public static void assignToLocalMode() {
+	public static void assignToLocalMode(Context caller) {
 		CommonURL.getInstance().assignValues(
 				CommonURL.getInstance().localBaseUrl);
 		CommonValues.getInstance().connectionMode = "Local";
-		
+		MainActionbarBase.setConnectionNodeImage(
+				CommonValues.getInstance().globalMenu, caller);
 		
 	}
-	public static void assignToInterentMode() {
+	public static void assignToInterentMode(Context caller) {
 		CommonURL.getInstance().assignValues(
 				CommonURL.getInstance().remoteBaseUrl);
 		CommonValues.getInstance().connectionMode = "Internet";
-		
+		MainActionbarBase.setConnectionNodeImage(
+				CommonValues.getInstance().globalMenu, caller);
 	}
 	
 	public static boolean sendApiKeyRequest(){

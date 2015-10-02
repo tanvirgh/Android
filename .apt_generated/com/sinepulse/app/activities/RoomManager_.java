@@ -90,39 +90,39 @@ public final class RoomManager_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        roomListView = ((ListView) hasViews.findViewById(id.lvRoomList));
-        ivDevice = ((ImageView) hasViews.findViewById(id.ivDevice));
-        tvDeviceName = ((TextView) hasViews.findViewById(id.tvDeviceName));
+        tvCircleProgressValue = ((TextView) hasViews.findViewById(id.tvCircleProgressValue));
+        roomlistProgressBar = ((ProgressBar) hasViews.findViewById(id.roomlistProgressBar));
+        btAddRoom = ((Button) hasViews.findViewById(id.btAddRoom));
+        etDateTo = ((EditText) hasViews.findViewById(id.etDateTo));
+        deviceLogProgressBar = ((ProgressBar) hasViews.findViewById(id.deviceLogProgressBar));
         streamingButton = ((Button) hasViews.findViewById(id.MyStreamButton));
+        pause = ((ImageView) hasViews.findViewById(id.pause));
+        up = ((ImageView) hasViews.findViewById(id.up));
+        vfRoom = ((ViewFlipper) hasViews.findViewById(id.vfRoom));
+        bRoom = ((Button) hasViews.findViewById(id.bRoom));
+        porda = ((RelativeLayout) hasViews.findViewById(id.porda));
+        devicelistProgressBar = ((ProgressBar) hasViews.findViewById(id.devicelistProgressBar));
+        btAddDevice = ((Button) hasViews.findViewById(id.btAddDevice));
+        toggleButton2 = ((ToggleButton) hasViews.findViewById(id.toggleButton2));
+        devicePropertyProgressBar = ((ProgressBar) hasViews.findViewById(id.devicePropertyProgressBar));
+        tvEmptyLog = ((TextView) hasViews.findViewById(id.tvEmptyLog));
+        tvDeviceName = ((TextView) hasViews.findViewById(id.tvDeviceName));
+        circularSeekBar1 = ((CircularSeekBar) hasViews.findViewById(id.circularSeekBar1));
+        etDateFrom = ((EditText) hasViews.findViewById(id.etDateFrom));
         knob = ((RelativeLayout) hasViews.findViewById(id.knob));
         deviceListView = ((ListView) hasViews.findViewById(id.lvDeviceList));
-        tvCircleProgressValue = ((TextView) hasViews.findViewById(id.tvCircleProgressValue));
-        etDateTo = ((EditText) hasViews.findViewById(id.etDateTo));
-        pause = ((ImageView) hasViews.findViewById(id.pause));
-        deviceLogProgressBar = ((ProgressBar) hasViews.findViewById(id.deviceLogProgressBar));
-        porda = ((RelativeLayout) hasViews.findViewById(id.porda));
-        down = ((ImageView) hasViews.findViewById(id.down));
-        devicelistProgressBar = ((ProgressBar) hasViews.findViewById(id.devicelistProgressBar));
-        btAddRoom = ((Button) hasViews.findViewById(id.btAddRoom));
-        devicePropertyProgressBar = ((ProgressBar) hasViews.findViewById(id.devicePropertyProgressBar));
-        vfRoom = ((ViewFlipper) hasViews.findViewById(id.vfRoom));
-        up = ((ImageView) hasViews.findViewById(id.up));
-        btAddDevice = ((Button) hasViews.findViewById(id.btAddDevice));
-        etDateFrom = ((EditText) hasViews.findViewById(id.etDateFrom));
-        bCamera = ((Button) hasViews.findViewById(id.bCamera));
-        tvEmptyLog = ((TextView) hasViews.findViewById(id.tvEmptyLog));
+        ivDevice = ((ImageView) hasViews.findViewById(id.ivDevice));
+        tvToday = ((TextView) hasViews.findViewById(id.tvToday));
         bSearch = ((Button) hasViews.findViewById(id.bSearch));
-        toggleButton2 = ((ToggleButton) hasViews.findViewById(id.toggleButton2));
-        deviceLogListView = ((ListView) hasViews.findViewById(id.lvLogList));
-        circularSeekBar1 = ((CircularSeekBar) hasViews.findViewById(id.circularSeekBar1));
-        bRoom = ((Button) hasViews.findViewById(id.bRoom));
-        btShowLog = ((Button) hasViews.findViewById(id.btShowLog));
         spCamera = ((Spinner) hasViews.findViewById(id.spinner_camera));
         tvYesterday = ((TextView) hasViews.findViewById(id.tvYesterday));
-        roomlistProgressBar = ((ProgressBar) hasViews.findViewById(id.roomlistProgressBar));
-        tvToday = ((TextView) hasViews.findViewById(id.tvToday));
         tvDeviceLogHeadingText = ((TextView) hasViews.findViewById(id.tvDeviceLogHeadingText));
+        btShowLog = ((Button) hasViews.findViewById(id.btShowLog));
         list_image = ((ImageView) hasViews.findViewById(id.list_image));
+        deviceLogListView = ((ListView) hasViews.findViewById(id.lvLogList));
+        roomListView = ((ListView) hasViews.findViewById(id.lvRoomList));
+        bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        down = ((ImageView) hasViews.findViewById(id.down));
         if (hasViews.findViewById(id.bCamera)!= null) {
             hasViews.findViewById(id.bCamera).setOnClickListener(new OnClickListener() {
 

@@ -1400,9 +1400,11 @@ public class JsonParser extends MainActionbarBase {
 					CommonConstraints.TIMEOUT_MILLISEC);
 			HttpGet httpGet = new HttpGet(url);
 //			httpGet.addHeader("Cookie", cookieID);
-			// if(CommonValues.getInstance().connectionMode=="Local"){
-			httpGet.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
-			// }
+			 if(CommonValues.getInstance().connectionMode=="Local"){
+			httpGet.addHeader("ApiKey", CommonValues.getInstance().ApiKeyLocal);
+			 }else{
+				 httpGet.addHeader("ApiKey", CommonValues.getInstance().ApiKeyGsb); 
+			 }
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			if (httpResponse.getStatusLine().getStatusCode() == 200) {
 				HttpEntity httpEntity = httpResponse.getEntity();

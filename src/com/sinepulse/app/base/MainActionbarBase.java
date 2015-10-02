@@ -226,7 +226,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 				if (CommonTask.isNetworkStateChanged(MainActionbarBase.this) == false) {
 					if (CommonValues.getInstance().connectionMode
 							.equals("Local")) {
-						CommonTask.assignToInterentMode();
+						CommonTask.assignToInterentMode(mainActionBarContext);
 						if (CommonValues.getInstance().ApiKeyGsb == null
 								|| CommonValues.getInstance().ApiKeyGsb
 										.equals("")) {
@@ -237,7 +237,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 					} else {
 
 						if (CommonURL.getInstance().localBaseUrl != null) {
-							CommonTask.assignToLocalMode();
+							CommonTask.assignToLocalMode(mainActionBarContext);
 						}
 						if (CommonValues.getInstance().ApiKeyLocal == null
 								|| CommonValues.getInstance().ApiKeyLocal
@@ -294,8 +294,8 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	int PageNumber = 1;
 
 	public void makeServerCallOnDemand() {
-		setConnectionNodeImage(
-				CommonValues.getInstance().globalMenu, MainActionbarBase.this);
+//		setConnectionNodeImage(
+//				CommonValues.getInstance().globalMenu, MainActionbarBase.this);
 		// ArrayList<String> runningactivities = checkActivityVisibility();
 		if (mainActionBarContext instanceof Home) {
 			if (Home_.vfDeviceType != null
@@ -381,10 +381,11 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 //					 clearAppData();
+					
 					if (CommonValues.getInstance().connectionMode
 							.equals("Local")) {
 						if (CommonURL.getInstance().remoteBaseUrl != null) {
-							CommonTask.assignToInterentMode();
+							CommonTask.assignToInterentMode(mainActionBarContext);
 						}
 						if (CommonValues.getInstance().ApiKeyGsb == null
 								|| CommonValues.getInstance().ApiKeyGsb
@@ -395,7 +396,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 						}
 					} else {
 						if (CommonURL.getInstance().localBaseUrl != null) {
-							CommonTask.assignToLocalMode();
+							CommonTask.assignToLocalMode(mainActionBarContext);
 						}
 						if (CommonValues.getInstance().ApiKeyLocal == null
 								|| CommonValues.getInstance().ApiKeyLocal
@@ -405,6 +406,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 							makeServerCallOnDemand();
 						}
 					}
+					
 					break;
 				case DialogInterface.BUTTON_NEGATIVE:
 					dialog.cancel();

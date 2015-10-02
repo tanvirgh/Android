@@ -66,8 +66,8 @@ public class AsyncSendApiKeyRequest extends AsyncTask<Void, Void, String> {
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 		if (result != "") {
-			MainActionbarBase.setConnectionNodeImage(
-					CommonValues.getInstance().globalMenu, callerActivity);
+//			MainActionbarBase.setConnectionNodeImage(
+//					CommonValues.getInstance().globalMenu, callerActivity);
 			// ArrayList<String> runningactivities = checkActivityVisibility();
 			// if (runningactivities
 			// .contains("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.Home_}")

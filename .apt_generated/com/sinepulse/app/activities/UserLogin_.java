@@ -84,9 +84,9 @@ public final class UserLogin_
     @Override
     public void onViewChanged(HasViews hasViews) {
         etUserName = ((EditText) hasViews.findViewById(id.etUserName));
+        etUserPassword = ((EditText) hasViews.findViewById(id.etUserPassword));
         pbFirstPage = ((ProgressBar) hasViews.findViewById(id.pbFirstPage));
         bUserLogin = ((Button) hasViews.findViewById(id.bUserLogin));
-        etUserPassword = ((EditText) hasViews.findViewById(id.etUserPassword));
         if (hasViews.findViewById(id.bUserLogin)!= null) {
             hasViews.findViewById(id.bUserLogin).setOnClickListener(new OnClickListener() {
 

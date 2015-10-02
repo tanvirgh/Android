@@ -66,11 +66,11 @@ public final class ChangePasswordFragment_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        pbChangePass = ((ProgressBar) hasViews.findViewById(com.sinepulse.app.R.id.pbChangePass));
         etOldPass = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etOldPass));
+        etConfirmPassword = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etConfirmPassword));
+        pbChangePass = ((ProgressBar) hasViews.findViewById(com.sinepulse.app.R.id.pbChangePass));
         etNewPassword = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etNewPassword));
         bSavePassword = ((Button) hasViews.findViewById(com.sinepulse.app.R.id.bSavePassword));
-        etConfirmPassword = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etConfirmPassword));
         if (hasViews.findViewById(com.sinepulse.app.R.id.bSavePassword)!= null) {
             hasViews.findViewById(com.sinepulse.app.R.id.bSavePassword).setOnClickListener(new OnClickListener() {
 
