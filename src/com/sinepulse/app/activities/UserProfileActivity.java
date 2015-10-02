@@ -11,6 +11,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +19,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -31,6 +31,7 @@ import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
+import com.sinepulse.app.utils.NetworkUtil;
 
 /**
  * this class will show the user profile related information through
@@ -69,7 +70,7 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	@ViewById(R.id.userProfileProgressBar)
 	public ProgressBar userProfileProgressBar;
 	
-	AsyncGetUserProfile asyncGetUserInfo = null;
+	static AsyncGetUserProfile asyncGetUserInfo = null;
 	@ViewById(R.id.bCamera)
 	protected Button bCamera;
 	@ViewById(R.id.bRoom)
@@ -77,12 +78,15 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	@ViewById(R.id.bDashboard)
 	protected Button bDashboard;
 	private Menu actionBarMenu;
+	public static Context context;
 	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		createMenuBar();
+		UserProfileActivity_.context=this;
+        mainActionBarContext=UserProfileActivity_.context;
 		
 	}
 	private void createMenuBar() {
@@ -99,36 +103,46 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		setConnectionNodeImage(actionBarMenu);
+		setConnectionNodeImage(actionBarMenu,this);
 		return prepared;
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		final String status = NetworkUtil.getConnectivityStatusString(this);
 		if (item.getItemId() == android.R.id.home) {
 			 onBackPressed();
 		}
 		if (item.getItemId() == R.id.menu_refresh) {
 			loadUserInformation();
 		}
-		return true;
+		if (item.getItemId() == R.id.menu_conn_indicatior) {
+			if (status.equals("Mobiledata enabled") && CommonValues.getInstance().connectionMode.equals("Internet") ) {
+				CommonTask.ShowMessage(this, "Local mode is not accessible in GSM network.Please try with WiFi.");
+			}else{
+			CommonTask
+			.ShowNetworkChangeConfirmation(
+					UserProfileActivity.this,
+					"Do you Really want to change mode?.",
+					showNetworkChangeEvent());
+			}
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	
 	@AfterViews
 	void afterViewLoaded(){
-		
 		loadUserInformation();
-		
-		
 	}
 	
 	
-	private void loadUserInformation() {
+	public static void loadUserInformation() {
 		CommonValues.getInstance().currentAction=CommonIdentifier.Action_Profile;
 		if (asyncGetUserInfo != null) {
 			asyncGetUserInfo.cancel(true);
 	}
-		asyncGetUserInfo = new AsyncGetUserProfile(this,CommonValues.getInstance().userId);
+		asyncGetUserInfo = new AsyncGetUserProfile((UserProfileActivity) UserProfileActivity.context,CommonValues.getInstance().userId);
 		asyncGetUserInfo.execute();
 		
 	}
@@ -136,12 +150,21 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 public boolean sendGetUserProfileRequest(Integer userId) {
 		
 //		String getUserProfileUrl=CommonURL.getInstance().GetCommonURL+"/"+String.valueOf(userId)+"/profile";
-	String getUserProfileUrl=CommonURL.getInstance().RootUrl+"profile";
+	   String getUserProfileUrl=CommonURL.getInstance().RootUrl+"profile";
 
 		if (JsonParser.getUserProfileRequest(getUserProfileUrl) != null && JsonParser.getUserProfileRequest(getUserProfileUrl) != "") {
 			return true;
-		}
+		}else{
+			/* UserProfileActivity.this.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						CommonTask.ShowAlertMessage(UserProfileActivity.this, CommonValues.getInstance().alertObj );
+						
+					}
+				});*/
 		return false;
+		}
 	}
 
 
@@ -202,6 +225,14 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 //					this,
 //					"Network State/Configuration Settings has been changed.Please log in again to continue.",
 //					showNetworkChangeEvent());
+      /*  UserProfileActivity.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask.ShowAlertMessage(UserProfileActivity.this, CommonValues.getInstance().alertObj );
+					
+				}
+			});*/
 		}
 	}
 	

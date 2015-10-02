@@ -10,6 +10,7 @@ import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * Load updated dash board data from server asynchronously
  * @author tanvir.ahmed
  *
  */

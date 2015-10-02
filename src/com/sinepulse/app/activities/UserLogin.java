@@ -1,24 +1,17 @@
 package com.sinepulse.app.activities;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Locale;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -194,7 +187,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		case R.id.bUserLogin:
 			selectAppMode();
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -223,7 +216,11 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 				registerInBackground();
 			} else {
 				String GcmRegId = getRegistrationId(getApplicationContext());
+				if(GcmRegId!=""){
 				saveUserInfo(GcmRegId);
+				}else{
+					saveUserInfo("");
+				}
 				// System.out.println(GcmRegId);
 			}
 		}
@@ -266,10 +263,6 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	public void selectAppMode() {
 		if (CommonTask.isNetworkAvailable(this)) {
 			resolveNetworkState();
-			/*
-			 * try { Thread.sleep(3000); } catch (InterruptedException e) {
-			 * e.printStackTrace(); }
-			 */
 			// return true;
 		} else {
 			// CommonTask.ShowMessage(this,
@@ -314,9 +307,11 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 					CommonURL.getInstance().remoteBaseUrl);
 			CommonValues.getInstance().connectionMode = "Internet";
 		} else {
-			CommonValues.getInstance().IsServerConnectionError = true;
+//			CommonValues.getInstance().IsServerConnectionError = true;
 //			CommonValues.getInstance().connectionMode = "";
-
+			CommonURL.getInstance().assignValues(
+					CommonURL.getInstance().remoteBaseUrl);
+			CommonValues.getInstance().connectionMode = "Internet";
 		}
 	}
 

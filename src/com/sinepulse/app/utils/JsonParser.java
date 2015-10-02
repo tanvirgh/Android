@@ -17,9 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,21 +83,23 @@ public class JsonParser extends MainActionbarBase {
 			StringEntity se = new StringEntity(json);
 			// 6. set httpPost Entity
 			httpPost.setEntity(se);
-
 			// 7. Set headers to inform server about the type of the content
 			httpPost.setHeader("Accept", "application/json");
 			httpPost.setHeader("Content-type", "application/json");
 			// 8. Execute POST request to the given URL
 			HttpResponse httpResponse = httpclient.execute(httpPost);
-
 //			Header[] cookieHeader = httpResponse.getHeaders("Set-Cookie");
 //			if (cookieHeader.length > 0) {
 //				cookieID = cookieHeader[0].getValue();
 //			}
-
 			Header[] apikeyHeader = httpResponse.getHeaders("ApiKey");
 			if (apikeyHeader.length > 0) {
 				String ApiKey = apikeyHeader[0].getValue();
+				if(CommonValues.getInstance().connectionMode.equals("Local")){
+					CommonValues.getInstance().ApiKeyLocal=ApiKey ;
+				}else{
+					CommonValues.getInstance().ApiKeyGsb=ApiKey;
+				}
 				CommonValues.getInstance().ApiKey = ApiKey;
 			}
 
@@ -178,11 +178,126 @@ public class JsonParser extends MainActionbarBase {
 				CommonValues.getInstance().IsServerConnectionError = false;
 			}
 		}
+		// 11. return result
+		return result;
+	}
+	
+	public static String postApiKeyRequest(String url,
+			LogInInfo logInInfo) {
+		InputStream inputStream = null;
+		String result = "";
+		try {
+			// 1. create HttpClient
+			HttpClient httpclient = new DefaultHttpClient();
+			// HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
+					CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpclient.getParams(),
+					CommonConstraints.TIMEOUT_MILLISEC);
+			// 2. make POST request to the given URL
+			HttpPost httpPost = new HttpPost(url);
+			String json = "";
+			// 3. build jsonObject
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.accumulate("UserName", logInInfo.getUserName());
+			jsonObject.accumulate("Password", logInInfo.getUserpassword());
+			jsonObject.accumulate("AppToken", logInInfo.getAppToken());
+			jsonObject.accumulate("AppType", logInInfo.getAppType());
+			// 4. convert JSONObject to JSON to String
+			json = jsonObject.toString();
+			// 5. set json to StringEntity
+			StringEntity se = new StringEntity(json);
+			// 6. set httpPost Entity
+			httpPost.setEntity(se);
+			// 7. Set headers to inform server about the type of the content
+			httpPost.setHeader("Accept", "application/json");
+			httpPost.setHeader("Content-type", "application/json");
+			// 8. Execute POST request to the given URL
+			HttpResponse httpResponse = httpclient.execute(httpPost);
+//			Header[] apikeyHeader = httpResponse.getHeaders("ApiKey");
+//			if (apikeyHeader.length > 0) {
+//				String ApiKey = apikeyHeader[0].getValue();
+//				CommonValues.getInstance().ApiKey = ApiKey;
+//			}
 
+			// 9. receive response as inputStream
+			inputStream = httpResponse.getEntity().getContent();
+			// 10. convert inputstream to string
+			if (inputStream != null) {
+				result = convertInputStreamToString(inputStream);
+
+			} else {
+				// result = "Did not work!";
+				CommonValues.getInstance().alertObj = Alert.setCustomAlertData(
+						330, "Error");
+				CommonValues.getInstance().IsServerConnectionError = true;
+			}
+		} catch (SocketTimeoutException e) {
+
+			CommonValues.getInstance().alertObj = Alert.setCustomAlertData(420,
+					"Error");
+			CommonValues.getInstance().IsServerConnectionError = true;
+
+		} catch (Exception e2) {
+			CommonValues.getInstance().IsServerConnectionError = true;
+		}
+
+		if (result != null && !result.equals("")) {
+			try {
+				JSONObject jObject = null;
+				jObject = new JSONObject(result);
+				if (jObject.getString("Success").equalsIgnoreCase("True")) {
+
+//					jData = jObject.getJSONObject("Data");
+					String RApiKey=jObject.getString("Data");
+					if(CommonValues.getInstance().connectionMode.equals("Local")){
+						CommonValues.getInstance().ApiKeyLocal=RApiKey;
+					}else{
+						CommonValues.getInstance().ApiKeyGsb=RApiKey;
+					}
+					CommonValues.getInstance().ApiKey=RApiKey;
+
+				} else {
+					CommonValues.getInstance().IsServerConnectionError = true;
+					CommonValues.getInstance().alertObj = Alert
+							.setAlartData(jObject.getJSONObject("Message"));
+				}
+			}
+
+			catch (JSONException e) {
+				// Log.e("log_tag", "Error parsing data " + e.toString());
+				CommonValues.getInstance().alertObj = Alert.setCustomAlertData(
+						320, "Error");
+				CommonValues.getInstance().IsServerConnectionError = true;
+			}
+		} else {
+			if (result.equals("")) {
+				CommonValues.getInstance().alertObj = Alert.setCustomAlertData(
+						310, "Error");
+				CommonValues.getInstance().IsServerConnectionError = true;
+			} else {
+				CommonValues.getInstance().IsServerConnectionError = false;
+			}
+		}
 		// 11. return result
 		return result;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static String getSummaryRequest(String url) {
 
 		InputStream is = null;
@@ -245,7 +360,6 @@ public class JsonParser extends MainActionbarBase {
 		try {
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpParams httpParameters = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
 					CommonConstraints.TIMEOUT_MILLISEC);
 			HttpConnectionParams.setSoTimeout(httpclient.getParams(),
@@ -603,8 +717,8 @@ public class JsonParser extends MainActionbarBase {
 					userLogCount.add(devicePropertyLog);
 				}
 
-				if (CommonValues.getInstance().userLogDetailList.size() > 0
-						&& shouldAppendList == false) {
+				if (CommonValues.getInstance().userLogDetailList.size() > 0 && shouldAppendList == false) 
+				{
 					CommonValues.getInstance().userLogDetailList.clear();
 				}
 				CommonValues.getInstance().userLogDetailList
@@ -711,9 +825,10 @@ public class JsonParser extends MainActionbarBase {
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
 				deviceLogArray = jObject.getJSONArray("Data");
+				
 				int lengthofArray = deviceLogArray.length();
 				ArrayList<DevicePropertyLog> deviceLogCount = new ArrayList<DevicePropertyLog>();
-
+			
 				for (int i = 0; i < lengthofArray; i++) {
 					DevicePropertyLog devicePropertyLog = new DevicePropertyLog();
 					devicePropertyLog.setUserId(deviceLogArray.getJSONObject(i)
@@ -743,12 +858,14 @@ public class JsonParser extends MainActionbarBase {
 					deviceLogCount.add(devicePropertyLog);
 				}
 
-				if (CommonValues.getInstance().deviceLogDetailList.size() > 0
-						&& shouldAppendList == false) {
+				if (CommonValues.getInstance().deviceLogDetailList.size() > 0 && shouldAppendList == false) //&& shouldAppendList == false
+				{
 					CommonValues.getInstance().deviceLogDetailList.clear();
 				}
 				CommonValues.getInstance().deviceLogDetailList
 						.addAll(deviceLogCount);
+			
+
 				if (shouldAppendList == true) {
 					shouldAppendList = false;
 				}
@@ -926,20 +1043,10 @@ public class JsonParser extends MainActionbarBase {
 			CommonValues.getInstance().IsServerConnectionError = true;
 		}
 		if (result != null && !result.equals("")) {
+			CommonValues.getInstance().end = System.currentTimeMillis();
+			Log.d("Time", "Found result in " + (CommonValues.getInstance().end - CommonValues.getInstance().start) + " ms");
 			try {
-				JSONObject jObject = null;
-				jObject = new JSONObject(result);
-				jData = jObject.getJSONObject("Data");
-				Device device = new Device();
-
-				device.setName(jData.getString("Name"));
-				device.setId(jData.getInt("Id"));
-				device.setRoomName(jData.getString("RoomName"));
-				device.setDeviceTypeId(jData.getInt("DeviceTypeId"));
-				device.setIsOn(jData.getBoolean("IsOn"));
-				device.setIsActionPending(jData.getBoolean("IsActionPending"));
-
-				CommonValues.getInstance().modifiedDeviceStatus = device;
+				processDeviceStatusResponse(result);
 
 			} catch (JSONException e) {
 //				Log.e("log_tag", "Error parsing data " + e.toString());
@@ -959,6 +1066,27 @@ public class JsonParser extends MainActionbarBase {
 
 
 		return result;
+	}
+
+	/**
+	 * @param result
+	 * @throws JSONException
+	 */
+	public static void processDeviceStatusResponse(String result)
+			throws JSONException {
+		JSONObject jObject = null;
+		jObject = new JSONObject(result);
+		jData = jObject.getJSONObject("Data");
+		Device device = new Device();
+
+		device.setName(jData.getString("Name"));
+		device.setId(jData.getInt("Id"));
+		device.setRoomName(jData.getString("RoomName"));
+		device.setDeviceTypeId(jData.getInt("DeviceTypeId"));
+		device.setIsOn(jData.getBoolean("IsOn"));
+		device.setIsActionPending(jData.getBoolean("IsActionPending"));
+
+		CommonValues.getInstance().modifiedDeviceStatus = device;
 	}
 
 	/*
@@ -1004,7 +1132,6 @@ public class JsonParser extends MainActionbarBase {
 		try {
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpParams httpParameters = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
 					CommonConstraints.TIMEOUT_MILLISEC);
 			HttpConnectionParams.setSoTimeout(httpclient.getParams(),
@@ -1468,15 +1595,15 @@ public class JsonParser extends MainActionbarBase {
 		}
 
 		if (result != null && !result.equals("")) {
-			JSONObject jObject = null;
-			try {
-				jObject = new JSONObject(result);
-
-			} catch (JSONException e) {
-				CommonValues.getInstance().alertObj = Alert.setCustomAlertData(
-						320, "Error");
-				CommonValues.getInstance().IsServerConnectionError = true;
-			}
+//			JSONObject jsnObject = null;
+//			try {
+//				jsnObject = new JSONObject(result);
+//
+//			} catch (JSONException e) {
+//				CommonValues.getInstance().alertObj = Alert.setCustomAlertData(
+//						320, "Error");
+//				CommonValues.getInstance().IsServerConnectionError = true;
+//			}
 
 		} else {
 			if (result.equals("")) {

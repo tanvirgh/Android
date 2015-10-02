@@ -17,8 +17,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -28,11 +28,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.OnMenuVisibilityListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
@@ -41,7 +39,6 @@ import com.sinepulse.app.asynctasks.AsyncCreateTicket;
 import com.sinepulse.app.asynctasks.AsyncGetAllTickets;
 import com.sinepulse.app.asynctasks.AsyncGetTicketType;
 import com.sinepulse.app.asynctasks.AsyncLoadTicketDetails;
-import com.sinepulse.app.asynctasks.AsyncRefreshDashBoard;
 import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.utils.CommonIdentifier;
 import com.sinepulse.app.utils.CommonTask;
@@ -129,7 +126,7 @@ public class SupportActivity extends MainActionbarBase implements
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
 	}
-	private boolean isReached = false;
+//	private boolean isReached = false;
 	@AfterViews
 	void afterViewLoaded() {
 		backState = TicketsState.INITIAL_STATE;
@@ -225,7 +222,7 @@ public class SupportActivity extends MainActionbarBase implements
 		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		setActionBarMenuVisibility(true);
-		setConnectionNodeImage(actionBarMenu);
+		setConnectionNodeImage(actionBarMenu,this);
 		return prepared;
 	}
 

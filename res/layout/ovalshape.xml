@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
    android:id="@+id/curtainControl"
     android:layout_width="match_parent"
+    android:layout_marginTop="20dp"
     android:layout_height="wrap_content" >
 
    
@@ -12,11 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/spinner1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
-        android:contentDescription="@string/app_name"
+       android:contentDescription="@string/app_name"
         android:src="@drawable/curup" />
 
-    <ImageView
+   <!--  <ImageView
         android:id="@+id/left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_marginRight="20dp"
         android:layout_toStartOf="@+id/pause"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/left" />
+        android:src="@drawable/left" /> -->
 
     <ImageView
         android:id="@+id/pause"
@@ -37,7 +37,7 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/pause" />
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         android:layout_marginStart="20dp"
         android:layout_toEndOf="@+id/pause"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/right" />
+        android:src="@drawable/right" /> -->
 
     <ImageView
         android:id="@+id/down"
@@ -65,7 +65,7 @@
         android:layout_alignParentTop="true" >
     </RelativeLayout>
 
-    <ImageView
+  <!--   <ImageView
         android:id="@+id/reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -110,5 +110,5 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:visibility="visible" />
-
+ -->
 </RelativeLayout>

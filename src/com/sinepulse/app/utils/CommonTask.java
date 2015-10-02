@@ -1,11 +1,7 @@
 package com.sinepulse.app.utils;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -19,9 +15,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
@@ -41,17 +34,18 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.sinepulse.app.R;
+import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.animations.AlphaAnimationListener;
 import com.sinepulse.app.animations.DisplayNextView;
 import com.sinepulse.app.animations.Flip3dAnimation;
-import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.entities.Alert;
 import com.sinepulse.app.entities.LogInInfo;
 
 /**
- * @author Some common methods are defined in this class that is used all
- *         through the application such as email validation,robotto font
- *         method,cofirmation message,alert message,loading user info etc.
+ * @author tanvir.ahmed
+ * Some common methods are defined in this class that is used all
+ * through the application such as email validation,robotto font
+ * method,cofirmation message,alert message,loading user info etc.
  */
 
 @SuppressLint("DefaultLocale")
@@ -99,25 +93,7 @@ public class CommonTask {
 				inputValue, context.getResources().getDisplayMetrics());
 	}
 
-	private static BitmapDrawable getDrawableImage(String url) {
-		try {
-			URL urlAdd = new URL(url);
-			URLConnection connection = urlAdd.openConnection();
-			connection.setConnectTimeout(CommonConstraints.TIMEOUT_MILLISEC);
-			connection.setReadTimeout(CommonConstraints.TIMEOUT_MILLISEC);
-			connection.connect();
-			InputStream is = connection.getInputStream();
-			BufferedInputStream bis = new BufferedInputStream(is, 8 * 512);
-
-			Bitmap bmp = BitmapFactory.decodeStream(bis);
-			bis.close();
-			is.close();
-			return new BitmapDrawable(null, bmp);
-
-		} catch (Exception e) {
-		}
-		return null;
-	}
+	
 
 	public static double round(double unrounded, int precision, int roundingMode) {
 		BigDecimal bd = new BigDecimal(unrounded);
@@ -221,7 +197,8 @@ public class CommonTask {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning)
 				.setMessage(message)
-				.setPositiveButton(R.string.button_yes, event);
+				.setPositiveButton(R.string.button_yes, event)
+				.setNegativeButton(R.string.button_no, event);
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
@@ -234,38 +211,7 @@ public class CommonTask {
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 	}
-
-	public static void ApplyRotation(float start, float end,
-			boolean is1stLayout, LinearLayout layout1, LinearLayout layout2,
-			int rotateDuration, InputMethodManager imm, int keyboardStatus) {
-		final float centerX = layout1.getWidth() / 2.0f;
-		final float centerY = layout1.getHeight() / 2.0f;
-		final Flip3dAnimation rotation = new Flip3dAnimation(start, end,
-				centerX, centerY);
-		rotation.setDuration(rotateDuration);
-		rotation.setAnimationListener(new DisplayNextView(is1stLayout, layout1,
-				layout2, imm, keyboardStatus));
-		if (is1stLayout) {
-			layout1.startAnimation(rotation);
-
-		} else {
-			layout2.startAnimation(rotation);
-		}
-	}
-
-	public static void setAlphaVisible(View view, boolean isVisible) {
-		AlphaAnimation animation = isVisible ? new AlphaAnimation(0.0f, 1.0f)
-				: new AlphaAnimation(1.0f, 0.0f);
-		animation.setDuration(1000);
-		view.startAnimation(animation);
-		animation.setAnimationListener(new AlphaAnimationListener(view,
-				isVisible));
-	}
-
-	/*
-	 * public static void setAsyncImageBackground(View view, String id) {
-	 * view.setTag(id); new AsyncImageLoader().execute(view); }
-	 */
+	
 
 	// for the previous movement
 	public static Animation inFromRightAnimation() {
@@ -402,73 +348,25 @@ public class CommonTask {
 	public static boolean isValidLogIn(Context context,String userName, String password,
 			String AppToken) {
 
-		LogInInfo logInInfo = new LogInInfo();
-		logInInfo.setUserName(userName);
-		logInInfo.setUserpassword(password);
-		logInInfo.setAppToken(AppToken);
-		logInInfo.setAppType("1");
+//		LogInInfo logInInfo = new LogInInfo();
+		CommonValues.getInstance().logInInfo.setUserName(userName);
+		CommonValues.getInstance().logInInfo.setUserpassword(password);
+		CommonValues.getInstance().logInInfo.setAppToken(AppToken);
+		CommonValues.getInstance().logInInfo.setAppType("1");
+//		CommonValues.getInstance().logInInfo
 
 		// String asd=CommonURL.getInstance().baseUrl;
 		if (JsonParser.postLogInRequest(context,
-				CommonURL.getInstance().LoginCustomerURL, logInInfo) != null) {
+				CommonURL.getInstance().LoginCustomerURL, CommonValues.getInstance().logInInfo) != null) {
 			return true;
-		}
+		}else{
 		return false;
+		}
 	}
 
-	public static boolean getCheckoutMode(Context context) {
-		boolean onlineCheckout = false;
-		// SharedPreferences sharedPreferences = context.getSharedPreferences(
-		// "settings", Context.MODE_PRIVATE);
-		SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		onlineCheckout = sharedPreferences.getBoolean(
-				CommonConstraints.PREF_CHECKOUT_KEY, false);
-		return onlineCheckout;
-	}
+	
 
-	public static void loadLoginUser(Context context) {
-		// SharedPreferences sharedPreferences = context.getSharedPreferences(
-		// CommonConstraints.PREF_LOGINUSER_NAME, Context.MODE_PRIVATE);
-		//
-		SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
-
-	}
-
-	public static void resetPreferenceValue(Context context) {
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_CUSTOMERID_KEY, "");
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_FIRSTNAME_KEY, "");
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_LASTNAME_KEY, "");
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_ZIPCODE_KEY, "");
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_EMAIL_KEY, "");
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_TELEPHONE_KEY, "");
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_ADDRESS1_KEY, "");
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_ADDRESS2_KEY, "");
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_CITY_KEY, "");
-		CommonTask.SavePreferences(context,
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				CommonConstraints.PREF_PASSWORD_KEY, "");
-		loadLoginUser(context);
-	}
+	
 
 	/*
 	 * public static UserInformation getLoginUser() { if (isUserLoggedIn()) {
@@ -482,53 +380,7 @@ public class CommonTask {
 		return true;
 	}
 
-	public static void setApplicationUrls(Context context,
-			ArrayList<String> values) {
-		setStringArrayPref(context, CommonConstraints.PREF_BASEURLS_KEY, values);
-	}
-
-	public static ArrayList<String> getApplicationUrls(Context context) {
-		return getStringArrayPref(context, CommonConstraints.PREF_BASEURLS_KEY);
-	}
-
-	public static void setStringArrayPref(Context context, String key,
-			ArrayList<String> values) {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		SharedPreferences.Editor editor = prefs.edit();
-		JSONArray a = new JSONArray();
-		for (int i = 0; i < values.size(); i++) {
-			a.put(values.get(i));
-		}
-		if (!values.isEmpty()) {
-			editor.putString(key, a.toString());
-		} else {
-			editor.putString(key, null);
-		}
-		editor.commit();
-	}
-
-	public static ArrayList<String> getStringArrayPref(Context context,
-			String key) {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		String json = prefs.getString(key, null);
-		ArrayList<String> urls = null;
-		if (json != null) {
-			try {
-				urls = new ArrayList<String>();
-				JSONArray a = new JSONArray(json);
-				for (int i = 0; i < a.length(); i++) {
-					String url = a.optString(i);
-					urls.add(url);
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-		return urls;
-	}
-
+	
 	// Method for Checking Email Validation..Tanvir
 	public static boolean checkEmail(String email) {
 		return Patterns.EMAIL_ADDRESS.matcher(email).matches();
@@ -601,19 +453,6 @@ public class CommonTask {
 		NetworkInfo wifinetworkInfo = null;
 		State networkState = null;
 		
-		if (lastConType.equals("Mobile")) {
-			wifinetworkInfo = connectivityManager
-					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-			if (wifinetworkInfo != null) {
-
-				networkState = wifinetworkInfo.getState();
-				if (networkState == NetworkInfo.State.CONNECTED) {
-					lastConType = "";
-					return false;
-				}
-			}
-		}
-
 		if (connectivityManager != null) {
 			// Check Wifi
 			wifinetworkInfo = connectivityManager
@@ -637,6 +476,18 @@ public class CommonTask {
 				if (networkState == NetworkInfo.State.CONNECTED) {
 					lastConType = "Mobile";
 					return true;
+				}
+			}
+			if (lastConType.equals("Mobile")) {
+				wifinetworkInfo = connectivityManager
+						.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+				if (wifinetworkInfo != null) {
+
+					networkState = wifinetworkInfo.getState();
+					if (networkState == NetworkInfo.State.CONNECTED) {
+						lastConType = "";
+						return false;
+					}
 				}
 			}
 		}
@@ -709,5 +560,31 @@ public class CommonTask {
 		alert.show();
 
 	}
+	
+	public static void assignToLocalMode() {
+		CommonURL.getInstance().assignValues(
+				CommonURL.getInstance().localBaseUrl);
+		CommonValues.getInstance().connectionMode = "Local";
+		
+		
+	}
+	public static void assignToInterentMode() {
+		CommonURL.getInstance().assignValues(
+				CommonURL.getInstance().remoteBaseUrl);
+		CommonValues.getInstance().connectionMode = "Internet";
+		
+	}
+	
+	public static boolean sendApiKeyRequest(){
+		if (JsonParser.postApiKeyRequest(
+				CommonURL.getInstance().ApiKeyUrl, CommonValues.getInstance().logInInfo) != null && JsonParser.postApiKeyRequest(
+						CommonURL.getInstance().ApiKeyUrl, CommonValues.getInstance().logInInfo) != "") {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	
 
 }

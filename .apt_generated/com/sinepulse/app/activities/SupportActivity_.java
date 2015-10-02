@@ -86,24 +86,24 @@ public final class SupportActivity_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        bCamera = ((Button) hasViews.findViewById(id.bCamera));
-        bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
-        ticketListView = ((ListView) hasViews.findViewById(id.lvTicketList));
         pbTicket = ((ProgressBar) hasViews.findViewById(id.pbTicket));
-        pbSingleTicket = ((ProgressBar) hasViews.findViewById(id.pbSingleTicket));
-        etSubject = ((EditText) hasViews.findViewById(id.etSubject));
-        etDate = ((EditText) hasViews.findViewById(id.etDate));
-        bRoom = ((Button) hasViews.findViewById(id.bRoom));
-        etTktSubject = ((EditText) hasViews.findViewById(id.etTktSubject));
-        etTicketNo = ((EditText) hasViews.findViewById(id.etTicketNo));
-        etMessage = ((EditText) hasViews.findViewById(id.etMessage));
-        bCreateTIcket = ((Button) hasViews.findViewById(id.bCreateTIcket));
-        btSubmitTicket = ((Button) hasViews.findViewById(id.btSubmitTicket));
-        vfTicket = ((ViewFlipper) hasViews.findViewById(id.vfTicket));
         etTktMessage = ((EditText) hasViews.findViewById(id.etTktMessage));
+        bRoom = ((Button) hasViews.findViewById(id.bRoom));
+        etDate = ((EditText) hasViews.findViewById(id.etDate));
+        etTicketNo = ((EditText) hasViews.findViewById(id.etTicketNo));
+        etSubject = ((EditText) hasViews.findViewById(id.etSubject));
         etStatus = ((EditText) hasViews.findViewById(id.etStatus));
-        spType = ((Spinner) hasViews.findViewById(id.spType));
+        bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        btSubmitTicket = ((Button) hasViews.findViewById(id.btSubmitTicket));
+        etTktSubject = ((EditText) hasViews.findViewById(id.etTktSubject));
+        bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
         pbCreateTicket = ((ProgressBar) hasViews.findViewById(id.pbCreateTicket));
+        bCreateTIcket = ((Button) hasViews.findViewById(id.bCreateTIcket));
+        etMessage = ((EditText) hasViews.findViewById(id.etMessage));
+        pbSingleTicket = ((ProgressBar) hasViews.findViewById(id.pbSingleTicket));
+        vfTicket = ((ViewFlipper) hasViews.findViewById(id.vfTicket));
+        ticketListView = ((ListView) hasViews.findViewById(id.lvTicketList));
+        spType = ((Spinner) hasViews.findViewById(id.spType));
         if (hasViews.findViewById(id.bCamera)!= null) {
             hasViews.findViewById(id.bCamera).setOnClickListener(new OnClickListener() {
 

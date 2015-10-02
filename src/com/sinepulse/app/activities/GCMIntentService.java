@@ -25,9 +25,6 @@ import org.json.JSONObject;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,8 +32,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.sinepulse.app.R;
-import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.entities.Device;
 import com.sinepulse.app.entities.DeviceProperty;
 import com.sinepulse.app.utils.CommonValues;
@@ -49,7 +44,7 @@ public class GCMIntentService extends IntentService {
 
 	String TAG = "Tanvir GCM Messsage";
 	public static final int NOTIFICATION_ID = 1;
-	private NotificationManager mNotificationManager;
+//	private NotificationManager mNotificationManager;
 	NotificationCompat.Builder builder;
 	JSONObject jsonObj = null;
 
@@ -197,7 +192,7 @@ public class GCMIntentService extends IntentService {
 							if (Home_.vfDeviceType!=null &&Home.vfDeviceType.getDisplayedChild() == 2) {
 								Integer pushDeviceId = jsonObj.getInt("Id");
 								ArrayList<DeviceProperty> devicePropertyValues = parseGCMDeviceProperty(extras);
-								if (pushDeviceId == CommonValues.getInstance().home.deviceId) {
+								if (pushDeviceId == CommonValues.getInstance().home.deviceIdFromHome) {
 									CommonValues.getInstance().devicePropertyList = devicePropertyValues;
 									CommonValues.getInstance().home
 											.runOnUiThread(new Runnable() {
@@ -303,6 +298,7 @@ public class GCMIntentService extends IntentService {
 	// Put the message into a notification and post it.
 	// This is just one simple example of what you might choose to do with
 	// a GCM message.
+/*	@SuppressWarnings("unused")
 	private void sendNotification(String msg) {
 		mNotificationManager = (NotificationManager) this
 				.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -322,5 +318,5 @@ public class GCMIntentService extends IntentService {
 
 		mBuilder.setContentIntent(contentIntent);
 		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-	}
+	}*/
 }

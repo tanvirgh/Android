@@ -31,7 +31,7 @@
   <class id="4" language="java" name="com.sinepulse.app.base.HomeAutomationApplication" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/base/HomeAutomationApplication.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="58" width="248" x="637" y="-782"/>    
+    <position height="58" width="248" x="1074" y="-713"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -40,7 +40,7 @@
   </class>  
   <class id="5" language="java" name="com.sinepulse.app.fragments.HomeFragment" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/fragments/HomeFragment.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="212" x="454" y="-677"/>    
+    <position height="53" width="212" x="238" y="-349"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -50,7 +50,7 @@
   <class id="6" language="java" name="com.sinepulse.app.fragments.UserProfileFragment" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/fragments/UserProfileFragment.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="59" width="216" x="455" y="-590"/>    
+    <position height="59" width="216" x="1089" y="-620"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -60,7 +60,7 @@
   <enumeration id="7" language="java" name="com.sinepulse.app.fragments.UserProfileFragment.UserProfileSate" 
     project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/fragments/UserProfileFragment.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="186" x="670" y="-499"/>    
+    <position height="53" width="186" x="1093" y="-521"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -69,7 +69,7 @@
   </enumeration>  
   <class id="8" language="java" name="com.sinepulse.app.activities.Home" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/activities/Home.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="96" width="253" x="289" y="-1265"/>    
+    <position height="96" width="253" x="307" y="-1277"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -78,7 +78,7 @@
   </class>  
   <class id="9" language="java" name="com.sinepulse.app.activities.About" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/activities/About.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="72" width="164" x="1038" y="-1030"/>    
+    <position height="72" width="164" x="1134" y="-1270"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -87,7 +87,7 @@
   </class>  
   <class id="10" language="java" name="com.sinepulse.app.activities.RoomManager" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/activities/RoomManager.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="73" width="164" x="1040" y="-935"/>    
+    <position height="165" width="169" x="1154" y="-961"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -97,7 +97,7 @@
   <class id="11" language="java" name="com.sinepulse.app.activities.Settings.SettingPreferenceFragment" 
     project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/activities/Settings.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="63" width="215" x="1017" y="-684"/>    
+    <position height="63" width="215" x="618" y="-461"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -106,7 +106,7 @@
   </class>  
   <class id="12" language="java" name="com.sinepulse.app.activities.Settings" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/activities/Settings.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="75" width="158" x="1045" y="-818"/>    
+    <position height="75" width="158" x="375" y="-453"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -116,7 +116,7 @@
   <class id="13" language="java" name="com.sinepulse.app.adapters.DeviceListAdapterByRoom" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/adapters/DeviceListAdapterByRoom.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="95" width="193" x="-67" y="-535"/>    
+    <position height="95" width="193" x="15" y="-488"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -126,7 +126,7 @@
   <class id="14" language="java" name="com.sinepulse.app.adapters.NavDrawerListAdapter.CustExpListview" 
     project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/adapters/NavDrawerListAdapter.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="80" width="171" x="-55" y="-886"/>    
+    <position height="80" width="171" x="-149" y="-1020"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -136,7 +136,7 @@
   <class id="15" language="java" name="com.sinepulse.app.adapters.NavDrawerListAdapter" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/adapters/NavDrawerListAdapter.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="65" width="222" x="179" y="-1081"/>    
+    <position height="65" width="227" x="87" y="-1017"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -145,7 +145,7 @@
   </class>  
   <class id="16" language="java" name="com.sinepulse.app.adapters.RoomListAdapter" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/adapters/RoomListAdapter.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="103" width="139" x="-61" y="-690"/>    
+    <position height="153" width="144" x="-151" y="-682"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -156,7 +156,7 @@
     project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/asynctasks/AsyncCheckServerStateAndSaveServerInfo.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="81" width="272" x="953" y="-1261"/>    
+    <position height="53" width="272" x="771" y="-1263"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -167,7 +167,7 @@
     project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/asynctasks/AsyncNavDrawerExpandFirstStepItemsLoading.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="68" width="292" x="141" y="-828"/>    
+    <position height="68" width="292" x="-153" y="-897"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -176,7 +176,7 @@
   </class>  
   <class id="19" language="java" name="com.sinepulse.app.base.MainActionbarBase" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/base/MainActionbarBase.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="58" width="173" x="755" y="-1021"/>    
+    <position height="123" width="227" x="1102" y="-1132"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -225,7 +225,7 @@
   </class>  
   <class id="24" language="java" name="com.sinepulse.app.entities.DeviceManager" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/entities/DeviceManager.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="125" width="222" x="207" y="-401"/>    
+    <position height="125" width="222" x="-48" y="-350"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -234,277 +234,200 @@
   </class>  
   <class id="25" language="java" name="com.sinepulse.app.entities.RoomManager" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/entities/RoomManager.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="61" width="242" x="201" y="-499"/>    
+    <position height="61" width="242" x="227" y="-282"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="26" language="java" name="com.sinepulse.app.fragments.CameraStreamFragment.CameraFragmentState" 
-    project="HomeAutomationV1" file="/HomeAutomationV1/src/com/sinepulse/app/fragments/CameraStreamFragment.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="204" x="681" y="-179"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </enumeration>  
-  <class id="27" language="java" name="com.sinepulse.app.fragments.CameraStreamFragment" project="HomeAutomationV1" 
-    file="/HomeAutomationV1/src/com/sinepulse/app/fragments/CameraStreamFragment.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="69" width="213" x="449" y="-269"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="28" language="java" name="com.sinepulse.app.utils.CommonTask" project="HomeAutomationV1" 
+  <class id="26" language="java" name="com.sinepulse.app.utils.CommonTask" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/utils/CommonTask.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="64" width="186" x="415" y="-1006"/>    
+    <position height="64" width="186" x="366" y="-1081"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="29" language="java" name="com.sinepulse.app.utils.CommonURL" project="HomeAutomationV1" 
+  <class id="27" language="java" name="com.sinepulse.app.utils.CommonURL" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/utils/CommonURL.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="76" width="146" x="641" y="-899"/>    
+    <position height="95" width="235" x="387" y="-878"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="30" language="java" name="com.sinepulse.app.utils.JSONfunctions" project="HomeAutomationV1" 
-    file="/HomeAutomationV1/src/com/sinepulse/app/utils/JSONfunctions.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="65" width="240" x="980" y="-1131"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="31" language="java" name="com.sinepulse.app.utils.NavDrawerItem" project="HomeAutomationV1" 
+  <class id="28" language="java" name="com.sinepulse.app.utils.NavDrawerItem" project="HomeAutomationV1" 
     file="/HomeAutomationV1/src/com/sinepulse/app/utils/NavDrawerItem.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="81" width="167" x="-54" y="-1172"/>    
+    <position height="81" width="167" x="-71" y="-1172"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <dependency id="32">    
-    <end type="SOURCE" refId="28"/>    
-    <end type="TARGET" refId="29"/>  
-  </dependency>  
-  <dependency id="33">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="29"/>  
-  </dependency>  
-  <association id="34">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="35" name="dAdapter"/>      
-      <multiplicity id="36" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="37">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="19"/>  
-  </generalization>  
-  <association id="38">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="39" name="navDrawerAdapter"/>      
-      <multiplicity id="40" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="41">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="15"/>  
-  </dependency>  
-  <dependency id="42">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="28"/>  
-  </dependency>  
-  <nesting id="43">    
-    <end type="SOURCE" refId="27"/>    
-    <end type="TARGET" refId="26"/>  
-  </nesting>  
-  <dependency id="44">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="29"/>  
-  </dependency>  
-  <association id="45">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="46" name="navDrawerListAdapter"/>      
-      <multiplicity id="47" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="48">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="49" name="basketDrawerItem"/>      
-      <multiplicity id="50" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="31" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="51">    
+  <dependency id="29">    
     <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="7"/>  
-  </nesting>  
-  <dependency id="52">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="28"/>  
+    <end type="TARGET" refId="27"/>  
   </dependency>  
-  <dependency id="53">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="28"/>  
-  </dependency>  
-  <association id="54">    
-    <end type="SOURCE" refId="27" navigable="false">      
-      <attribute id="55" name="backState"/>      
-      <multiplicity id="56" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="26" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="57">    
-    <end type="SOURCE" refId="19"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <association id="58">    
+  <association id="30">    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="59" name="navDrawerItems"/>      
-      <multiplicity id="60" minimum="0" maximum="2147483647"/>    
+      <attribute id="31" name="navDrawerAdapter"/>      
+      <multiplicity id="32" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="31" navigable="true"/>    
+    <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="61">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <generalization id="62">    
+  <association id="33">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="34" name="basketDrawerItem"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="36">    
     <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="19"/>  
-  </generalization>  
-  <dependency id="63">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="15"/>  
+    <end type="TARGET" refId="26"/>  
   </dependency>  
-  <association id="64">    
-    <end type="SOURCE" refId="29" navigable="false">      
-      <attribute id="65" name="commonURLInstance">        
-        <position height="18" width="111" x="658" y="-849"/>      
-      </attribute>      
-      <multiplicity id="66" minimum="0" maximum="1">        
-        <position height="16" width="23" x="792" y="-823"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="29" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="67">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="28"/>  
-  </dependency>  
-  <dependency id="68">    
-    <end type="SOURCE" refId="27"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="69">    
-    <end type="SOURCE" refId="19"/>    
-    <end type="TARGET" refId="29"/>  
-  </dependency>  
-  <nesting id="70">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
-  </nesting>  
-  <generalization id="71">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="19"/>  
-  </generalization>  
-  <dependency id="72">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="29"/>  
-  </dependency>  
-  <dependency id="73">    
-    <end type="SOURCE" refId="19"/>    
-    <end type="TARGET" refId="28"/>  
-  </dependency>  
-  <association id="74">    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="75" name="navDrawerItems"/>      
-      <multiplicity id="76" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="31" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="77">    
+  <dependency id="37">    
     <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="29"/>  
+    <end type="TARGET" refId="27"/>  
   </dependency>  
-  <nesting id="78">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="14"/>  
-  </nesting>  
-  <dependency id="79">    
-    <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="28"/>  
-  </dependency>  
-  <association id="80">    
+  <association id="38">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="81" name="mInstance"/>      
-      <multiplicity id="82" minimum="0" maximum="1"/>    
+      <attribute id="39" name="mInstance"/>      
+      <multiplicity id="40" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="83">    
-    <end type="SOURCE" refId="9"/>    
+  <generalization id="41">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <dependency id="42">    
+    <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="8"/>  
   </dependency>  
-  <dependency id="84">    
-    <end type="SOURCE" refId="27"/>    
-    <end type="TARGET" refId="15"/>  
-  </dependency>  
-  <nesting id="85">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="11"/>  
-  </nesting>  
-  <dependency id="86">    
-    <end type="SOURCE" refId="27"/>    
+  <generalization id="43">    
+    <end type="SOURCE" refId="9"/>    
     <end type="TARGET" refId="19"/>  
-  </dependency>  
-  <association id="87">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="88" name="rAdapter"/>      
-      <multiplicity id="89" minimum="0" maximum="1"/>    
+  </generalization>  
+  <nesting id="44">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <association id="45">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="46" name="navDrawerItems"/>      
+      <multiplicity id="47" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
+    <end type="TARGET" refId="28" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="90">    
+  <association id="48">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="49" name="commonURLInstance">        
+        <position height="18" width="111" x="524" y="-824"/>      
+      </attribute>      
+      <multiplicity id="50" minimum="0" maximum="1">        
+        <position height="16" width="23" x="598" y="-873"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="51">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="19"/>  
+  </generalization>  
+  <dependency id="52">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <dependency id="53">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <nesting id="54">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </nesting>  
+  <dependency id="55">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <association id="56">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="57" name="navDrawerListAdapter"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="59">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <dependency id="60">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <association id="61">    
     <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="91" name="backState"/>      
-      <multiplicity id="92" minimum="0" maximum="1"/>    
+      <attribute id="62" name="backState"/>      
+      <multiplicity id="63" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="93">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="29"/>  
+  <association id="64">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="65" name="dAdapter"/>      
+      <multiplicity id="66" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="67">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="27"/>  
   </dependency>  
+  <dependency id="68">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <association id="69">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="70" name="rAdapter"/>      
+      <multiplicity id="71" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="72">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="11"/>  
+  </nesting>  
+  <dependency id="73">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="74">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="27"/>  
+  </dependency>  
+  <dependency id="75">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="27"/>  
+  </dependency>  
+  <nesting id="76">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="14"/>  
+  </nesting>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

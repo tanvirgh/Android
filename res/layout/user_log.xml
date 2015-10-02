@@ -206,7 +206,7 @@
             android:textStyle="normal" />
 
         <ListView
-            android:id="@+id/lvLogList"
+            android:id="@+id/lvUserLogList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvEmptyLog"

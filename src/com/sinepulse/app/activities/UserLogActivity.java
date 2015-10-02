@@ -15,30 +15,23 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.CalendarView.OnDateChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -51,6 +44,7 @@ import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
+import com.sinepulse.app.utils.NetworkUtil;
 
 /**
  * This class will be used to view users activity on system.there are different search parameter 
@@ -72,10 +66,10 @@ public class UserLogActivity extends MainActionbarBase implements
 	boolean fragmentPaused = false;
 
 	public static UserLogSate backState = UserLogSate.INITIAL_STATE;
-	AsyncGetUserLogInfo asyncGetUserLogInfo = null;
+	static AsyncGetUserLogInfo asyncGetUserLogInfo = null;
 	private UserLogAdapter uLogAdapter;
-	@ViewById(R.id.lvLogList)
-	public ListView deviceLogListView;
+	@ViewById(R.id.lvUserLogList)
+	public ListView userLogListView;
 	@ViewById(R.id.userLogProgressBar)
 	public static ProgressBar userLogProgressBar;
 	@ViewById(R.id.bDeliverydate)
@@ -118,12 +112,15 @@ public class UserLogActivity extends MainActionbarBase implements
 	String tosDate = "";
 	int PageNumber = 0;
 	int ChunkSize = 30;
+	public static Context context;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// getActivity().setContentView(R.layout.catalogue2);
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		UserLogActivity.context=this;
+        mainActionBarContext=UserLogActivity.context;
 		createMenuBar();
 		dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 		setDateTimeField();
@@ -167,15 +164,29 @@ public class UserLogActivity extends MainActionbarBase implements
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		setConnectionNodeImage(actionBarMenu);
+		setConnectionNodeImage(actionBarMenu,this);
 		return prepared;
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		final String status = NetworkUtil.getConnectivityStatusString(this);
 		if (item.getItemId() == android.R.id.home) {
 			onBackPressed();
 		}
+		
+		if (item.getItemId() == R.id.menu_conn_indicatior) {
+			if (status.equals("Mobiledata enabled") && CommonValues.getInstance().connectionMode.equals("Internet") ) {
+			CommonTask.ShowMessage(this, "Local mode is not accessible in GSM network.Please try with WiFi.");
+		}else{
+			CommonTask
+			.ShowNetworkChangeConfirmation(
+					UserLogActivity.this,
+					"Do you Really want to change mode?.",
+					showNetworkChangeEvent());
+		}
+		}
+		
 		if (item.getItemId() == R.id.menu_refresh) {
 			loadTodaysLog();
 		}
@@ -280,16 +291,7 @@ public class UserLogActivity extends MainActionbarBase implements
 			 * * 60 * 60 * 1000).toString(); esl.toDate=formatter
 			 * .format(d.getTime() - 24 * 60 * 60 * 1000).toString();
 			 */
-			FilterType = 2;
-			fromsDate = formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
-					.toString();
-			tosDate = formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
-					.toString();
-			PageNumber = 1;
-			// ChunkSize=40;
-
-			loadUserLogInfo(FilterType, fromsDate, tosDate, PageNumber,
-					ChunkSize);
+			loadYesterdayLog();
 			break;
 		case R.id.bDashboard:
 			if (MainActionbarBase.stackIndex != null) {
@@ -361,8 +363,24 @@ public class UserLogActivity extends MainActionbarBase implements
 	/**
 	 * 
 	 */
+	private void loadYesterdayLog() {
+		FilterType = 2;
+		fromsDate = formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
+				.toString();
+		tosDate = formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
+				.toString();
+		PageNumber = 1;
+		// ChunkSize=40;
+
+		loadUserLogInfo(FilterType, fromsDate, tosDate, PageNumber,
+				ChunkSize);
+	}
+
+	/**
+	 * 
+	 */
 	private void clearPreviousData() {
-		deviceLogListView.setAdapter(null);
+		userLogListView.setAdapter(null);
 		uLogAdapter.clear();
 		CommonValues.getInstance().userLogDetailList.clear();
 	}
@@ -420,13 +438,13 @@ public class UserLogActivity extends MainActionbarBase implements
 				.ShowMessage(this, "End Date can't  be less than Start date.");
 	}
 
-	private void loadUserLogInfo(int FilterType, String fromsDate,
+	public static void loadUserLogInfo(int FilterType, String fromsDate,
 			String tosDate, int PageNumber, int ChunkSize) {
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_User_Activities;
 		if (asyncGetUserLogInfo != null) {
 			asyncGetUserLogInfo.cancel(true);
 		}
-		asyncGetUserLogInfo = new AsyncGetUserLogInfo(this, FilterType,
+		asyncGetUserLogInfo = new AsyncGetUserLogInfo((UserLogActivity) UserLogActivity.context, FilterType,
 				fromsDate, tosDate, PageNumber, ChunkSize);
 		asyncGetUserLogInfo.execute();
 
@@ -447,6 +465,15 @@ public class UserLogActivity extends MainActionbarBase implements
 						shouldAppendList) != "") {
 			return true;
 		} else {
+			/*UserLogActivity.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					CommonTask.ShowAlertMessage(UserLogActivity.this, CommonValues.getInstance().alertObj );
+					
+				}
+			});*/
+			
 			return false;
 		}
 	}
@@ -463,40 +490,50 @@ public class UserLogActivity extends MainActionbarBase implements
 				tvEmptyLog.setVisibility(View.INVISIBLE);
 				uLogAdapter = new UserLogAdapter(this, R.layout.log_list_item,
 						CommonValues.getInstance().userLogDetailList);
-				deviceLogListView.setAdapter(uLogAdapter);
+				userLogListView.setAdapter(uLogAdapter);
 				uLogAdapter.setTouchEnabled(false);
-				deviceLogListView.setEnabled(true);
+				userLogListView.setEnabled(true);
 
-				deviceLogListView
+				userLogListView
 						.setOnScrollListener(new AbsListView.OnScrollListener() {
 
 							@Override
 							public void onScrollStateChanged(AbsListView view,
 									int scrollState) {
 								int threshold = 1;
-								int count = deviceLogListView.getCount();
+								int count = userLogListView.getCount();
 
 								if (scrollState == SCROLL_STATE_IDLE) {
 
-									if (deviceLogListView
+									if (userLogListView
 											.getLastVisiblePosition() >= count
 											- threshold) {
-										if (CommonValues.getInstance().shouldSendLogReq == true) {
-											CommonValues.getInstance().shouldSendLogReq = false;
-										}
+//										if (CommonValues.getInstance().shouldSendLogReq == true) {
+//											CommonValues.getInstance().shouldSendLogReq = false;
+//										}
+										if (CommonValues.getInstance().userLogDetailList
+												.size() % ChunkSize == 0
+												&& CommonValues.getInstance().userLogDetailList
+														.size() >= ChunkSize) {
 										shouldAppendList = true;
 										// Execute LoadMoreData AsyncTask
-										CommonValues.getInstance().currentAction = CommonIdentifier.Action_User_Activities;
+//										CommonValues.getInstance().currentAction = CommonIdentifier.Action_User_Activities;
 										PageNumber = PageNumber += 1;
 
-										if (asyncGetUserLogInfo != null) {
-											asyncGetUserLogInfo.cancel(true);
+//										if (asyncGetUserLogInfo != null) {
+//											asyncGetUserLogInfo.cancel(true);
+//										}
+//										asyncGetUserLogInfo = new AsyncGetUserLogInfo(
+//												UserLogActivity.this,
+//												FilterType, fromsDate, tosDate,
+//												PageNumber, ChunkSize);
+//										asyncGetUserLogInfo.execute();
+										
+										loadUserLogInfo(FilterType, fromsDate, tosDate, PageNumber,
+												ChunkSize);
+										}else{
+											shouldAppendList = false;
 										}
-										asyncGetUserLogInfo = new AsyncGetUserLogInfo(
-												UserLogActivity.this,
-												FilterType, fromsDate, tosDate,
-												PageNumber, ChunkSize);
-										asyncGetUserLogInfo.execute();
 									}
 								}
 							}
@@ -515,7 +552,7 @@ public class UserLogActivity extends MainActionbarBase implements
 				tvEmptyLog.setText("Sorry ! No Log Available ");
 			}
 		} else {
-			CommonTask.ShowMessage(this, "No Data returned from Server");
+//			CommonTask.ShowAlertMessage(this, CommonValues.getInstance().alertObj );
 			 /*CommonTask
 			 .ShowNetworkChangeConfirmation(
 			 this,
@@ -525,11 +562,10 @@ public class UserLogActivity extends MainActionbarBase implements
 
 	}
 
-	public void refreshAdapter() {
-		CommonValues.getInstance().shouldSendLogReq = true;
-		uLogAdapter.notifyDataSetChanged();
-
-	}
+//	public void refreshAdapter() {
+//		CommonValues.getInstance().shouldSendLogReq = true;
+//		uLogAdapter.notifyDataSetChanged();
+//	}
 
 	@Override
 	public void onBackPressed() {

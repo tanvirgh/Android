@@ -1,16 +1,9 @@
 package com.sinepulse.app.activities;
 
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Collections;
-import java.util.Enumeration;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.nsd.NsdManager;
-import android.net.nsd.NsdManager.RegistrationListener;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,10 +12,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.sinepulse.app.R;
-import com.sinepulse.app.base.MainActionbarBase;
-import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
-import com.sinepulse.app.utils.NetworkUtil;
 
 /**
  * Application Launcher class This activity class perform a splash screen with a
@@ -41,6 +31,7 @@ public class SplashScreen extends SherlockFragmentActivity {
 
 	// The NSD service type that the RPi exposes.
 	private static final String SERVICE_TYPE = "_workstation._tcp.";
+	private static final String APPLICATION_SERVICE_NAME="sinepulsemcdev";
 
 	// how long until we go to the next activity
 	protected boolean _active = true;
@@ -74,7 +65,7 @@ public class SplashScreen extends SherlockFragmentActivity {
 		// NSD ****Hostname resolve realted
 		mRPiAddress = "";
 		mNsdManager = (NsdManager) (getApplicationContext()
-				.getSystemService(this.NSD_SERVICE));
+				.getSystemService(SplashScreen.NSD_SERVICE));
 		// initRegistrationListener();
 		initializeDiscoveryListener();
 		initializeResolveListener();
@@ -147,7 +138,7 @@ public class SplashScreen extends SherlockFragmentActivity {
 				requiredServiceName = requiredServiceArray[0];
 
 				if (type.equals(SERVICE_TYPE)
-						&& (requiredServiceName.trim().equals("sinepulsemctest"))) {
+						&& (requiredServiceName.trim().equals(APPLICATION_SERVICE_NAME))) {
 					try {
 						mNsdManager.resolveService(service, mResolveListener);
 						

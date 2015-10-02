@@ -292,7 +292,7 @@ public class HomeFragment extends SherlockFragment {
 			break;
 		}
 
-		if (fragment != null) {
+	/*	if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			android.support.v4.app.FragmentTransaction ft = fragmentManager
 					.beginTransaction();
@@ -313,9 +313,9 @@ public class HomeFragment extends SherlockFragment {
 		} else {
 			// error in creating fragment
 			Log.e("MainActivity", "Error in creating fragment");
-		}
+		}	*/
+
 	}
 			
-	
 	
 }

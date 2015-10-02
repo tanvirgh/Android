@@ -48,7 +48,7 @@
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/redled_large" />
 
-            <Spinner
+            <!-- <Spinner
                 android:id="@+id/spinner1"
                 android:layout_width="150dp"
                 android:layout_height="35dp"
@@ -59,13 +59,13 @@
                 android:layout_toRightOf="@+id/list_image"
                 android:background="@drawable/cellbg_dropdown"
                 android:prompt="@string/camera_prompt"
-                android:visibility="invisible" />
+                android:visibility="invisible" /> -->
             <!-- Rightend OnOFF Button -->
 
             <ToggleButton
                 android:id="@+id/toggleButton2"
-                android:layout_width="75dp"
-                android:layout_height="35dp"
+                android:layout_width="80dp"
+                android:layout_height="38dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
@@ -140,11 +140,14 @@
                 android:id="@+id/porda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible" >
+                android:visibility="visible" >
 
                 <include
                     android:id="@+id/curtainadcontrol"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
                     layout="@layout/ovalshape" />
+
             </RelativeLayout>
 
             <com.sinepulse.app.custom.controls.CustomButton
@@ -173,7 +176,7 @@
                 android:layout_marginBottom="5dp"
                 android:text="DeviceName"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
         </RelativeLayout>
     </RelativeLayout>

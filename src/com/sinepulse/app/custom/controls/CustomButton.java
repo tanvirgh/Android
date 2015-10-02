@@ -1,10 +1,9 @@
 package com.sinepulse.app.custom.controls;
 
-import com.sinepulse.app.utils.ButtonTooltipHelper;
-
 import android.content.Context;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
+
+import com.sinepulse.app.utils.ButtonTooltipHelper;
 
 public class CustomButton extends SafeButton{
 	public CustomButton(Context context) {

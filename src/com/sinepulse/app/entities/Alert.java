@@ -9,8 +9,6 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.JsonObject;
-
 /**
  * @author tanvir.ahmed
  *

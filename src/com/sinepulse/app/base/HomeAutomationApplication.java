@@ -3,15 +3,12 @@ package com.sinepulse.app.base;
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
-import org.acra.ReportField;
-
-
-import com.sinepulse.app.utils.CommonURL;
-import com.sinepulse.app.utils.CommonValues;
-import com.sinepulse.app.R;
 
 import android.app.Application;
-import android.content.Context;
+
+import com.sinepulse.app.R;
+import com.sinepulse.app.utils.CommonURL;
+import com.sinepulse.app.utils.CommonValues;
 
 /**
  * Automatically call at the application startup

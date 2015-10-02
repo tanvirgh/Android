@@ -156,7 +156,7 @@ public class DeviceStatusFragment extends SherlockFragment implements
 
 	
 
-	void loadCheckoutModeFromSettings() {
+/*	void loadCheckoutModeFromSettings() {
 		if (CommonTask.getCheckoutMode(getActivity()) == true) {
 			// online chekcout, so we have to enable 4 steps in top bar
 			tvStep2.setText(getResources().getString(R.string.pay));
@@ -165,7 +165,7 @@ public class DeviceStatusFragment extends SherlockFragment implements
 			// inhouse checkout, so we have to enable 2 steps in top bar
 			tvStep2.setText(getResources().getString(R.string.pay));
 		}
-	}
+	}*/
 
 	@Override
 	public void onPause() {

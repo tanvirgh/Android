@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="0dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="5dp"
             android:orientation="vertical" >
 
@@ -62,7 +62,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="3dp"
                 android:layout_marginTop="32dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:text="Name"
                     android:textColor="@color/textColor"
@@ -103,7 +103,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="3dp"
                 android:layout_marginTop="2dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:text="User Name"
                     android:textColor="@color/textColor"
@@ -144,7 +144,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="3dp"
                 android:layout_marginTop="2dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
@@ -155,7 +155,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:text="Email"
                     android:textColor="@color/textColor"
@@ -185,7 +185,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="3dp"
                 android:layout_marginTop="2dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
@@ -196,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:text="Sex"
                     android:textColor="@color/textColor"
@@ -221,7 +221,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="3dp"
                 android:layout_marginTop="2dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
@@ -232,7 +232,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:text="Date Of Birth"
                     android:textColor="@color/textColor"
@@ -256,10 +256,10 @@
             <RelativeLayout
                 android:id="@+id/rlAddress"
                 android:layout_width="fill_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
 
@@ -269,7 +269,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:text="Address"
                     android:textColor="@color/textColor"
@@ -278,16 +278,18 @@
                 <com.sinepulse.app.custom.controls.CustomEditText
                     android:id="@+id/etAddress"
                     android:layout_width="170dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignParentTop="true"
                     android:layout_toRightOf="@+id/tvAddress"
                     android:background="@drawable/userprofile_et_bg"
-                    android:ems="10"
                     android:ellipsize="end"
+                    android:ems="10"
                     android:focusable="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="0dp"
                     android:textSize="12sp" />
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -295,7 +297,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="3dp"
                 android:layout_marginTop="2dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
@@ -306,7 +308,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:text="Cell Phone"
                     android:textColor="@color/textColor"
@@ -333,7 +335,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="3dp"
                 android:layout_marginTop="1dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"

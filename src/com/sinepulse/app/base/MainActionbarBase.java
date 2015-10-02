@@ -3,7 +3,9 @@ package com.sinepulse.app.base;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Stack;
 
@@ -19,7 +21,9 @@ import org.json.JSONObject;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -27,11 +31,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
@@ -39,7 +40,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -47,16 +47,21 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.devspark.appmsg.AppMsg;
 import com.sinepulse.app.R;
-import com.sinepulse.app.R.menu;
 import com.sinepulse.app.activities.About_;
 import com.sinepulse.app.activities.ChangePasswordActivity_;
 import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.activities.Home_;
+import com.sinepulse.app.activities.RoomManager;
+import com.sinepulse.app.activities.RoomManager_;
 import com.sinepulse.app.activities.SupportActivity_;
+import com.sinepulse.app.activities.UserLogActivity;
 import com.sinepulse.app.activities.UserLogActivity_;
 import com.sinepulse.app.activities.UserLogin;
+import com.sinepulse.app.activities.UserProfileActivity;
 import com.sinepulse.app.activities.UserProfileActivity_;
+import com.sinepulse.app.activities.VideoActivity;
 import com.sinepulse.app.asynctasks.AsyncLogOutTask;
+import com.sinepulse.app.asynctasks.AsyncSendApiKeyRequest;
 import com.sinepulse.app.asynctasks.CheckMC;
 import com.sinepulse.app.utils.CommonConstraints;
 import com.sinepulse.app.utils.CommonTask;
@@ -65,20 +70,20 @@ import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
 
 /**
- * @author Tanvir Ahmed Chowdhury used for loading sherlock action bar,set
- *         Application Theme and also describing menu functions,starting
- *         activities,validating server configuration if no valid IP and shop
- *         number is set in settigs screen related error message will dispalyed
- *         and prompt user for providing valid server address.Also starts
- *         various activities when user click on realted menu items.Also go home
- *         method of this class is working for return back to homescreen from
- *         any stage of application when necessary.
+ * used for loading sherlock action bar,set Application Theme and also
+ * describing menu functions,starting activities,validating server configuration
+ * Starts various activities when user click on realted menu items.Also go home
+ * method of this class is working for return back to homescreen from any stage
+ * of application when necessary.
+ * 
+ * @author tanvir.ahmed
  */
 
 public class MainActionbarBase extends SherlockFragmentActivity {
 
 	protected static String connnectionState = "NONE";
-	CheckMC checkMC = null;
+	static CheckMC checkMC = null;
+
 	// public Intent settingIntent;
 	public static final int INITAIL_STATE = -1;
 	public static final int SETTINGS_ACTIVITY = 0, ABOUT_ACTIVITY = 1,
@@ -104,6 +109,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			userProfileIntent, cameraIntent;
 
 	public static boolean isSearchExpanded = false;
+	public static Context mainActionBarContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -129,6 +135,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		FrameLayout.LayoutParams distanceFromUpIcon = (FrameLayout.LayoutParams) homeButton
 				.getLayoutParams();
 		distanceFromUpIcon.leftMargin = 10;
+		MainActionbarBase.mainActionBarContext = this;
 
 	}
 
@@ -145,6 +152,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		// CommonValues.getInstance().menuList = (android.view.Menu) menu;
 
 		this.actionBarMenu = menu;
+		CommonValues.getInstance().globalMenu = menu;
 		return true;
 	}
 
@@ -198,12 +206,10 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		}
 	}
 
-	boolean isappinBackground = false;
-
 	@Override
 	protected void onPause() {
 		super.onPause();
-		isappinBackground = true;
+		CommonValues.getInstance().isappinBackground = true;
 		if (mConnReceiver != null) {
 			unregisterReceiver(mConnReceiver);
 		}
@@ -218,38 +224,138 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		public void onReceive(Context context, Intent intent) {
 			if (activityVisible) {
 				if (CommonTask.isNetworkStateChanged(MainActionbarBase.this) == false) {
+					if (CommonValues.getInstance().connectionMode
+							.equals("Local")) {
+						CommonTask.assignToInterentMode();
+						if (CommonValues.getInstance().ApiKeyGsb == null
+								|| CommonValues.getInstance().ApiKeyGsb
+										.equals("")) {
+							sendApiKeyReqAsync(mainActionBarContext);
+						} else {
+							makeServerCallOnDemand();
+						}
+					} else {
+
+						if (CommonURL.getInstance().localBaseUrl != null) {
+							CommonTask.assignToLocalMode();
+						}
+						if (CommonValues.getInstance().ApiKeyLocal == null
+								|| CommonValues.getInstance().ApiKeyLocal
+										.equals("")) {
+							checkApiAndMcAvailability(mainActionBarContext);
+						} else {
+							makeServerCallOnDemand();
+						}
+					}
+
+					// Home.sendApiKeyReqAsync();
+
+				}
+				if (CommonTask.isNetworkAvailable(MainActionbarBase.this) == false) {
 					msg = AppMsg.makeText(MainActionbarBase.this,
 							getString(R.string.networkError),
 							AppMsg.STYLE_ALERT_ALWAYS_VISIBLE);
 					msg.show();
-
-					ArrayList<String> runningactivities = checkActivityVisibility();
-					if (runningactivities
-							.contains("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.UserLogin_}") == true) {
-						// return true;
-						return;
-					} else {
-
-						CommonTask
-								.ShowNetworkChangeConfirmation(
-										MainActionbarBase.this,
-										"Network State/Configuration Settings has been changed.Please log in again to continue.",
-										showNetworkChangeEvent());
-
-					}
-
+					// ArrayList<String> runningactivities =
+					// checkActivityVisibility();
+					// if (runningactivities
+					// .contains("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.UserLogin_}")
+					// == true) {
+					// // return true;
+					// return;
+					// } else {
+					// CommonTask
+					// .ShowNetworkChangeConfirmation(
+					// MainActionbarBase.this,
+					// "Network State/Configuration Settings has been changed.Please log in again to continue.",
+					// showNetworkChangeEvent());
+					// }
 				} else {
 					if (msg != null) {
 						msg.cancel();
 						AppMsg.cancelAll();
 					}
 				}
-
 			}
 
 		}
 
 	};
+
+	/**
+	 * 
+	 */
+	SimpleDateFormat formatter = new SimpleDateFormat(
+			"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+	Date d = new Date();
+	int FilterType = 1;
+	String fromsDate = formatter.format(d).toString();
+	String tosDate = formatter.format(d).toString();
+	int PageNumber = 1;
+
+	public void makeServerCallOnDemand() {
+		setConnectionNodeImage(
+				CommonValues.getInstance().globalMenu, MainActionbarBase.this);
+		// ArrayList<String> runningactivities = checkActivityVisibility();
+		if (mainActionBarContext instanceof Home) {
+			if (Home_.vfDeviceType != null
+					&& Home.vfDeviceType.getDisplayedChild() == 0) {
+				Home.refreshDashboarddata();
+			}
+			if (Home_.vfDeviceType != null
+					&& Home.vfDeviceType.getDisplayedChild() == 1) {
+				Home.LoadDeviceDetailsContent(CommonValues.getInstance().deviceTypeId);
+			}
+			if (Home_.vfDeviceType != null
+					&& Home.vfDeviceType.getDisplayedChild() == 2) {
+				Home.loadDeviceProperty(
+						CommonValues.getInstance().deviceTypeId,
+						CommonValues.getInstance().deviceIdFromHome);
+			}
+			if (Home_.vfDeviceType != null
+					&& Home.vfDeviceType.getDisplayedChild() == 3) {
+
+				Home.LoadDeviceLogContent(
+						CommonValues.getInstance().deviceIdFromHome,
+						FilterType, fromsDate, tosDate, PageNumber, 30);
+			}
+
+		}
+		if (mainActionBarContext instanceof RoomManager) {
+			if (RoomManager.vfRoom != null
+					&& RoomManager.vfRoom.getDisplayedChild() == 0) {
+				RoomManager_.loadRoomInfoAsync();
+			}
+			if (RoomManager.vfRoom != null
+					&& RoomManager.vfRoom.getDisplayedChild() == 1) {
+				RoomManager_
+						.LoadRoomDetailsContent(CommonValues.getInstance().roomId);
+			}
+			if (RoomManager.vfRoom != null
+					&& RoomManager.vfRoom.getDisplayedChild() == 2) {
+				RoomManager.loadDeviceProperty(
+						CommonValues.getInstance().deviceTypeIdRoom,
+						CommonValues.getInstance().deviceIdRoom);
+			}
+			if (RoomManager.vfRoom != null
+					&& RoomManager.vfRoom.getDisplayedChild() == 3) {
+				RoomManager_.LoadDeviceLogContent(
+						CommonValues.getInstance().deviceIdRoom, FilterType,
+						fromsDate, tosDate, PageNumber, 30);
+			}
+		}
+		if (mainActionBarContext instanceof UserProfileActivity) {
+			UserProfileActivity.loadUserInformation();
+		}
+		if (mainActionBarContext instanceof VideoActivity) {
+			VideoActivity.loadCameraInfoAsync();
+		}
+		if (mainActionBarContext instanceof UserLogActivity) {
+			UserLogActivity.loadUserLogInfo(FilterType, fromsDate, tosDate,
+					PageNumber, 30);
+		}
+
+	}
 
 	boolean activityVisible = false;
 
@@ -274,27 +380,35 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
-
-					// clearAppData();
-					ArrayList<String> runningactivities = checkActivityVisibility();
-					if (runningactivities
-							.contains("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.UserLogin_}") == true) {
-						return;
+//					 clearAppData();
+					if (CommonValues.getInstance().connectionMode
+							.equals("Local")) {
+						if (CommonURL.getInstance().remoteBaseUrl != null) {
+							CommonTask.assignToInterentMode();
+						}
+						if (CommonValues.getInstance().ApiKeyGsb == null
+								|| CommonValues.getInstance().ApiKeyGsb
+										.equals("")) {
+							sendApiKeyReqAsync(mainActionBarContext);
+						} else {
+							makeServerCallOnDemand();
+						}
 					} else {
-						removePreferenceLoginData();
-						clearAppData();
-						MainActionbarBase.this.finishAffinity();
-						Intent loginintent = new Intent(
-								"com.sinepulse.app.activities.UserLogin");
-						loginintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(loginintent);
+						if (CommonURL.getInstance().localBaseUrl != null) {
+							CommonTask.assignToLocalMode();
+						}
+						if (CommonValues.getInstance().ApiKeyLocal == null
+								|| CommonValues.getInstance().ApiKeyLocal
+										.equals("")) {
+							checkApiAndMcAvailability(mainActionBarContext);
+						} else {
+							makeServerCallOnDemand();
+						}
 					}
-
 					break;
-				// case DialogInterface.BUTTON_NEGATIVE:
-				// dialog.cancel();
-				//
-				// break;
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialog.cancel();
+					break;
 
 				default:
 					break;
@@ -307,6 +421,19 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 
 	}
 
+	/**
+	 * 
+	 */
+	public void cleanUpAndReLogin() {
+		removePreferenceLoginData();
+		clearAppData();
+		MainActionbarBase.this.finishAffinity();
+		Intent loginintent = new Intent(
+				"com.sinepulse.app.activities.UserLogin");
+		loginintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(loginintent);
+	}
+
 	boolean isWifiChanged = false;
 
 	@Override
@@ -314,10 +441,10 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		super.onResume();
 		// ConnectivityManager connectivityManager = (ConnectivityManager) this
 		// .getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (isappinBackground == true) {
-			connectByIp();
-
-		}
+		// if (CommonValues.getInstance().isappinBackground == true) {
+		// connectByIp();
+		//
+		// }
 
 		IntentFilter filter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
@@ -355,20 +482,6 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	/**
 	 * @return
 	 */
-	public ArrayList<String> checkActivityVisibility() {
-		ArrayList<String> runningactivities = new ArrayList<String>();
-
-		ActivityManager activityManager = (ActivityManager) getBaseContext()
-				.getSystemService(Context.ACTIVITY_SERVICE);
-
-		List<RunningTaskInfo> services = activityManager
-				.getRunningTasks(Integer.MAX_VALUE);
-
-		for (int i1 = 0; i1 < services.size(); i1++) {
-			runningactivities.add(0, services.get(i1).topActivity.toString());
-		}
-		return runningactivities;
-	}
 
 	// override this method in child classes in order to be notified about
 	// search button click
@@ -499,12 +612,15 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		invalidateOptionsMenu();
 	}
 
-	public void setConnectionNodeImage(com.actionbarsherlock.view.Menu menu) {
+	public static void setConnectionNodeImage(
+			com.actionbarsherlock.view.Menu menu, Context contxt) {
 		MenuItem connImage = menu.findItem(R.id.menu_conn_indicatior);
 		if (CommonValues.getInstance().connectionMode == "Local") {
-			connImage.setIcon(getResources().getDrawable(R.drawable.local));
+			connImage.setIcon(contxt.getResources().getDrawable(
+					R.drawable.local));
 		} else if (CommonValues.getInstance().connectionMode == "Internet") {
-			connImage.setIcon(getResources().getDrawable(R.drawable.internet));
+			connImage.setIcon(contxt.getResources().getDrawable(
+					R.drawable.internet));
 		}
 
 	}
@@ -535,8 +651,8 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		return dir.delete();
 	}
 
-	String urlForMc = "";
-	boolean isSolvedLocal = false;
+	static String urlForMc = "";
+	static boolean isSolvedLocal = false;
 
 	/**
 	 * try to resolve the connectivity by Appropriate host name.local
@@ -559,15 +675,15 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	/**
 	 * try to resolve the connectivity by Appropriate host name
 	 */
-	public void connectByHostName() {
+	public static void connectByHostName() {
 
 		connnectionState = "RasPeri";
-		urlForMc = "http://sinepulsemctest/api/is-online";
+		urlForMc = "http://sinepulsemcdev/api/is-online";
 		if (checkMC != null) {
 			checkMC.cancel(true);
 		}
 
-		checkMC = new CheckMC(urlForMc, MainActionbarBase.this, isSolvedLocal);
+		checkMC = new CheckMC(urlForMc, mainActionBarContext, isSolvedLocal);
 		checkMC.execute();
 
 	}
@@ -599,9 +715,9 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	// checkMC.execute();
 	// }
 
-	String targetIp = "";
+	public static String targetIp = "";
 
-	public void connectByIp() {
+	public static void connectByIp() {
 
 		// Log.d("WIFI Ip", ipAddress);
 		targetIp = CommonValues.getInstance().nsdResolvedIp;
@@ -615,8 +731,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 				checkMC.cancel(true);
 			}
 			connnectionState = "IP";
-			checkMC = new CheckMC(urlForMc, MainActionbarBase.this,
-					isSolvedLocal);
+			checkMC = new CheckMC(urlForMc, mainActionBarContext, isSolvedLocal);
 			// checkMC.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			checkMC.execute();
 		}
@@ -680,16 +795,29 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 				if (Ip != null && Ip != "") {
 					CommonValues.getInstance().localIp = Ip;
 				}
+
 				String baseUrlForMC = "http://" + Ip + "/api/";
+				CommonURL.getInstance().localBaseUrl = baseUrlForMC;
 				CommonURL.getInstance().assignValues(baseUrlForMC);
+				CommonValues.getInstance().nsdResolvedIp = Ip;
 
 				if (CommonValues.getInstance().connectionMode == "Internet") {
-					fireNetworkChangeEvent();
+					// fireNetworkChangeEvent();
 				}
 				CommonValues.getInstance().connectionMode = "Local";
 				if (CommonValues.getInstance().localIp != null
 						&& CommonValues.getInstance().localIp != "") {
 					saveLocalIpInPreference();
+
+				}
+				if (CommonValues.getInstance().isAutologin) {
+
+					if (CommonValues.getInstance().ApiKeyLocal == null
+							|| CommonValues.getInstance().ApiKeyLocal
+									.equals("")) {
+						CommonValues.getInstance().isAutologin = false;
+						sendApiKeyReqAsync(mainActionBarContext);
+					}
 				}
 
 			}
@@ -719,7 +847,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			else if (connnectionState.equals("RasPeri")) {
 				if (isWifiChanged == false
 						&& CommonValues.getInstance().connectionMode == "Local") {
-					fireNetworkChangeEvent();
+					// fireNetworkChangeEvent();
 
 				} else {
 					// setInternetUrl();
@@ -772,9 +900,10 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	public void clearAppData() {
 		CommonValues.getInstance().summary.deviceSummaryArray.clear();
 		CommonValues.getInstance().userLogDetailList.clear();
+		CommonValues.getInstance().deviceLogDetailList.clear();
 		CommonValues.getInstance().userId = 0;
 		CommonValues.getInstance().ApiKey = "";
-		CommonValues.getInstance().connectionMode="";
+		CommonValues.getInstance().connectionMode = "";
 		clearCache();
 
 	}
@@ -795,13 +924,48 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		 */
 	public void removePreferenceLoginData() {
 		SharedPreferences password = UserLogin.context.getSharedPreferences(
-				CommonConstraints.PREF_PASSWORD_KEY,
-				UserLogin.context.MODE_PRIVATE);
+				CommonConstraints.PREF_PASSWORD_KEY, Context.MODE_PRIVATE);
 		password.edit().remove(CommonConstraints.PREF_PASSWORD_KEY).commit();
 		SharedPreferences userName = UserLogin.context.getSharedPreferences(
-				CommonConstraints.PREF_LOGINUSER_NAME,
-				UserLogin.context.MODE_PRIVATE);
+				CommonConstraints.PREF_LOGINUSER_NAME, Context.MODE_PRIVATE);
 		userName.edit().remove(CommonConstraints.PREF_LOGINUSER_NAME).commit();
+	}
+
+	private ArrayList<String> checkActivityVisibility() {
+		ArrayList<String> runningactivities = new ArrayList<String>();
+
+		ActivityManager activityManager = (ActivityManager) getBaseContext()
+				.getSystemService(Context.ACTIVITY_SERVICE);
+
+		List<RunningTaskInfo> services = activityManager
+				.getRunningTasks(Integer.MAX_VALUE);
+
+		for (int i1 = 0; i1 < services.size(); i1++) {
+			runningactivities.add(0, services.get(i1).topActivity.toString());
+		}
+		return runningactivities;
+	}
+
+	public static void checkApiAndMcAvailability(Context callingActivity) {
+		CommonValues.getInstance().isAutologin = true;
+		// connectByIp();
+		if (CommonValues.getInstance().ApiKeyLocal == null
+				&& CommonValues.getInstance().ApiKeyLocal.equals("")) {
+			sendApiKeyReqAsync(callingActivity);
+		} else {
+			connectByIp();
+		}
+		// sendApiKeyReqAsync(callingActivity);
+	}
+
+	static AsyncSendApiKeyRequest asyncSendApiKeyRequest = null;
+
+	public static void sendApiKeyReqAsync(Context callingActivity) {
+		if (asyncSendApiKeyRequest != null) {
+			asyncSendApiKeyRequest.cancel(true);
+		}
+		asyncSendApiKeyRequest = new AsyncSendApiKeyRequest(callingActivity);
+		asyncSendApiKeyRequest.execute();
 	}
 
 }

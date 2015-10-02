@@ -16,6 +16,7 @@ public class NetworkUtil {
    public static int TYPE_WIFI = 1;
    public static int TYPE_MOBILE = 2;
    public static int TYPE_NOT_CONNECTED = 0;
+   public static int TYPE_BOTH_CONNECTED = 3;
     
     
    public static int getConnectivityStatus(Context context) {
@@ -24,11 +25,18 @@ public class NetworkUtil {
 
        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
        if (null != activeNetwork) {
-           if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
+           if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI 
+        		   )
                return TYPE_WIFI;
             
-           if(activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE)
+           if(activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE  
+        		 )
                return TYPE_MOBILE;
+           if(activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE  
+             && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI 
+        		   )
+               return TYPE_BOTH_CONNECTED;
+           
        } 
        return TYPE_NOT_CONNECTED;
    }
@@ -52,6 +60,8 @@ public class NetworkUtil {
            status = "Mobiledata enabled";
        } else if (conn == NetworkUtil.TYPE_NOT_CONNECTED) {
            status = "Not connected to Internet";
+       }else if (conn == NetworkUtil.TYPE_BOTH_CONNECTED) {
+           status = "Both Enabled";
        }
        return status;
    }

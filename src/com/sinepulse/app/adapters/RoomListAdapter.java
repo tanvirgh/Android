@@ -42,8 +42,8 @@ public class RoomListAdapter extends ArrayAdapter<Room> {
 
 	public static class RoomManagerHolder {
 		// public Room roomManagerEntity;
-		private ImageView ivListItemImage;
-		private ImageView ivListItemImageRight;
+//		private ImageView ivListItemImage;
+//		private ImageView ivListItemImageRight;
 		private RelativeLayout rlItemDetails;
 		private TextView room_name;
 		private int rowID;
@@ -51,10 +51,10 @@ public class RoomListAdapter extends ArrayAdapter<Room> {
 		private RoomManagerHolder(ImageView ivListItemImage,
 				RelativeLayout rlItemDetails, TextView room_name,
 				ImageView ivListItemImageRight, int rowID) {
-			this.ivListItemImage = ivListItemImage;
+//			this.ivListItemImage = ivListItemImage;
 			this.rlItemDetails = rlItemDetails;
 			this.room_name = room_name;
-			this.ivListItemImageRight = ivListItemImageRight;
+//			this.ivListItemImageRight = ivListItemImageRight;
 			this.rowID = rowID;
 		}
 

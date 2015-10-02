@@ -114,8 +114,8 @@ public class ChangePasswordFragment extends SherlockFragment implements
 	@Click(R.id.bSavePassword)
 	public void onClick(View v) {
 		if (validateChangePassWindow()) {
-			String currentPass = etOldPass.getText().toString();
-			String newPass = etNewPassword.getText().toString();
+//			String currentPass = etOldPass.getText().toString();
+//			String newPass = etNewPassword.getText().toString();
 			if (etNewPassword.getText().toString()
 					.equals(etConfirmPassword.getText().toString())) {
 				if (asyncPostChangePassRequest != null) {

@@ -9,6 +9,7 @@ import com.sinepulse.app.utils.CommonValues;
 import android.os.AsyncTask;
 
 /**
+ * used to fetch user profile from server asynchronously.
  * @author tanvir.ahmed
  *
  */

@@ -4,6 +4,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,13 +12,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.base.MainActionbarBase;
+import com.sinepulse.app.utils.CommonTask;
+import com.sinepulse.app.utils.CommonValues;
+import com.sinepulse.app.utils.NetworkUtil;
 
 /**
  * Display about section of the application with build version no and necessary details .
@@ -37,11 +40,15 @@ public class About extends MainActionbarBase implements OnClickListener {
 	@ViewById(R.id.tvAboutHeadingText1)
 	protected TextView tvAboutHeadingText1;
 	private Menu actionBarMenu;
+	public static Context context;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setTheme(R.style.settinglistbackground);
 		setContentView(R.layout.about);
+		About.context = this;
+		mainActionBarContext=About.context;
+
 		super.onCreate(savedInstanceState);
 
 		createMenuBar();
@@ -60,19 +67,29 @@ public class About extends MainActionbarBase implements OnClickListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		final String status = NetworkUtil.getConnectivityStatusString(this);
 		if (item.getItemId() == android.R.id.home) {
-			
 			 onBackPressed();
-
 		}
-		return true;
+		if (item.getItemId() == R.id.menu_conn_indicatior) {
+			if (status.equals("Mobiledata enabled") && CommonValues.getInstance().connectionMode.equals("Internet") ) {
+				CommonTask.ShowMessage(this, "Local mode is not accessible in GSM network.Please try with WiFi.");
+			}else{
+				CommonTask
+				.ShowNetworkChangeConfirmation(
+						About.this,
+						"Do you Really want to change mode?.",
+						showNetworkChangeEvent());
+			}
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		hideRefreshMenu(menu);
-		setConnectionNodeImage(actionBarMenu);
+		setConnectionNodeImage(actionBarMenu,this);
 		return prepared;
 	}
 	

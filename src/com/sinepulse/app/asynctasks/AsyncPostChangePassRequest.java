@@ -11,6 +11,7 @@ import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * Send password change request with required parameters to server asynchronously.
  * @author tanvir.ahmed
  *
  */
@@ -53,7 +54,6 @@ public class AsyncPostChangePassRequest extends AsyncTask<Void, Void, Boolean> {
 				public void run() {
 					if (parentActivity != null) {
 						if(CommonValues.getInstance().isPasswordChanged==true){
-							CommonTask.ShowMessage(parentActivity, "Password Change Successful.");
 							parentActivity.resetChangePassWindow();
 						}else{
 							CommonTask.ShowMessage(parentActivity, "Password Change Failed.");

@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.sinepulse.app.R;
-import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.activities.RoomManager;
 import com.sinepulse.app.asynctasks.AsyncProcessRequestFromDashboard;
 import com.sinepulse.app.asynctasks.AsyncSetDeviceStatus;
@@ -40,17 +39,17 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 	View oldView = null;
 	private int layoutResourceId;
 	private Context context;
-	int modifiedIndex=0;
-//	AsyncSetStatusFromRoom asyncSetStatusFromRoom=null;
-	AsyncSetDeviceStatus asyncSetDeviceStatus=null;
-	public static Device orderLine;
+	int modifiedIndex = 0;
+	// AsyncSetStatusFromRoom asyncSetStatusFromRoom=null;
+	AsyncSetDeviceStatus asyncSetDeviceStatus = null;
+	public static Device currentDevice;
 	public ArrayList<Device> requestQueue = new ArrayList<Device>();
 	int onOffValue;
 
-	public DeviceListAdapterByRoom(Context roomManagerFragment, int layoutResourceId,
-			ArrayList<Device> deviceList) {
+	public DeviceListAdapterByRoom(Context roomManagerFragment,
+			int layoutResourceId, ArrayList<Device> deviceList) {
 		super(roomManagerFragment, layoutResourceId, new ArrayList<Device>());
-		 addAll(deviceList);
+		addAll(deviceList);
 		this.layoutResourceId = layoutResourceId;
 		this.context = roomManagerFragment;
 		this.deviceByRoomList = deviceList;
@@ -116,92 +115,105 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 					.findViewById(R.id.btdevice_value);
 			drh.onOffImage = (ImageView) convertView
 					.findViewById(R.id.onOffImage);
-			drh.btdevice_value.setTag(position);
+			// drh.btdevice_value.setTag(position);
 			convertView.setTag(drh);
 
 		} else {
 			drh = (DeviceByRoomHolder) convertView.getTag();
 		}
-//		drh.btdevice_value.setTag(position);
+		drh.btdevice_value.setTag(position);
 		drh.rowID = position;
 		drh.tvdevice_name.setText(deviceByRoomEntity.getName());
 		if (deviceByRoomEntity.getDeviceTypeId() == 1) {
-			if (deviceByRoomEntity.IsOn){
+			if (deviceByRoomEntity.IsOn) {
 				drh.ivDeviceListItemImage
-				.setBackgroundResource(R.drawable.fan_on);
-			}else{
-			drh.ivDeviceListItemImage
-					.setBackgroundResource(R.drawable.fan_off);
+						.setBackgroundResource(R.drawable.fan_on);
+			} else {
+				drh.ivDeviceListItemImage
+						.setBackgroundResource(R.drawable.fan_off);
 			}
 		}
 		if (deviceByRoomEntity.getDeviceTypeId() == 2) {
-			if (deviceByRoomEntity.IsOn){
+			if (deviceByRoomEntity.IsOn) {
 				drh.ivDeviceListItemImage
-				.setBackgroundResource(R.drawable.bulbon);
-			}else{
-			drh.ivDeviceListItemImage
-					.setBackgroundResource(R.drawable.bulb_off);
+						.setBackgroundResource(R.drawable.bulbon);
+			} else {
+				drh.ivDeviceListItemImage
+						.setBackgroundResource(R.drawable.bulb_off);
 			}
 		}
 		if (deviceByRoomEntity.getDeviceTypeId() == 3) {
-			if (deviceByRoomEntity.IsOn){
+			if (deviceByRoomEntity.IsOn) {
 				drh.ivDeviceListItemImage
-				.setBackgroundResource(R.drawable.ac_medium);
-			}else{
-			drh.ivDeviceListItemImage
-					.setBackgroundResource(R.drawable.ac_medium);
+						.setBackgroundResource(R.drawable.ac_medium);
+			} else {
+				drh.ivDeviceListItemImage
+						.setBackgroundResource(R.drawable.ac_medium);
 			}
 		}
 		if (deviceByRoomEntity.getDeviceTypeId() == 4) {
-			if (deviceByRoomEntity.IsOn){
+			if (deviceByRoomEntity.IsOn) {
 				drh.ivDeviceListItemImage
-				.setBackgroundResource(R.drawable.curtainmedium);
-			}else{
-			drh.ivDeviceListItemImage
-					.setBackgroundResource(R.drawable.curtainmedium_off);
+						.setBackgroundResource(R.drawable.curtainmedium);
+			} else {
+				drh.ivDeviceListItemImage
+						.setBackgroundResource(R.drawable.curtainmedium_off);
 			}
 		}
-		
+
 		drh.btdevice_value.setOnCheckedChangeListener(null);
-		if(deviceByRoomEntity.IsActionPending){
+		if (deviceByRoomEntity.IsActionPending) {
 			drh.btdevice_value.setChecked(!deviceByRoomEntity.IsOn);
 			drh.btdevice_value.setEnabled(false);
-			
-		}else{
+
+		} else {
 			drh.btdevice_value.setChecked(deviceByRoomEntity.IsOn);
 			drh.btdevice_value.setEnabled(true);
 		}
 		if (deviceByRoomEntity.IsOn) {
 			drh.onOffImage.setImageResource(R.drawable.greenled_medium);
-		}else{
+		} else {
 			drh.onOffImage.setImageResource(R.drawable.redled_medium);
 		}
-		
-		drh.btdevice_value.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					modifiedIndex = Integer.parseInt(buttonView.getTag()
-							.toString());
-					onOffValue=(isChecked?1:0);
-					 CommonValues.getInstance().deviceList
-                     .get(modifiedIndex).IsActionPending=true;
-					buttonView.setEnabled(false);
-					orderLine = getItem(modifiedIndex);
-					requestQueue.add(orderLine);
-					processRequestQueue();
-			} 
-			
-/*private void sendSetStatus(boolean isChecked,int deviceId,int userId) {
-				if (asyncSetStatusFromRoom != null) {
-					asyncSetStatusFromRoom.cancel(true);
-				}
-				asyncSetStatusFromRoom = new AsyncSetStatusFromRoom(DeviceListAdapter.this,context, deviceId,userId,isChecked);
-				asyncSetStatusFromRoom.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-				RoomManager.LoadRoomDetailsContent();
-				
-			}*/
-		});	
+
+		drh.btdevice_value
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						modifiedIndex = Integer.parseInt(buttonView.getTag()
+								.toString());
+						onOffValue = (isChecked ? 1 : 0);
+						CommonValues.getInstance().deviceList
+								.get(modifiedIndex).IsActionPending = true;
+						buttonView.setEnabled(false);
+						currentDevice = getItem(modifiedIndex);
+						if (CommonValues.getInstance().connectionMode
+								.equals("Internet")) {
+							requestQueue.add(currentDevice);
+							processRequestQueue();
+						} else {
+							CommonValues.getInstance().wamp
+									.requestforRpcStatusData(currentDevice.Id,
+											onOffValue, RoomManager.context);
+						}
+					}
+
+					/*
+					 * private void sendSetStatus(boolean isChecked,int
+					 * deviceId,int userId) { if (asyncSetStatusFromRoom !=
+					 * null) { asyncSetStatusFromRoom.cancel(true); }
+					 * asyncSetStatusFromRoom = new
+					 * AsyncSetStatusFromRoom(DeviceListAdapter.this,context,
+					 * deviceId,userId,isChecked);
+					 * asyncSetStatusFromRoom.executeOnExecutor
+					 * (AsyncTask.THREAD_POOL_EXECUTOR);
+					 * RoomManager.LoadRoomDetailsContent();
+					 * 
+					 * }
+					 */
+				});
 
 		if (_position != position) {
 			convertView.setBackgroundResource(R.drawable.bgmedium);
@@ -212,10 +224,10 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 
 		return convertView;
 	}
-	
+
 	Device tobeProcessedLine = null;
 	public boolean requestProcessing = false;
-	
+
 	public void processRequestQueue() {
 
 		if (requestProcessing == true)
@@ -223,22 +235,21 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 		if (requestQueue.size() > 0) {
 			tobeProcessedLine = requestQueue.get(0);
 			requestProcessing = true;
-		}
-		 else if (CommonValues.getInstance().deviceList.size() == 0) {
-			 //Refresh call
-		 return;
-        }
-		else {
+		} else if (CommonValues.getInstance().deviceList.size() == 0) {
+			// Refresh call
+			return;
+		} else {
 			return;
 		}
-		if(asyncSetDeviceStatus!=null){
+		if (asyncSetDeviceStatus != null) {
 			asyncSetDeviceStatus.cancel(true);
 		}
-		asyncSetDeviceStatus= new AsyncSetDeviceStatus(asyncProcessRequestListener);
+		asyncSetDeviceStatus = new AsyncSetDeviceStatus(
+				asyncProcessRequestListener);
 		asyncSetDeviceStatus.execute();
 
 	}
-	
+
 	AsyncProcessRequestFromDashboard asyncProcessRequestListener = new AsyncProcessRequestFromDashboard() {
 
 		@Override
@@ -259,8 +270,8 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 
 		@Override
 		public void startSendingTask() {
-			if (tobeProcessedLine != null ) {
-				sendSetStatusRequest(tobeProcessedLine.Id,onOffValue);
+			if (tobeProcessedLine != null) {
+				sendSetStatusRequest(tobeProcessedLine.Id, onOffValue);
 			}
 		}
 
@@ -269,8 +280,6 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 			startSendingTask();
 		}
 	};
-
-
 
 	public int getSize() {
 		return deviceByRoomList.size();
@@ -289,9 +298,9 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 	public void setSelection(int pos) {
 		_position = pos;
 	}
-	
-boolean touchEnabled = true;
-	
+
+	boolean touchEnabled = true;
+
 	public void setTouchEnabled(boolean touchEnabled) {
 		this.touchEnabled = touchEnabled;
 	}
@@ -315,55 +324,57 @@ boolean touchEnabled = true;
 			return false;
 		}
 	};
-	
 
 	public boolean sendSetStatusRequest(int deviceId, int onOffValue) {
-		
-//		String setStatusUrl = CommonURL.getInstance().GetCommonURL
-//				+ "/" + userId + "/status?id="+ deviceId+"&status="+onOffValue;
-		String setStatusUrl = CommonURL.getInstance().RootUrl + "status" ;
-		boolean status=onOffValue==1?true:false;
-		if (JsonParser.postSetStatusRequest(setStatusUrl,deviceId,status) != null) {
+		CommonValues.getInstance().start = System.currentTimeMillis();
+		// String setStatusUrl = CommonURL.getInstance().GetCommonURL
+		// + "/" + userId + "/status?id="+ deviceId+"&status="+onOffValue;
+		String setStatusUrl = CommonURL.getInstance().RootUrl + "status";
+		boolean status = onOffValue == 1 ? true : false;
+		if (JsonParser.postSetStatusRequest(setStatusUrl, deviceId, status) != null) {
 			System.out.println(setStatusUrl);
 			return true;
 		}
 		return false;
-		
+
 	}
 
 	public void setStatusResponseData() {
-//		Log.d("Room:NamebeforeRemove", CommonValues.getInstance().deviceList.get(modifiedIndex).Name+"");
-		if(CommonValues.getInstance().deviceList!=null){
-		 try {
-			int indextoChange= indexOfModifiedDevice(CommonValues.getInstance().modifiedDeviceStatus);
-//			CommonValues.getInstance().deviceList.remove(indextoChange);
-			 CommonValues.getInstance().deviceList.set(indextoChange,
-			 CommonValues.getInstance().modifiedDeviceStatus);
-//		 Log.d("Room:NameAfterAdd", CommonValues.getInstance().deviceList.get(modifiedIndex).Name+"");
-			 notifyDataSetChanged();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// Log.d("Room:NamebeforeRemove",
+		// CommonValues.getInstance().deviceList.get(modifiedIndex).Name+"");
+		if (CommonValues.getInstance().deviceList != null) {
+			try {
+				int indextoChange = indexOfModifiedDevice(CommonValues
+						.getInstance().modifiedDeviceStatus);
+				// CommonValues.getInstance().deviceList.remove(indextoChange);
+				CommonValues.getInstance().deviceList.set(indextoChange,
+						CommonValues.getInstance().modifiedDeviceStatus);
+				// Log.d("Room:NameAfterAdd",
+				// CommonValues.getInstance().deviceList.get(modifiedIndex).Name+"");
+				notifyDataSetChanged();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		}
-		
+
 	}
-	public void refreshAdapter(){
+
+	public void refreshAdapter() {
 		notifyDataSetChanged();
 	}
-	
-	public int indexOfModifiedDevice(Device device){
-		int actualIndex=-1;
-		for(int i=0;i<CommonValues.getInstance().deviceList.size();i++){
-			if(CommonValues.getInstance().deviceList.get(i).Id== device.Id){
-				actualIndex=i;
+
+	public int indexOfModifiedDevice(Device device) {
+		int actualIndex = -1;
+		for (int i = 0; i < CommonValues.getInstance().deviceList.size(); i++) {
+			if (CommonValues.getInstance().deviceList.get(i).Id == device.Id) {
+				actualIndex = i;
 				break;
 			}
 		}
-		
-		
+
 		return actualIndex;
-		
+
 	}
 
 }

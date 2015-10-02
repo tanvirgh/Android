@@ -48,7 +48,7 @@ public class AsyncGetCurtainPresetValues extends AsyncTask<Void, Void, Boolean> 
 					
 					@Override
 					public void run() {
-						parentActivity.setCurtainPresetResponseData();
+//						parentActivity.setCurtainPresetResponseData();
 					}
 				});
 		

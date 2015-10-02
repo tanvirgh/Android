@@ -7,9 +7,11 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * Send log out request to server asynchronously.
  * @author tanvir.ahmed
  *
  */
@@ -60,6 +62,7 @@ public class AsyncLogOutTask extends AsyncTask<Void, Void, Boolean> {
 //		parentActivity.stopNavDrawerProgress();
 				
 	   parentActivity.redirectToLogInPage();
+				
 	}
 		}
 	}

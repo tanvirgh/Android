@@ -56,20 +56,24 @@ public class AsyncGetDeviceLogInfo extends AsyncTask<Void, Void, Boolean> {
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
+				if(CommonValues.getInstance().deviceLogDetailList!=null){
+
 		parentActivity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				if(CommonValues.getInstance().shouldSendLogReq==false){
-					parentActivity.refreshAdapter();
-					return;
-				}
+//				if(CommonValues.getInstance().shouldSendLogReq==false){
+//					parentActivity.refreshAdapter();
+//					return;
+//				}
 				parentActivity.setupDeviceLogAdapter();
+			
 			}
 		});
 		
 	}
 		}
+	}
 	}
 	}
 }

@@ -6,6 +6,7 @@ package com.sinepulse.app.adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -49,10 +50,10 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 //	AsyncSetStatusFromDashboard asyncSetStatusFromDashboard = null;
 	AsyncSetDeviceStatus asyncSetDeviceStatus=null;
 	int modifiedIndex = 0;
-	public static Device orderLine;
+	public static Device currentDevice;
 	public ArrayList<Device> requestQueue = new ArrayList<Device>();
 	int onOffValue;
-//	Wamp wamp=new Wamp();
+	Wamp wamp=new Wamp();
 
 	public DeviceListByTypeAdapter(Context Home, int layoutResourceId,
 			ArrayList<Device> deviceList) {
@@ -122,14 +123,14 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 					.findViewById(R.id.tvroom_name);
 			dth.btdevice_value = (ToggleButton) convertView
 					.findViewById(R.id.btdevice_value);
-			dth.btdevice_value.setTag(position);
+//			dth.btdevice_value.setTag(position);
 			convertView.setTag(dth);
 
 		} else {
 			dth = (DeviceByTypeHolder) convertView.getTag();
-
+//			dth.btdevice_value.setTag(position);
 		}
-//		dth.btdevice_value.setTag(position);
+		dth.btdevice_value.setTag(position);
 		dth.rowID = position;
 
 		dth.tvdevice_name.setText(deviceByTypeEntity.getName());
@@ -154,26 +155,30 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
+						
 						modifiedIndex = Integer.parseInt(buttonView.getTag()
 								.toString());
+						Log.d("Item Position :",""+ modifiedIndex);
                         onOffValue=(isChecked?1:0);
 //                        if(CommonValues.getInstance().deviceList
 //                              .get(modifiedIndex).IsActionPending || (CommonValues.getInstance().deviceList
 //                              .get(modifiedIndex).IsOn=isChecked)){
-//                           
 //                           return;
 //                          }
                         CommonValues.getInstance().deviceList
                         .get(modifiedIndex).IsActionPending=true;
                           buttonView.setEnabled(false);
-						
-						orderLine = getItem(modifiedIndex);
-						requestQueue.add(orderLine);
+                         currentDevice = getItem(modifiedIndex);
+                        
+                         if(CommonValues.getInstance().connectionMode.equals("Internet")){
+						requestQueue.add(currentDevice);
 						processRequestQueue();
-						
+                         }
+					else{
+                        	 CommonValues.getInstance().wamp.requestforRpcStatusData(currentDevice.Id,
+         							onOffValue,Home.context);
+                         }
 //						wamp.connectWampClient();
-						
-
 					}
 
 				});
@@ -233,17 +238,30 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 		@Override
 		public void onTaskPostExecute(Object object) {
 			Home.stopDeviceProgress();
+		
 			setStatusResponseData();
 			if (requestQueue.size() > 0) {
 				requestQueue.remove(0);
 			}
 			requestProcessing = false;
 			processRequestQueue();
+		
 		}
 
 		@Override
 		public void startSendingTask() {
 			if (tobeProcessedLine != null ) {
+			/*	if(CommonValues.getInstance().connectionMode.equals("Internet")){
+					sendSetStatusRequest(
+							tobeProcessedLine.Id,
+							onOffValue);
+				}
+				else{
+					wamp.connectWampClient(Home.context);
+					wamp.requestComments(tobeProcessedLine.Id,
+							onOffValue);
+				}*/
+				
 				sendSetStatusRequest(
 						tobeProcessedLine.Id,
 						onOffValue);
@@ -338,10 +356,10 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 	}
 
 	public void refreshAdapter() {
-		notifyDataSetChanged();
+		this.notifyDataSetChanged();
 	}
 
-	public int indexOfModifiedDevice(Device device) {
+	public static int indexOfModifiedDevice(Device device) {
 		int actualIndex = -1;
 		for (int i = 0; i < CommonValues.getInstance().deviceList.size(); i++) {
 			if (CommonValues.getInstance().deviceList.get(i).Id == device.Id) {

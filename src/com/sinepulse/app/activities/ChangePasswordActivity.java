@@ -8,12 +8,13 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
+import com.sinepulse.app.utils.NetworkUtil;
 
 /**
  * This class is used to change users password through a asynchronous call to server.
@@ -38,7 +40,7 @@ import com.sinepulse.app.utils.JsonParser;
 @EActivity(R.layout.change_password)
 public class ChangePasswordActivity extends MainActionbarBase implements OnClickListener{
 	public Menu actionBarMenu;
-
+	public static Context context;
 	public static final int INITIAL_STATE = -1;
 
 	public enum AboutState {
@@ -76,6 +78,8 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ChangePasswordActivity.context=this;
+        mainActionBarContext=ChangePasswordActivity.context;
 		this.setRequestedOrientation(
 				ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		createMenuBar() ;
@@ -105,21 +109,32 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 		mSupportActionBar.setDisplayHomeAsUpEnabled(true);
 		
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		final String status = NetworkUtil.getConnectivityStatusString(this);
 		if (item.getItemId() == android.R.id.home) {
-
 			 onBackPressed();
-
 		}
-		return true;
+		if (item.getItemId() == R.id.menu_conn_indicatior) {
+			if (status.equals("Mobiledata enabled") && CommonValues.getInstance().connectionMode.equals("Internet") ) {
+				CommonTask.ShowMessage(this, "Local mode is not accessible in GSM network.Please try with WiFi.");
+			}else{
+			CommonTask
+			.ShowNetworkChangeConfirmation(
+					ChangePasswordActivity.this,
+					"Do you Really want to change mode?.",
+					showNetworkChangeEvent());
+			}
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		hideRefreshMenu(menu);
-		setConnectionNodeImage(actionBarMenu);
+		setConnectionNodeImage(actionBarMenu,this);
 		
 		return prepared;
 	}
@@ -285,6 +300,13 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 		etOldPass.setText("");
 		etNewPassword.setText("");
 		etConfirmPassword.setText("");
+		removePreferenceLoginData();
+		clearAppData();
+		Intent intent = new Intent("com.sinepulse.app.activities.UserLogin");
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+		Toast.makeText(this, getResources().getString(R.string.passchangetext) ,Toast.LENGTH_LONG).show();
+//		this.finish();
 
 	}
 

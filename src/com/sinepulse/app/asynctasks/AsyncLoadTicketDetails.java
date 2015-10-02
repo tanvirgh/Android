@@ -9,6 +9,7 @@ import com.sinepulse.app.activities.SupportActivity;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * Load ticket detials information from server asynchronously.
  * @author tanvir.ahmed
  *
  */

@@ -47,7 +47,7 @@ parentActivity.runOnUiThread(new Runnable() {
 					
 					@Override
 					public void run() {
-						parentActivity.setCurtainPresetResponseData();
+//						sparentActivity.setCurtainPresetResponseData();
 					}
 				});
 			}

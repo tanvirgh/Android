@@ -7,7 +7,7 @@ public class NavDrawerItem {
 	private String count = "0";
 	// boolean to set visiblity of the counter
 	private boolean isCounterVisible = false;
-	private boolean isIndicatorVisible=false;
+//	private boolean isIndicatorVisible=false;
 	
 	public NavDrawerItem(){}
 
@@ -60,7 +60,7 @@ public class NavDrawerItem {
 	}
 	
 	public void setIndicatorVisibility(boolean isIndicatorVisible){
-		this.isIndicatorVisible = isIndicatorVisible;
+//		this.isIndicatorVisible = isIndicatorVisible;
 	}
 	
 }

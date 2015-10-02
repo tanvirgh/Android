@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.sinepulse.app.activities.SupportActivity;
 
 /**
+ * Fetch the ticket types asynchronously from server
  * @author tanvir.ahmed
  *
  */

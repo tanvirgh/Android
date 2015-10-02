@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.RelativeLayout.LayoutParams;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -84,7 +83,7 @@ public class VideoActivity extends MainActionbarBase implements
 	public static final byte CHANNEL_ENABLED = 1;
 	public static final byte CHANNEL_DISABLED = 0;
 	LoadingDevicesTask loadingDevicesTask = null;
-	AsyncGetCameraInfo asyncGetCameraInfo = null;
+	static AsyncGetCameraInfo asyncGetCameraInfo = null;
 	String cameraIp;
 	Integer port;
 	String userName;
@@ -92,11 +91,14 @@ public class VideoActivity extends MainActionbarBase implements
 	@ViewById(R.id.pbCamera)
 	public ProgressBar pbCamera;
 	public Menu actionBarMenu;
+	public static Context context;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		createMenuBar();
+		VideoActivity_.context=this;
+        mainActionBarContext=VideoActivity_.context;
 
 		// loadStream( CommonValues.getInstance().currentCameraIndex);
 
@@ -113,7 +115,7 @@ public class VideoActivity extends MainActionbarBase implements
 		this.actionBarMenu = menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
 		hideRefreshMenu(menu);
-		setConnectionNodeImage(actionBarMenu);
+		setConnectionNodeImage(actionBarMenu,this);
 		
 		return prepared;
 	};
@@ -129,10 +131,23 @@ public class VideoActivity extends MainActionbarBase implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		final String status = NetworkUtil.getConnectivityStatusString(this);
 		if (item.getItemId() == android.R.id.home) {
 			onBackPressed();
 		}
-		return true;
+		
+		if (item.getItemId() == R.id.menu_conn_indicatior) {
+			if (status.equals("Mobiledata enabled") && CommonValues.getInstance().connectionMode.equals("Internet") ) {
+			CommonTask.ShowMessage(this, "Local mode is not accessible in GSM network.Please try with WiFi.");
+		}else{
+			CommonTask
+			.ShowNetworkChangeConfirmation(
+					VideoActivity.this,
+					"Do you Really want to change mode?.",
+					showNetworkChangeEvent());
+		}
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@AfterViews
@@ -140,16 +155,18 @@ public class VideoActivity extends MainActionbarBase implements
 		spCamera.setOnItemSelectedListener(this);
 		
 	}
-
+	
 	@Override
 	@Click({ R.id.MyStreamButton, R.id.bCamera, R.id.bRoom, R.id.bDashboard })
 	public void onClick(View v) {
+		final String status = NetworkUtil.getConnectivityStatusString(this);
 		switch (v.getId()) {
 
 		case R.id.MyStreamButton://
 			releaseVideoProperties();
-			final String status = NetworkUtil.getConnectivityStatusString(this);
+			if(channelCount!=0){
 			if (status.equals("Wifi enabled")) {
+				
 				continueStreaming();
 
 			} else if (status.equals("Mobiledata enabled")) {
@@ -171,6 +188,9 @@ public class VideoActivity extends MainActionbarBase implements
 
 				}
 
+			}
+			}else{
+				CommonTask.ShowMessage(this, "Surveillance system not available");
 			}
 
 			break;
@@ -358,17 +378,24 @@ public class VideoActivity extends MainActionbarBase implements
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		getSupportActionBar().setTitle("Live Video");
 		streamingButton.setText("Start Streaming");
-		CommonValues.getInstance().currentAction = CommonIdentifier.Action_CameraInfo;
-		if (asyncGetCameraInfo != null) {
-			asyncGetCameraInfo.cancel(true);
-		}
-		asyncGetCameraInfo = new AsyncGetCameraInfo(this);
-		asyncGetCameraInfo.execute();
+		loadCameraInfoAsync();
 //		setConnectionIndicator(actionBarMenu);
 		// playPort=-1;
 		fragmentPaused = false;
 		super.onResume();
 
+	}
+
+	/**
+	 * 
+	 */
+	public static void loadCameraInfoAsync() {
+		CommonValues.getInstance().currentAction = CommonIdentifier.Action_CameraInfo;
+		if (asyncGetCameraInfo != null) {
+			asyncGetCameraInfo.cancel(true);
+		}
+		asyncGetCameraInfo = new AsyncGetCameraInfo((VideoActivity) VideoActivity.context);
+		asyncGetCameraInfo.execute();
 	}
 
 	/**
@@ -560,7 +587,7 @@ public class VideoActivity extends MainActionbarBase implements
 
 	public void catchErrorIfNecessary() {
 		int code = hcNetSdk.NET_DVR_GetLastError();
-		if (0 != code && code == 1 || code == 153) {
+		if (0 != code && code == 1 || code == 153 || code==6) {
 			// System.out.println("Error: " + code);
 			authenticationError = true;
 		} else if (0 != code && code == 4) {
@@ -580,16 +607,18 @@ public class VideoActivity extends MainActionbarBase implements
 				&& JsonParser.getcameraInfoRequest(getCameraInfoUrl) != "") {
 			return true;
 		} else {
-			/*
-			 * VideoActivity.this.runOnUiThread(new Runnable() {
-			 * 
-			 * @Override public void run() {
-			 * CommonTask.ShowMessage(VideoActivity.this,
-			 * "No Data Returned From Server."); } });
-			 */
+			/* VideoActivity.this.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						CommonTask.ShowAlertMessage(VideoActivity.this, CommonValues.getInstance().alertObj );
+						
+					}
+				});*/
 			return false;
 		}
 	}
+	Integer channelCount;
 
 	public void setCameraInfo() {
 //		setConnectionNodeImage(actionBarMenu);
@@ -601,14 +630,15 @@ public class VideoActivity extends MainActionbarBase implements
 			password = CommonValues.getInstance().cameraInfo.password;
 //			 userName = "smarthomedev11";
 			// password = "123456";
-			Integer channelCount = CommonValues.getInstance().cameraInfo.ChannelCount;
+//			channelCount =0;
+			channelCount = CommonValues.getInstance().cameraInfo.ChannelCount;
 			// String[] state=new String[channelCount];
 			if (userName == null || password == null) {
 				CommonTask.ShowMessage(this, "Server Returned empty Camera Data");
 			}
 			if (channelCount == 0) {
-				streamingButton.setEnabled(false);
 				CommonTask.ShowMessage(this, "Surveillance system not available");
+				streamingButton.setEnabled(false);
 			} else {
 				streamingButton.setEnabled(true);
 			}
@@ -630,6 +660,14 @@ public class VideoActivity extends MainActionbarBase implements
 							this,
 							"Network State/Configuration Settings has been changed.Please log in again to continue.",
 							showNetworkChangeEvent());*/
+			/* VideoActivity.this.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						CommonTask.ShowAlertMessage(VideoActivity.this, CommonValues.getInstance().alertObj );
+						
+					}
+				});*/
 		}
 	}
 

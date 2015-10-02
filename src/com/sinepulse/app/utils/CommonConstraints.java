@@ -38,7 +38,7 @@ public class CommonConstraints {
 	public static final String PREF_SETTING ="Setting";
 	public static final String PREF_CHECKOUT ="Checkout";
 	public static final String PREF_CHECKOUT_KEY ="checkout_preference";
-	public static final int TIMEOUT_MILLISEC = 10000; // = 10 seconds
+	public static final int TIMEOUT_MILLISEC = 15000; // = 10 seconds
 	public static final int MAX_QUANTITY_FOR_SINGLE_ITEM = 99;
 	
 	

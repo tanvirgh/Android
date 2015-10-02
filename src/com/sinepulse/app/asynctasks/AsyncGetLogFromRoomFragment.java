@@ -62,10 +62,10 @@ public class AsyncGetLogFromRoomFragment extends AsyncTask<Void, Void, Boolean> 
 				
 				@Override
 				public void run() {
-					if(CommonValues.getInstance().shouldSendLogReq==false){
-						parentActivity.refreshAdapter();
-						return;
-					}
+//					if(CommonValues.getInstance().shouldSendLogReq==false){
+//						parentActivity.refreshAdapter();
+//					return;
+//					}
 					parentActivity.setupDeviceLogAdapter();
 				}
 			});

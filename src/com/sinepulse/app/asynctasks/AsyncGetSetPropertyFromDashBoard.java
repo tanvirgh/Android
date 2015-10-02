@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.sinepulse.app.activities.Home;
 
 /**
+ * used to send device property change request to server asynchronously
  * @author tanvir.ahmed
  *
  */

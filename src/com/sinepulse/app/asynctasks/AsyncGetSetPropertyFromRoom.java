@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.sinepulse.app.activities.RoomManager;
 
 /**
+ * used to send device property change request from room tab to server asynchronously
  * @author tanvir.ahmed
  * 
  */

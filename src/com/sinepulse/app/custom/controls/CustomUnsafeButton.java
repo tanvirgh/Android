@@ -1,11 +1,10 @@
 package com.sinepulse.app.custom.controls;
 
-import com.sinepulse.app.utils.ButtonTooltipHelper;
-
 import android.content.Context;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.Button;
+
+import com.sinepulse.app.utils.ButtonTooltipHelper;
 
 public class CustomUnsafeButton extends Button{
 	public CustomUnsafeButton(Context context) {

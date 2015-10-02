@@ -103,13 +103,13 @@ public class AboutFragment extends SherlockFragment implements OnItemClickListen
 //	}
 
 
-	private void cancelBack() {
+	/*private void cancelBack() {
 
 
 //		imm.hideSoftInputFromWindow(saerchitem.getWindowToken(), 0);
 
 		backState = AboutState.INITIAL_STATE;
-	}
+	}*/
 
 
 	

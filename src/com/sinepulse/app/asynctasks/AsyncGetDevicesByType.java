@@ -3,29 +3,40 @@
  */
 package com.sinepulse.app.asynctasks;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.base.MainActionbarBase;
+import com.sinepulse.app.entities.Device;
+import com.sinepulse.app.utils.CommonTask;
+import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
+import com.sinepulse.app.utils.NetworkUtil;
 
 /**
  * Get all device list type wise from server for home tab through asynchronous call.
  * @author tanvir.ahmed
  *
  */
-public class AsyncGetDevicesByType extends AsyncTask<Void, Void, Boolean> {
+public class AsyncGetDevicesByType extends AsyncTask<Void, Void, ArrayList<Device>> {
 	
 //	DisplayDeviceDetails  deviceDetails ;
     Context parentActivity;
 	private int deviceType;
+	private int deviceTypeId;
 //	private int roomId;
 	
-	public AsyncGetDevicesByType(Context _parentActivity, int deviceType) {
+	public AsyncGetDevicesByType(Context _parentActivity, int deviceType,int deviceTypeId) {
 //		deviceDetails = deviceDetailsFragment;
 		this.parentActivity=_parentActivity;
 		this.deviceType=deviceType;
+		this.deviceTypeId=deviceTypeId;
 //		this.roomId=roomId;
 		
 	}
@@ -40,14 +51,15 @@ public class AsyncGetDevicesByType extends AsyncTask<Void, Void, Boolean> {
 	
 
 	@Override
-	protected Boolean doInBackground(Void... params) {
+	protected ArrayList<Device> doInBackground(Void... params) {
 		((Home) parentActivity).sendGetDeviceByTypeRequest(deviceType);
-		return null;
+		return CommonValues.getInstance().deviceList;
 	}
 	
 	@Override
-	protected void onPostExecute(Boolean result) {
+	protected void onPostExecute(ArrayList<Device> result) {
 		Home.stopDeviceProgress();
+		if(result.size()!=0){
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
@@ -62,6 +74,14 @@ public class AsyncGetDevicesByType extends AsyncTask<Void, Void, Boolean> {
 			}
 		}
 	}
+		}else{
+//			CommonTask.ShowAlertMessage(parentActivity, CommonValues.getInstance().alertObj );
+			
+		}
 	}
+
+
+
+	
 }
 	

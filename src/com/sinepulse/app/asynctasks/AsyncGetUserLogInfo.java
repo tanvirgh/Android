@@ -11,12 +11,13 @@ import com.sinepulse.app.activities.UserLogActivity;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
+ * used to fetch user activities from server based on search parameter asynchronously.
  * @author tanvir.ahmed
  *
  */
 public class AsyncGetUserLogInfo extends AsyncTask<Void, Void, Boolean> {
 	
-	Context parentActivity;
+	UserLogActivity parentActivity;
 	
 	public String fromDate;
 	public String toDate;
@@ -25,8 +26,8 @@ public class AsyncGetUserLogInfo extends AsyncTask<Void, Void, Boolean> {
 	public int ChunkSize;
 //	private boolean interrupttask=false;
 	
-	public AsyncGetUserLogInfo(Context parentActivity,int FilterType,String fromDate,String toDate,int PageNumber,int ChunkSize) {
-		this.parentActivity=parentActivity;
+	public AsyncGetUserLogInfo(UserLogActivity _parentActivity,int FilterType,String fromDate,String toDate,int PageNumber,int ChunkSize) {
+		this.parentActivity=_parentActivity;
 		this.fromDate=fromDate;
 		this.toDate=toDate;
 		this.FilterType=FilterType;
@@ -39,7 +40,7 @@ public class AsyncGetUserLogInfo extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPreExecute() {
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
-		((UserLogActivity) parentActivity).startProgress();
+		parentActivity.startProgress();
 		
 	}
 	
@@ -49,31 +50,33 @@ public class AsyncGetUserLogInfo extends AsyncTask<Void, Void, Boolean> {
 	/*	while (interrupttask==true) {
 		      if (isCancelled()) break;
 		    }*/
-		((UserLogActivity) parentActivity).sendGetUserLogRequest(FilterType,fromDate,toDate,PageNumber,ChunkSize);
+		 parentActivity.sendGetUserLogRequest(FilterType,fromDate,toDate,PageNumber,ChunkSize);
 		return null;
 	}
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
-		((UserLogActivity) parentActivity).stopProgress();
+		parentActivity.stopProgress();
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
-		((Activity) parentActivity).runOnUiThread(new Runnable() {
+				if(CommonValues.getInstance().deviceLogDetailList!=null){
+	       parentActivity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				if(CommonValues.getInstance().shouldSendLogReq==false){
-					((UserLogActivity) parentActivity).refreshAdapter();
-//					interrupttask=true;
-					return;
-				}
-				((UserLogActivity) parentActivity).setupUserLogAdapter();
+//				if(CommonValues.getInstance().shouldSendLogReq==false){
+//					((UserLogActivity) parentActivity).refreshAdapter();
+//				interrupttask=true;
+//					return;
+//				}
+			parentActivity.setupUserLogAdapter();
 			}
 		});
 		
 	}
+			}
 		}
 	}
 	}
