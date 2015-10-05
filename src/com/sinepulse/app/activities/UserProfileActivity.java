@@ -77,7 +77,7 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	protected Button bRoom;
 	@ViewById(R.id.bDashboard)
 	protected Button bDashboard;
-	private Menu actionBarMenu;
+//	Menu connMenu=null;
 	public static Context context;
 	
 	
@@ -87,6 +87,7 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 		createMenuBar();
 		UserProfileActivity_.context=this;
         mainActionBarContext=UserProfileActivity_.context;
+//        this.connMenu=actionBarMenu;
 		
 	}
 	private void createMenuBar() {
@@ -101,9 +102,9 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		setConnectionNodeImage(actionBarMenu,this);
+//		connMenu=menu;
+		setConnectionNodeImage(CommonValues.getInstance().globalMenu,this);
 		return prepared;
 	}
 	
@@ -296,6 +297,7 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 	public void onResume() {
 		this.setTitle("Profile");
 //		fragmentPaused = false;
+//		setConnectionNodeImage(actionBarMenu,mainActionBarContext);
 		super.onResume();
 		
 		

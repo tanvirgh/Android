@@ -407,7 +407,7 @@ public class CommonTask {
 	 *         of being established, false otherwise.
 	 */
 	public static boolean isNetworkAvailable(Context context) {
-
+// || networkState == NetworkInfo.State.CONNECTING
 		ConnectivityManager connectivityManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = null;
@@ -418,7 +418,7 @@ public class CommonTask {
 			if (networkInfo != null) {
 				networkState = networkInfo.getState();
 				if (networkState == NetworkInfo.State.CONNECTED
-						|| networkState == NetworkInfo.State.CONNECTING) {
+						) {
 					return true;
 				}
 			}
@@ -428,7 +428,7 @@ public class CommonTask {
 
 				networkState = networkInfo.getState();
 				if (networkState == NetworkInfo.State.CONNECTED
-						|| networkState == NetworkInfo.State.CONNECTING) {
+						) {
 					return true;
 				}
 			}
@@ -441,6 +441,25 @@ public class CommonTask {
 		}else{
 			return false;
 		}*/
+	}
+	public static boolean isGsmAvailable(Context context) {
+		ConnectivityManager connManager = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo nwInfo = null;
+		State nwState = null;
+		if (connManager != null) {
+			nwInfo = connManager.
+					getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			if (nwInfo != null) {
+				nwState = nwInfo.getState();
+				if (nwState == NetworkInfo.State.CONNECTED) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+		
 	}
 	
 

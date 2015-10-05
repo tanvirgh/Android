@@ -9,7 +9,7 @@ package com.sinepulse.app.utils;
 public class CommonURL {	
 //	http://192.168.11.151/api/
 	//http://dev.sinepulse.com/smarthome/service/dev/DataAPI.svc/data/
-	public String remoteBaseUrl="http://dev.sinepulse.com/smarthome/service/dev/DataAPI.svc/";
+	public String remoteBaseUrl="http://dev.sinepulse.com/smarthome/service/test/DataAPI.svc/";
 	public String localBaseUrl="";
 //	public String baseUrl="http://dev.sinepulse.com/smarthome/service/dev/DataAPI.svc/data/";
 //	public String LoginCustomerURL=baseUrl	+ "login";

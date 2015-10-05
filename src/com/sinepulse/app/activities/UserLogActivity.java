@@ -105,7 +105,6 @@ public class UserLogActivity extends MainActionbarBase implements
 	private SimpleDateFormat dateFormatter;
 	Date tobesetFromDate = new Date();
 	Date tobesetToDate = new Date();
-	private Menu actionBarMenu;
 
 	int FilterType = 0;
 	String fromsDate = "";
@@ -113,6 +112,7 @@ public class UserLogActivity extends MainActionbarBase implements
 	int PageNumber = 0;
 	int ChunkSize = 30;
 	public static Context context;
+//	Menu connMenu=null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -121,6 +121,7 @@ public class UserLogActivity extends MainActionbarBase implements
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		UserLogActivity.context=this;
         mainActionBarContext=UserLogActivity.context;
+//        this.connMenu=actionBarMenu;
 		createMenuBar();
 		dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 		setDateTimeField();
@@ -162,9 +163,9 @@ public class UserLogActivity extends MainActionbarBase implements
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		setConnectionNodeImage(actionBarMenu,this);
+//		connMenu=menu;
+		setConnectionNodeImage(CommonValues.getInstance().globalMenu,this);
 		return prepared;
 	}
 	
@@ -584,6 +585,7 @@ public class UserLogActivity extends MainActionbarBase implements
 	@Override
 	public void onResume() {
 		this.setTitle("Activities");
+//		setConnectionNodeImage(actionBarMenu,mainActionBarContext);
 		// loadTodaysLog();
 		fragmentPaused = false;
 		super.onResume();

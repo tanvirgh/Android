@@ -97,7 +97,7 @@ public class SupportActivity extends MainActionbarBase implements
 //	@ViewById(R.id.menu_refresh)
 //	public Button refresh;
 	InputMethodManager imm;
-	private Menu actionBarMenu;
+//	Menu connMenu=null;
 
 	private AllTicketListAdapter tAdapter;
 	public static final int INITIAL_STATE = -1, VIEWSINGLETICKET_STATE = 0,
@@ -122,6 +122,7 @@ public class SupportActivity extends MainActionbarBase implements
 		super.onCreate(savedInstanceState);
 		// HelpActivity.context = this;
 		createMenuBar();
+//		connMenu=actionBarMenu;
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
@@ -219,10 +220,10 @@ public class SupportActivity extends MainActionbarBase implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
+//		connMenu=menu;
+		setConnectionNodeImage(CommonValues.getInstance().globalMenu,this);
 		setActionBarMenuVisibility(true);
-		setConnectionNodeImage(actionBarMenu,this);
 		return prepared;
 	}
 
@@ -552,10 +553,10 @@ public class SupportActivity extends MainActionbarBase implements
 	}
 
 	public void setActionBarMenuVisibility(boolean visibility) {
-		if (MainActionbarBase.actionBarMenu != null) {
-			int size = MainActionbarBase.actionBarMenu.size();
+		if (actionBarMenu != null) {
+			int size = actionBarMenu.size();
 			for (int i = 0; i < size; i++) {
-				MainActionbarBase.actionBarMenu.getItem(i).setVisible(
+				actionBarMenu.getItem(i).setVisible(
 						visibility);
 			}
 		}

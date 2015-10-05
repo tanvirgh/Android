@@ -31,7 +31,7 @@ public class SplashScreen extends SherlockFragmentActivity {
 
 	// The NSD service type that the RPi exposes.
 	private static final String SERVICE_TYPE = "_workstation._tcp.";
-	private static final String APPLICATION_SERVICE_NAME="sinepulsemcdev";
+	private static final String APPLICATION_SERVICE_NAME="sinepulsemctest";
 
 	// how long until we go to the next activity
 	protected boolean _active = true;

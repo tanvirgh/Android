@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.AsyncTask;
 
+import com.sinepulse.app.activities.About;
 import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.activities.Home_;
 import com.sinepulse.app.activities.RoomManager;
@@ -135,7 +136,6 @@ public class AsyncSendApiKeyRequest extends AsyncTask<Void, Void, String> {
 					if (callerActivity instanceof UserLogActivity) {
 						UserLogActivity.loadUserLogInfo(FilterType, fromsDate, tosDate, PageNumber, 30);
 					}
-					
 				}
 			});
 			

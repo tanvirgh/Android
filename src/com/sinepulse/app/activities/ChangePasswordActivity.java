@@ -39,10 +39,9 @@ import com.sinepulse.app.utils.NetworkUtil;
  */
 @EActivity(R.layout.change_password)
 public class ChangePasswordActivity extends MainActionbarBase implements OnClickListener{
-	public Menu actionBarMenu;
+//	Menu connMenu=null;
 	public static Context context;
 	public static final int INITIAL_STATE = -1;
-
 	public enum AboutState {
 		INITIAL_STATE, // backState -1
 
@@ -80,6 +79,7 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 		super.onCreate(savedInstanceState);
 		ChangePasswordActivity.context=this;
         mainActionBarContext=ChangePasswordActivity.context;
+//        connMenu=actionBarMenu;
 		this.setRequestedOrientation(
 				ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		createMenuBar() ;
@@ -131,10 +131,10 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-		this.actionBarMenu=menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
+//		connMenu=menu;
+		setConnectionNodeImage(CommonValues.getInstance().globalMenu,this);
 		hideRefreshMenu(menu);
-		setConnectionNodeImage(actionBarMenu,this);
 		
 		return prepared;
 	}
@@ -161,6 +161,7 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	public void onResume() {
 		this.setTitle("Change Password");
 		fragmentPaused = false;
+//		setConnectionNodeImage(actionBarMenu,mainActionBarContext);
 		super.onResume();
 		backState = AboutState.INITIAL_STATE;
 	}

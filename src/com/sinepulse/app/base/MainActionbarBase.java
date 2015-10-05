@@ -47,6 +47,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.devspark.appmsg.AppMsg;
 import com.sinepulse.app.R;
+import com.sinepulse.app.activities.About;
 import com.sinepulse.app.activities.About_;
 import com.sinepulse.app.activities.ChangePasswordActivity_;
 import com.sinepulse.app.activities.Home;
@@ -100,7 +101,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 
 	private InputMethodManager imm;
 
-	public static Menu actionBarMenu;
+	public Menu actionBarMenu;
 	public ProgressBar abs__search_progress_bar;
 
 	AutoCompleteTextView searchAutoCompleteTextView;
@@ -123,6 +124,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		mSupportActionBar = getSupportActionBar();
 		mSupportActionBar.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.tool_bar));
+		
 
 		IntentFilter filter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
@@ -145,14 +147,12 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	@SuppressWarnings("static-access")
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
 		com.actionbarsherlock.view.MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.actionbarmenu, menu);
-
-		// CommonValues.getInstance().menuList = (android.view.Menu) menu;
-
 		this.actionBarMenu = menu;
 		CommonValues.getInstance().globalMenu = menu;
+		setConnectionNodeImage(menu, mainActionBarContext);
+		super.onCreateOptionsMenu(menu);
 		return true;
 	}
 
@@ -222,10 +222,18 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
+//			Bundle extra=intent.getExtras();
 			if (activityVisible) {
 				if (CommonTask.isNetworkStateChanged(MainActionbarBase.this) == false) {
 					if (CommonValues.getInstance().connectionMode
 							.equals("Local")) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						if(CommonTask.isGsmAvailable(mainActionBarContext) == true){
 						CommonTask.assignToInterentMode(mainActionBarContext);
 						if (CommonValues.getInstance().ApiKeyGsb == null
 								|| CommonValues.getInstance().ApiKeyGsb
@@ -233,6 +241,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 							sendApiKeyReqAsync(mainActionBarContext);
 						} else {
 							makeServerCallOnDemand();
+						}
 						}
 					} else {
 
@@ -438,19 +447,17 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 
 	boolean isWifiChanged = false;
 
-	@Override
 	protected void onResume() {
 		super.onResume();
+		invalidateOptionsMenu();
 		// ConnectivityManager connectivityManager = (ConnectivityManager) this
 		// .getSystemService(Context.CONNECTIVITY_SERVICE);
 		// if (CommonValues.getInstance().isappinBackground == true) {
 		// connectByIp();
 		//
 		// }
-
 		IntentFilter filter = new IntentFilter(
-				ConnectivityManager.CONNECTIVITY_ACTION);
-
+					ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mConnReceiver, filter);
 		// registerReceiver(conChangeReceiver, filter);
 		/*
@@ -680,7 +687,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	public static void connectByHostName() {
 
 		connnectionState = "RasPeri";
-		urlForMc = "http://sinepulsemcdev/api/is-online";
+		urlForMc = "http://sinepulsemctest/api/is-online";
 		if (checkMC != null) {
 			checkMC.cancel(true);
 		}
@@ -878,7 +885,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	/**
 		 * 
 		 */
-	public void fireNetworkChangeEvent() {
+	/*public void fireNetworkChangeEvent() {
 		MainActionbarBase.this.runOnUiThread(new Runnable() {
 
 			@Override
@@ -891,7 +898,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 
 			}
 		});
-	}
+	}*/
 
 	public void saveLocalIpInPreference() {
 		CommonTask.SavePreferences(this, CommonConstraints.PREF_URL_KEY,

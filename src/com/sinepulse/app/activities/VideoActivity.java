@@ -90,13 +90,15 @@ public class VideoActivity extends MainActionbarBase implements
 	String password;
 	@ViewById(R.id.pbCamera)
 	public ProgressBar pbCamera;
-	public Menu actionBarMenu;
+//	public Menu actionBarMenu;
 	public static Context context;
+//	Menu connMenu=null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		createMenuBar();
+//		this.connMenu=actionBarMenu;
 		VideoActivity_.context=this;
         mainActionBarContext=VideoActivity_.context;
 
@@ -112,10 +114,10 @@ public class VideoActivity extends MainActionbarBase implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-		this.actionBarMenu = menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
+//		connMenu=menu;
+		setConnectionNodeImage(CommonValues.getInstance().globalMenu,this);
 		hideRefreshMenu(menu);
-		setConnectionNodeImage(actionBarMenu,this);
 		
 		return prepared;
 	};
@@ -373,6 +375,7 @@ public class VideoActivity extends MainActionbarBase implements
 
 	@Override
 	public void onResume() {
+//		setConnectionNodeImage(actionBarMenu,mainActionBarContext);
 		bCamera.setBackground(getResources().getDrawable(
 				R.drawable.camera_selected1));
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

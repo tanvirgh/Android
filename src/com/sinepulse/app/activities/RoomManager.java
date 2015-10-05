@@ -215,7 +215,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	String tosDate = "";
 	int PageNumber = 0;
 	int ChunkSize = 30;
-	private Menu actionBarMenu;
+//	Menu connMenu=null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -224,6 +224,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		mainActionBarContext=RoomManager.context;
 		backState = RoomsState.INITIAL_STATE;
 		createMenuBar();
+//		this.connMenu=actionBarMenu;
 		dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
 	}
@@ -264,9 +265,9 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-		this.actionBarMenu = menu;
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		setConnectionNodeImage(actionBarMenu,this);
+//		connMenu=menu;
+		setConnectionNodeImage(CommonValues.getInstance().globalMenu,this);
 		return prepared;
 	}
 	
@@ -1120,7 +1121,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	@Override
 	public void onResume() {
-
+//		setConnectionNodeImage(actionBarMenu,mainActionBarContext);
 		if (CommonValues.getInstance().connectionMode == "Local") {
 			CommonValues.getInstance().wamp.connectWampClient(this);
 			CommonValues.getInstance().wamp.managePubSubWampData();

@@ -127,7 +127,7 @@ public class DeviceStatusFragment extends SherlockFragment implements
 					R.drawable.stepincomplete));
 			ivStep1.setEnabled(false);
 			ivStep2.setEnabled(true);
-			setActionBarMenuVisibility(true);
+//			setActionBarMenuVisibility(true);
 			break;
 		case 2:// Inactive Device
 			ivStep1.setBackgroundDrawable(getResources().getDrawable(
@@ -136,7 +136,7 @@ public class DeviceStatusFragment extends SherlockFragment implements
 					R.drawable.stepcompleted));
 			ivStep1.setEnabled(true);
 			ivStep2.setEnabled(false);
-			setActionBarMenuVisibility(false);
+//			setActionBarMenuVisibility(false);
 			break;
 
 		default:
@@ -254,7 +254,7 @@ public void resetDeviceStatusView(){
 				.outToRightAnimation());
 		// Set Initial state as active state when this activity is resumed
 		backState = INITIAL_STATE;
-		setActionBarMenuVisibility(true);
+//		setActionBarMenuVisibility(true);
 		markStepActive(1);
 	}
 
@@ -354,7 +354,7 @@ public void resetDeviceStatusView(){
 	 * 
 	 * @param visibility
 	 */
-	public void setActionBarMenuVisibility(boolean visibility) {
+/*	public void setActionBarMenuVisibility(boolean visibility) {
 		if (MainActionbarBase.actionBarMenu != null) {
 			int size = MainActionbarBase.actionBarMenu.size();
 			for (int i = 0; i < size; i++) {
@@ -362,7 +362,7 @@ public void resetDeviceStatusView(){
 						visibility);
 			}
 		}
-	}
+	}*/
 
 
 

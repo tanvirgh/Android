@@ -297,7 +297,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 	int ChunkSize = 30;
 	@ViewById(R.id.tvCircleProgressValue)
 	public TextView tvCircleProgressValue;
-	Menu connMenu=null;
+//	Menu connMenu=null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -306,7 +306,7 @@ public class Home extends MainActionbarBase implements OnClickListener,
 		// R.anim.slide_out_left);
 		Home.context = this;
 		mainActionBarContext=Home.context;
-		connMenu=actionBarMenu;
+//		this.connMenu=actionBarMenu;
 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		getWindow().setSoftInputMode(
@@ -1353,8 +1353,8 @@ circularSeekBar1.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener(
 	@Override
 	public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		boolean prepared = super.onPrepareOptionsMenu(menu);
-		connMenu=menu;
-		setConnectionNodeImage(connMenu,this);
+//		connMenu=menu;
+		setConnectionNodeImage(CommonValues.getInstance().globalMenu,this);
 		
 		Log.d("selectedposition", "" + mDrawerList.getCheckedItemPosition());
 		
@@ -1508,7 +1508,7 @@ circularSeekBar1.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener(
 	
 	@Override
 	protected void onResume() {
-		setConnectionNodeImage(connMenu, mainActionBarContext);
+//		setConnectionNodeImage(connMenu, mainActionBarContext);
 		if(CommonValues.getInstance().connectionMode=="Local"){
 		    CommonValues.getInstance().wamp.connectWampClient(this);
 		    CommonValues.getInstance().wamp.managePubSubWampData();

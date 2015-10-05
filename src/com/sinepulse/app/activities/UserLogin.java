@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -86,6 +87,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	 */
 	static final String TAG = "Tanvir";
 	String urlForMc = "";
+//	Menu connMenu=null;
 
 	/**
 	 * Called when the activity is started.
@@ -100,6 +102,7 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 		UserLogin.context = this;
 		mSupportActionBar = getSupportActionBar();
 		mSupportActionBar.hide();
+//		 connMenu=actionBarMenu;
 		// getHostnameSuffix();
 	}
 
@@ -165,15 +168,15 @@ public class UserLogin extends MainActionbarBase implements OnClickListener {
 	 * 
 	 * @param visibility
 	 */
-	public void setActionBarMenuVisibility(boolean visibility) {
-		if (MainActionbarBase.actionBarMenu != null) {
-			int size = MainActionbarBase.actionBarMenu.size();
+	/*public void setActionBarMenuVisibility(boolean visibility) {
+		if (actionBarMenu != null) {
+			int size = actionBarMenu.size();
 			for (int i = 0; i < size; i++) {
-				MainActionbarBase.actionBarMenu.getItem(i).setVisible(
+				actionBarMenu.getItem(i).setVisible(
 						visibility);
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * use for manage all button click events centrally
