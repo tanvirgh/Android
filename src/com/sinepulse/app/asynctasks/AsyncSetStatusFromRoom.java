@@ -7,7 +7,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.RoomManager_;
-import com.sinepulse.app.adapters.DeviceListAdapterByRoom;
+import com.sinepulse.app.adapters.DeviceListAdapter;
 
 /**
  * @author tanvir.ahmed
@@ -16,13 +16,13 @@ import com.sinepulse.app.adapters.DeviceListAdapterByRoom;
 public class AsyncSetStatusFromRoom extends AsyncTask<Void, Void, Boolean> {
 	
 //	DisplayDeviceDetails  deviceDetails ;
-	DeviceListAdapterByRoom deviceDetails;
+	DeviceListAdapter deviceDetails;
 	Context parentActivity;
 	private int deviceId;
 	private int userId;
 	private boolean isChecked;
 	
-	public AsyncSetStatusFromRoom(DeviceListAdapterByRoom deviceDetails,Context _parentActivity ,int deviceId,int userId,boolean isChecked) {
+	public AsyncSetStatusFromRoom(DeviceListAdapter deviceDetails,Context _parentActivity ,int deviceId,int userId,boolean isChecked) {
 		this.deviceDetails=deviceDetails;
 		this.parentActivity=_parentActivity;
 		this.deviceId=deviceId;

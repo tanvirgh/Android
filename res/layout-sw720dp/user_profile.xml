@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/logbgnewpre" >
+    android:background="@drawable/logbgnew" >
 
     <RelativeLayout
         android:id="@+id/rlOnlinePaymentHeading"
@@ -12,7 +12,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="18dp"
         android:layout_marginTop="40dp"
-        android:visibility="visible"
         android:gravity="center" >
 
         <TextView
@@ -21,13 +20,14 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/userProfileProgressBar"
             android:layout_centerHorizontal="true"
+            android:drawableLeft="@drawable/userimage"
             android:gravity="center"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="28dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="30dp"
             android:layout_marginTop="50dp"
-             android:text="   Profile"
+             android:text="   User Profile"
             android:textColor="#FFFFFF"
-            android:textSize="29sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         
@@ -51,37 +51,36 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-           android:layout_marginTop="30dp"
             android:layout_marginBottom="40dp"
             android:layout_marginLeft="75dp"
             android:orientation="vertical" >
 
-                    <RelativeLayout
+            <RelativeLayout
                 android:id="@+id/rlFirstName"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
 
                 <!-- android:background="@drawable/online_payment_first_row" -->
 
-                <com.sinepulse.app.custom.controls.CustomTextView
+                <TextView
                     android:id="@+id/tvFirstName"
-                    android:layout_width="135dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="left"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:text="Name"
                     android:textColor="@color/textColor"
-                    android:textSize="18sp" />
+                    android:textSize="22sp" />
                 <!-- android:text="Fornavn" -->
 
-                <com.sinepulse.app.custom.controls.CustomEditText
+                <EditText
                     android:id="@+id/etFirstName"
                     android:layout_width="320dp"
                     android:layout_height="45dp"
@@ -89,250 +88,213 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/tvFirstName"
-                    android:background="@drawable/userprofile_et_bg"
+                    android:background="@drawable/setting_username_background"
                     android:focusable="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="0dp"
-                    android:textSize="14sp" />
+                    android:textSize="18sp" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/rlUserName"
-                android:layout_width="fill_parent"
-                android:layout_height="55dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="25dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-               >
-
-                <com.sinepulse.app.custom.controls.CustomTextView
-                     android:id="@+id/tvUSerName"
-                    android:layout_width="135dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:gravity="left"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:text="User Name"
-                    android:textColor="@color/textColor"
-                    android:textSize="18sp"/>
-
-                <com.sinepulse.app.custom.controls.CustomEditText
-                    android:id="@+id/etUserName"
-                    android:layout_width="320dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/tvUSerName"
-                    android:background="@drawable/userprofile_et_bg"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:textSize="14sp" />
-
-            </RelativeLayout>
+          
 
             <RelativeLayout
                 android:id="@+id/rlEmail"
-                android:layout_width="fill_parent"
-                android:layout_height="55dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="25dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true" >
-
-                <com.sinepulse.app.custom.controls.CustomTextView
-                    android:id="@+id/tvEmail"
-                    android:layout_width="135dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:gravity="left"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:text="Email"
-                    android:textColor="@color/textColor"
-                    android:textSize="18sp" />
-
-                <com.sinepulse.app.custom.controls.CustomEditText
-                    android:id="@+id/etEmail"
-                    android:layout_width="320dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/tvEmail"
-                    android:background="@drawable/userprofile_et_bg"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:textSize="14sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rlSex"
-                android:layout_width="fill_parent"
-                android:layout_height="55dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="25dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true" >
-
-                <com.sinepulse.app.custom.controls.CustomTextView
-                    android:id="@+id/tvSex"
-                    android:layout_width="135dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:gravity="left"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:text="Sex"
-                    android:textColor="@color/textColor"
-                    android:textSize="18sp" />
-
-                <com.sinepulse.app.custom.controls.CustomEditText
-                    android:id="@+id/etSex"
-                    android:layout_width="320dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/tvSex"
-                    android:background="@drawable/userprofile_et_bg"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:textSize="14sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rldob"
-                android:layout_width="fill_parent"
-                android:layout_height="55dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="25dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true" >
-
-                <com.sinepulse.app.custom.controls.CustomTextView
-                    android:id="@+id/tvdob"
-                    android:layout_width="135dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:gravity="left"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:text="Date Of Birth"
-                    android:textColor="@color/textColor"
-                    android:textSize="18sp" />
-
-                <com.sinepulse.app.custom.controls.CustomEditText
-                    android:id="@+id/etdob"
-                    android:layout_width="320dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/tvdob"
-                    android:background="@drawable/userprofile_et_bg"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:textSize="14sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rlAddress"
-                android:layout_width="fill_parent"
-                android:layout_height="55dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="25dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true" >
-
-                <com.sinepulse.app.custom.controls.CustomTextView
-                    android:id="@+id/tvAddress"
-                    android:layout_width="135dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:gravity="left"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:text="Address"
-                    android:textColor="@color/textColor"
-                    android:textSize="18sp" />
-
-                <com.sinepulse.app.custom.controls.CustomEditText
-                    android:id="@+id/etAddress"
-                    android:layout_width="320dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/tvAddress"
-                    android:background="@drawable/userprofile_et_bg"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:textSize="14sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rlTelephone"
-                android:layout_width="fill_parent"
-                android:layout_height="55dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="25dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true" >
-
-                <com.sinepulse.app.custom.controls.CustomTextView
-                    android:id="@+id/tvTelephone"
-                    android:layout_width="135dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:gravity="left"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:text="Cell Phone"
-                    android:textColor="@color/textColor"
-                    android:textSize="18sp" />
-
-                <com.sinepulse.app.custom.controls.CustomEditText
-                    android:id="@+id/etTelephone"
-                    android:layout_width="320dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/tvTelephone"
-                    android:background="@drawable/userprofile_et_bg"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:inputType="textPhonetic"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="0dp"
-                    android:textSize="14sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rlSex2"
                 android:layout_width="fill_parent"
                 android:layout_height="55dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
                 android:focusable="true"
-                android:visibility="gone"
                 android:focusableInTouchMode="true" >
 
                 <TextView
-                    android:id="@+id/tvSex2"
+                    android:id="@+id/tvEmail"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="left"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="0dp"
+                    android:text="Email"
+                    android:textColor="@color/textColor"
+                    android:textSize="22sp" />
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="320dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/tvEmail"
+                    android:background="@drawable/setting_username_background"
+                    android:focusable="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlAddress"
+                android:layout_width="fill_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="left"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="0dp"
+                    android:text="Address1"
+                    android:textColor="@color/textColor"
+                    android:textSize="22sp" />
+
+                <EditText
+                    android:id="@+id/etAddress"
+                    android:layout_width="320dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/tvAddress"
+                    android:background="@drawable/setting_username_background"
+                    android:focusable="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlAddress2"
+                android:layout_width="fill_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:id="@+id/tvAddress2"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="Address2"
+                    android:textColor="@color/textColor"
+                    android:textSize="22sp" />
+
+                <EditText
+                    android:id="@+id/etAddress2"
+                    android:layout_width="320dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/tvAddress2"
+                    android:background="@drawable/setting_username_background"
+                    android:focusable="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlCity"
+                android:layout_width="fill_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:id="@+id/tvCity"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="City"
+                    android:textColor="@color/textColor"
+                    android:textSize="22sp" />
+
+                <EditText
+                    android:id="@+id/etCity"
+                    android:layout_width="320dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/tvCity"
+                    android:background="@drawable/setting_username_background"
+                    android:focusable="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlTelephone"
+                android:layout_width="fill_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:id="@+id/tvTelephone"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:text="Phone"
+                    android:textColor="@color/textColor"
+                    android:textSize="22sp" />
+
+                <EditText
+                    android:id="@+id/etTelephone"
+                    android:layout_width="320dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/tvTelephone"
+                    android:background="@drawable/setting_username_background"
+                    android:focusable="false"
+                    android:inputType="textPhonetic"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="0dp"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlSex"
+                android:layout_width="fill_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <TextView
+                    android:id="@+id/tvSex"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -344,7 +306,7 @@
                     android:textSize="22sp" />
 
                 <EditText
-                    android:id="@+id/etSex2"
+                    android:id="@+id/etSex"
                     android:layout_width="320dp"
                     android:layout_height="45dp"
                     android:layout_centerVertical="true"
@@ -367,7 +329,6 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
                 android:focusable="true"
-                 android:visibility="gone"
                 android:focusableInTouchMode="true" >
 
                 <TextView

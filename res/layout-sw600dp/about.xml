@@ -14,7 +14,7 @@
         android:layout_marginTop="50dp"
         android:gravity="center_horizontal"
         android:scaleType="fitCenter"
-        android:src="@drawable/aboutus"
+        android:src="@drawable/sp_logo"
         android:contentDescription="@string/todo" />
 
     <ImageView
@@ -37,7 +37,7 @@
         android:layout_marginTop="55dp"
         android:ellipsize="marquee"
         android:gravity="center_horizontal"
-        android:maxLines="6"
+        android:maxLines="4"
        android:textSize="22sp"
         android:singleLine="false"
         android:text="@string/aboutText"

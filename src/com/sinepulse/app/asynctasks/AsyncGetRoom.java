@@ -3,6 +3,8 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.RoomManager;
+import com.sinepulse.app.fragments.RoomManagerFragment;
+import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
 
 public class AsyncGetRoom extends AsyncTask<Void, Void, Boolean> {
@@ -21,6 +23,7 @@ public class AsyncGetRoom extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected void onPreExecute() {
+		CommonValues.getInstance().IsServerConnectionError=false;
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
 		roomManagerFrg.startProgress();
 		
@@ -37,6 +40,10 @@ public class AsyncGetRoom extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		roomManagerFrg.stopProgress();
+		if(CommonValues.getInstance().IsServerConnectionError==true){
+			CommonTask.ShowMessage(roomManagerFrg, "Server is not reachable at this moment.");
+        	return;
+		}
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {

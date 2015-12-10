@@ -6,7 +6,10 @@ package com.sinepulse.app.asynctasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.sinepulse.app.R;
 import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.activities.UserLogin;
+import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
@@ -24,13 +27,15 @@ public class AsyncRefreshDashBoard extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected void onPreExecute() {
+		CommonValues.getInstance().IsServerConnectionError=false;
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
-		try {
+		((Home) parentActivity).startDashBoardProgress();
+		/*try {
 			// progress bar starts with the method call
 			((Home) parentActivity).startDashBoardProgress();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	@Override
@@ -42,6 +47,10 @@ public class AsyncRefreshDashBoard extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		((Home) parentActivity).stopDashBoardProgress();
+		if(CommonValues.getInstance().IsServerConnectionError==true){
+			CommonTask.ShowMessage(parentActivity, "Server UnReachable");
+        	return;
+		}
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="15dp"
-    >
+    android:background="@drawable/sh_background" >
 
     <RelativeLayout
         android:id="@+id/top"
@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/devicecontrol_bg" >
 
@@ -36,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp" >
+            android:layout_marginTop="12dp" >
 
             <!-- Left side Thumbnail image -->
 
@@ -45,26 +46,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+               android:layout_marginTop="7dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/redled_large" />
 
-            <Spinner
+           <!--  <Spinner
                 android:id="@+id/spinner1"
                 android:layout_width="150dp"
                 android:layout_height="35dp"
+                android:layout_toRightOf="@+id/list_image"
+                android:layout_toLeftOf="@+id/toggleButton2"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/cellbg_dropdown"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/toggleButton2"
-                android:layout_toRightOf="@+id/list_image"
-                android:background="@drawable/cellbg_dropdown"
                 android:prompt="@string/camera_prompt"
-                android:visibility="invisible" />
+                android:visibility="invisible"/> -->
             <!-- Rightend OnOFF Button -->
 
-            <ToggleButton
+             <ToggleButton
                 android:id="@+id/toggleButton2"
                 android:layout_width="75dp"
                 android:layout_height="35dp"
@@ -77,17 +79,11 @@
                 android:gravity="center_vertical"
                 android:textColor="#000000"
                 android:textOff=""
-                android:textOn="" />
+                android:textOn="" /> 
+           
         </RelativeLayout>
 
-        <ProgressBar
-            android:id="@+id/devicePropertyProgressBar"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_below="@+id/thumbnail"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="2dp"
-            android:visibility="invisible" />
+        
 
         <RelativeLayout
             android:id="@+id/propertyMiddleView"
@@ -95,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/thumbnail"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="0dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="7dp"
@@ -107,15 +103,14 @@
                 android:layout_height="55dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_centerInParent="true"
+                 android:layout_centerInParent="true"
                 android:layout_marginBottom="140dp"
+                 android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:background="@drawable/slider_bg"
                 android:max="100"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
                 android:visibility="invisible" />
-
-            <com.sinepulse.app.custom.controls.CustomTextView
+             <TextView
                 android:id="@+id/tvProgressValue"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
@@ -131,42 +126,66 @@
                 android:id="@+id/porda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible" >
+                android:layout_alignParentTop="true"
+                android:visibility="invisible" >
 
                 <include
                     android:id="@+id/curtainadcontrol"
                     layout="@layout/ovalshape" />
+
             </RelativeLayout>
 
-            <com.sinepulse.app.custom.controls.CustomButton
-                android:id="@+id/btShowLog"
-                android:layout_width="wrap_content"
+            <ProgressBar
+                android:id="@+id/devicePropertyProgressBar"
+                android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="3dp"
-                android:layout_marginLeft="12dp"
-                android:layout_toRightOf="@+id/tvDeviceName"
-                android:background="@drawable/left_curved_button_bg_selected"
-                android:gravity="center"
-                android:text="Activities"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:layout_alignParentTop="true"
+                android:layout_alignRight="@+id/tvProgressValue"
+                android:visibility="visible" />
 
-            <com.sinepulse.app.custom.controls.CustomTextView
+            <TextView
                 android:id="@+id/tvDeviceName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/btShowLog"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-               android:layout_marginBottom="5dp"
+                android:layout_marginBottom="16dp"
                 android:text="DeviceName"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
+
+            <com.sinepulse.app.custom.controls.CustomButton
+                android:id="@+id/btShowLog"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:layout_alignBaseline="@+id/tvDeviceName"
+                android:layout_alignBottom="@+id/tvDeviceName"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/left_curved_button_bg_selected"
+                android:gravity="center|center_vertical"
+                android:text="Activities"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
         </RelativeLayout>
+
+       <!--  <com.sinepulse.app.custom.controls.CustomButton
+            android:id="@+id/btShowLog"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tvDeviceName"
+            android:background="@drawable/left_curved_button_bg_selected"
+            android:gravity="center"
+           android:text="Activities"
+            android:textColor="@color/white"
+            android:textStyle="bold" /> -->
+            
     </RelativeLayout>
 
 </RelativeLayout>

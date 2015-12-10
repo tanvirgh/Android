@@ -6,6 +6,8 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.utils.CommonTask;
+import com.sinepulse.app.utils.CommonValues;
 
 /**
  * @author tanvir.ahmed
@@ -33,6 +35,7 @@ public class AsyncGetSetPropertyFromDashBoard extends AsyncTask<Void, Void, Bool
 
 	@Override
 	protected void onPreExecute() {
+		CommonValues.getInstance().IsServerConnectionError=false;
 		parentActivity.startDevicePropertyProgress();
 		
 	}
@@ -46,6 +49,11 @@ public class AsyncGetSetPropertyFromDashBoard extends AsyncTask<Void, Void, Bool
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
+		parentActivity.stopDevicePropertyProgress();
+		if(CommonValues.getInstance().IsServerConnectionError==true){
+			CommonTask.ShowMessage(parentActivity, "Server Unreachable");
+			return;
+		}
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {
@@ -53,7 +61,6 @@ public class AsyncGetSetPropertyFromDashBoard extends AsyncTask<Void, Void, Bool
 			
 			@Override
 			public void run() {
-				parentActivity.stopDevicePropertyProgress();
 				parentActivity.setPropertyResponseData();
 			}
 		});

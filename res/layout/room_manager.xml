@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/sh_background"
+    tools:context=".ListViewActivity" >
+    
+    <EditText 
+        android:id="@+id/txtItem"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textColor="@color/white"
+        android:hint="@string/hintTxtItem"         
+        />
+
+    <Button 
+        android:id="@+id/btnAdd"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="0dp"
+        android:text="Add Room"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/txtItem"
+        />
+
+
+
+    <ListView
+        android:id="@+id/lvRoomList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:scrollingCache="false"
+        android:overScrollMode="always"
+        android:layout_below="@id/txtItem"
+        android:choiceMode="multipleChoice">
+
+    </ListView>
+    <com.sinepulse.app.custom.controls.CustomButton
+	    android:id="@+id/btnDel"
+	    android:layout_width="315dp"
+        android:layout_height="40dp"	    
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerInParent="true"
+	    android:background="@drawable/normal_rounded_button_bg"
+	    android:text="@string/lblBtnDel"
+	    android:drawableLeft="@android:drawable/ic_menu_delete" />
+
+
+</RelativeLayout>
+
+
+
+
+<!-- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <EditText 
+        android:id="@+id/txtItem"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/hintTxtItem"         
+        />
+
+    <Button 
+        android:id="@+id/btnAdd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="ADD"
+        android:layout_toRightOf="@id/txtItem"
+        />
+
+    <TextView 
+        android:id="@android:id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtItem"
+        android:text="@string/txtEmpty"
+        android:gravity="center_horizontal"        
+        />
+	
+	<ListView
+	    android:id="@android:id/list"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"	    
+	    android:layout_below="@id/txtItem"
+	    android:choiceMode="multipleChoice" >
+	</ListView>
+	
+	<Button
+	    android:id="@+id/btnDel"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"	    
+	    android:layout_alignParentBottom="true"
+	    android:text="@string/lblBtnDel" />
+	
+
+</RelativeLayout> -->

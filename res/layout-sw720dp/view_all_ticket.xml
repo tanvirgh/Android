@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/sh_background"
     android:orientation="vertical" >
 
     <com.sinepulse.app.custom.controls.CustomButton
@@ -80,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/tvSubject"
             android:layout_alignBottom="@+id/tvSubject"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="45dp"
             android:layout_toRightOf="@+id/tvSubject"
             android:gravity="center"
             android:text="Date"

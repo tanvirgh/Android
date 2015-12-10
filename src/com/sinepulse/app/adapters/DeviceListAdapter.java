@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.sinepulse.app.R;
+import com.sinepulse.app.activities.RoomManager;
 import com.sinepulse.app.asynctasks.AsyncProcessRequestFromDashboard;
 import com.sinepulse.app.asynctasks.AsyncSetDeviceStatus;
 import com.sinepulse.app.entities.Device;
@@ -26,7 +27,7 @@ import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
 import com.sinepulse.app.utils.JsonParser;
 
-public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
+public class DeviceListAdapter extends ArrayAdapter<Device> {
 
 	// protected static final String LOG_TAG =
 	// DeviceListAdapter.class.getSimpleName();
@@ -45,12 +46,12 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 	public ArrayList<Device> requestQueue = new ArrayList<Device>();
 	int onOffValue;
 
-	public DeviceListAdapterByRoom(Context roomManagerFragment, int layoutResourceId,
+	public DeviceListAdapter(Context context, int layoutResourceId,
 			ArrayList<Device> deviceList) {
-		super(roomManagerFragment, layoutResourceId, new ArrayList<Device>());
+		super(context, layoutResourceId, new ArrayList<Device>());
 		 addAll(deviceList);
 		this.layoutResourceId = layoutResourceId;
-		this.context = roomManagerFragment;
+		this.context = context;
 		this.deviceByRoomList = deviceList;
 	}
 
@@ -124,20 +125,40 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 		drh.rowID = position;
 		drh.tvdevice_name.setText(deviceByRoomEntity.getName());
 		if (deviceByRoomEntity.getDeviceTypeId() == 1) {
+			if (deviceByRoomEntity.IsOn){
+				drh.ivDeviceListItemImage
+				.setBackgroundResource(R.drawable.fan_on);
+			}else{
 			drh.ivDeviceListItemImage
-					.setBackgroundResource(R.drawable.fanmedium);
+					.setBackgroundResource(R.drawable.fan_off);
+			}
 		}
 		if (deviceByRoomEntity.getDeviceTypeId() == 2) {
+			if (deviceByRoomEntity.IsOn){
+				drh.ivDeviceListItemImage
+				.setBackgroundResource(R.drawable.bulbon);
+			}else{
 			drh.ivDeviceListItemImage
-					.setBackgroundResource(R.drawable.bulbmedium);
+					.setBackgroundResource(R.drawable.bulb_off);
+			}
 		}
 		if (deviceByRoomEntity.getDeviceTypeId() == 3) {
+			if (deviceByRoomEntity.IsOn){
+				drh.ivDeviceListItemImage
+				.setBackgroundResource(R.drawable.ac_medium);
+			}else{
 			drh.ivDeviceListItemImage
 					.setBackgroundResource(R.drawable.ac_medium);
+			}
 		}
 		if (deviceByRoomEntity.getDeviceTypeId() == 4) {
+			if (deviceByRoomEntity.IsOn){
+				drh.ivDeviceListItemImage
+				.setBackgroundResource(R.drawable.curtainmedium);
+			}else{
 			drh.ivDeviceListItemImage
 					.setBackgroundResource(R.drawable.curtainmedium_off);
+			}
 		}
 		drh.btdevice_value.setOnCheckedChangeListener(null);
 		if(deviceByRoomEntity.IsActionPending){
@@ -149,9 +170,9 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 			drh.btdevice_value.setEnabled(true);
 		}
 		if (deviceByRoomEntity.IsOn) {
-			drh.onOffImage.setImageResource(R.drawable.greenled_medium);
+			drh.onOffImage.setImageResource(R.drawable.greenled);
 		}else{
-			drh.onOffImage.setImageResource(R.drawable.redled_medium);
+			drh.onOffImage.setImageResource(R.drawable.redled);
 		}
 		
 		drh.btdevice_value.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -220,12 +241,18 @@ public class DeviceListAdapterByRoom extends ArrayAdapter<Device> {
 
 		@Override
 		public void onTaskPreExecute() {
-
+			CommonValues.getInstance().IsServerConnectionError=false;
+			RoomManager.startDeviceProgress();
 		}
 
 		@Override
 		public void onTaskPostExecute(Object object) {
-
+			RoomManager.stopDeviceProgress();
+			  if(CommonValues.getInstance().IsServerConnectionError==true){
+	            	CommonTask.ShowMessage(context, "Server is not reachable at this moment.");
+//	            	asyncSetDeviceStatus.cancel(true);
+	            	return;
+	            }
 			setStatusResponseData();
 			if (requestQueue.size() > 0) {
 				requestQueue.remove(0);
@@ -300,11 +327,13 @@ boolean touchEnabled = true;
 		
 		String setStatusUrl = CommonURL.getInstance().GetCommonURL
 				+ "/" + userId + "/status?id="+ deviceId+"&status="+onOffValue;
-		if (JsonParser.setStatusRequest(setStatusUrl) != null) {
+		if (JsonParser.setStatusRequest(setStatusUrl,context) != null &&  JsonParser.setStatusRequest(setStatusUrl,context)!="") {
 //			System.out.println(setStatusUrl);
 			return true;
-		}
+		}else{
+			CommonValues.getInstance().IsServerConnectionError=true;
 		return false;
+		}
 		
 	}
 

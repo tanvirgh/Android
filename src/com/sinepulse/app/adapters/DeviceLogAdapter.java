@@ -110,8 +110,7 @@ public class DeviceLogAdapter extends ArrayAdapter<DevicePropertyLog> {
 		}
 		dlh.rowID = position;
 		
-//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm a");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd  HH:mm ");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm a");
 		Long timeInMillis = Long.valueOf(deviceLogEntity.getLoggedAt().getTime());
 		Date LoggedAt = new Date(timeInMillis);
 		 dlh.tv_date.setText(formatter.format(LoggedAt));

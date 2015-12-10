@@ -7,6 +7,9 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.sinepulse.app.activities.ChangePasswordActivity;
+import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.fragments.ChangePasswordFragment;
+import com.sinepulse.app.fragments.ChangePasswordFragment_;
 
 /**
  * @author tanvir.ahmed

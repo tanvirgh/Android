@@ -30,12 +30,12 @@ public class CommonValues {
 	
 	public CameraMessageStatus CameraMessage;
 	public boolean IsServerConnectionError = false;
+	public boolean isStateChanged=false;
 	public UserProfile profile = new UserProfile();
 	public Summary summary = new Summary();
 	public int userId =0;
 	public String appToken="";
 	public String localIp="";
-	public String ApiKey="";
 	public ArrayList<Room> roomList=new ArrayList<Room>();
 	public ArrayList<Device> deviceList=new ArrayList<Device>();
 	public ArrayList<DeviceProperty> devicePropertyList=new ArrayList<DeviceProperty>();
@@ -64,8 +64,11 @@ public class CommonValues {
 	public int ErrorCode = CommonConstraints.NO_EXCEPTION;
 
 	static CommonValues commonValuesInstance;
+	public  String loginError;
 	public boolean logoutResponse=false;
 	public String connectionMode="";
+	public String ApiKey="";
+	public String nsdResolvedIp;
 
 	/**
 	 * Return Instance
@@ -81,7 +84,7 @@ public class CommonValues {
 	public static void initializeInstance() {
 		if (commonValuesInstance == null) {
 			commonValuesInstance = new CommonValues();
-//			checkApiVersion();
+			checkApiVersion();
 		}
 	}
 	// Constructor hidden because of singleton

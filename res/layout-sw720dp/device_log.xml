@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_marginRight="10dp"
     android:layout_marginTop="15dp"
-    android:background="@drawable/devicelog_bg"
+    android:background="@drawable/devicelogbg"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -31,25 +31,27 @@
             android:gravity="center"
             android:text="   User Log"
             android:textColor="#FFFFFF"
-            android:textSize="27sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
-    </RelativeLayout>
 
-    <ProgressBar
-        android:id="@+id/deviceLogProgressBar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerInParent="true"
-        android:visibility="visible" />
+       
+
+    </RelativeLayout>
+     <ProgressBar
+            android:id="@+id/deviceLogProgressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/rlOnlinePaymentHeading"
+       android:layout_below="@+id/rlOnlinePaymentHeading"
         android:layout_gravity="center"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="120dp"
+         android:layout_marginTop="120dp"
         android:orientation="vertical" >
 
         <!-- android:background="@drawable/userinfo_body" -->
@@ -58,38 +60,24 @@
             android:id="@+id/rllogsearch"
             android:layout_width="fill_parent"
             android:layout_height="55dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_marginTop="12dp"
-            android:layout_marginLeft="45dp" >
+           android:focusable="true"
+            android:focusableInTouchMode="true" >
 
             <!-- android:background="@drawable/online_payment_first_row" -->
 
-            <ImageView
-                android:id="@+id/ivClock"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:src="@drawable/logclock"
-                android:textStyle="bold" />
-
-            <com.sinepulse.app.custom.controls.CustomTextView
+            <TextView
                 android:id="@+id/tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-               android:layout_toRightOf="@+id/ivClock"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="20dp"
                 android:gravity="left"
                 android:text="Show Log Of  :   "
                 android:textColor="@color/black"
-                android:textSize="27sp"
+                android:textSize="23sp"
                 android:textStyle="bold" />
 
-            <com.sinepulse.app.custom.controls.CustomTextView
+            <TextView
                 android:id="@+id/tvToday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -98,10 +86,10 @@
                 android:gravity="left"
                 android:text="  Today  "
                 android:textColor="#bdbdbd"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <com.sinepulse.app.custom.controls.CustomTextView
+            <TextView
                 android:id="@+id/tvYesterday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,7 +99,7 @@
                 android:gravity="left"
                 android:text="   Yesterday  "
                 android:textColor="#2C5197"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </RelativeLayout>
 
@@ -119,8 +107,6 @@
             android:id="@+id/rllogsearchbyDate"
             android:layout_width="fill_parent"
             android:layout_height="55dp"
-            android:layout_marginTop="7dp"
-             android:layout_marginLeft="45dp"
             android:layout_below="@+id/rllogsearch"
             android:focusable="true"
             android:focusableInTouchMode="true" >
@@ -141,7 +127,6 @@
                 android:layout_width="150dp"
                 android:layout_height="35dp"
                 android:layout_centerVertical="true"
-                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/bDeliverydate"
                 android:background="@drawable/setting_username_background"
@@ -150,18 +135,18 @@
                 android:inputType="date"
                 android:textSize="18sp" />
 
-            <com.sinepulse.app.custom.controls.CustomTextView
+            <TextView
                 android:id="@+id/tvto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_toRightOf="@+id/etDateFrom"
                 android:text=" to"
                 android:textColor="@color/textColor"
-                android:textSize="24sp" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/etDateTo"
@@ -191,17 +176,17 @@
                 android:visibility="visible" />
         </RelativeLayout>
 
-        <com.sinepulse.app.custom.controls.CustomTextView
+        <TextView
             android:id="@+id/tvEmptyLog"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rllogsearchbyDate"
-            android:layout_marginBottom="10dp"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="No Log"
             android:textColor="@color/alert"
             android:textSize="18sp"
+            android:text="No Log"
             android:textStyle="bold" />
 
         <ListView
@@ -212,9 +197,8 @@
             android:layout_marginBottom="10dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="10dp"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="3dp"
-           tools:listitem="@layout/log_list_item" >
+            android:dividerHeight="2dp"
+            tools:listitem="@layout/log_list_item" >
         </ListView>
     </RelativeLayout>
 

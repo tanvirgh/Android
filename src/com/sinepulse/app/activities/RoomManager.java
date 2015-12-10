@@ -2,25 +2,18 @@ package com.sinepulse.app.activities;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -39,7 +32,6 @@ import android.widget.CalendarView;
 import android.widget.CalendarView.OnDateChangeListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -47,6 +39,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +48,8 @@ import android.widget.ViewFlipper;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
-import com.sinepulse.app.adapters.DeviceListAdapterByRoom;
+import com.sinepulse.app.activities.Home.GestureListener;
+import com.sinepulse.app.adapters.DeviceListAdapter;
 import com.sinepulse.app.adapters.DeviceLogAdapter;
 import com.sinepulse.app.adapters.RoomListAdapter;
 import com.sinepulse.app.asynctasks.AsyncGetCurtainPresetValuesFromRoom;
@@ -64,6 +58,7 @@ import com.sinepulse.app.asynctasks.AsyncGetDevices;
 import com.sinepulse.app.asynctasks.AsyncGetLogFromRoomFragment;
 import com.sinepulse.app.asynctasks.AsyncGetRoom;
 import com.sinepulse.app.asynctasks.AsyncGetSetPropertyFromRoom;
+import com.sinepulse.app.asynctasks.AsyncRefreshDashBoard;
 import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.entities.Device;
 import com.sinepulse.app.entities.DeviceProperty;
@@ -77,7 +72,7 @@ import com.sinepulse.app.utils.JsonParser;
 @EActivity(R.layout.room_status)
 public class RoomManager extends MainActionbarBase implements OnClickListener,
 		OnTouchListener, OnItemClickListener {
-
+	
 	Singleton m_Inst = Singleton.getInstance();
 	@ViewById(R.id.lvRoomList)
 	public ListView roomListView;
@@ -94,7 +89,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	@ViewById(R.id.roomlistProgressBar)
 	public ProgressBar roomlistProgressBar;
 	@ViewById(R.id.devicelistProgressBar)
-	public ProgressBar devicelistProgressBar;
+	public static ProgressBar devicelistProgressBar;
 	@ViewById(R.id.deviceLogProgressBar)
 	public ProgressBar deviceLogProgressBar;
 	@ViewById(R.id.devicePropertyProgressBar)
@@ -181,7 +176,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	@ViewById(R.id.tvDeviceLogHeadingText)
 	public TextView tvDeviceLogHeadingText;
 
-	public DeviceListAdapterByRoom dAdapter;
+	public DeviceListAdapter dAdapter;
 	boolean isRoomVisible = false;
 	int deviceTypeId;
 	int roomid;
@@ -191,17 +186,11 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	SimpleDateFormat formatter = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	Date d = new Date();
-	int year;
-	int month;
-	int day;
-	private DatePickerDialog fromDatePickerDialog = null;
-	private DatePickerDialog toDatePickerDialog = null;
-	private SimpleDateFormat dateFormatter;
-	RoundKnobButton rv;
+	RoundKnobButton rv ;
 	TextView tv2;
-	RelativeLayout panel;
-	Date tobesetFromDate = new Date();
-	Date tobesetToDate = new Date();
+	RelativeLayout panel ;
+	int ictValue=0;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -210,7 +199,6 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		RoomManager.context = this;
 		backState = RoomsState.INITIAL_STATE;
 		createMenuBar();
-		dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
 	}
 
@@ -220,8 +208,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		backState = RoomsState.INITIAL_STATE;
 		vfRoom.setDisplayedChild(0);
 //		btAddRoom.setText("Room List");
-		fromDate = dateFormatter.format(d).toString();
-		toDate = dateFormatter.format(d).toString();
+		fromDate=formatter.format(d).toString();
+		toDate=formatter.format(d).toString();
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_All_Room;
 		if (asyncGetRoomInfo != null) {
 			asyncGetRoomInfo.cancel(true);
@@ -237,17 +225,15 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				R.drawable.tool_bar));
 
 		mSupportActionBar.setIcon(R.drawable.sp_logo);
-		mSupportActionBar.setDisplayHomeAsUpEnabled(true);
 		mSupportActionBar.setTitle(R.string.create_room);
+		mSupportActionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
 			onBackPressed();
-			if (MainActionbarBase.stackIndex != null) {
-				MainActionbarBase.stackIndex.removeAllElements();
-			}
+			MainActionbarBase.stackIndex.removeAllElements();
 		}
 		if (item.getItemId() == R.id.menu_refresh) {
 			// Toast.makeText(this, "Please Wait..Page is Refreshing",
@@ -295,15 +281,17 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		String getRoomUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ String.valueOf(userId) + "/rooms";
 
-		if (JsonParser.getRoomRequest(getRoomUrl) != null) {
+		if (JsonParser.getRoomRequest(getRoomUrl) != null && JsonParser.getRoomRequest(getRoomUrl) !="") {
 			return true;
+		}else{
+			CommonValues.getInstance().IsServerConnectionError=true;
+//			asyncGetRoomInfo.cancel(true);
+			return false;
 		}
-		return false;
 	}
 
 	public void setupRoomListViewAdapter() {
-		if (CommonValues.getInstance().roomList != null && CommonValues.getInstance().roomList.size()>0 )
-		{
+		if (CommonValues.getInstance().roomList != null) {
 			rAdapter = new RoomListAdapter(this, R.layout.room_list_item,
 					CommonValues.getInstance().roomList);
 			roomListView.setAdapter(rAdapter);
@@ -311,11 +299,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			roomListView.setEnabled(true);
 			roomListView.setOnItemClickListener(this);
 		} else {
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "No data returned from Server");
+//			CommonTask.ShowNetworkChangeConfirmation(this, "Server Unreachable.Please log in again to continue.", showNetworkChangeEvent());
 		}
 
 	}
@@ -330,20 +315,20 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	public void setupDeviceListViewAdapter() {
 		// rAdapter.clear();
-		if (CommonValues.getInstance().deviceList != null && CommonValues.getInstance().deviceList.size()>0) {
-			dAdapter = new DeviceListAdapterByRoom(this, R.layout.device_item_view,
+		if (CommonValues.getInstance().deviceList != null) {
+			if(CommonValues.getInstance().deviceList.size()>0){
+			dAdapter = new DeviceListAdapter(this, R.layout.device_item_view,
 					CommonValues.getInstance().deviceList);
 			deviceListView.setAdapter(dAdapter);
 			dAdapter.setTouchEnabled(false);
 			deviceListView.setEnabled(true);
 			deviceListView.setOnItemClickListener(this);
+			}else{
+				CommonTask.ShowMessage(this, "No data returned from Server");
+			}
 		} else {
-//			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "No data returned from Server");
+//			CommonTask.ShowNetworkChangeConfirmation(this, "Server Unreachable.Please log in again to continue.", showNetworkChangeEvent());
 		}
 
 	}
@@ -363,11 +348,11 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			roomListView.setSelectionFromTop(position, view.getTop());
 			roomManagerEntity = rAdapter.getItemAtPosition(position);
 			btAddDevice.setText("  " + roomManagerEntity.Name);
-			// btAddDevice.setCompoundDrawablesWithIntrinsicBounds(
-			// R.drawable.icon_room_medium, 0, 0, 0);
-			// new DisplayRoomDetails(RoomManagerFragment.this,
-			// roomManagerEntity.Id);
 			roomid = roomManagerEntity.getId();
+			if(CommonValues.getInstance().deviceList!=null){
+				CommonValues.getInstance().deviceList.clear();
+				deviceListView.setAdapter(null);
+				}
 			LoadRoomDetailsContent(roomid);
 
 			// displayFragment(7);
@@ -423,10 +408,12 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		String getDevicePropertyUrl = CommonURL.getInstance().GetCommonURL
 				+ "/" + CommonValues.getInstance().userId + "/properties?id="
 				+ DeviceId;
-		if (JsonParser.getDevicePropertyRequest(getDevicePropertyUrl) != null) {
+		if (JsonParser.getDevicePropertyRequest(getDevicePropertyUrl) != null && JsonParser.getDevicePropertyRequest(getDevicePropertyUrl)!="") {
 			return true;
-		}
+		}else{
+		CommonValues.getInstance().IsServerConnectionError=false;
 		return false;
+		}
 
 	}
 
@@ -435,80 +422,74 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		hideRotatingKnob();
 		switch (deviceTypeId) {
 		case 1:// Fan
+//			getSupportActionBar().setTitle("Fan Control");
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
-			generateRotatingKnobView();
+			 generateRotatingKnobView();
 			rv.SetListener(new com.sinepulse.app.activities.RoundKnobButton.RoundKnobButtonListener() {
 
 				public void onRotate(final int percentage) {
 					tv2.post(new Runnable() {
-						@Override
 						public void run() {
-							tv2.setText(percentage + " %");
-							int value = percentage;
-							if (value == 99) {
-								value = 100;
-							}
-							// if(knobState){
-							sendSetProperty(CommonValues.getInstance().userId,
-									value, deviceId, 3);
-							loadDeviceProperty(
-									deviceManagerEntity.DeviceTypeId,
-									deviceManagerEntity.Id);
+							 tv2.setText(percentage + " %");
+//							if(knobState){
+							int value=percentage;
+//							sendSetProperty(CommonValues.getInstance().userId,
+//									value, deviceId, 3);
 						}
 					});
 				}
-
 			});
 			seekBar1.setVisibility(View.INVISIBLE);
 			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
-			spinner1.setVisibility(View.INVISIBLE);
+//			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 2:// Light
+//			getSupportActionBar().setTitle("Light Control");
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
-			generateRotatingKnobView();
-			rv.SetListener(new com.sinepulse.app.activities.RoundKnobButton.RoundKnobButtonListener() {
-
-				public void onRotate(final int percentage) {
-					tv2.post(new Runnable() {
-						@Override
-						public void run() {
-							tv2.setText(percentage + " %");
-							// if(knobState){
-							int value = percentage;
-							if (value == 99) {
-								value = 100;
+			toggleButton2.setVisibility(View.VISIBLE);
+			 generateRotatingKnobView();
+			 rv.SetListener(new com.sinepulse.app.activities.RoundKnobButton.RoundKnobButtonListener() {
+					
+					public void onRotate(final int percentage) {
+						tv2.post(new Runnable() {
+							public void run() {
+								 tv2.setText(percentage + " %");
+//								if(knobState){
+								int value=percentage;
+								if(value==99){
+									value=100;
+								}
+//								sendSetProperty(CommonValues.getInstance().userId,
+//										value, deviceId,2);
 							}
-							sendSetProperty(CommonValues.getInstance().userId,
-									value, deviceId, 2);
-							loadDeviceProperty(
-									deviceManagerEntity.DeviceTypeId,
-									deviceManagerEntity.Id);
-						}
-					});
-				}
-			});
+						});
+					}
+				});
 			seekBar1.setVisibility(View.INVISIBLE);
 			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
-			spinner1.setVisibility(View.INVISIBLE);
+//			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 3:// AC
-			// hideRotatingKnob();
+//			getSupportActionBar().setTitle("AC Control");
+//			hideRotatingKnob();
 			ivDevice.setImageDrawable(getResources().getDrawable(
 					R.drawable.ac_large));
 			seekBar1.setVisibility(View.INVISIBLE);
 			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.INVISIBLE);
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
-			spinner1.setVisibility(View.INVISIBLE);
+//			spinner1.setVisibility(View.INVISIBLE);
 			break;
 		case 4:// Curtain
-			// hideRotatingKnob();
-			spinner1.setVisibility(View.VISIBLE);
-			loadCurtainPresetValues(CommonValues.getInstance().userId,
-					deviceManagerEntity.Id);
+//			hideRotatingKnob();
+//			spinner1.setVisibility(View.VISIBLE);
+//			loadCurtainPresetValues(CommonValues.getInstance().userId,
+//					deviceManagerEntity.Id);
+//			getSupportActionBar().setTitle("Curtain Control");
 			seekBar1.setVisibility(View.INVISIBLE);
+			toggleButton2.setVisibility(View.INVISIBLE);
 			tvProgressValue.setVisibility(View.INVISIBLE);
 			porda.setVisibility(View.VISIBLE);
 			tvDeviceName.setText(deviceManagerEntity.Name + " ");
@@ -517,72 +498,66 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		default:
 			break;
 		}
-		if (CommonValues.getInstance().devicePropertyList != null && CommonValues.getInstance().devicePropertyList.size()>0) {
+		if (CommonValues.getInstance().devicePropertyList != null) {
 			for (int i = 0; i < CommonValues.getInstance().devicePropertyList
 					.size(); i++) {
 
 				setDevicePropertyValue(CommonValues.getInstance().devicePropertyList
-						.get(i));
+						.get(i),deviceTypeId);
 			}
 		} else {
-//			CommonTask.ShowMessage(this, "Network Problem.Please Retry.");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "Server Error, while fetching Device Propyerty from room tab.");
 		}
 	}
-
+	
 	ViewGroup parent;
-
 	public void generateRotatingKnobView() {
-		View C = findViewById(R.id.propertyMiddleView);
-		parent = (ViewGroup) C.getParent();
-		// panel = (RelativeLayout)
-		// findViewById(R.id.propertyMiddleView).getParent();
-		rv = new RoundKnobButton(this, R.drawable.stator, R.drawable.rotoron,
-				R.drawable.rotoroff, m_Inst.Scale(360), m_Inst.Scale(360));
+		 View C = findViewById(R.id.propertyMiddleView);
+		 parent = (ViewGroup) C.getParent();
+//		panel = (RelativeLayout) findViewById(R.id.propertyMiddleView).getParent();
+		 rv = new RoundKnobButton(this, R.drawable.stator,
+					R.drawable.rotoron, R.drawable.rotoroff, m_Inst.Scale(360),
+					m_Inst.Scale(360));
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		lp = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
 		lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-		// lp.setMargins(0, 0, 0, 200);
-		parent.addView(rv, lp);
-
+//			lp.setMargins(0, 0, 0, 200);
+		parent.addView(rv,lp);
+		
 		tv2 = new TextView(this);
 		tv2.setText("");
 		tv2.setTextColor(getResources().getColor(R.color.lime));
-		tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources()
-				.getDimension(R.dimen.font_size));
-		lp = new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, 
+		           getResources().getDimension(R.dimen.font_size));
+		lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
 		lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		lp.addRule(RelativeLayout.CENTER_IN_PARENT);
 		parent.addView(tv2, lp);
 	}
-
+	
 	public void hideRotatingKnob() {
-		if (parent != null) {
-			if (rv.getVisibility() == View.VISIBLE) {
+		if(parent!=null){
+			if(rv.getVisibility()==View.VISIBLE){
 				parent.removeView(rv);
 				rv.setVisibility(View.GONE);
 			}
-			if (tv2.getVisibility() == View.VISIBLE) {
+			if(tv2.getVisibility()==View.VISIBLE){
 				parent.removeView(tv2);
 				tv2.setVisibility(View.GONE);
 			}
 		}
-		/*
-		 * if(rv!=null){ panel.removeView(rv); } if(tv2!=null){
-		 * panel.removeView(tv2); }
-		 */
+		/*if(rv!=null){
+		panel.removeView(rv);
+		}
+		if(tv2!=null){
+		panel.removeView(tv2);
+		}*/
 	}
 
+	@SuppressWarnings("unused")
 	private void loadCurtainPresetValues(int userId, int deviceId) {
 		if (asyncGetCurtainPresetValuesFromRoom != null) {
 			asyncGetCurtainPresetValuesFromRoom.cancel(true);
@@ -593,8 +568,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 	}
 
-	public void setDevicePropertyValue(DeviceProperty property) {
-
+	public void setDevicePropertyValue(DeviceProperty property,Integer DeviceTypeId) {
+		if(deviceTypeId!=4){
 		switch (property.PropertyId) {
 		case 1:// OnOff
 			setHeaderImage(property.Value);
@@ -621,56 +596,58 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			}
 			break;
 		case 2:// Dimming Light
-			/*
-			 * seekBar1.setOnSeekBarChangeListener(null); if
-			 * (property.IsActionPending) {
-			 * seekBar1.setProgress(Integer.parseInt(property
-			 * .getPendingValue()));
-			 * tvProgressValue.setText("Dimming : "+property.getPendingValue() +
-			 * " %"); seekBar1.setEnabled(false); } else {
-			 * seekBar1.setProgress(Integer.parseInt(property.getValue()));
-			 * seekBar1.setEnabled(true);
-			 * tvProgressValue.setText("Dimming : "+property.getValue() + " %");
-			 * }
-			 */
+			/*seekBar1.setOnSeekBarChangeListener(null);
 			if (property.IsActionPending) {
-				rv.setRotorPercentage(Integer.parseInt(property
+				seekBar1.setProgress(Integer.parseInt(property
 						.getPendingValue()));
-				tv2.setText(property.getPendingValue() + " %");
-				rv.setEnabled(false);
+				tvProgressValue.setText("Dimming : "+property.getPendingValue() + " %");
+				seekBar1.setEnabled(false);
 			} else {
-				rv.setRotorPercentage(Integer.parseInt(property.getValue()));
-				rv.setEnabled(true);
-				tv2.setText(property.getValue() + " %");
-			}
+				seekBar1.setProgress(Integer.parseInt(property.getValue()));
+				seekBar1.setEnabled(true);
+				tvProgressValue.setText("Dimming : "+property.getValue() + " %");
+			}*/
+			/*if (property.IsActionPending) {
+				 rv.setRotorPercentage(Integer.parseInt(property
+							.getPendingValue()));
+				 tv2.setText(property.getPendingValue() + " %");
+				 rv.setEnabled(false);
+				} else {
+					rv.setRotorPercentage(Integer.parseInt(property.getValue()));
+					rv.setEnabled(true);
+					tv2.setText(property.getValue() + " %");
+				}*/
+			rv.setRotorPercentage(100);
+			tv2.setText("100%");
 
 			break;
 		case 3:// Dimming Fan(Knob)
-			/*
-			 * seekBar1.setOnSeekBarChangeListener(null); if
-			 * (property.IsActionPending) {
-			 * seekBar1.setProgress(Integer.parseInt(property
-			 * .getPendingValue())); seekBar1.setEnabled(false);
-			 * tvProgressValue.setText("Dimming : "+property.getPendingValue() +
-			 * " %"); } else {
-			 * seekBar1.setProgress(Integer.parseInt(property.getValue()));
-			 * seekBar1.setEnabled(true);
-			 * tvProgressValue.setText("Dimming : "+property.getValue() + " %");
-			 * }
-			 */
+			/*seekBar1.setOnSeekBarChangeListener(null);
 			if (property.IsActionPending) {
-				rv.setRotorPercentage(Integer.parseInt(property
+				seekBar1.setProgress(Integer.parseInt(property
 						.getPendingValue()));
-				tv2.setText(property.getPendingValue() + " %");
-				rv.setEnabled(false);
+				seekBar1.setEnabled(false);
+				tvProgressValue.setText("Dimming : "+property.getPendingValue() + " %");
 			} else {
-				rv.setRotorPercentage(Integer.parseInt(property.getValue()));
-				rv.setEnabled(true);
-				tv2.setText(property.getValue() + " %");
-			}
+				seekBar1.setProgress(Integer.parseInt(property.getValue()));
+				seekBar1.setEnabled(true);
+				tvProgressValue.setText("Dimming : "+property.getValue() + " %");
+			}*/
+//			if (property.IsActionPending) {
+//				 rv.setRotorPercentage(Integer.parseInt(property
+//							.getPendingValue()));
+//				 tv2.setText(property.getPendingValue() + " %");
+//				 rv.setEnabled(false);
+//				} else {
+//					rv.setRotorPercentage(Integer.parseInt(property.getValue()));
+//					rv.setEnabled(true);
+//					tv2.setText(property.getValue() + " %");
+//				}
+			rv.setRotorPercentage(100);
+			tv2.setText("100%");
 			break;
 		case 6:// Preset
-			if (property.IsActionPending) {
+			/*if (property.IsActionPending) {
 				for (int i = 0; i < CommonValues.getInstance().presetList
 						.size(); i++) {
 					if (CommonValues.getInstance().presetList.get(i).Id == Integer
@@ -690,45 +667,80 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				}
 
 			}
-			break;
+			break;*/
 		default:
 			break;
 		}
+		}else{
+			setHeaderImage(property.Value);
+			if(property.PropertyId==1){
+				
+				if (property.IsActionPending) {
+					if (property.PendingValue.equals("1")) {
+						list_image.setImageResource(R.drawable.redled_large);
+					} else {
+						list_image.setImageResource(R.drawable.greenled_large);
+					}
+
+				} else {
+					if (property.Value.equals("1")) {
+						list_image.setImageResource(R.drawable.greenled_large);
+					} else {
+						list_image.setImageResource(R.drawable.redled_large);
+					}
+				}
+				
+//			if (property.Value.equals("1")) {
+//				list_image.setImageResource(R.drawable.greenled_large);
+//			} else {
+//				list_image.setImageResource(R.drawable.redled_large);
+//			}
+		}
+		}
+			
+		if(deviceTypeId!=4){
 		toggleButton2.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
+				buttonView.setEnabled(false);
 				sendSetProperty(CommonValues.getInstance().userId,
 						(isChecked ? 1 : 0), deviceId, 1);
 				// toggleButton2.setEnabled(false);
 			}
 		});
-		/*
-		 * seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-		 * 
-		 * @Override public void onStopTrackingTouch(SeekBar seekBar) {
-		 * seekBarProgressValue = seekBar.getProgress();
-		 * seekBar1.setEnabled(false); if (deviceManagerEntity.DeviceTypeId ==
-		 * 1) { sendSetProperty(CommonValues.getInstance().userId,
-		 * seekBarProgressValue, deviceId, 3); } else if
-		 * (deviceManagerEntity.DeviceTypeId == 2) {
-		 * sendSetProperty(CommonValues.getInstance().userId,
-		 * seekBarProgressValue, deviceId, 2); }
-		 * tvProgressValue.setText("Dimming : "
-		 * +String.valueOf(seekBarProgressValue) + " %"); }
-		 * 
-		 * @Override public void onStartTrackingTouch(SeekBar seekBar) { }
-		 * 
-		 * @Override public void onProgressChanged(SeekBar seekBar, int
-		 * progress, boolean fromUser) { // seekBarProgress=progress; //
-		 * sendSetPropertyForSeekBar
-		 * (CommonValues.getInstance().userId,progress,2,property.DeviceId); }
-		 * });
-		 */
+		}
+		/*seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				seekBarProgressValue = seekBar.getProgress();
+				seekBar1.setEnabled(false);
+				if (deviceManagerEntity.DeviceTypeId == 1) {
+					sendSetProperty(CommonValues.getInstance().userId,
+							seekBarProgressValue, deviceId, 3);
+				} else if (deviceManagerEntity.DeviceTypeId == 2) {
+					sendSetProperty(CommonValues.getInstance().userId,
+							seekBarProgressValue, deviceId, 2);
+				}
+				tvProgressValue.setText("Dimming : "+String.valueOf(seekBarProgressValue)
+						+ " %");
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				// seekBarProgress=progress;
+				// sendSetPropertyForSeekBar(CommonValues.getInstance().userId,progress,2,property.DeviceId);
+			}
+		});*/
 		up.setOnTouchListener(this);
 		down.setOnTouchListener(this);
-		right.setOnTouchListener(this);
-		left.setOnTouchListener(this);
+//		right.setOnTouchListener(this);
+//		left.setOnTouchListener(this);
 		pause.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -736,7 +748,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 						7);
 			}
 		});
-		reset.setOnClickListener(new OnClickListener() {
+		/*reset.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				sendSetProperty(CommonValues.getInstance().userId, 1, deviceId,
@@ -751,7 +763,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 						9);
 				calibration.setEnabled(false);
 			}
-		});
+		});*/
 	}
 
 	public void sendSetProperty(int userId, int value, int DeviceId,
@@ -770,11 +782,13 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		String setPropertyUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ userId + "/property?id=" + deviceId + "&propertyid="
 				+ propertyId + "&value=" + value;
-		System.out.println(setPropertyUrl);
-		if (JsonParser.setProptyerRequest(setPropertyUrl) != null) {
+//		System.out.println(setPropertyUrl);
+		if (JsonParser.setProptyerRequest(setPropertyUrl) != null && JsonParser.setProptyerRequest(setPropertyUrl)!="") {
 			return true;
-		}
+		}else{
+			CommonValues.getInstance().IsServerConnectionError=true;
 		return false;
+		}
 
 	}
 
@@ -783,10 +797,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			for (int i = 0; i < CommonValues.getInstance().devicePropertyList
 					.size(); i++) {
 				setDevicePropertyValue(CommonValues.getInstance().devicePropertyList
-						.get(i));
+						.get(i),deviceTypeId);
 			}
 		} else {
-			CommonTask.ShowMessage(this, "Network Error.Please try Later");
+			CommonTask.ShowMessage(this, "Server Error,while updating device property value");
 		}
 
 	}
@@ -843,142 +857,130 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				tvEmptyLog.setText("Sorry! No Log Available");
 			}
 		} else {
-//			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "Server Error while Fetching log data from room tab.");
 		}
 
-		// }
+	}
 
-		// Dialog dialog;
-		//
-		// private void showCalendar(final View v) {
-		// dialog = new Dialog(this);
-		// dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		// dialog.setContentView(R.layout.delivery_date);
-		// dialog.setCancelable(true);
-		//
-		// final CalendarView calendarView1 = (CalendarView) dialog
-		// .findViewById(R.id.calendarView1);
-		//
-		// calendarView1.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// calendarView1.getDate();
-		//
-		// }
-		// });
-		// calendarView1.setOnDateChangeListener(new OnDateChangeListener() {
-		//
-		// @Override
-		// @SuppressWarnings("deprecation")
-		// public void onSelectedDayChange(CalendarView view, int year,
-		// int month, int dayOfMonth) {
-		// tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-		// tvToday.setTextColor(Color.parseColor("#bdbdbd"));
-		// SimpleDateFormat formatter = new SimpleDateFormat(
-		// "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-		// if (etDateFrom != null && v.getId() == R.id.etDateFrom) {
-		// fromDate = formatter.format(
-		// new Date(year - 1900, month, dayOfMonth))
-		// .toString();
-		// String delims = "T";
-		// String[] tokens = fromDate.split(delims);
-		// try {
-		// Date firstDate = formatter.parse(fromDate);
-		// Date CurrentDate = d;
-		// if(firstDate.after(CurrentDate)){
-		// showFirstDateError();
-		// }else{
-		// etDateFrom.setText(tokens[0]);
-		// }
-		// } catch (ParseException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// if (etDateTo != null && v.getId() == R.id.etDateTo) {
-		// if (etDateFrom.getText().toString().length() > 0) {
-		// toDate = formatter.format(
-		// new Date(year - 1900, month, dayOfMonth))
-		// .toString();
-		// String delims = "T";
-		// String[] tokens = toDate.split(delims);
-		// if (validateLastDateInput()) {
-		// etDateTo.setText(tokens[0]);
-		// bSearch.setVisibility(View.VISIBLE);
-		// }
-		// } else {
-		// showError();
-		// }
-		// }
-		// // dialog.cancel();
-		// }
-		// });
-		//
-		// // Date ok button
-		// Button button = (Button) dialog.findViewById(R.id.Button01);
-		// button.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// dialog.cancel();
-		//
-		// }
-		// });
-		// // Date cancel button
-		// Button button2 = (Button) dialog.findViewById(R.id.Button02);
-		// button2.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// dialog.cancel();
-		//
-		// }
-		// });
-		//
-		// // now that the dialog is set up, it's time to show it
-		// dialog.show();
+	Dialog dialog;
 
-		/*
-		 * bSearch.setOnClickListener(new OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) {
-		 * tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-		 * tvToday.setTextColor(Color.parseColor("#bdbdbd")); if
-		 * (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-		 * deviceLogListView.setAdapter(null); dLogAdapter.clear(); }
-		 * LoadDeviceLogContent(deviceManagerEntity.Id, 3, stserverDate,
-		 * lstserverDate);
-		 * 
-		 * } });
-		 */
+	private void showCalendar(final View v) {
+		dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.delivery_date);
+		dialog.setCancelable(true);
+
+		final CalendarView calendarView1 = (CalendarView) dialog
+				.findViewById(R.id.calendarView1);
+
+		calendarView1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				calendarView1.getDate();
+
+			}
+		});
+		calendarView1.setOnDateChangeListener(new OnDateChangeListener() {
+
+			@Override
+			@SuppressWarnings("deprecation")
+			public void onSelectedDayChange(CalendarView view, int year,
+					int month, int dayOfMonth) {
+				tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
+				tvToday.setTextColor(Color.parseColor("#bdbdbd"));
+				SimpleDateFormat formatter = new SimpleDateFormat(
+						"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+				if (etDateFrom != null && v.getId() == R.id.etDateFrom) {
+					fromDate = formatter.format(
+							new Date(year - 1900, month, dayOfMonth))
+							.toString();
+					String delims = "T";
+					String[] tokens = fromDate.split(delims);
+					try {
+						Date firstDate = formatter.parse(fromDate);
+						Date CurrentDate = d;
+						if(firstDate.after(CurrentDate)){
+							showFirstDateError();
+						}else{
+							etDateFrom.setText(tokens[0]);
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (etDateTo != null && v.getId() == R.id.etDateTo) {
+					if (etDateFrom.getText().toString().length() > 0) {
+						toDate = formatter.format(
+								new Date(year - 1900, month, dayOfMonth))
+								.toString();
+						String delims = "T";
+						String[] tokens = toDate.split(delims);
+						 if (validateLastDateInput()) {
+								etDateTo.setText(tokens[0]);
+								bSearch.setVisibility(View.VISIBLE);
+								}
+					} else {
+						showError();
+					}
+				}
+				// dialog.cancel();
+			}
+		});
+
+		// Date ok button
+		Button button = (Button) dialog.findViewById(R.id.Button01);
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.cancel();
+
+			}
+		});
+		// Date cancel button
+		Button button2 = (Button) dialog.findViewById(R.id.Button02);
+		button2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.cancel();
+
+			}
+		});
+
+		// now that the dialog is set up, it's time to show it
+		dialog.show();
+
+		bSearch.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
+					deviceLogListView.setAdapter(null);
+					dLogAdapter.clear();
+				}
+				LoadDeviceLogContent(deviceManagerEntity.Id, 3, fromDate,
+						toDate);
+
+			}
+		});
 
 	}
 
 	private boolean validateLastDateInput() {
+		Date CurrentDate = d;
 		try {
-			// Date firstDate = dateFormatter.parse(stDate);
-			Date lastDate = dateFormatter.parse(lstDate);
-			Date CurrentDate = d;
-			if (etDateFrom.getText().toString().length() == 0) {
-				CommonTask.ShowMessage(this, "Please select Start Date first.");
+			Date firstDate = formatter.parse(fromDate);
+			Date lastDate = formatter.parse(toDate);
+			if (lastDate.after(CurrentDate)) {
+				CommonTask.ShowMessage(this, "To date can't be greater than current date");
 				etDateTo.setText("");
 				return false;
-			} else if (lastDate.after(CurrentDate)) {
-				CommonTask.ShowMessage(this,
-						"End Date can't be greater than Current Date");
-				etDateTo.setText("");
-				return false;
-			} else if (lastDate.before(tobesetFromDate)) {
-				CommonTask.ShowMessage(this,
-						"End Date can't be less than Start date");
+			}else if( lastDate.before(firstDate)){
+				CommonTask.ShowMessage(this, "To date can't be less than From date");
 				etDateTo.setText("");
 				return false;
 			}
-
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -988,12 +990,10 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	}
 
 	public void showError() {
-		CommonTask.ShowMessage(this, "Please select Start Date First.");
+		CommonTask.ShowMessage(this, "Please select FromDate First");
 	}
-
 	public void showFirstDateError() {
-		CommonTask.ShowMessage(this,
-				"Start Date can't be greater than Current Date.");
+		CommonTask.ShowMessage(this, "From Date should  be less than current date");
 	}
 
 	public boolean sendGetDeviceRequest(int userId, int roomId) {
@@ -1002,10 +1002,13 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 				+ String.valueOf(userId) + "/devices?roomid=" + roomId
 				+ "&typeId=0";
 
-		if (JsonParser.getDevicesRequest(getDeviceUrl) != null) {
+		if (JsonParser.getDevicesRequest(getDeviceUrl) != null && JsonParser.getDevicesRequest(getDeviceUrl) !="") {
 			return true;
-		}
+		}else{
+			CommonValues.getInstance().IsServerConnectionError=true;
+//			asyncGetDeviceInfo.cancel(true);
 		return false;
+		}
 
 	}
 
@@ -1027,9 +1030,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		case INITIAL_STATE:
 			// MainActionbarBase.currentMenuIndex = MainActionbarBase
 			// .getLastIndex();
-			if (MainActionbarBase.stackIndex != null) {
-				MainActionbarBase.stackIndex.removeAllElements();
-			}
+			MainActionbarBase.stackIndex.removeAllElements();
 			// fragmentBackStack.clear();
 			Intent homeIntent = new Intent(this, Home_.class);
 			homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -1055,22 +1056,14 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			LoadRoomDetailsContent(roomid);
 			break;
 		case VIEWLOG_STATE:
-//			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-//				// deviceLogListView.setAdapter(null);
-//				// dLogAdapter.clear();
-//			}
-			etDateFrom.setText("");
-			etDateTo.setText("");
-			// bSearch.setVisibility(View.INVISIBLE);
-			if(deviceTypeId==1){
-				getSupportActionBar().setTitle("Fan Control");
-				}else if(deviceTypeId==2){
-					getSupportActionBar().setTitle("Light Control");
-				}else if(deviceTypeId==3){
-					getSupportActionBar().setTitle("Ac Control");
-				}else if(deviceTypeId==4){
-					getSupportActionBar().setTitle("Curtain Control");
-				}
+			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
+				// deviceLogListView.setAdapter(null);
+				// dLogAdapter.clear();
+			}
+//			etDateFrom.setText("");
+//			etDateTo.setText("");
+//			bSearch.setVisibility(View.INVISIBLE);
+//			getSupportActionBar().setTitle("Device Control");
 			vfRoom.setDisplayedChild(2);
 			backState = RoomsState.PROPERTY_STATE;
 			loadDeviceProperty(deviceManagerEntity.DeviceTypeId,
@@ -1087,8 +1080,9 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 	@Override
 	public void onResume() {
 		CommonValues.getInstance().roomManager = (RoomManager_) this;
+//		getSupportActionBar().setTitle(R.string.create_room);
 		if (vfRoom.getDisplayedChild() == 0) {
-//			getSupportActionBar().setTitle("Rooms");
+			
 			if (asyncGetRoomInfo != null) {
 				asyncGetRoomInfo.cancel(true);
 			}
@@ -1098,20 +1092,12 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 		}
 		if (vfRoom.getDisplayedChild() == 1) {
-//			getSupportActionBar().setTitle("Devices");
 			LoadRoomDetailsContent(roomid);
 
 		}
 		if (vfRoom.getDisplayedChild() == 2) {
 			loadDeviceProperty(deviceManagerEntity.DeviceTypeId,
 					deviceManagerEntity.Id);
-
-		}
-		if (vfRoom.getDisplayedChild() == 3) {
-//			getSupportActionBar().setTitle("Activities");
-			bSearch.setVisibility(View.INVISIBLE);
-			LoadDeviceLogContent(deviceManagerEntity.Id, 1, formatter.format(d)
-					.toString(), formatter.format(d).toString());
 
 		}
 		bRoom.setBackground(getResources().getDrawable(R.drawable.roomselected));
@@ -1130,30 +1116,25 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		}
 	}
 
-	public void startDeviceProgress() {
+	public static void startDeviceProgress() {
 		devicelistProgressBar.setVisibility(View.VISIBLE);
 	}
 
-	public void stopDeviceProgress() {
+	public static void stopDeviceProgress() {
 		if (null != devicelistProgressBar && devicelistProgressBar.isShown()) {
-
 			devicelistProgressBar.setVisibility(View.GONE);
 		}
 
 	}
-
-	@Override
 	@Click({ R.id.bCamera, R.id.bRoom, R.id.bDashboard, R.id.btShowLog,
-			R.id.etDateFrom, R.id.etDateTo, R.id.tvToday, R.id.tvYesterday,
-			R.id.bSearch })
+			R.id.etDateFrom, R.id.etDateTo, R.id.tvToday, R.id.tvYesterday })
 	public void onClick(View v) {
+		CommonValues.getInstance().isStateChanged=false;
 		// fragmentBackStack.clear();
 		switch (v.getId()) {
 		case R.id.bCamera:
 			// cancelAsyncOnVisibleFlipper();
-			if (MainActionbarBase.stackIndex != null) {
-				MainActionbarBase.stackIndex.removeAllElements();
-			}
+			MainActionbarBase.stackIndex.removeAllElements();
 			currentFragment = CAMERA_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(6)))
 				stackIndex.push(String.valueOf(6));
@@ -1162,11 +1143,16 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			startActivity(cameraIntent);
 			break;
 		case R.id.bRoom:
+			if (vfRoom.getDisplayedChild() == 0) {
+				return;
+			} else {
+				getSupportActionBar().setTitle("Rooms");
+				new AsyncGetRoom(RoomManager.this,CommonValues.getInstance().userId).execute();
+				vfRoom.setDisplayedChild(0);
+			}
 			break;
 		case R.id.bDashboard:
-			if (MainActionbarBase.stackIndex != null) {
-				MainActionbarBase.stackIndex.removeAllElements();
-			}
+			MainActionbarBase.stackIndex.removeAllElements();
 			// cancelAsyncOnVisibleFlipper();
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
 			Home.navDrawerAdapter.setSelectedPosition(ALLDEVICE_FRAGMENT);
@@ -1177,7 +1163,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			// ((MainActionbarBase) getActivity()).displayFragment(0);
 			break;
 		case R.id.btShowLog:
-			getSupportActionBar().setTitle("Activities");
+			getSupportActionBar().setTitle("Device Activity");
 			vfRoom.setInAnimation(CommonTask.inFromRightAnimation());
 			vfRoom.setOutAnimation(CommonTask.outToLeftAnimation());
 			backState = RoomsState.VIEWLOG_STATE;
@@ -1185,71 +1171,39 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			tvDeviceLogHeadingText.setText("  " + deviceManagerEntity.Name);
 			if (deviceManagerEntity.DeviceTypeId == 1) {
 				tvDeviceLogHeadingText.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.logfan, 0, 0, 0);
+						R.drawable.fan_on, 0, 0, 0);
 			} else if (deviceManagerEntity.DeviceTypeId == 2) {
 				tvDeviceLogHeadingText.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.logbulb, 0, 0, 0);
+						R.drawable.bulbon, 0, 0, 0);
 			} else if (deviceManagerEntity.DeviceTypeId == 3) {
 				tvDeviceLogHeadingText.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.logac, 0, 0, 0);
+						R.drawable.ac_medium, 0, 0, 0);
 			} else if (deviceManagerEntity.DeviceTypeId == 4) {
 				tvDeviceLogHeadingText.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.logcurtain, 0, 0, 0);
+						R.drawable.curtainmedium, 0, 0, 0);
 			}
-			tvToday.setTextColor(Color.parseColor("#6699ff"));
+			tvToday.setTextColor(Color.parseColor("#2C5197"));
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-			etDateFrom.setInputType(InputType.TYPE_NULL);
-			etDateTo.setInputType(InputType.TYPE_NULL);
-			// etDateFrom.setText(fromDate);
-			// etDateTo.setText(toDate,#2C5197);
-			etDateFrom.setHint("Start Date");
-			etDateTo.setHint("End Date");
-			etDateFrom.requestFocus();
-			setDateTimeField();
-			bSearch.setVisibility(View.INVISIBLE);
-
+			String delims ="T" ;
+		    String[] tokens = formatter.format(d).toString().split(delims);
+		    etDateFrom.setText(tokens[0]);
+		    etDateTo.setText(tokens[0]);
 			LoadDeviceLogContent(deviceManagerEntity.Id, 1, formatter.format(d)
 					.toString(), formatter.format(d).toString());
 			break;
 		case R.id.etDateFrom:
-			if (fromDatePickerDialog != null)
-				fromDatePickerDialog.show();
-			fromDatePickerDialog.setOnCancelListener(new OnCancelListener() {
-
-				@Override
-				public void onCancel(DialogInterface dialog) {
-
-					fromDatePickerDialog.getDatePicker().getCalendarView()
-							.setDate(tobesetFromDate.getTime());
-				}
-			});
-			bSearch.setVisibility(View.VISIBLE);
-			break;
 		case R.id.etDateTo:
-			// showCalendar(v);
-			if (toDatePickerDialog != null)
-				toDatePickerDialog.show();
-			toDatePickerDialog.setOnCancelListener(new OnCancelListener() {
-
-				@Override
-				public void onCancel(DialogInterface dialog) {
-
-					toDatePickerDialog.getDatePicker().getCalendarView()
-							.setDate(tobesetToDate.getTime());
-				}
-			});
+			showCalendar(v);
 			break;
 		case R.id.tvToday:
-			/*
-			 * String tDelims = "T"; String[] tTokens
-			 * =dateFormatter.format(d).toString().split(tDelims);
-			 */
-			etDateFrom.setText("");
-			etDateTo.setText("");
-			 bSearch.setVisibility(View.INVISIBLE);
+			String tDelims ="T" ;
+		    String[] tTokens = formatter.format(d).toString().split(tDelims);
+			etDateFrom.setText(tTokens[0]);
+			etDateTo.setText(tTokens[0]);
+//			bSearch.setVisibility(View.INVISIBLE);
 			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-			tvToday.setTextColor(Color.parseColor("#6699ff"));
-			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
+			tvToday.setTextColor(Color.parseColor("#2C5197"));
+			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 				deviceLogListView.setAdapter(null);
 				dLogAdapter.clear();
 			}
@@ -1260,51 +1214,25 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 			if (tvEmptyLog.isShown()) {
 				tvEmptyLog.setVisibility(View.GONE);
 			}
-			/*
-			 * String yDelims = "T"; String[] yTokens = dateFormatter
-			 * .format(d.getTime() - 24 * 60 * 60 * 1000).toString()
-			 * .split(yDelims);
-			 */
-			etDateFrom.setText("");
-			etDateTo.setText("");
-			 bSearch.setVisibility(View.INVISIBLE);
-			tvYesterday.setTextColor(Color.parseColor("#6699ff"));
+			String yDelims ="T" ;
+		    String[] yTokens = formatter.format(d.getTime() - 24 * 60 * 60 * 1000).toString().split(yDelims);
+			etDateFrom.setText(yTokens[0]);
+			etDateTo.setText(yTokens[0]);
+//			bSearch.setVisibility(View.INVISIBLE);
+			tvYesterday.setTextColor(Color.parseColor("#2C5197"));
 			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
-			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
+			if (CommonValues.getInstance().deviceLogDetailList.size() > 0) {
 				deviceLogListView.setAdapter(null);
 				dLogAdapter.clear();
 			}
 			LoadDeviceLogContent(deviceManagerEntity.DeviceTypeId, 2, formatter
-					.format(d.getTime() - 24 * 60 * 60 * 1000).toString(),
-					formatter.format(d.getTime() - 24 * 60 * 60 * 1000)
-							.toString());
-			break;
-		case R.id.bSearch:
-			tvYesterday.setTextColor(Color.parseColor("#bdbdbd"));
-			tvToday.setTextColor(Color.parseColor("#bdbdbd"));
-			if (CommonValues.getInstance().deviceLogDetailList!=null && CommonValues.getInstance().deviceLogDetailList.size() > 0) {
-				deviceLogListView.setAdapter(null);
-				dLogAdapter.clear();
-			}
-			if(validateEmptyDateInput()){
-			LoadDeviceLogContent(deviceManagerEntity.Id, 3, stserverDate,
-					lstserverDate);
-			}
-
+					.format(d.getTime()-24*60*60*1000).toString(), formatter.format(d.getTime()-24*60*60*1000).toString());
 			break;
 
 		default:
 			break;
 		}
 
-	}
-	
-	public boolean validateEmptyDateInput() {
-		 if(etDateTo.getText().toString().length() == 0){
-			CommonTask.ShowMessage(this, "End Date Can't be blank");
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -1377,7 +1305,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		String[] presetValues = getCurtainPresetValues();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				R.layout.spinner_item, presetValues);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner1.setAdapter(adapter);
 		spinner1.setSelection(presetItemPosition + 1);
 		spinner1.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -1424,20 +1352,22 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 
 		switch (v.getId()) {
 		case R.id.up:
-			curtainMultiplier = 1;
-			curtainPropertyId = 4;
+//			curtainMultiplier = 1;
+//			curtainPropertyId = 4;
+			ictValue=0;
 			break;
 		case R.id.down:
-			curtainMultiplier = -1;
-			curtainPropertyId = 4;
+//			curtainMultiplier = -1;
+//			curtainPropertyId = 4;
+			ictValue=1;
 			break;
 		case R.id.right:
-			curtainMultiplier = 1;
-			curtainPropertyId = 5;
+//			curtainMultiplier = 1;
+//			curtainPropertyId = 5;
 			break;
 		case R.id.left:
-			curtainMultiplier = -1;
-			curtainPropertyId = 5;
+//			curtainMultiplier = -1;
+//			curtainPropertyId = 5;
 			break;
 		default:
 			break;
@@ -1460,8 +1390,8 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
 			Log.d("Tap", "Double");
-			sendSetProperty(CommonValues.getInstance().userId,
-					10 * curtainMultiplier, deviceId, curtainPropertyId);
+//			sendSetProperty(CommonValues.getInstance().userId,
+//					10 * curtainMultiplier, deviceId, curtainPropertyId);
 			return true;
 		}
 
@@ -1469,16 +1399,18 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			Log.d("Tap", "Single");
+//			sendSetProperty(CommonValues.getInstance().userId,
+//					5 * curtainMultiplier, deviceId, curtainPropertyId);
 			sendSetProperty(CommonValues.getInstance().userId,
-					5 * curtainMultiplier, deviceId, curtainPropertyId);
+					ictValue, deviceId, 1);
 			return super.onSingleTapUp(e);
 		}
 
 		@Override
 		public void onLongPress(MotionEvent e) {
 			Log.d("Tap", "Long");
-			sendSetProperty(CommonValues.getInstance().userId,
-					15 * curtainMultiplier, deviceId, curtainPropertyId);
+//			sendSetProperty(CommonValues.getInstance().userId,
+//					15 * curtainMultiplier, deviceId, curtainPropertyId);
 			super.onLongPress(e);
 		}
 	}
@@ -1512,7 +1444,7 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 						R.drawable.curtain_large));
 			} else {
 				ivDevice.setImageDrawable(getResources().getDrawable(
-						R.drawable.curtain_large_off));
+						R.drawable.curtain_large));
 			}
 
 			break;
@@ -1520,79 +1452,6 @@ public class RoomManager extends MainActionbarBase implements OnClickListener,
 		default:
 			break;
 		}
-
-	}
-
-	String stDate = "";
-	String lstDate = "";
-	String stserverDate = formatter.format(d).toString();
-	String lstserverDate = formatter.format(d).toString();
-	Calendar newDate = Calendar.getInstance();
-
-	private void setDateTimeField() {
-		Calendar newCalendar = Calendar.getInstance();
-		fromDatePickerDialog = new DatePickerDialog(this,
-				new OnDateSetListener() {
-
-					public void onDateSet(DatePicker view, int year,
-							int monthOfYear, int dayOfMonth) {
-						newDate.set(year, monthOfYear, dayOfMonth);
-
-						try {
-							Date fromDate = dateFormatter.parse(dateFormatter
-									.format(newDate.getTime()));
-							stDate = dateFormatter.format(newDate.getTime());
-							stserverDate = formatter.format(newDate.getTime());
-							Date CurrentDate = new Date();
-							if (fromDate.after(CurrentDate)) {
-								showFirstDateError();
-							} else {
-								etDateFrom.setText(dateFormatter.format(newDate
-										.getTime()));
-							}
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
-						try {
-							tobesetFromDate = dateFormatter.parse(etDateFrom
-									.getText().toString());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
-
-				}, newCalendar.get(Calendar.YEAR),
-				newCalendar.get(Calendar.MONTH),
-				newCalendar.get(Calendar.DAY_OF_MONTH));
-
-		toDatePickerDialog = new DatePickerDialog(this,
-				new OnDateSetListener() {
-
-					public void onDateSet(DatePicker view, int year,
-							int monthOfYear, int dayOfMonth) {
-						Calendar newDate = Calendar.getInstance();
-						newDate.set(year, monthOfYear, dayOfMonth);
-						lstDate = dateFormatter.format(newDate.getTime());
-						lstserverDate = formatter.format(newDate.getTime());
-						if (validateLastDateInput()) {
-							etDateTo.setText(dateFormatter.format(newDate
-									.getTime()));
-
-						}
-						try {
-							tobesetToDate = dateFormatter.parse(etDateTo
-									.getText().toString());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-
-				}, newCalendar.get(Calendar.YEAR),
-				newCalendar.get(Calendar.MONTH),
-				newCalendar.get(Calendar.DAY_OF_MONTH));
 
 	}
 

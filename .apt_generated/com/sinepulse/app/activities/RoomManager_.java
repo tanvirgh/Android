@@ -92,42 +92,42 @@ public final class RoomManager_
     @Override
     public void onViewChanged(HasViews hasViews) {
         etDateFrom = ((EditText) hasViews.findViewById(id.etDateFrom));
-        left = ((ImageView) hasViews.findViewById(id.left));
-        tvToday = ((TextView) hasViews.findViewById(id.tvToday));
-        etDateTo = ((EditText) hasViews.findViewById(id.etDateTo));
-        tvEmptyLog = ((TextView) hasViews.findViewById(id.tvEmptyLog));
-        devicePropertyProgressBar = ((ProgressBar) hasViews.findViewById(id.devicePropertyProgressBar));
-        spCamera = ((Spinner) hasViews.findViewById(id.spinner_camera));
-        calibration = ((ImageView) hasViews.findViewById(id.calibration));
-        right = ((ImageView) hasViews.findViewById(id.right));
-        up = ((ImageView) hasViews.findViewById(id.up));
-        reset = ((ImageView) hasViews.findViewById(id.reset));
-        btAddDevice = ((Button) hasViews.findViewById(id.btAddDevice));
-        roomListView = ((ListView) hasViews.findViewById(id.lvRoomList));
-        toggleButton2 = ((ToggleButton) hasViews.findViewById(id.toggleButton2));
-        devicelistProgressBar = ((ProgressBar) hasViews.findViewById(id.devicelistProgressBar));
-        tvYesterday = ((TextView) hasViews.findViewById(id.tvYesterday));
-        bCamera = ((Button) hasViews.findViewById(id.bCamera));
-        down = ((ImageView) hasViews.findViewById(id.down));
-        streamingButton = ((Button) hasViews.findViewById(id.MyStreamButton));
-        spinner1 = ((Spinner) hasViews.findViewById(id.spinner1));
-        deviceLogListView = ((ListView) hasViews.findViewById(id.lvLogList));
-        deviceLogProgressBar = ((ProgressBar) hasViews.findViewById(id.deviceLogProgressBar));
-        tvDeviceLogHeadingText = ((TextView) hasViews.findViewById(id.tvDeviceLogHeadingText));
-        vfRoom = ((ViewFlipper) hasViews.findViewById(id.vfRoom));
+        roomlistProgressBar = ((ProgressBar) hasViews.findViewById(id.roomlistProgressBar));
         seekBar1 = ((SeekBar) hasViews.findViewById(id.seekBar1));
-        tvDeviceName = ((TextView) hasViews.findViewById(id.tvDeviceName));
-        tvProgressValue = ((TextView) hasViews.findViewById(id.tvProgressValue));
+        pause = ((ImageView) hasViews.findViewById(id.pause));
+        btAddDevice = ((Button) hasViews.findViewById(id.btAddDevice));
+        ivDevice = ((ImageView) hasViews.findViewById(id.ivDevice));
+        tvEmptyLog = ((TextView) hasViews.findViewById(id.tvEmptyLog));
+        bSearch = ((Button) hasViews.findViewById(id.bSearch));
+        vfRoom = ((ViewFlipper) hasViews.findViewById(id.vfRoom));
+        tvDeviceLogHeadingText = ((TextView) hasViews.findViewById(id.tvDeviceLogHeadingText));
         deviceListView = ((ListView) hasViews.findViewById(id.lvDeviceList));
+        up = ((ImageView) hasViews.findViewById(id.up));
+        etDateTo = ((EditText) hasViews.findViewById(id.etDateTo));
+        toggleButton2 = ((ToggleButton) hasViews.findViewById(id.toggleButton2));
+        bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        roomListView = ((ListView) hasViews.findViewById(id.lvRoomList));
+        streamingButton = ((Button) hasViews.findViewById(id.MyStreamButton));
+        left = ((ImageView) hasViews.findViewById(id.left));
+        deviceLogProgressBar = ((ProgressBar) hasViews.findViewById(id.deviceLogProgressBar));
+        deviceLogListView = ((ListView) hasViews.findViewById(id.lvLogList));
+        devicelistProgressBar = ((ProgressBar) hasViews.findViewById(id.devicelistProgressBar));
+        reset = ((ImageView) hasViews.findViewById(id.reset));
+        list_image = ((ImageView) hasViews.findViewById(id.list_image));
+        right = ((ImageView) hasViews.findViewById(id.right));
         btShowLog = ((Button) hasViews.findViewById(id.btShowLog));
         porda = ((RelativeLayout) hasViews.findViewById(id.porda));
-        ivDevice = ((ImageView) hasViews.findViewById(id.ivDevice));
-        bSearch = ((Button) hasViews.findViewById(id.bSearch));
+        down = ((ImageView) hasViews.findViewById(id.down));
         bRoom = ((Button) hasViews.findViewById(id.bRoom));
         btAddRoom = ((Button) hasViews.findViewById(id.btAddRoom));
-        roomlistProgressBar = ((ProgressBar) hasViews.findViewById(id.roomlistProgressBar));
-        list_image = ((ImageView) hasViews.findViewById(id.list_image));
-        pause = ((ImageView) hasViews.findViewById(id.pause));
+        tvYesterday = ((TextView) hasViews.findViewById(id.tvYesterday));
+        calibration = ((ImageView) hasViews.findViewById(id.calibration));
+        devicePropertyProgressBar = ((ProgressBar) hasViews.findViewById(id.devicePropertyProgressBar));
+        spCamera = ((Spinner) hasViews.findViewById(id.spinner_camera));
+        tvToday = ((TextView) hasViews.findViewById(id.tvToday));
+        tvProgressValue = ((TextView) hasViews.findViewById(id.tvProgressValue));
+        tvDeviceName = ((TextView) hasViews.findViewById(id.tvDeviceName));
+        spinner1 = ((Spinner) hasViews.findViewById(id.spinner1));
         if (hasViews.findViewById(id.bCamera)!= null) {
             hasViews.findViewById(id.bCamera).setOnClickListener(new OnClickListener() {
 
@@ -214,18 +214,6 @@ public final class RoomManager_
         }
         if (hasViews.findViewById(id.tvYesterday)!= null) {
             hasViews.findViewById(id.tvYesterday).setOnClickListener(new OnClickListener() {
-
-
-                @Override
-                public void onClick(View view) {
-                    RoomManager_.this.onClick(view);
-                }
-
-            }
-            );
-        }
-        if (hasViews.findViewById(id.bSearch)!= null) {
-            hasViews.findViewById(id.bSearch).setOnClickListener(new OnClickListener() {
 
 
                 @Override

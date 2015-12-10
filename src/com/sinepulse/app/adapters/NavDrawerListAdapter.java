@@ -215,9 +215,9 @@ public class NavDrawerListAdapter extends BaseExpandableListAdapter implements
 	public boolean onGroupClick(ExpandableListView parent, View v,
 			int groupPosition, long id) {
 		 if(groupPosition==6){
-			 nav_drawer_progress_bar.setVisibility(View.VISIBLE);
+			 nav_drawer_progress_bar.setVisibility(v.VISIBLE);
 		 }else{
-			 nav_drawer_progress_bar.setVisibility(View.INVISIBLE);
+			 nav_drawer_progress_bar.setVisibility(v.INVISIBLE);
 		 }
 		return false;
 	}

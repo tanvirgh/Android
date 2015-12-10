@@ -6,6 +6,7 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
@@ -31,6 +32,7 @@ public class AsyncGetDeviceProperty  extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected void onPreExecute() {
+		CommonValues.getInstance().IsServerConnectionError=false;
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
 		parentActivity.startDevicePropertyProgress();
 		
@@ -46,6 +48,10 @@ public class AsyncGetDeviceProperty  extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		parentActivity.stopDevicePropertyProgress();
+		if(CommonValues.getInstance().IsServerConnectionError==true){
+			CommonTask.ShowMessage(parentActivity, "Server is not reachable at this moment.");
+        	return;
+		}
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {

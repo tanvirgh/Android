@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.sinepulse.app.R;
+import com.sinepulse.app.base.MainActionbarBase;
 
 /**
  * @author tac

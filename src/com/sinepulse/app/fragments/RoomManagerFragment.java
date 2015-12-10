@@ -42,9 +42,10 @@ import android.widget.ViewFlipper;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.sinepulse.app.R;
-import com.sinepulse.app.activities.Home;
-import com.sinepulse.app.activities.VideoActivity;
-import com.sinepulse.app.adapters.DeviceListAdapterByRoom;
+import com.sinepulse.app.activities.Home_;
+import com.sinepulse.app.activities.RoomManager_;
+import com.sinepulse.app.activities.VideoActivity_;
+import com.sinepulse.app.adapters.DeviceListAdapter;
 import com.sinepulse.app.adapters.DeviceLogAdapter;
 import com.sinepulse.app.adapters.RoomListAdapter;
 import com.sinepulse.app.asynctasks.AsyncGetCurtainPresetValuesFromRoom;
@@ -170,7 +171,7 @@ public class RoomManagerFragment extends SherlockFragment implements
 	@ViewById(R.id.tvDeviceLogHeadingText)
 	public TextView tvDeviceLogHeadingText;
 
-	private DeviceListAdapterByRoom dAdapter;
+	private DeviceListAdapter dAdapter;
 
 	/**
 	 * Automatically call from menu select once initialize all controls
@@ -243,7 +244,7 @@ public class RoomManagerFragment extends SherlockFragment implements
 	public void setupDeviceListViewAdapter() {
 		// rAdapter.clear();
 		if(CommonValues.getInstance().deviceList!=null){
-		dAdapter = new DeviceListAdapterByRoom(getActivity(),
+		dAdapter = new DeviceListAdapter(getActivity(),
 				R.layout.device_item_view,
 				CommonValues.getInstance().deviceList);
 		deviceListView.setAdapter(dAdapter);
@@ -761,7 +762,7 @@ public class RoomManagerFragment extends SherlockFragment implements
 //			currentFragment = CAMERA_FRAGMENT;
 //			displayFragment(7);
 //			((MainActionbarBase) getActivity()).displayFragment(7);
-			Intent cameraIntent = new Intent(this.getActivity(), VideoActivity.class);
+			Intent cameraIntent = new Intent(this.getActivity(), VideoActivity_.class);
 			cameraIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(cameraIntent);
 
@@ -774,8 +775,8 @@ public class RoomManagerFragment extends SherlockFragment implements
 			break;
 		case R.id.bDashboard:
 			asyncGetRoomInfo.cancel(true);
-			Home.mDrawerList.setItemChecked(0, true);
-			Home.navDrawerAdapter.setSelectedPosition(0);
+			Home_.mDrawerList.setItemChecked(0, true);
+			Home_.navDrawerAdapter.setSelectedPosition(0);
 			goBackToDashboard();
 //			((MainActionbarBase) getActivity()).displayFragment(0);
 			break;
@@ -847,7 +848,7 @@ public class RoomManagerFragment extends SherlockFragment implements
 	 */
 	public void goBackToDashboard() {
 //		currentFragment = ALLDEVICE_FRAGMENT;
-		Intent homeIntent = new Intent(this.getActivity(), Home.class);
+		Intent homeIntent = new Intent(this.getActivity(), Home_.class);
 		homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		startActivity(homeIntent);
 	}

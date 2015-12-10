@@ -17,10 +17,12 @@ public class AsyncCheckServerStateAndSaveServerInfo extends AsyncTask<Void, Void
 
 	UserLogin saveLogInData;
 	String Apptoken;
+	boolean isloginworkDone;
 
-	public AsyncCheckServerStateAndSaveServerInfo(UserLogin src,String AppToken) {
+	public AsyncCheckServerStateAndSaveServerInfo(UserLogin src,String AppToken,boolean isloginworkDone) {
 		saveLogInData = src;
 		Apptoken=AppToken;
+		this.isloginworkDone=isloginworkDone;
 	}
 
 	@Override
@@ -42,11 +44,21 @@ public class AsyncCheckServerStateAndSaveServerInfo extends AsyncTask<Void, Void
 	@Override
 	protected void onPostExecute(Boolean result) {
 		saveLogInData.stopmenuProgress();
+		android.os.AsyncTask.Status status = getStatus();
+		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
+			if (saveLogInData != null) {
 		if (!CommonValues.getInstance().IsServerConnectionError) {
-			saveLogInData.setUserInfoAfterSave();
+			saveLogInData.setUserInfoAfterSave(isloginworkDone);
 		} else {
+			if(CommonValues.getInstance().loginError!=null && CommonValues.getInstance().loginError!=""){
 			CommonTask.ShowMessage(saveLogInData,
-					saveLogInData.getString(R.string.wronguserpass));
+					CommonValues.getInstance().loginError);
+			}else{
+				CommonTask.ShowMessage(saveLogInData,
+						"No Data Returned From Server");
+			}
+		}
+			}
 		}
 
 	}
@@ -56,8 +68,10 @@ public class AsyncCheckServerStateAndSaveServerInfo extends AsyncTask<Void, Void
 		
 		// save LogIn screen information in shared preference
 		if (saveLogInData.isConnectedToServer(Apptoken)) {
+			isloginworkDone=true;
 			saveLogInData.saveUsernameAndPassword();
 		}else{
+			isloginworkDone=false;
 			CommonValues.getInstance().IsServerConnectionError=true;
 		}
 			

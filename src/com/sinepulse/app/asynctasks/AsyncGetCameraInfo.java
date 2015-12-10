@@ -5,6 +5,7 @@ package com.sinepulse.app.asynctasks;
 
 import android.os.AsyncTask;
 
+import com.sinepulse.app.activities.RoomManager;
 import com.sinepulse.app.activities.VideoActivity;
 import com.sinepulse.app.utils.CommonValues;
 
@@ -30,7 +31,6 @@ public class AsyncGetCameraInfo extends AsyncTask<Void, Void, Boolean> {
 	protected void onPreExecute() {
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
 		parentActivity.startProgress();
-		parentActivity.streamingButton.setEnabled(false);
 		
 	}
 	
@@ -54,7 +54,6 @@ public class AsyncGetCameraInfo extends AsyncTask<Void, Void, Boolean> {
 			@Override
 			public void run() {
 				parentActivity.setCameraInfo();
-				parentActivity.streamingButton.setEnabled(true);
 			}
 		});
 		

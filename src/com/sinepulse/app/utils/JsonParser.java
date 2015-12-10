@@ -15,6 +15,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -27,7 +28,9 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.activities.UserLogin;
 import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.entities.Address;
@@ -59,16 +62,17 @@ public class JsonParser  extends MainActionbarBase{
 	
 	
 
-	public static String postLogInRequest(String url, LogInInfo logInInfo) {
+	public static String postLogInRequest(String url, LogInInfo logInInfo,final Context context) {
 		InputStream inputStream = null;
 		String result = "";
+//		if(url!=null && url!=""){
 		try {
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
-//			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			String json = "";
@@ -110,24 +114,33 @@ public class JsonParser  extends MainActionbarBase{
 				CommonValues.getInstance().IsServerConnectionError = false;
 			}
 
-		} catch (Exception e) {
+		} catch (JSONException e) {
 			e.getMessage();
 			CommonValues.getInstance().IsServerConnectionError = true;
+		}catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+//			CommonTask.ShowMessage(context, "Connection Timeout");
 		}
 
 		if (result != null && !result.equals("")) {
 			try {
 				JSONObject jObject = null;
 				jObject = new JSONObject(result);
+				if(jObject.getString("Success").equalsIgnoreCase("True")){
 				//API key
 				try {
-					if(CommonValues.getInstance().connectionMode=="Local"){
+					
 					CommonValues.getInstance().ApiKey=jObject.getString("ApiKey");
-					}
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 				jData = jObject.getJSONObject("Data");
 				jArray = jData.getJSONArray("DeviceSummary");
 				for (int i = 0; i < jArray.length(); i++) {
@@ -149,11 +162,16 @@ public class JsonParser  extends MainActionbarBase{
 				CommonValues.getInstance().summary.setRoomCount(jData
 						.getInt("RoomCount"));
 				CommonValues.getInstance().userId = jData.getInt("UserId");
+				}else{
+					CommonValues.getInstance().IsServerConnectionError = true;
+					CommonValues.getInstance().loginError=jObject.getString("Message");
+				}
 
 			} catch (JSONException e) {
 				Log.e("log_tag", "Error parsing data " + e.toString());
 				CommonValues.getInstance().IsServerConnectionError = true;
 			}
+			
 		}
 
 		// 11. return result
@@ -211,15 +229,12 @@ public class JsonParser  extends MainActionbarBase{
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
-			if(CommonValues.getInstance().connectionMode=="Local"){
-			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
-			}
 			String json = "";
 
 			// 3. build jsonObject
@@ -414,16 +429,16 @@ public class JsonParser  extends MainActionbarBase{
 
 		try{
 			HttpClient httpclient = new DefaultHttpClient();
-//			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
-					7000);
-			HttpConnectionParams.setSoTimeout(httpclient.getParams(), 7000);
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
+					CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
-			if(CommonValues.getInstance().connectionMode=="Local"){
-			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
-			}
+			if(CommonValues.getInstance().connectionMode.equals("Local")){
+				httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
+				}
 			String json = "";
 
 			// 3. build jsonObject
@@ -525,16 +540,16 @@ public class JsonParser  extends MainActionbarBase{
 
 		try{
 			HttpClient httpclient = new DefaultHttpClient();
-//			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.addHeader("Cookie",cookieID );
-			if(CommonValues.getInstance().connectionMode=="Local"){
-			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
-			}
+			if(CommonValues.getInstance().connectionMode.equals("Local")){
+				httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
+				}
 			String json = "";
 
 			// 3. build jsonObject
@@ -647,39 +662,26 @@ public class JsonParser  extends MainActionbarBase{
 				userProfile.setFirstName(jUserProfile.getString("FirstName"));
 				userProfile.setLastName(jUserProfile.getString("LastName"));
 				userProfile.setMiddleName(jUserProfile.getString("MiddleName"));
-				
-				userProfile.setUserName(jUserProfile.getString("UserName"));
 				userProfile.setEmail(jUserProfile.getString("Email"));
-				userProfile.setSex(jUserProfile.getString("Sex"));
-				String results = jUserProfile
-						.getString("DateOfBirth").replaceAll("^/Date\\(", "");
-
-				results = results.substring(0, results.indexOf('+'));
-				Long timeInMillis = Long.valueOf(results);
-				Date dateOfBirth = new Date(timeInMillis);
-				userProfile.setDateOfBirth(dateOfBirth);
-				
 				userProfile.setCellPhone(jUserProfile.getString("CellPhone"));
-				
+				userProfile.setSex(jUserProfile.getString("Sex"));
 				userProfile.setSocialSecurityNumber(jUserProfile
 						.getString("SocialSecurityNumber"));
 
 				Address address = new Address();
 				JSONObject addressJson = new JSONObject();
-				if(!jUserProfile.isNull("Address")){
 				addressJson = jUserProfile.getJSONObject("Address");
 				address.setAddress1(addressJson.getString("Address1"));
 				address.setAddress2(addressJson.getString("Address2"));
 				userProfile.setAddress(address);
-				}
 
-//				City city = new City();
-//				JSONObject cityJson = new JSONObject();
-//				cityJson = addressJson.getJSONObject("City");
-//				city.setCountry(cityJson.getString("Country"));
-//				city.setName(cityJson.getString("Name"));
-//				city.setState(cityJson.getString("State"));
-//				userProfile.getAddress().setCity(city);
+				City city = new City();
+				JSONObject cityJson = new JSONObject();
+				cityJson = addressJson.getJSONObject("City");
+				city.setCountry(cityJson.getString("Country"));
+				city.setName(cityJson.getString("Name"));
+				city.setState(cityJson.getString("State"));
+				userProfile.getAddress().setCity(city);
 
 				CommonValues.getInstance().profile = userProfile;
 
@@ -691,7 +693,7 @@ public class JsonParser  extends MainActionbarBase{
 		return result;
 	}
 
-	public static String  setStatusRequest(String url) {
+	public static String  setStatusRequest(String url,Context context) {
 		InputStream is = null;
 		String result = "";
 //		JSONArray devicePropertyArray = null;
@@ -822,16 +824,13 @@ public class JsonParser  extends MainActionbarBase{
 		try {
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
-//			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
-			httpPost.addHeader("Cookie",cookieID );
-			if(CommonValues.getInstance().connectionMode=="Local"){
-			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
-			}
+//			httpPost.addHeader("Cookie",cookieID );
 			String json = "";
 
 			// 3. build jsonObject
@@ -876,7 +875,7 @@ public class JsonParser  extends MainActionbarBase{
 			try {
 				jObject = new JSONObject(result);
 				if(jObject.getString("Data").equals("true")){
-					SharedPreferences password = UserLogin.context.getSharedPreferences(CommonConstraints.PREF_PASSWORD_KEY, Context.MODE_PRIVATE);
+					SharedPreferences password = UserLogin.context.getSharedPreferences(CommonConstraints.PREF_PASSWORD_KEY, UserLogin.context.MODE_PRIVATE);
 					password.edit().remove(CommonConstraints.PREF_PASSWORD_KEY).commit();
 					CommonTask.SavePreferences(UserLogin.context, CommonConstraints.PREF_LOGINUSER_NAME,
 							CommonConstraints.PREF_PASSWORD_KEY, newPass);
@@ -897,18 +896,19 @@ public class JsonParser  extends MainActionbarBase{
 	public static String sendHttpGetRequest(String url, InputStream is,
 			String result, DefaultHttpClient httpClient) {
 		try {
-//			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(),
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpClient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			HttpGet httpGet = new HttpGet(url);
 			httpGet.addHeader("Cookie",cookieID );
-			if(CommonValues.getInstance().connectionMode=="Local"){
-			httpGet.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
-			}
+			if(CommonValues.getInstance().connectionMode.equals("Local")){
+				httpGet.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
+				}
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity httpEntity = httpResponse.getEntity();
 			is = httpEntity.getContent();
+			
 
 			if (is != null) {
 				result = convertInputStreamToString(is);
@@ -922,6 +922,16 @@ public class JsonParser  extends MainActionbarBase{
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+//			CommonValues.getInstance().home.runOnUiThread(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					CommonValues.getInstance().IsServerConnectionError = true;
+//					CommonTask.ShowMessage(CommonValues.getInstance().home, "Server down");
+//					
+//				}
+//			});
+//			CommonTask.ShowMessage(MainActionbarBase.appContext, "Connection Timeout");
 		}
 		return result;
 	}
@@ -1012,14 +1022,13 @@ public class JsonParser  extends MainActionbarBase{
 		try {
 			// 1. create HttpClient
 			HttpClient httpclient = new DefaultHttpClient();
-//			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpConnectionParams.setConnectionTimeout(httpParameters,
 					CommonConstraints.TIMEOUT_MILLISEC);
-			HttpConnectionParams.setSoTimeout(httpclient.getParams(), CommonConstraints.TIMEOUT_MILLISEC);
+			HttpConnectionParams.setSoTimeout(httpParameters, CommonConstraints.TIMEOUT_MILLISEC);
 			// 2. make POST request to the given URL
 			HttpPost httpPost = new HttpPost(url);
 //			httpPost.addHeader("Cookie",cookieID );
-//			httpPost.addHeader("ApiKey", CommonValues.getInstance().ApiKey);
 			String json = "";
 
 			// 3. build jsonObject

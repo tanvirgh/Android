@@ -1,13 +1,9 @@
 package com.sinepulse.app.base;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
+import com.sinepulse.app.asynctasks.AsyncLogOutTask;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.BroadcastReceiver;
@@ -15,9 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -44,7 +38,6 @@ import com.sinepulse.app.activities.SupportActivity_;
 import com.sinepulse.app.activities.UserLogActivity_;
 import com.sinepulse.app.activities.UserProfileActivity_;
 import com.sinepulse.app.asynctasks.AsyncLogOutTask;
-import com.sinepulse.app.utils.CommonConstraints;
 import com.sinepulse.app.utils.CommonIdentifier;
 import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
@@ -61,6 +54,8 @@ import com.sinepulse.app.utils.CommonValues;
  */
 
 public class MainActionbarBase extends SherlockFragmentActivity {
+	
+	AsyncLogOutTask asyncLogOutTask = null;
 	// public Intent settingIntent;
 	public static final int INITAIL_STATE = -1;
 	public static final int SETTINGS_ACTIVITY = 0, ABOUT_ACTIVITY = 1,
@@ -78,6 +73,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	private InputMethodManager imm;
 
 	public static Menu actionBarMenu;
+	public static Context appContext;
 	public ProgressBar abs__search_progress_bar;
 
 	AutoCompleteTextView searchAutoCompleteTextView;
@@ -103,7 +99,6 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		IntentFilter filter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mConnReceiver, filter);
-//		registerReceiver(conChangeReceiver, filter);
 
 		// Home Button position reset..moving right
 		ImageView homeButton = (ImageView) findViewById(android.R.id.home);
@@ -111,6 +106,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		FrameLayout.LayoutParams distanceFromUpIcon = (FrameLayout.LayoutParams) homeButton
 				.getLayoutParams();
 		distanceFromUpIcon.leftMargin = 10;
+		MainActionbarBase.appContext = getBaseContext();
 
 	}
 
@@ -124,7 +120,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		com.actionbarsherlock.view.MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.actionbarmenu, menu);
 
-//		 CommonValues.getInstance().menuList = (android.view.Menu) menu;
+		// CommonValues.getInstance().menuList = menu;
 
 		this.actionBarMenu = menu;
 		return true;
@@ -194,29 +190,23 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Editor editor = getSharedPreferences("clear_cache", Context.MODE_PRIVATE).edit();
-	    editor.clear();
-	    editor.commit();
-		try {
-			
-	         trimCache(this);
-	      } catch (Exception e) {
-	         // TODO Auto-generated catch block
-	         e.printStackTrace();
-	      }
 	}
 
+	// boolean isinBackground=false;
 	@Override
 	protected void onPause() {
+		// isinBackground=true;
+		// CommonValues.getInstance().isStateChanged=false;
 		super.onPause();
 		// CLose the search view and clear the input fields when
 		// leaving...tanvir
-		/*
-		 * if (mSearchView != null) { mSearchView.onActionViewCollapsed();
-		 * mSearchView.setQuery("", false); mSearchView.clearFocus(); }
-		 */
+		if (mSearchView != null) {
+			mSearchView.onActionViewCollapsed();
+			mSearchView.setQuery("", false);
+			mSearchView.clearFocus();
+		}
 		unregisterReceiver(mConnReceiver);
-//		unregisterReceiver(conChangeReceiver);
+		// unregisterReceiver(wifiListener);
 	}
 
 	AppMsg msg = null;
@@ -225,27 +215,25 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			ActivityManager activityManager = (ActivityManager) getBaseContext()
+					.getSystemService(Context.ACTIVITY_SERVICE);
+
+			List<RunningTaskInfo> services = activityManager
+					.getRunningTasks(Integer.MAX_VALUE);
+			ArrayList<String> runningactivities = new ArrayList<String>();
+			for (int i1 = 0; i1 < services.size(); i1++) {
+				runningactivities.add(0,
+						services.get(i1).topActivity.toString());
+			}
 			if (activityVisible) {
-				if (CommonTask.isNetworkStateChanged(MainActionbarBase.this) == false 
-						 ) {
+				if (CommonTask.isNetworkStateChanged(MainActionbarBase.this) == false) {
 					msg = AppMsg.makeText(MainActionbarBase.this,
 							getString(R.string.networkError),
 							AppMsg.STYLE_ALERT_ALWAYS_VISIBLE);
 					msg.show();
 					// check if it is from login screen or not...if so do
 					// nothing.else back to login screen
-					ArrayList<String> runningactivities = new ArrayList<String>();
 
-					ActivityManager activityManager = (ActivityManager) getBaseContext()
-							.getSystemService(Context.ACTIVITY_SERVICE);
-
-					List<RunningTaskInfo> services = activityManager
-							.getRunningTasks(Integer.MAX_VALUE);
-
-					for (int i1 = 0; i1 < services.size(); i1++) {
-						runningactivities.add(0,
-								services.get(i1).topActivity.toString());
-					}
 					if (runningactivities
 							.contains("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.UserLogin_}") == true) {
 						// return true;
@@ -255,7 +243,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 						CommonTask
 								.ShowNetworkChangeConfirmation(
 										MainActionbarBase.this,
-										"Network State has been changed.Please log in again to continue.",
+										"Network State has been changed.Please log in to continue.",
 										showNetworkChangeEvent());
 
 					}
@@ -266,43 +254,12 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 						AppMsg.cancelAll();
 					}
 				}
-				
-				
 			}
 
 		}
 
 	};
 	boolean activityVisible = false;
-
-//	public BroadcastReceiver conChangeReceiver = new BroadcastReceiver() {
-//
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			ConnectivityManager connectivityManager = (ConnectivityManager) context
-//					.getSystemService(Context.CONNECTIVITY_SERVICE);
-//			NetworkInfo activeNetInfo = connectivityManager
-//					.getActiveNetworkInfo();
-//			NetworkInfo mobNetInfo = connectivityManager
-//					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-//			if (activeNetInfo != null) {
-//				CommonTask
-//						.ShowNetworkChangeConfirmation(
-//								MainActionbarBase.this,
-//								"Network State has been changed.Please log in to continue.",
-//								showNetworkChangeEvent());
-//			}
-//			if (mobNetInfo != null) {
-//				CommonTask
-//						.ShowNetworkChangeConfirmation(
-//								MainActionbarBase.this,
-//								"Network State has been changed.Please log in to continue.",
-//								showNetworkChangeEvent());
-//			}
-//		}
-//	};
-	
-	
 
 	@Override
 	protected void onStart() {
@@ -315,8 +272,6 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		super.onStop();
 		activityVisible = false;
 	}
-	
-	AsyncLogOutTask asyncLogOutTask = null;
 
 	public DialogInterface.OnClickListener showNetworkChangeEvent() {
 		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -325,12 +280,15 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
+					 CommonValues.getInstance().connectionMode="";
 					
-					  Intent loginintent = new Intent(
-					  "com.sinepulse.app.activities.UserLogin");
-					  loginintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					  startActivity(loginintent);
-					 
+					CommonValues.getInstance().summary.deviceSummaryArray.clear();
+					CommonValues.getInstance().userId = 0;
+					Intent loginintent = new Intent(
+							"com.sinepulse.app.activities.UserLogin");
+					loginintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(loginintent);
+//					cleanupAndExit(MainActionbarBase.this);
 
 					break;
 				// case DialogInterface.BUTTON_NEGATIVE:
@@ -348,19 +306,33 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		return dialogClickListener;
 
 	}
+	
+	
+	
 
+	
+	
+	
+	
 	@Override
 	protected void onResume() {
+		// start();
 		super.onResume();
+		/*ConnectivityManager connectivityManager = (ConnectivityManager) MainActionbarBase.this
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		
+		if(connectivityManager.getBackgroundDataSetting()==true){
+			CommonTask.ShowNetworkChangeConfirmation(MainActionbarBase.this, "New Changed", showNetworkChangeEvent());
+			
+		}else{
+			
+			return ;
+		}*/
 
 		IntentFilter filter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
-//		filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-//		filter.addAction("android.net.wifi.STATE_CHANGE");
-//		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-		
+
 		registerReceiver(mConnReceiver, filter);
-//		registerReceiver(conChangeReceiver, filter);
 
 		// on resume, if network is not available we again show the alert
 		// message
@@ -508,9 +480,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 						.ShowMessage(
 								MainActionbarBase.this,
 								"You are in Local Mode.Support menu is not accesible in this mode.Please switch to Internet mode to access this Menu.");
-				if(stackIndex!=null){
 				stackIndex.removeAllElements();
-				}
 				if (!stackIndex.contains(String.valueOf(0)))
 					stackIndex.push(String.valueOf(0));
 				Intent dashboardIntent = new Intent(this, Home_.class);
@@ -524,7 +494,7 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 				stackIndex.push(String.valueOf(7));
 			Intent viewIntent = new Intent(
 					"android.intent.action.VIEW",
-					Uri.parse("http://dev.sinepulse.com/SmartHome/Web/Dev"));
+					Uri.parse("http://dev.sinepulse.com/SmartHome/Web/Dev/en/Page/Help"));
 			startActivity(viewIntent);
 			break;
 
@@ -539,31 +509,111 @@ public class MainActionbarBase extends SherlockFragmentActivity {
 		refresh.setVisible(false);
 		invalidateOptionsMenu();
 	}
-	
-	public static void trimCache(Context context) {
-	      try {
-	         File dir = context.getCacheDir();
-	         if (dir != null && dir.isDirectory()) {
-	            deleteDir(dir);
-	         }
-	      } catch (Exception e) {
-	         // TODO: handle exception
-	      }
-	   }
 
-	   public static boolean deleteDir(File dir) {
-	      if (dir != null && dir.isDirectory()) {
-	         String[] children = dir.list();
-	         for (int i = 0; i < children.length; i++) {
-	            boolean success = deleteDir(new File(dir, children[i]));
-	            if (!success) {
-	               return false;
-	            }
-	         }
-	      }
+	public void start() {
+		// Register for the intents that tell us about WiFi state changes.
+		// Thanks to Kent for the tip.
+		IntentFilter wifiFilter = new IntentFilter();
+		wifiFilter.addAction(WifiManager.NETWORK_IDS_CHANGED_ACTION);
+		wifiFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+		wifiFilter.addAction(WifiManager.RSSI_CHANGED_ACTION);
+		wifiFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+		wifiFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+		wifiFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+		wifiFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+		this.registerReceiver(wifiListener, wifiFilter);
 
-	      // The directory is now empty so delete it
-	      return dir.delete();
-	   }
+		// Get the initial status, or any status that may have changed
+		// while we were paused.
+		// getWifiState();
+		// getWifiConnection();
+	}
 
+	// boolean stateChanged=false;
+
+	private BroadcastReceiver wifiListener = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			ActivityManager activityManager = (ActivityManager) getBaseContext()
+					.getSystemService(Context.ACTIVITY_SERVICE);
+
+			List<RunningTaskInfo> services = activityManager
+					.getRunningTasks(Integer.MAX_VALUE);
+			ArrayList<String> runningactivitis = new ArrayList<String>();
+
+			for (int i1 = 0; i1 < services.size(); i1++) {
+				runningactivitis
+						.add(0, services.get(i1).topActivity.toString());
+			}
+			if (runningactivitis
+					.contains("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.UserLogin_}") == true) {
+				// return true;
+				return;
+			} else {
+				// if (!activityVisible)
+				if (action.equals(WifiManager.NETWORK_IDS_CHANGED_ACTION)) {
+
+				} else if (action
+						.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+					// getWifiConnection();
+					CommonValues.getInstance().isStateChanged = true;
+				} else if (action.equals(WifiManager.RSSI_CHANGED_ACTION)) {
+					// getWifiConnection();
+				} else if (action
+						.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+					// getScanResults();
+				} else if (action
+						.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)) {
+					// getWifiConnection();
+
+				} else if (action
+						.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)) {
+					// getWifiConnection();
+
+				} else if (action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
+					// getWifiState();
+
+				}
+			}
+
+		};
+	};
+
+	@Override
+	protected void onRestart() {
+
+		// stateChanged==true &&
+		// CommonValues.getInstance().isStateChanged=false;
+		// if (CommonValues.getInstance().isStateChanged == true) {
+		//
+		// ActivityManager activityManager = (ActivityManager) getBaseContext()
+		// .getSystemService(Context.ACTIVITY_SERVICE);
+		//
+		// List<RunningTaskInfo> services = activityManager
+		// .getRunningTasks(Integer.MAX_VALUE);
+		// ArrayList<String> runningactivities = new ArrayList<String>();
+		// for (int i1 = 0; i1 < services.size(); i1++) {
+		// runningactivities.add(0,
+		// services.get(i1).topActivity.toString());
+		// }
+		//
+		// if (runningactivities
+		// .contains("ComponentInfo{com.sinepulse.app/com.sinepulse.app.activities.UserLogin_}")
+		// == true) {
+		// // return true;
+		// return;
+		// } else {
+		//
+		// CommonTask
+		// .ShowNetworkChangeConfirmation(
+		// MainActionbarBase.this,
+		// "Network State has been changed.Please log in to continue.",
+		// showNetworkChangeEvent());
+		// }
+		//
+		// }
+		super.onRestart();
+	}
 }

@@ -16,10 +16,10 @@
 -->
 <resources>
 
-    <string name="app_name">Smart Home</string>
-    <string name="hyperlink"><a href="https://play.google.com/store/apps/details?id=com.sinepulse.app">Send Feedback</a></string>
+    <string name="app_name">SH(ICT)</string>
+    <string name="hyperlink"><a href="http://www.sinepulse.com/">Send Feedback</a></string>
     <string name="desc">Smart Home is a app that enables its users to regulate various home appliances remotely.\n Smart Home combines technology and services to facilitate your better living quality, enhanced security and energy efficiency.</string>
-    <string name="aboutText">Smart Home SinePulse  \n\nVersion : 0.1.1 \n \n@ SinePulse GmbH. (All Rights Reserved)</string>
+    <string name="aboutText">Sine Pulse Home Automation App \nVersion : 0.1.1 \nDesign and Developed By \n@ SinePulse GmbH. (All Rights Reserved)</string>
     <string name="my_password">my password</string>
     <string name="pay">Pending Tickets</string>
     <string name="next">Next</string>
@@ -36,8 +36,8 @@
     <string name="empty_basket">Kurv (tom)</string>
     <string name="live_stream">Video Stream</string>
     <string name="device_status">Device Status</string>
-    <string name="username"> User Name</string>
-    <string name="password"> Password</string>
+    <string name="username"> User Name ...*</string>
+    <string name="password"> Password ...*</string>
     <string name="password1">Room user Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="usercredential">User Name:</string>
@@ -84,15 +84,15 @@
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="app_name_drawer"></string>
-    <string name="alldevices"> Dashboard</string>
+    <string name="alldevices"> My Dashboard</string>
     <string name="powerusage"> Power Usage</string>
     <string name="roomlist"> My Rooms</string>
-    <string name="settings"> Profile</string>
+    <string name="settings"> My Profile</string>
     <string name="about"> About Us</string>
      <string name="support"> Support</string>
      <string name="help"> Help</string>
     <string name="cp"> Change Password</string>
-    <string name="userlog"> Activities</string>
+    <string name="userlog"> My Activities</string>
     <string name="continue_shopping">Continue Application</string>
     <string name="title_feature1">Feature 1</string>
     <string name="title_feature2">Feature 2</string>
@@ -100,7 +100,7 @@
     <string name="title_feature4">Feature 4</string>
     <string name="title_feature5">Feature 5</string>
     <string name="title_feature6">Feature 6</string>
-    <string name="networkError">No Netwok Connectivity ! Please Check  your Network Connection.</string>
+    <string name="networkError">No Network connection found ! Please Check  your Network Connection.</string>
     <string name="Room_nameHint">Type Room Name</string>
     <string name="Device_numHint">Total Device</string>
     <string name="EnterPays_TextView_ZeroValue">0</string>
@@ -145,7 +145,7 @@
          <item>@drawable/user_log</item>
        <!--  <item>drawable/logo1</item> -->
        <!--  <item>@drawable/ic_action_view_as_list</item> -->
-        <item>@drawable/userprofile</item>
+        <item>@drawable/settings1</item>
         <item>@drawable/locknew</item>
         <item>@drawable/support</item>
         <item>@drawable/ic_help2</item>
@@ -183,14 +183,5 @@
     <string name="options_unregister">Unregister</string>
     <string name="options_clear">Clear</string>
     <string name="options_exit">Exit</string>
-    
-    <string name="crash_toast_text">Oops ! Smart Home has crashed, but a report will be sent to app developer to help fix the issue !</string>
-
-<string name="crash_dialog_title">Smart Home has crashed</string>
-<string name="crash_dialog_text">An unexpected error occurred that forces the 
-    app to stop. Please help us fix this by sending us error data/scenario,
-    all you have to do is click OK.</string>
-<string name="crash_dialog_comment_prompt">You might add your comments about the problem below:</string>
-<string name="crash_dialog_ok_toast">Thank you to stay with us!</string>
 
 </resources>

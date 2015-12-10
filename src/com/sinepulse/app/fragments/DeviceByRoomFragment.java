@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.sinepulse.app.R;
-import com.sinepulse.app.adapters.DeviceListAdapterByRoom;
+import com.sinepulse.app.adapters.DeviceListAdapter;
 import com.sinepulse.app.asynctasks.AsyncGetDevices;
 import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;
@@ -37,7 +37,7 @@ public class DeviceByRoomFragment extends SherlockFragment {
 	boolean fragmentPaused = false;
 
 	AsyncGetDevices asyncGetDeviceInfo = null;
-	private DeviceListAdapterByRoom dAdapter;
+	private DeviceListAdapter dAdapter;
 	@ViewById(R.id.lvDeviceList)
 	public ListView deviceListView;
 	
@@ -81,7 +81,7 @@ public class DeviceByRoomFragment extends SherlockFragment {
 
 public void setupDeviceListViewAdapter() {
 //	rAdapter.clear();
-	dAdapter = new DeviceListAdapterByRoom(getActivity(),R.layout.device_item_view, CommonValues.getInstance().deviceList);
+	dAdapter = new DeviceListAdapter(getActivity(),R.layout.device_item_view, CommonValues.getInstance().deviceList);
 	deviceListView.setAdapter(dAdapter);
 	deviceListView.setOnItemClickListener(new OnItemClickListener() {
 

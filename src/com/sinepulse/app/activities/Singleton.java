@@ -1,13 +1,20 @@
 package com.sinepulse.app.activities;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -85,7 +92,7 @@ public class Singleton extends Application {
 		m_nTotalW = dm.widthPixels;
 		m_nTotalH = dm.heightPixels;
 		// scale factor
-		m_fFrameS = m_nTotalW / 640.0f;
+		m_fFrameS = (float)m_nTotalW / 640.0f;
 		// compute our frame
 		m_nFrameW = m_nTotalW;
 		m_nFrameH = (int) (960.0f * m_fFrameS);
@@ -100,12 +107,12 @@ public class Singleton extends Application {
 	
 	public int Px2DIP(int value) {
 		final float scale = getResources().getDisplayMetrics().density;
-		return (int)(value * scale);
+		return (int)((float) value * scale);
 	}
 	
 
 	public int Scale(int v) {
-		float s = v * m_fFrameS; int rs = 0;
+		float s = (float)v * m_fFrameS; int rs = 0;
 		if (s - (int)s >= 0.5) rs= ((int)s)+1; else rs= (int)s;
 		return rs;
 	}

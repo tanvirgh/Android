@@ -28,7 +28,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="5dp" >
 
-        <com.sinepulse.app.custom.controls.CustomTextView
+        <TextView
             android:id="@+id/tvdevice_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
    android:id="@+id/curtainControl"
     android:layout_width="match_parent"
+    android:layout_marginTop="15dp"
     android:layout_height="wrap_content" >
 
    
@@ -12,19 +13,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/spinner1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/curup" />
 
-    <ImageView
+   <!--  <ImageView
         android:id="@+id/left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/pause"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_toStartOf="@+id/pause"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/left" />
+        android:src="@drawable/left" /> -->
 
     <ImageView
         android:id="@+id/pause"
@@ -33,11 +34,11 @@
         android:layout_below="@+id/up"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="18dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/pause" />
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,7 +46,7 @@
         android:layout_marginStart="20dp"
         android:layout_toEndOf="@+id/pause"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/right" />
+        android:src="@drawable/right" /> -->
 
     <ImageView
         android:id="@+id/down"
@@ -53,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/pause"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="22dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/curdown" />
 
@@ -65,17 +66,18 @@
         android:layout_alignParentTop="true" >
     </RelativeLayout>
 
-    <ImageView
+  <!--   <ImageView
         android:id="@+id/reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
         android:layout_marginBottom="0dp"
         android:layout_alignTop="@+id/down"
+       android:visibility="invisible"
         android:contentDescription="@string/app_name"
         android:src="@drawable/reset" />
-     <com.sinepulse.app.custom.controls.CustomTextView
+     <TextView
                 android:id="@+id/tvResetText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,19 +88,20 @@
                 android:textSize="12sp"
                 android:text="Reset"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/calibration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/down"
-        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
+        android:visibility="invisible"
         android:src="@drawable/calibration" />
-      <com.sinepulse.app.custom.controls.CustomTextView
+      <TextView
                 android:id="@+id/tvCalibrateText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,6 +112,6 @@
                 android:text="Calibrate"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="invisible" /> -->
 
 </RelativeLayout>

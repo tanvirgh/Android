@@ -16,7 +16,7 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1" >
 
-        <com.sinepulse.app.custom.controls.CustomTextView
+        <TextView
             android:id="@+id/fourthRowLeft"
             style="@style/HomeButton"
             android:layout_width="wrap_content"
@@ -24,8 +24,8 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:text="58 w"
-           android:ellipsize="end"
-              android:singleLine="true"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:paddingLeft="20dp"
             android:paddingRight="0dp"
             android:textSize="24sp"
@@ -57,18 +57,17 @@
         android:paddingLeft="0dp">
 
         <RelativeLayout
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:background="@drawable/bgled"
           android:layout_marginTop="8dp" >
 
-            <com.sinepulse.app.custom.controls.CustomTextView
+            <TextView
                 android:id="@+id/fourthRowRightUp"
                 style="@style/HomeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
                 android:text="3 "
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -83,20 +82,19 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
              android:background="@drawable/bgled"
             android:layout_marginTop="3dp" 
             android:layout_marginBottom="5dp">
 
-            <com.sinepulse.app.custom.controls.CustomTextView
+            <TextView
                 android:id="@+id/fourthRowRightDown"
                 style="@style/HomeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:paddingLeft="5dp"
                 android:text="4 "
                 android:textSize="18sp"
                 android:textStyle="bold" />

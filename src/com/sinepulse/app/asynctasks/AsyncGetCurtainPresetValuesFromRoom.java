@@ -6,6 +6,7 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.RoomManager;
+import com.sinepulse.app.fragments.RoomManagerFragment;
 
 /**
  * @author tanvir.ahmed

@@ -3,18 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="@drawable/sh_background_lyt">
+    android:background="@drawable/sh_background">
 
     <ImageView
         android:id="@+id/aboutImageView01"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:scaleType="fitCenter"
-        android:src="@drawable/aboutus"
+        android:src="@drawable/sp_logo"
         android:contentDescription="@string/todo" />
 
     <ImageView
@@ -37,10 +37,9 @@
         android:layout_marginTop="25dp"
         android:ellipsize="marquee"
         android:gravity="center_horizontal"
-        android:maxLines="6"
+        android:maxLines="4"
         android:singleLine="false"
         android:text="@string/aboutText"
-        android:textSize="16sp"
         android:textColor="@color/white" />
 
     <com.sinepulse.app.custom.controls.CustomTextView
@@ -54,15 +53,10 @@
         android:linksClickable="true"
         android:maxLines="1"
         android:singleLine="true"
-        android:textSize="14sp"
         android:text="@string/hyperlink"
-        android:textColor="#bdbdbd" />
-    
+        android:textColor="@color/white" />
     <include
             android:id="@+id/bottom"
-           android:layout_width="fill_parent"
-            android:layout_height="@dimen/bottom_bar_height"
-            android:layout_alignParentBottom="true"
             layout="@layout/dashboard_bottom_bar" 
             android:visibility="visible" />
     

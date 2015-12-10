@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -33,6 +34,9 @@ import com.sinepulse.app.fragments.DebugTools;
 
 import com.sinepulse.app.R;
 import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.activities.Home_;
+import com.sinepulse.app.activities.RoomManager_;
+import com.sinepulse.app.asynctasks.AsyncRefreshDashBoard;
 import com.sinepulse.app.base.MainActionbarBase;
 /**
  * 
@@ -131,7 +135,7 @@ public class CameraStreamFragment extends SherlockFragment implements
 			break;
 		case R.id.bDashboard:
 //			currentFragment = ALLDEVICE_FRAGMENT;
-			Intent homeIntent = new Intent(this.getActivity(), Home.class);
+			Intent homeIntent = new Intent(this.getActivity(), Home_.class);
 			homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(homeIntent);
 //			((MainActionbarBase) getActivity()).displayFragment(0);

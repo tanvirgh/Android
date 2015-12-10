@@ -49,7 +49,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
            android:background="@drawable/bg_cell_dark"
             android:drawableLeft="@drawable/passkey"
             android:gravity="center"
@@ -76,18 +76,6 @@
             android:background="@drawable/login_button"
             android:gravity="center_horizontal|center" >
  </com.sinepulse.app.custom.controls.CustomButton>
- 
-          <ImageView
-            android:id="@+id/aboutImageView02"
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/etUserName"
-           android:layout_marginLeft="15dp"
-           android:layout_marginTop="10dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/dark_gray"
-            android:contentDescription="@string/todo" />
    
         </RelativeLayout>
 

@@ -8,6 +8,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.RoomManager;
+import com.sinepulse.app.fragments.RoomManagerFragment;
+import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
@@ -31,8 +33,9 @@ public class AsyncGetDevices extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected void onPreExecute() {
+		CommonValues.getInstance().IsServerConnectionError=false;
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
-		((RoomManager) parentActivity).startDeviceProgress();
+		RoomManager.startDeviceProgress();
 		
 	}
 	
@@ -46,7 +49,11 @@ public class AsyncGetDevices extends AsyncTask<Void, Void, Boolean> {
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
-		((RoomManager) parentActivity).stopDeviceProgress();
+		RoomManager.stopDeviceProgress();
+		if(CommonValues.getInstance().IsServerConnectionError==true){
+			CommonTask.ShowMessage(parentActivity, "Server UnReachable");
+        	return;
+		}
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {

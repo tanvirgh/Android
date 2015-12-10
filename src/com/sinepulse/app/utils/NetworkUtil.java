@@ -3,9 +3,12 @@
  */
 package com.sinepulse.app.utils;
 
+import java.lang.reflect.Method;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 
 /**
  * @author tanvir.ahmed

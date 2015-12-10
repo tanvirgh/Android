@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/sh_background"
     android:orientation="vertical" >
 
     <com.sinepulse.app.custom.controls.CustomTextView
@@ -16,7 +17,6 @@
         android:paddingLeft="10dp"
         android:paddingRight="5dp"
         android:text="Ticket No :"
-        android:textStyle="bold"
         android:textColor="@color/white"
         android:textSize="15sp" />
      <com.sinepulse.app.custom.controls.CustomEditText

@@ -4,13 +4,20 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
+import com.sinepulse.app.R.menu;
 import com.sinepulse.app.asynctasks.AsyncGetUserProfile;
+import com.sinepulse.app.base.MainActionbarBase;
 import com.sinepulse.app.entities.UserProfile;
 import com.sinepulse.app.utils.CommonURL;
 import com.sinepulse.app.utils.CommonValues;

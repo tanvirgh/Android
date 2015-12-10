@@ -13,6 +13,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,7 +24,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.RelativeLayout.LayoutParams;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.hikvision.netsdk.ExceptionCallBack;
@@ -69,7 +69,7 @@ public class VideoActivity extends MainActionbarBase implements
 	public Button bCamera;
 	@ViewById(R.id.surface)
 	public LiveSurface surface;
-	int userId = 0;
+	int m_iPlayID = -1;
 	public static final int CHANNEL_TYPE_ANALOG = 1;
 	public static final int CHANNEL_TYPE_DIGIT = 0;
 	public static final int CHANNEL_TYPE_ZERO = 3;
@@ -87,6 +87,7 @@ public class VideoActivity extends MainActionbarBase implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		createMenuBar();
 
 		// loadStream( CommonValues.getInstance().currentCameraIndex);
@@ -122,18 +123,12 @@ public class VideoActivity extends MainActionbarBase implements
 	@AfterViews
 	void afterViewLoaded() {
 		spCamera.setOnItemSelectedListener(this);
-		CommonValues.getInstance().currentAction = CommonIdentifier.Action_CameraInfo;
-		if (asyncGetCameraInfo != null) {
-			asyncGetCameraInfo.cancel(true);
-		}
-		asyncGetCameraInfo = new AsyncGetCameraInfo(this,
-				CommonValues.getInstance().userId);
-		asyncGetCameraInfo.execute();
+		
 	}
 
-	@Override
 	@Click({ R.id.MyStreamButton, R.id.bCamera, R.id.bRoom, R.id.bDashboard })
 	public void onClick(View v) {
+		CommonValues.getInstance().isStateChanged=false;
 		switch (v.getId()) {
 
 		case R.id.MyStreamButton://
@@ -164,9 +159,7 @@ public class VideoActivity extends MainActionbarBase implements
 		case R.id.bRoom:
 //			releaseVideoProperties();
 			playPort = -1;
-			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
-			}
 			currentFragment = ROOM_FRAGMENT;
 			if (!stackIndex.contains(String.valueOf(5)))
 				stackIndex.push(String.valueOf(5));
@@ -177,9 +170,7 @@ public class VideoActivity extends MainActionbarBase implements
 			break;
 		case R.id.bDashboard:
 			// loadingDevicesTask.cancel(true);
-			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
-			}
 //			releaseVideoProperties();
 			playPort = -1;
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
@@ -198,23 +189,36 @@ public class VideoActivity extends MainActionbarBase implements
 
 	}
 
-	/**
-	 * 
-	 */
-	public void continueStreaming() {
-//		Toast.makeText(VideoActivity.this,
-//				"*** Loading Video.Please wait ***",
-//				Toast.LENGTH_SHORT).show();
-		loadStream(spinnerValue);
-	}
-
 	public DialogInterface.OnClickListener ShowCameraEvent() {
 		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
-					continueStreaming();
+					/*switch (spinnerValue) {
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					case 6:
+					case 7:
+					case 8:
+					case 9:
+					case 10:
+					case 11:
+					case 12:
+					case 13:
+					case 14:
+					case 15:
+						Toast.makeText(VideoActivity.this,
+								"*** Loading Video.Please wait ***",
+								Toast.LENGTH_SHORT).show();
+
+					}*/
+//					Toast.makeText(VideoActivity.this,
+//							"*** Loading Video.Please wait ***",
+//							Toast.LENGTH_SHORT).show();
+					loadStream(spinnerValue);
 					break;
 
 				case DialogInterface.BUTTON_NEGATIVE:
@@ -229,6 +233,7 @@ public class VideoActivity extends MainActionbarBase implements
 
 	private void loadStream(int spinnerValue) {
 		CommonValues.getInstance().currentAction = CommonIdentifier.Action_DvrInfo;
+
 		if (loadingDevicesTask != null) {
 			loadingDevicesTask.cancel(true);
 		}
@@ -238,6 +243,16 @@ public class VideoActivity extends MainActionbarBase implements
 		streamingButton.setText("Refresh");
 	}
 
+	public void continueStreaming() {
+//		Toast.makeText(VideoActivity.this,
+//				"*** Loading Video.Please wait ***",
+//				Toast.LENGTH_SHORT).show();
+		if(spinnerValue==0){
+		   Toast.makeText(VideoActivity.this, "Server returns wrong data .", Toast.LENGTH_SHORT).show();
+		}else{
+		loadStream(spinnerValue);
+		}
+	}
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position,
 			long id) {
@@ -339,11 +354,17 @@ public class VideoActivity extends MainActionbarBase implements
 	public void onResume() {
 		bCamera.setBackground(getResources().getDrawable(
 				R.drawable.camera_selected1));
-		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		getSupportActionBar().setTitle("Video Stream");
 		streamingButton.setText("Start Streaming");
 		// playPort=-1;
 		fragmentPaused = false;
+		CommonValues.getInstance().currentAction = CommonIdentifier.Action_CameraInfo;
+		if (asyncGetCameraInfo != null) {
+			asyncGetCameraInfo.cancel(true);
+		}
+		asyncGetCameraInfo = new AsyncGetCameraInfo(this,
+				CommonValues.getInstance().userId);
+		asyncGetCameraInfo.execute();
 		super.onResume();
 
 	}
@@ -352,29 +373,27 @@ public class VideoActivity extends MainActionbarBase implements
 	 * 
 	 */
 	private void releaseVideoProperties() {
-		
 		if (surface != null && player != null) {
 			if (surface.getHolder().getSurface().isValid() && -1 != playPort) {
 				Player.getInstance().closeStream(playPort);
 				Player.getInstance().freePort(playPort);
 				Player.getInstance().setVideoWindow(playPort, 0, null);
 				playPort = -1;
-				Player.getInstance().stop(userId);
+				Player.getInstance().stop(m_iPlayID);
 			}
-//			hcNetSdk.NET_DVR_StopPlayBack(playPort);
-			hcNetSdk.NET_DVR_Logout_V30(userId);
+			// hcNetSdk.NET_DVR_Logout_V30(userId);
+			hcNetSdk.NET_DVR_StopRealPlay(m_iPlayID);
 			hcNetSdk.NET_DVR_Cleanup();
 			playPort = -1;
+			m_iPlayID=-1;
 		}
 	}
 
 	@Override
 	public void onBackPressed() {
 //		releaseVideoProperties();
-		playPort=-1;
-		if(MainActionbarBase.stackIndex!=null){
+		playPort = -1;
 		MainActionbarBase.stackIndex.removeAllElements();
-		}
 		currentFragment = ALLDEVICE_FRAGMENT;
 		Intent homeIntent = new Intent(this, Home_.class);
 		homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -397,25 +416,16 @@ public class VideoActivity extends MainActionbarBase implements
 		super.onConfigurationChanged(newConfig);
 		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			this.getActionBar().hide();
+			spCamera.setVisibility(View.INVISIBLE);
+			streamingButton.setVisibility(View.INVISIBLE);
 			this.getWindow().addFlags(
-					View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-			this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//			View videoview=findViewById(R.id.videoScreen);
-//			videoview.getLayoutParams().height=WindowManager.LayoutParams.FLAG_FULLSCREEN;
-//			videoview.setBackgroundColor(R.color.black);
-//			spCamera.setVisibility(View.INVISIBLE);
-//			streamingButton.setVisibility(View.INVISIBLE);
-			
-			
+					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
 			this.getActionBar().show();
-//			spCamera.setVisibility(View.VISIBLE);
-//			streamingButton.setVisibility(View.VISIBLE);
-//			this.getWindow().clearFlags(
-//					WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			this.getWindow().addFlags(
-					View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-			this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			spCamera.setVisibility(View.VISIBLE);
+			streamingButton.setVisibility(View.VISIBLE);
+			this.getWindow().clearFlags(
+					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
 	}
 
@@ -536,7 +546,7 @@ public class VideoActivity extends MainActionbarBase implements
 		int code = hcNetSdk.NET_DVR_GetLastError();
 		if (0 != code) {
 			System.out.println("Error: " + code);
-//			CommonTask.ShowMessage(this, "Some error occured while loading DVR info"+"Error: " + code);
+//			CommonTask.ShowMessage(this, "Error Loading Video Stream"+"Error: " + code);
 		}
 	}
 
@@ -545,7 +555,8 @@ public class VideoActivity extends MainActionbarBase implements
 		String getCameraInfoUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ logedInUserId + "/home" + "/camera";
 
-		if (JsonParser.getcameraInfoRequest(getCameraInfoUrl) != null) {
+		if (JsonParser.getcameraInfoRequest(getCameraInfoUrl) != null && JsonParser.getcameraInfoRequest(getCameraInfoUrl) != "") {
+			System.out.println("Camera Url :"+getCameraInfoUrl );
 			return true;
 		}
 		return false;
@@ -553,12 +564,36 @@ public class VideoActivity extends MainActionbarBase implements
 	}
 
 	public void setCameraInfo() {
-		if (CommonValues.getInstance().cameraInfo != null) {
+//		if(CommonValues.getInstance().IsServerConnectionError==true){
+//			Toast.makeText(VideoActivity.this, "Server is switched off", Toast.LENGTH_SHORT).show();
+//			streamingButton.setEnabled(false);
+//		}else{
+//		streamingButton.setEnabled(true);
+//		}
+		if (CommonValues.getInstance().cameraInfo != null ) {
 			cameraIp = CommonValues.getInstance().cameraInfo.IpAddress;
 			port = CommonValues.getInstance().cameraInfo.port;
 			userName = CommonValues.getInstance().cameraInfo.userName;
 			password = CommonValues.getInstance().cameraInfo.password;
 			Integer channelCount = CommonValues.getInstance().cameraInfo.ChannelCount;
+			if(channelCount==0){
+				CommonTask.ShowMessage(this, "Server Returned Empty data for channelcount");
+				streamingButton.setEnabled(false);
+			}else{
+				streamingButton.setEnabled(true);
+			}
+//			Integer channelCount = 16;
+			VideoActivity.this.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					Toast.makeText(VideoActivity.this, cameraIp+"\n"+port+"\n"+userName+"\n"+password, Toast.LENGTH_SHORT).show();
+					
+				}
+			});
+			if(userName==null || password==null){
+				CommonTask.ShowMessage(this, "Server Returned empty credential for camera");
+			}
 			// String[] state=new String[channelCount];
 			String[] cameraStates = new String[channelCount];
 			for (int i = 0; i < channelCount; i++) {
@@ -574,12 +609,7 @@ public class VideoActivity extends MainActionbarBase implements
 			spCamera.setSelection(CommonValues.getInstance().currentCameraIndex - 1);
 
 		} else {
-//			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			CommonTask.ShowMessage(this, "No Camera Information  returned from Server");
 		}
 	}
 
@@ -590,6 +620,9 @@ public class VideoActivity extends MainActionbarBase implements
 		private int port;
 		private String userName;
 		private String passWord;
+		boolean loginFailed=false;
+		boolean dvrOff=false;
+		boolean initdvrSuccees=false;
 
 		public LoadingDevicesTask(int spinnerValue, String iP, int port,
 				String userName, String passWord) {
@@ -598,15 +631,14 @@ public class VideoActivity extends MainActionbarBase implements
 			this.port = port;
 			this.userName = userName;
 			this.passWord = passWord;
+			
 
 		}
-		
 		@Override
 		protected void onPreExecute() {
 			CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
 			startProgress();
 			streamingButton.setEnabled(false);
-			
 		}
 
 		@Override
@@ -614,8 +646,15 @@ public class VideoActivity extends MainActionbarBase implements
 
 			player = Player.getInstance();
 			hcNetSdk = new HCNetSDK();
-			hcNetSdk.NET_DVR_Init();
-			hcNetSdk.NET_DVR_SetConnectTime(Integer.MAX_VALUE);
+			try {
+				hcNetSdk.NET_DVR_Init();
+			} catch (Exception e1) {
+				initdvrSuccees=true;
+				e1.printStackTrace();
+			}
+//			hcNetSdk.NET_DVR_SetConnectTime(Integer.MAX_VALUE);
+			hcNetSdk.NET_DVR_SetConnectTime(5000);
+			hcNetSdk.NET_DVR_SetReconnect(10000, true);
 			hcNetSdk.NET_DVR_SetExceptionCallBack(exceptionCallback);
 
 			// get play port
@@ -626,19 +665,27 @@ public class VideoActivity extends MainActionbarBase implements
 			NET_DVR_DEVICEINFO_V30 dvr_deviceinfo;
 			try {
 				dvr_deviceinfo = new NET_DVR_DEVICEINFO_V30();
-				userId = hcNetSdk.NET_DVR_Login_V30(iP, port, userName,
+				m_iPlayID = hcNetSdk.NET_DVR_Login_V30(iP, port, userName,
 						passWord, dvr_deviceinfo);
 				DebugTools.dump(dvr_deviceinfo);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				loginFailed=true;
 				e.printStackTrace();
+			}
+			
+			if (m_iPlayID < 0)
+			{
+				dvrOff=true;
+//			 	return dvrOff;
 			}
 
 			catchErrorIfNecessary();
 			NET_DVR_IPPARACFG_V40 ipParaCfg = new NET_DVR_IPPARACFG_V40();
 			// UserId, Command, ChannelNo., Out
+			
+			
 			try {
-				hcNetSdk.NET_DVR_GetDVRConfig(userId,
+				hcNetSdk.NET_DVR_GetDVRConfig(m_iPlayID,
 						HCNetSDK.NET_DVR_GET_IPPARACFG_V40, 0, ipParaCfg);
 				for (NET_DVR_IPCHANINFO entry : ipParaCfg.struIPChanInfo) {
 					if (CHANNEL_ENABLED == entry.byEnable) {
@@ -646,7 +693,7 @@ public class VideoActivity extends MainActionbarBase implements
 					}
 				}
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
+				dvrOff=true;
 				e1.printStackTrace();
 			}
 
@@ -666,15 +713,17 @@ public class VideoActivity extends MainActionbarBase implements
 			 * final int returned = hcNetSdk.NET_DVR_RealPlay_V30(userId,
 			 * clientInfo, realplayCallback, true);
 			 */
+			
 			try {
-				final int returned = hcNetSdk.NET_DVR_RealPlay_V30(userId,
+				m_iPlayID = hcNetSdk.NET_DVR_RealPlay_V30(m_iPlayID,
 						clientInfo, realplayCallback, true);
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			catchErrorIfNecessary();
 			
+			catchErrorIfNecessary();
 
 			return null;
 
@@ -683,16 +732,23 @@ public class VideoActivity extends MainActionbarBase implements
 		@Override
 		protected void onPostExecute(Boolean result) {
 			stopProgress();
-			// super.onPostExecute(result);
-			android.os.AsyncTask.Status status = getStatus();
-			if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
-				if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
-			
 			streamingButton.setEnabled(true);
+			if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 			if (Player.getInstance().getPort() == -1) {
 				showVideoLoadingError();
 			}
-		}
+			if(dvrOff==true){
+				Toast.makeText(VideoActivity.this, "DVR is switched OFF.", Toast.LENGTH_SHORT).show();
+			}
+			if(loginFailed==true){
+				Toast.makeText(VideoActivity.this, "Authentication Error.Failed log in to DVR", Toast.LENGTH_SHORT).show();
+			}
+			/*if(dvrOff==true){
+				Toast.makeText(VideoActivity.this, "Some problem arises with live video feed.Please try later.", Toast.LENGTH_SHORT).show();
+			//DVR is switched off
+			}if(initdvrSuccees==true){
+				Toast.makeText(VideoActivity.this, "MC is switched off.", Toast.LENGTH_SHORT).show();
+			}*/
 			}
 		}
 

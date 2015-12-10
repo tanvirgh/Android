@@ -21,8 +21,14 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.sinepulse.app.R;
+import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.asynctasks.AsyncPostChangePassRequest;
+import com.sinepulse.app.asynctasks.AsyncRefreshDashBoard;
+import com.sinepulse.app.fragments.AboutFragment.AboutState;
 import com.sinepulse.app.utils.CommonTask;
+import com.sinepulse.app.utils.CommonURL;
+import com.sinepulse.app.utils.CommonValues;
+import com.sinepulse.app.utils.JsonParser;
 
 /**
  * @author tanvir.ahmed

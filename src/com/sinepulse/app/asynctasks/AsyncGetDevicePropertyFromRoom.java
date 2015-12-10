@@ -6,6 +6,8 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.RoomManager;
+import com.sinepulse.app.fragments.RoomManagerFragment;
+import com.sinepulse.app.utils.CommonTask;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
@@ -31,6 +33,7 @@ public class AsyncGetDevicePropertyFromRoom extends AsyncTask<Void, Void, Boolea
 
 	@Override
 	protected void onPreExecute() {
+		CommonValues.getInstance().IsServerConnectionError=false;
 		CommonValues.getInstance().previousAction=CommonValues.getInstance().currentAction;
 		parentActivity.startDevicePropertyProgress();
 		
@@ -46,6 +49,10 @@ public class AsyncGetDevicePropertyFromRoom extends AsyncTask<Void, Void, Boolea
 	@Override
 	protected void onPostExecute(Boolean result) {
 		parentActivity.stopDevicePropertyProgress();
+		if(CommonValues.getInstance().IsServerConnectionError==true){
+			CommonTask.ShowMessage(parentActivity, "Server is not reachable at this moment.");
+        	return;
+		}
 		if(CommonValues.getInstance().currentAction.equals(CommonValues.getInstance().previousAction)){
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {

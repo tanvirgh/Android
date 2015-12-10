@@ -2,19 +2,21 @@ package com.sinepulse.app.activities;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
+import com.sinepulse.app.asynctasks.AsyncPostChangePassRequest;
 import com.sinepulse.app.base.MainActionbarBase;
 
 /**
@@ -32,8 +34,6 @@ public class About extends MainActionbarBase implements OnClickListener {
 	protected Button bRoom;
 	@ViewById(R.id.bDashboard)
 	protected Button bDashboard;
-	@ViewById(R.id.tvAboutHeadingText1)
-	protected TextView tvAboutHeadingText1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,12 +71,9 @@ public class About extends MainActionbarBase implements OnClickListener {
 		return prepared;
 	}
 	
-	@Override
-	@Click({R.id.bCamera,R.id.bDashboard,R.id.bRoom,R.id.tvAboutHeadingText1})
+	@Click({R.id.bCamera,R.id.bDashboard,R.id.bRoom})
 	public void onClick(View v) {
-		if(MainActionbarBase.stackIndex!=null){
 		MainActionbarBase.stackIndex.removeAllElements();
-		}
 		switch (v.getId()) {
 		case R.id.bDashboard:
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
@@ -105,12 +102,6 @@ public class About extends MainActionbarBase implements OnClickListener {
 			roomIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(roomIntent);
 			
-			break;
-		case R.id.tvAboutHeadingText1:
-			Intent viewIntent = new Intent(
-					"android.intent.action.VIEW",
-					Uri.parse("https://play.google.com/store/apps/details?id=com.sinepulse.app"));
-			startActivity(viewIntent);
 			break;
 		default:
 			break;

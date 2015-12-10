@@ -6,6 +6,9 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.RoomManager;
+import com.sinepulse.app.fragments.RoomManagerFragment;
+import com.sinepulse.app.utils.CommonTask;
+import com.sinepulse.app.utils.CommonValues;
 
 /**
  * @author tanvir.ahmed
@@ -32,6 +35,7 @@ public class AsyncGetSetPropertyFromRoom extends AsyncTask<Void, Void, Boolean> 
 
 	@Override
 	protected void onPreExecute() {
+		CommonValues.getInstance().IsServerConnectionError=false;
 		parentActivity.startDevicePropertyProgress();
 		
 	}
@@ -45,6 +49,10 @@ public class AsyncGetSetPropertyFromRoom extends AsyncTask<Void, Void, Boolean> 
 	
 	@Override
 	protected void onPostExecute(Boolean result) {
+		if(CommonValues.getInstance().IsServerConnectionError==true){
+			CommonTask.ShowMessage(parentActivity, "Server Unreachable");
+			return;
+		}
 		android.os.AsyncTask.Status status = getStatus();
 		if (status != AsyncTask.Status.FINISHED && !isCancelled()) {
 			if (parentActivity != null) {

@@ -3,9 +3,6 @@
  */
 package com.sinepulse.app.activities;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -52,16 +49,16 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 	protected EditText etEmail;
 	@ViewById(R.id.etAddress)
 	protected EditText etAddress;
-	@ViewById(R.id.etUserName)
-	protected EditText etUserName;
+	@ViewById(R.id.etAddress2)
+	protected EditText etAddress2;
 	@ViewById(R.id.etCity)
 	protected EditText etCity;
 	@ViewById(R.id.etTelephone)
 	protected EditText etTelephone;
 	@ViewById(R.id.etSex)
 	protected EditText etSex;
-	@ViewById(R.id.etdob)
-	protected EditText etdob;
+	@ViewById(R.id.etSocialSecurity)
+	protected EditText etSocialSecurity;
 	@ViewById(R.id.userProfileProgressBar)
 	public ProgressBar userProfileProgressBar;
 	
@@ -86,7 +83,7 @@ public class UserProfileActivity extends MainActionbarBase implements OnClickLis
 				R.drawable.tool_bar));
 
 		mSupportActionBar.setIcon(R.drawable.sp_logo);
-		mSupportActionBar.setTitle(" Profile");
+		mSupportActionBar.setTitle("User Profile");
 		mSupportActionBar.setDisplayHomeAsUpEnabled(true);
 		
 	}
@@ -137,61 +134,40 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 	public void setUserInformation() {
 		if(CommonValues.getInstance().profile!=null){
 		UserProfile userProfile = CommonValues.getInstance().profile;
-		String name="";  
-		if(!userProfile.getFirstName().equalsIgnoreCase("null") ){
-			name= userProfile.getFirstName();
-			
-		} if(!userProfile.getMiddleName().equalsIgnoreCase("null")){
-			name=name+" "+userProfile.getMiddleName();
-			
-		} if(!userProfile.getLastName().equalsIgnoreCase("null")){
-			name=name+" "+userProfile.getLastName();
-			
-		}
-		etFirstName.setText(name);
-		
-		
-		etUserName.setText(userProfile.getUserName());
+		etFirstName.setText(userProfile.getFirstName() + " "
+				+ userProfile.getMiddleName() + " "
+				+ userProfile.getLastName());
 		etEmail.setText(userProfile.getEmail());
-		etSex.setText(userProfile.getSex());
-		if(userProfile.getDateOfBirth()!=null){
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-		Long timeInMillis = Long.valueOf(userProfile.getDateOfBirth().getTime());
-		Date dob = new Date(timeInMillis);
-		etdob.setText(formatter.format(dob));
-		}else{
-			etdob.setText("");
-		}
-		
 		if(userProfile.getAddress()!=null &&userProfile.getAddress().getAddress1()!=null && userProfile.getAddress().getAddress2()!=null ){
 		etAddress.setText(userProfile.getAddress().getAddress1());
-//		etAddress2.setText(userProfile.getAddress().getAddress2());
+		etAddress2.setText(userProfile.getAddress().getAddress2());
 		}else{
-			etAddress.setText("Not applicable");
-//			etAddress2.setText("");
+			etAddress.setText("");
+			etAddress2.setText("");
 		}
 		
-		
-//		etCity.setText(userProfile.getAddress().getCity().getCountry()
-//				+ "- " + userProfile.getAddress().getCity().getName());
-		etTelephone.setText(userProfile.getCellPhone());
-		
+		if(userProfile.getAddress().getCity().getCountry()!=null &&  userProfile.getAddress().getCity().getName()!=null){
+		etCity.setText(userProfile.getAddress().getCity().getCountry()
+				+ "- " + userProfile.getAddress().getCity().getName());
 		}else{
-//			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
-			CommonTask
-			.ShowNetworkChangeConfirmation(
-					this,
-					"Network State has been changed.Please log in again to continue.",
-					showNetworkChangeEvent());
+			etCity.setText("");
+		}
+//		etAddress.setText("null");
+//		etAddress2.setText("null");
+//		etCity.setText("null");
+		etTelephone.setText(userProfile.getCellPhone());
+		etSex.setText(userProfile.getSex());
+		etSocialSecurity.setText(userProfile.getSocialSecurityNumber());
+		}
+
+	  else{
+			CommonTask.ShowMessage(this, "Error Fetching Data from Server");
 		}
 	}
 	
-	@Override
 	public void onBackPressed() {
 			backState = UserProfileSate.INITIAL_STATE;
-			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
-			}
 			currentFragment = ALLDEVICE_FRAGMENT;
 			Intent homeIntent = new Intent(this, Home_.class);
 			homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -203,9 +179,7 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 	@Override
 	@Click({ R.id.bDeliverydate, R.id.etDateFrom, R.id.etDateTo,R.id.tvToday,R.id.tvYesterday, R.id.bCamera,R.id.bDashboard,R.id.bRoom})
 	public void onClick(View v) {
-		if(MainActionbarBase.stackIndex!=null){
 		MainActionbarBase.stackIndex.removeAllElements();
-		}
 		switch (v.getId()) {
 		case R.id.bDashboard:
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
@@ -243,7 +217,7 @@ public boolean sendGetUserProfileRequest(Integer userId) {
 	
 	@Override
 	public void onResume() {
-		this.setTitle("Profile");
+		this.setTitle("User Profile");
 //		fragmentPaused = false;
 		super.onResume();
 		

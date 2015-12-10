@@ -5,33 +5,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.sinepulse.app.custom.controls.CustomTextView
+    <TextView
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="15dp"
         android:gravity="center"
         android:text="11/03/2014"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_log"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:gravity="center"
+        android:lines="2"
+        android:text="Fan Turned On at "
         android:textColor="#FFFFFF"
         android:textSize="12sp"
         android:textStyle="bold" />
 
-    <com.sinepulse.app.custom.controls.CustomTextView
-        android:id="@+id/tv_log"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="2dp"
-        android:gravity="center"
-        android:lines="2"
-        android:ellipsize="end"
-        android:text="Fan Turned On at "
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
-        android:textStyle="bold" />
-
-    <com.sinepulse.app.custom.controls.CustomTextView
+    <TextView
         android:id="@+id/tv_others"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

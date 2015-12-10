@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sh_background_lyt"
+    android:background="@drawable/sh_background"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -29,8 +29,6 @@
                 layout="@layout/device_property" />
               <include
                 android:id="@+id/deviceLogView"
-                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
                 layout="@layout/device_log" />
               <!-- <include
                 android:id="@+id/videoView"

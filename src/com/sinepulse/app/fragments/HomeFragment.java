@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.sinepulse.app.R;
-import com.sinepulse.app.activities.Home;
+import com.sinepulse.app.activities.Home_;
 
 @EFragment(R.layout.main)
 public class HomeFragment extends SherlockFragment {
@@ -190,8 +190,8 @@ public class HomeFragment extends SherlockFragment {
 
 		case ALLDEVICE_FRAGMENT:
 			currentFragment = ALLDEVICE_FRAGMENT;
-//			Intent homeIntent = new Intent(getActivity(), Home.class);
-//			startActivity(homeIntent);
+			Intent homeIntent = new Intent(getActivity(), Home_.class);
+			startActivity(homeIntent);
 			// when home was selected from navigation bar, we want to clear all
 			// the current entries in back stack
 			if (getFragmentManager().getBackStackEntryCount() > 0)

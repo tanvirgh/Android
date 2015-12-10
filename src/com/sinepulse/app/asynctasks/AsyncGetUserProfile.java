@@ -4,6 +4,7 @@
 package com.sinepulse.app.asynctasks;
 
 import com.sinepulse.app.activities.UserProfileActivity;
+import com.sinepulse.app.fragments.UserProfileFragment;
 import com.sinepulse.app.utils.CommonValues;
 
 import android.os.AsyncTask;
@@ -47,7 +48,7 @@ public class AsyncGetUserProfile extends AsyncTask<Void, Void, Boolean> {
 				@Override
 				public void run() {
 					
-					userProfileFrg.setUserInformation();
+//					userProfileFrg.setUserInformation();
 				}
 			});
 			

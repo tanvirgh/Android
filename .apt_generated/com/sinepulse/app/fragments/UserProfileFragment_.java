@@ -64,15 +64,15 @@ public final class UserProfileFragment_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        etCity = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etCity));
-        etFirstName = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etFirstName));
-        etSocialSecurity = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etSocialSecurity));
-        etSex = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etSex));
         etAddress2 = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etAddress2));
-        etTelephone = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etTelephone));
         userProfileProgressBar = ((ProgressBar) hasViews.findViewById(com.sinepulse.app.R.id.userProfileProgressBar));
+        etSocialSecurity = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etSocialSecurity));
         etAddress = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etAddress));
+        etTelephone = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etTelephone));
         etEmail = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etEmail));
+        etCity = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etCity));
+        etSex = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etSex));
+        etFirstName = ((EditText) hasViews.findViewById(com.sinepulse.app.R.id.etFirstName));
         afterViewLoaded();
     }
 

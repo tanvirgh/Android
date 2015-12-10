@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_selector"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+    <!-- ListRow Left side Thumbnail image -->
+    <RelativeLayout
+        android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:padding="2dip" >
+        <ImageView
+            android:id="@+id/list_image"
+            android:contentDescription="@string/app_name"
+            android:layout_alignParentLeft="true"
+            android:layout_width="45dip"
+            android:layout_height="45dip"
+             />
+    </RelativeLayout>
+    <!-- Rightend OnOFF Button -->
+    
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="65dp"
+        android:layout_height="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:button="@null"
+        android:textOff=""
+        android:textOn="" />
+    <!-- City-->
+    
+    <TextView
+        android:id="@+id/tvDeviceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="75dip"
+        android:layout_centerVertical="true"
+        android:paddingBottom ="10dip"
+        android:textColor="#040404"
+        android:textSize="15dip"
+        android:textStyle="bold"
+        />
+    <RelativeLayout 
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"            
+            >    
+    <SeekBar
+        android:id="@+id/seekBar11"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:max="10"/>
+    </RelativeLayout>
+    <!-- Weather Information-->
+</RelativeLayout>  

@@ -1,14 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/roomlistRowItem1"
+   android:id="@+id/roomlistRowItem1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp"
-    >
-     <!-- android:layout_margin="15dp"
-    -->
+    android:layout_margin="15dp"
+    android:background="@drawable/sh_background" >
 
-  <!--   <com.sinepulse.app.custom.controls.CustomButton
+    <Button
         android:id="@+id/btAddRoom"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
@@ -17,14 +15,14 @@
         android:background="@drawable/normal_rounded_button_bg"
         android:drawableLeft="@android:drawable/ic_input_add"
         android:textColor="@color/black"
-        android:visibility="gone" /> -->
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/lvRoomList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:dividerHeight="7dp"
+        android:dividerHeight="5dp"
         tools:listitem="@layout/room_list_item" >
     </ListView>
 

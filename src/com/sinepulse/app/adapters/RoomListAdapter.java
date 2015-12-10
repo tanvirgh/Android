@@ -109,7 +109,7 @@ public class RoomListAdapter extends ArrayAdapter<Room> {
 			 * }else{
 			 * convertView.setBackgroundResource(R.drawable.bg_cell_dark); }
 			 */
-			convertView.setBackgroundResource(R.drawable.bg_cell_lightx);
+			convertView.setBackgroundResource(R.drawable.bg_cell_light);
 		}
 
 		convertView.setOnTouchListener(touchListener);
@@ -148,7 +148,7 @@ boolean touchEnabled = true;
 
 			try {
 				if (oldView != null) {
-					oldView.setBackgroundResource(R.drawable.bg_cell_lightx);
+					oldView.setBackgroundResource(R.drawable.bg_cell_light);
 				}
 				setSelection(((RoomManagerHolder) v.getTag()).rowID);
 				v.setBackgroundResource(R.drawable.list_pressed);

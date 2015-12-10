@@ -15,9 +15,9 @@
          android:gravity="left|center"
         android:padding="5dp" >
         
-         <com.sinepulse.app.custom.controls.CustomTextView
+         <TextView
             android:id="@+id/tvTicketNumber"
-            android:layout_width="35dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerHorizontal="true"
@@ -30,13 +30,13 @@
             android:textSize="12sp"
             android:textStyle="bold" />
 
-          <com.sinepulse.app.custom.controls.CustomTextView
+          <TextView
               android:id="@+id/tvTktSubject"
-              android:layout_width="100dp"
+              android:layout_width="80dp"
               android:layout_height="wrap_content"
               android:layout_alignBaseline="@+id/tvTicketNumber"
               android:layout_alignBottom="@+id/tvTicketNumber"
-              android:layout_marginLeft="8dp"
+              android:layout_marginLeft="7dp"
               android:layout_toRightOf="@+id/tvTicketNumber"
               android:ellipsize="end"
               android:singleLine="true"
@@ -48,9 +48,9 @@
               android:textSize="12sp"
               android:textStyle="bold" />
 
-          <com.sinepulse.app.custom.controls.CustomTextView
+          <TextView
               android:id="@+id/tvTktSubmissionDate"
-              android:layout_width="70dp"
+              android:layout_width="80dp"
               android:layout_height="wrap_content"
               android:layout_alignBaseline="@+id/tvTktSubject"
               android:layout_alignBottom="@+id/tvTktSubject"
@@ -65,9 +65,9 @@
               android:textSize="12sp"
               android:textStyle="bold" />
 
-          <com.sinepulse.app.custom.controls.CustomTextView
+          <TextView
               android:id="@+id/tvTktStatus"
-              android:layout_width="60dp"
+              android:layout_width="70dp"
               android:layout_height="wrap_content"
               android:layout_alignBaseline="@+id/tvTktSubmissionDate"
               android:layout_alignBottom="@+id/tvTktSubmissionDate"

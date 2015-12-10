@@ -5,6 +5,9 @@ package com.sinepulse.app.asynctasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.SystemClock;
+
+import com.sinepulse.app.activities.DisplayDeviceDetails;
 import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.adapters.DeviceListByTypeAdapter;
 
@@ -45,7 +48,7 @@ public class AsyncSetStatusFromDashboard extends AsyncTask<Void, Void, Boolean> 
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		
-		displayDetails.sendSetStatusRequest(userId, deviceId, value);
+//		displayDetails.sendSetStatusRequest(userId, deviceId, value);
 //		SystemClock.sleep(2000);
 //		mListener.startSendingTask();
 		return null;
@@ -61,7 +64,7 @@ public class AsyncSetStatusFromDashboard extends AsyncTask<Void, Void, Boolean> 
 					@Override
 					public void run() {
 //						((Home) parentActivity).stopDeviceProgress();
-						displayDetails.setStatusResponseData();
+//						displayDetails.setStatusResponseData();
 					}
 				});
 				

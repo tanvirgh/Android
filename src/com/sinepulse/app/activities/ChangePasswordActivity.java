@@ -8,6 +8,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.actionbarsherlock.view.MenuItem;
 import com.sinepulse.app.R;
 import com.sinepulse.app.asynctasks.AsyncPostChangePassRequest;
@@ -121,13 +124,10 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	 * After pressing back button with backState = -1 always gone to home screen
 	 * otherwise came back to the previous screen
 	 */
-	@Override
 	public void onBackPressed() {
 
 		backState = AboutState.INITIAL_STATE;
-		if(MainActionbarBase.stackIndex!=null){
 		MainActionbarBase.stackIndex.removeAllElements();
-		}
 		currentFragment = ALLDEVICE_FRAGMENT;
 		Intent homeIntent = new Intent(this, Home_.class);
 		homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -151,7 +151,6 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 	}
 
 
-	@Override
 	@Click({R.id.bSavePassword,R.id.bCamera,R.id.bDashboard,R.id.bRoom})
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -180,9 +179,7 @@ public class ChangePasswordActivity extends MainActionbarBase implements OnClick
 		}
 		break;
 		case R.id.bDashboard:
-			if(MainActionbarBase.stackIndex!=null){
 			MainActionbarBase.stackIndex.removeAllElements();
-			}
 			Home.mDrawerList.setItemChecked(ALLDEVICE_FRAGMENT, true);
 			Home.navDrawerAdapter.setSelectedPosition(ALLDEVICE_FRAGMENT);
 			currentFragment = ALLDEVICE_FRAGMENT;

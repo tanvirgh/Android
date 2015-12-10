@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Locale;
 
 import org.json.JSONArray;
@@ -21,13 +22,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Bitmap.Config;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -38,8 +51,10 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.LinearLayout;
 
+import com.hikvision.netsdk.RealPlayCallBack;
 import com.sinepulse.app.R;
 import com.sinepulse.app.animations.AlphaAnimationListener;
 import com.sinepulse.app.animations.DisplayNextView;
@@ -47,9 +62,9 @@ import com.sinepulse.app.animations.Flip3dAnimation;
 import com.sinepulse.app.entities.LogInInfo;
 
 /**
- * @author Some common methods are defined in this class that is used all
- *         through the application such as email validation,robotto font
- *         method,cofirmation message,alert message,loading user info etc.
+ * @author  Some common methods are defined in this class that is
+ *         used all through the application such as email validation,robotto
+ *         font method,cofirmation message,alert message,loading user info etc.
  */
 
 @SuppressLint("DefaultLocale")
@@ -92,10 +107,14 @@ public class CommonTask {
 
 	}
 
+	
 	public static int convertToDimensionValue(Context context, int inputValue) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
 				inputValue, context.getResources().getDisplayMetrics());
 	}
+
+	
+
 
 	private static BitmapDrawable getDrawableImage(String url) {
 		try {
@@ -131,8 +150,7 @@ public class CommonTask {
 
 	@SuppressLint("DefaultLocale")
 	public static String toCamelCase(String s) {
-		return s.substring(0, 1).toUpperCase(Locale.getDefault())
-				+ s.substring(1).toLowerCase(Locale.getDefault());
+		return s.substring(0, 1).toUpperCase(Locale.getDefault()) + s.substring(1).toLowerCase(Locale.getDefault());
 	}
 
 	public static String toCamelCase(String s, String separator) {
@@ -169,14 +187,13 @@ public class CommonTask {
 	public static void ShowConfirmation(Context context, String message,
 			DialogInterface.OnClickListener event) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning)
-				.setMessage(message)
+		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning).setMessage(message)
 				.setPositiveButton(R.string.button_yes, event)
 				.setNegativeButton(R.string.button_no, event);
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-
+	
 	public static void ShowNetworkChangeConfirmation(Context context,
 			String message, DialogInterface.OnClickListener event) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -186,6 +203,8 @@ public class CommonTask {
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
+	
+	
 
 	// method for exit from the app
 	public static void CloseApplication(Context context) {
@@ -223,10 +242,10 @@ public class CommonTask {
 				isVisible));
 	}
 
-	/*
-	 * public static void setAsyncImageBackground(View view, String id) {
-	 * view.setTag(id); new AsyncImageLoader().execute(view); }
-	 */
+	/*public static void setAsyncImageBackground(View view, String id) {
+		view.setTag(id);
+		new AsyncImageLoader().execute(view);
+	}*/
 
 	// for the previous movement
 	public static Animation inFromRightAnimation() {
@@ -305,30 +324,40 @@ public class CommonTask {
 	// method for saving data to shared preference
 	public static void SavePreferences(Context context, String sharedId,
 			String key, String value) {
-
-		// SharedPreferences sharedPreferences = context.getSharedPreferences(
-		// sharedId, Context.MODE_PRIVATE);
+		
 		SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
+			.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 		editor.putString(key, value);
 		editor.commit();
 	}
+	
+	public static void removePreferences(Context context, String sharedId,
+			String key, String value) {
+		
+//		SharedPreferences sharedPreferences = context.getSharedPreferences(
+//				sharedId, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = PreferenceManager
+			.getDefaultSharedPreferences(context);
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.remove(key);
+		editor.commit();
+	}
+	
 
 	public static void loadSettings(Context context) {
-		// String baseUrl = getBaseUrl(context);
-		// String baseUrl =
-		// "http://dev.sinepulse.com/smarthome/service/dev/DataAPI.svc/data/";
-		// if (!baseUrl.equals("")) {
-		// CommonURL.getInstance().assignValues(baseUrl,
-		// getPassword(context));
-		// }
+//		String baseUrl = getBaseUrl(context);
+//		String baseUrl = "http://dev.sinepulse.com/smarthome/service/dev/DataAPI.svc/data/";
+//		if (!baseUrl.equals("")) {
+//			CommonURL.getInstance().assignValues(baseUrl,
+//					getPassword(context));
+//		}
 	}
 
 	public static String getBaseUrl(Context context) {
 		String baseUrlIp = "";
-		// SharedPreferences sharedPreferences = context.getSharedPreferences(
-		// "settings", Context.MODE_PRIVATE);
+//		SharedPreferences sharedPreferences = context.getSharedPreferences(
+//				"settings", Context.MODE_PRIVATE);
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		baseUrlIp = sharedPreferences.getString(
@@ -338,49 +367,48 @@ public class CommonTask {
 
 	public static String getPassword(Context context) {
 		String password = "";
-		// SharedPreferences sharedPreferences = context.getSharedPreferences(
-		// "settings", Context.MODE_PRIVATE);
+//		SharedPreferences sharedPreferences = context.getSharedPreferences(
+//				"settings", Context.MODE_PRIVATE);
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		password = sharedPreferences.getString(
 				CommonConstraints.PREF_PASSWORD_KEY, "");
 		return password;
 	}
-
+	
 	public static String getUserName(Context context) {
 		String userName = "";
-		// SharedPreferences sharedPreferences = context.getSharedPreferences(
-		// "settings", Context.MODE_PRIVATE);
-		/*
-		 * SharedPreferences sharedPreferences = PreferenceManager
-		 * .getDefaultSharedPreferences(context); userName =
-		 * sharedPreferences.getString( CommonConstraints.PREF_URL_KEY, "");
-		 */
+//		SharedPreferences sharedPreferences = context.getSharedPreferences(
+//				"settings", Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		userName = sharedPreferences.getString(
+				CommonConstraints.PREF_LOGINUSER_NAME, "");
 		return userName;
 	}
-
+	
 	// This Method Checks the successful log in status
-	public static boolean isValidLogIn(String userName, String password,
-			String AppToken) {
+		public static boolean isValidLogIn(String userName, String password,String AppToken,Context context) {
 
-		LogInInfo logInInfo = new LogInInfo();
-		logInInfo.setUserName(userName);
-		logInInfo.setUserpassword(password);
-		logInInfo.setAppToken(AppToken);
-		logInInfo.setAppType("1");
-
-		// String asd=CommonURL.getInstance().baseUrl;
-		if (JsonParser.postLogInRequest(
-				CommonURL.getInstance().LoginCustomerURL, logInInfo) != null) {
-			return true;
+			LogInInfo logInInfo = new LogInInfo();
+			logInInfo.setUserName(userName);
+			logInInfo.setUserpassword(password);
+			logInInfo.setAppToken(AppToken);
+			logInInfo.setAppType("1");
+			
+//          String asd=CommonURL.getInstance().baseUrl;
+			if (JsonParser.postLogInRequest(CommonURL.getInstance().LoginCustomerURL,
+					logInInfo,context) != null) {
+				return true;
+			}
+			return false;
 		}
-		return false;
-	}
-
+		
+	
 	public static boolean getCheckoutMode(Context context) {
-		boolean onlineCheckout = false;
-		// SharedPreferences sharedPreferences = context.getSharedPreferences(
-		// "settings", Context.MODE_PRIVATE);
+		boolean onlineCheckout =false;
+//		SharedPreferences sharedPreferences = context.getSharedPreferences(
+//				"settings", Context.MODE_PRIVATE);
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		onlineCheckout = sharedPreferences.getBoolean(
@@ -389,12 +417,13 @@ public class CommonTask {
 	}
 
 	public static void loadLoginUser(Context context) {
-		// SharedPreferences sharedPreferences = context.getSharedPreferences(
-		// CommonConstraints.PREF_LOGINUSER_NAME, Context.MODE_PRIVATE);
-		//
+//		SharedPreferences sharedPreferences = context.getSharedPreferences(
+//				CommonConstraints.PREF_LOGINUSER_NAME, Context.MODE_PRIVATE);
+//		
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
-
+		
+		
 	}
 
 	public static void resetPreferenceValue(Context context) {
@@ -431,25 +460,30 @@ public class CommonTask {
 		loadLoginUser(context);
 	}
 
-	/*
-	 * public static UserInformation getLoginUser() { if (isUserLoggedIn()) {
-	 * return CommonValues.getInstance().loginuser; } else { return null; } }
-	 */
+	/*public static UserInformation getLoginUser() {
+		if (isUserLoggedIn()) {
+			return CommonValues.getInstance().loginuser;
+		} else {
+			return null;
+		}
+	}*/
 
 	public static boolean isUserLoggedIn() {
 		if (CommonValues.getInstance().profile == null)
 			return false;
-		// return !CommonValues.getInstance().loginuser.IsLoggedIn;
+//		return !CommonValues.getInstance().loginuser.IsLoggedIn;
 		return true;
 	}
 
 	public static void setApplicationUrls(Context context,
 			ArrayList<String> values) {
-		setStringArrayPref(context, CommonConstraints.PREF_BASEURLS_KEY, values);
+		setStringArrayPref(context, CommonConstraints.PREF_BASEURLS_KEY,
+				values);
 	}
 
 	public static ArrayList<String> getApplicationUrls(Context context) {
-		return getStringArrayPref(context, CommonConstraints.PREF_BASEURLS_KEY);
+		return getStringArrayPref(context,
+				CommonConstraints.PREF_BASEURLS_KEY);
 	}
 
 	public static void setStringArrayPref(Context context, String key,
@@ -495,15 +529,17 @@ public class CommonTask {
 		return Patterns.EMAIL_ADDRESS.matcher(email).matches();
 	}
 
+
 	// Method for displaying Checkout Confirmationmessage..Tanivr
 	public static void showCheckoutConfirmation(Context context,
 			String message, DialogInterface.OnClickListener event) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setMessage(message)
-				.setPositiveButton(R.string.button_ok, event);
+		builder.setMessage(message).setPositiveButton(
+				R.string.button_ok, event);
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
+	
 
 	/**
 	 * Indicates whether network connectivity exists or is in the process of
@@ -523,7 +559,7 @@ public class CommonTask {
 		if (connectivityManager != null) {
 			networkInfo = connectivityManager
 					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-			if (networkInfo != null) {
+			if(networkInfo!=null){
 				networkState = networkInfo.getState();
 				if (networkState == NetworkInfo.State.CONNECTED
 						|| networkState == NetworkInfo.State.CONNECTING) {
@@ -532,23 +568,22 @@ public class CommonTask {
 			}
 			networkInfo = connectivityManager
 					.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-			if (networkInfo != null) {
-
+			if(networkInfo!=null){
+			
 				networkState = networkInfo.getState();
 				if (networkState == NetworkInfo.State.CONNECTED
 						|| networkState == NetworkInfo.State.CONNECTING) {
 					return true;
 				}
 			}
-
 		}
 		return false;
 	}
-
+	
 	public static String lastConType = "";
 
 	public static boolean isNetworkStateChanged(Context context) {
-
+//       CommonValues.getInstance().connectionMode="";
 		ConnectivityManager connectivityManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo mobnetworkInfo = null;
@@ -594,6 +629,7 @@ public class CommonTask {
 
 	}
 
+
 	/**
 	 * User for getting exception message
 	 * 
@@ -605,59 +641,61 @@ public class CommonTask {
 			int exceptionCode) {
 
 		switch (exceptionCode) {
-		// case CommonConstraints.GENERAL_EXCEPTION:
-		// return context.getString(R.string.GeneralExceptionMessage);
-		// case CommonConstraints.CLIENT_PROTOCOL_EXCEPTION:
-		// return context.getString(R.string.ClientProtocolExceptionMessage);
-		// case CommonConstraints.ILLEGAL_STATE_EXCEPTION:
-		// return context.getString(R.string.IllegalStateExceptionMessage);
-		// case CommonConstraints.IO_EXCEPTION:
-		// return context.getString(R.string.IOExceptionMessage);
-		// case CommonConstraints.UNSUPPORTED_ENCODING_EXCEPTION:
-		// return context
-		// .getString(R.string.UnsupportedEncodingExceptionMessage);
-		// case CommonConstraints.NO_INTERNET_AVAILABLE:
-		// return context
-		// .getString(R.string.networkError);
+//		case CommonConstraints.GENERAL_EXCEPTION:
+//			return context.getString(R.string.GeneralExceptionMessage);
+//		case CommonConstraints.CLIENT_PROTOCOL_EXCEPTION:
+//			return context.getString(R.string.ClientProtocolExceptionMessage);
+//		case CommonConstraints.ILLEGAL_STATE_EXCEPTION:
+//			return context.getString(R.string.IllegalStateExceptionMessage);
+//		case CommonConstraints.IO_EXCEPTION:
+//			return context.getString(R.string.IOExceptionMessage);
+//		case CommonConstraints.UNSUPPORTED_ENCODING_EXCEPTION:
+//			return context
+//					.getString(R.string.UnsupportedEncodingExceptionMessage);
+//		case CommonConstraints.NO_INTERNET_AVAILABLE:
+//			return context
+//					.getString(R.string.networkError);
 		default:
 			return "";
 		}
 	}
+	
 
+	
+	
 	public static void showSoftKeybord(final EditText editText) {
 		(new Handler()).postDelayed(new Runnable() {
 
-			@Override
-			public void run() {
-				editText.dispatchTouchEvent(MotionEvent.obtain(
-						SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
-						MotionEvent.ACTION_DOWN, 0, 0, 0));
-				editText.dispatchTouchEvent(MotionEvent.obtain(
-						SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
-						MotionEvent.ACTION_UP, 0, 0, 0));
-				editText.selectAll();
+		        @Override
+				public void run() {
+		        	editText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN , 0, 0, 0));
+		        	editText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP , 0, 0, 0));
+		        	editText.selectAll();
 
-			}
-		}, 200);
+		        }
+		    }, 200);
 	}
+	 public static boolean isEmpty(CharSequence str) {
+	        if (str == null || str.length() == 0 || str=="")
+	            return true;
+	        else
+	            return false;
+	    }
 
-	public static boolean isEmpty(CharSequence str) {
-		if (str == null || str.length() == 0 || str == "")
-			return true;
-		else
-			return false;
-	}
-
-	public static void ShowLogOutConfirmation(Context context, String message,
-			android.content.DialogInterface.OnClickListener showLogOutEvent) {
+	public static void ShowLogOutConfirmation(
+			Context context, String message,
+			android.content.DialogInterface.OnClickListener showExitEvent) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning)
-				.setMessage(message)
-				.setPositiveButton(R.string.button_yes, showLogOutEvent)
-				.setNegativeButton(R.string.button_no, showLogOutEvent);
+		builder.setTitle(R.string.app_name).setIcon(R.drawable.warning).setMessage(message)
+				.setPositiveButton(R.string.button_yes, showExitEvent)
+				.setNegativeButton(R.string.button_no, showExitEvent);
 		AlertDialog alert = builder.create();
 		alert.show();
-
+		
 	}
 
+	
+	 
+	 
+	
 }

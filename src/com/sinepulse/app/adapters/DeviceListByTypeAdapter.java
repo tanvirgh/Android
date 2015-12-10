@@ -5,6 +5,8 @@ package com.sinepulse.app.adapters;
 
 import java.util.ArrayList;
 
+import org.androidannotations.annotations.ViewById;
+
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,11 +17,13 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.sinepulse.app.R;
+import com.sinepulse.app.activities.Home;
 import com.sinepulse.app.asynctasks.AsyncProcessRequestFromDashboard;
 import com.sinepulse.app.asynctasks.AsyncSetDeviceStatus;
 import com.sinepulse.app.entities.Device;
@@ -50,13 +54,14 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 	public static Device orderLine;
 	public ArrayList<Device> requestQueue = new ArrayList<Device>();
 	int onOffValue;
+//	public ProgressBar devicelistProgressBar;
 
-	public DeviceListByTypeAdapter(Context Home, int layoutResourceId,
+	public DeviceListByTypeAdapter(Context context, int layoutResourceId,
 			ArrayList<Device> deviceList) {
-		super(Home, layoutResourceId, new ArrayList<Device>());
+		super(context, layoutResourceId, new ArrayList<Device>());
 		addAll(deviceList);
 		this.layoutResourceId = layoutResourceId;
-		this.context = Home;
+		this.context = context;
 		this.deviceByTypeList = deviceList;
 	}
 
@@ -140,9 +145,9 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 			dth.btdevice_value.setEnabled(true);
 		}
 		if (deviceByTypeEntity.IsOn) {
-			dth.onOffImage.setImageResource(R.drawable.greenled_medium);
+			dth.onOffImage.setImageResource(R.drawable.greenled);
 		} else {
-			dth.onOffImage.setImageResource(R.drawable.redled_medium);
+			dth.onOffImage.setImageResource(R.drawable.redled);
 		}
 
 		dth.btdevice_value
@@ -163,6 +168,7 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
                         CommonValues.getInstance().deviceList
                         .get(modifiedIndex).IsActionPending=true;
                           buttonView.setEnabled(false);
+//                         dth. btdevice_value.setChecked(isChecked);
 						
 						orderLine = getItem(modifiedIndex);
 						requestQueue.add(orderLine);
@@ -222,18 +228,26 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 
 		@Override
 		public void onTaskPreExecute() {
+			CommonValues.getInstance().IsServerConnectionError=false;
+			Home.startDeviceProgress();
 
 		}
 
 		@Override
 		public void onTaskPostExecute(Object object) {
-
+			Home.stopDeviceProgress();
+            if(CommonValues.getInstance().IsServerConnectionError==true){
+            	CommonTask.ShowMessage(context, "Server is not reachable at this moment.");
+//            	asyncSetDeviceStatus.cancel(true);
+            	return;
+            }
 			setStatusResponseData();
 			if (requestQueue.size() > 0) {
 				requestQueue.remove(0);
 			}
 			requestProcessing = false;
 			processRequestQueue();
+			
 		}
 
 		@Override
@@ -302,11 +316,14 @@ public class DeviceListByTypeAdapter extends ArrayAdapter<Device> {
 
 		String setStatusUrl = CommonURL.getInstance().GetCommonURL + "/"
 				+ userId + "/status?id=" + deviceId + "&status=" + onOffValue;
-		if (JsonParser.setStatusRequest(setStatusUrl) != null) {
+		if (JsonParser.setStatusRequest(setStatusUrl,context) != null &&  JsonParser.setStatusRequest(setStatusUrl,context)!="") {
 //			System.out.println(setStatusUrl);
 			return true;
-		}
+		}else{
+//		 CommonTask.ShowMessage(context,"Server is not reachable at this moment.");
+			CommonValues.getInstance().IsServerConnectionError=true;
 		return false;
+		}
 
 	}
 

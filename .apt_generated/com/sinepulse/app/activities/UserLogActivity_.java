@@ -85,18 +85,18 @@ public final class UserLogActivity_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        bSearch = ((Button) hasViews.findViewById(id.bSearch));
         bDeliverydate = ((Button) hasViews.findViewById(id.bDeliverydate));
-        deviceLogListView = ((ListView) hasViews.findViewById(id.lvLogList));
-        bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
+        bCamera = ((Button) hasViews.findViewById(id.bCamera));
         userLogProgressBar = ((ProgressBar) hasViews.findViewById(id.userLogProgressBar));
-        tvToday = ((TextView) hasViews.findViewById(id.tvToday));
-        etDateTo = ((EditText) hasViews.findViewById(id.etDateTo));
+        etDateFrom = ((EditText) hasViews.findViewById(id.etDateFrom));
+        bDashboard = ((Button) hasViews.findViewById(id.bDashboard));
+        bSearch = ((Button) hasViews.findViewById(id.bSearch));
         bRoom = ((Button) hasViews.findViewById(id.bRoom));
         tvYesterday = ((TextView) hasViews.findViewById(id.tvYesterday));
-        etDateFrom = ((EditText) hasViews.findViewById(id.etDateFrom));
+        etDateTo = ((EditText) hasViews.findViewById(id.etDateTo));
+        tvToday = ((TextView) hasViews.findViewById(id.tvToday));
         tvEmptyLog = ((TextView) hasViews.findViewById(id.tvEmptyLog));
-        bCamera = ((Button) hasViews.findViewById(id.bCamera));
+        deviceLogListView = ((ListView) hasViews.findViewById(id.lvLogList));
         if (hasViews.findViewById(id.bDeliverydate)!= null) {
             hasViews.findViewById(id.bDeliverydate).setOnClickListener(new OnClickListener() {
 
@@ -183,18 +183,6 @@ public final class UserLogActivity_
         }
         if (hasViews.findViewById(id.bRoom)!= null) {
             hasViews.findViewById(id.bRoom).setOnClickListener(new OnClickListener() {
-
-
-                @Override
-                public void onClick(View view) {
-                    UserLogActivity_.this.onClick(view);
-                }
-
-            }
-            );
-        }
-        if (hasViews.findViewById(id.bSearch)!= null) {
-            hasViews.findViewById(id.bSearch).setOnClickListener(new OnClickListener() {
 
 
                 @Override

@@ -6,6 +6,7 @@ package com.sinepulse.app.asynctasks;
 import android.os.AsyncTask;
 
 import com.sinepulse.app.activities.UserLogActivity;
+import com.sinepulse.app.fragments.UserLogFragment;
 import com.sinepulse.app.utils.CommonValues;
 
 /**
